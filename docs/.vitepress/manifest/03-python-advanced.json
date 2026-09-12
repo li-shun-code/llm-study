@@ -1,0 +1,22 @@
+{
+  "module": "03-python-advanced",
+  "articles": [
+    { "topic": "装饰器", "url": "https://realpython.com/primer-on-python-decorators/", "channel": "web", "file": "01-decorators.md" },
+    { "topic": "迭代器与生成器", "url": "https://docs.python.org/zh-cn/3/howto/functional.html", "channel": "web", "file": "02-iterators-and-generators.md" },
+    { "topic": "上下文管理器", "url": "https://docs.python.org/zh-cn/3/library/contextlib.html", "channel": "web", "file": "03-context-managers.md" },
+    { "topic": "并发编程（GIL/threading/concurrent.futures）", "url": "https://docs.python.org/zh-cn/3/library/concurrent.futures.html", "channel": "web", "file": "04-concurrency.md" },
+    { "topic": "asyncio 异步", "url": "https://docs.python.org/zh-cn/3/howto/a-conceptual-overview-of-asyncio.html", "channel": "web", "file": "05-asyncio.md" },
+    { "topic": "类型注解", "url": "https://docs.python.org/zh-cn/3/library/typing.html", "channel": "web", "file": "06-type-hints.md" },
+    { "topic": "正则表达式", "url": "https://docs.python.org/zh-cn/3/howto/regex.html", "channel": "web", "file": "07-regex.md" },
+    { "topic": "requests", "url": "https://requests.readthedocs.io/en/latest/user/quickstart/", "channel": "web", "file": "08-requests.md" },
+    { "topic": "httpx", "url": "https://www.python-httpx.org/quickstart/", "channel": "web", "file": "09-httpx.md" },
+    { "topic": "Pydantic", "url": "https://docs.pydantic.dev/latest/concepts/models/", "channel": "web", "file": "10-pydantic.md" },
+    { "topic": "FastAPI 入门与 API Key 鉴权", "url": "https://fastapi.tiangolo.com/zh/tutorial/first-steps/", "channel": "web", "file": "11-fastapi.md" },
+    { "topic": "Docker 容器化", "url": "https://docs.docker.com/language/python/containerize/", "channel": "web", "file": "12-docker.md" },
+    { "topic": "Gradio", "url": "https://www.gradio.app/guides/quickstart", "channel": "web", "file": "13-gradio.md" },
+    { "topic": "Streamlit", "url": "https://docs.streamlit.io/get-started/fundamentals/main-concepts", "channel": "web", "file": "14-streamlit.md" },
+    { "topic": "pytest 测试", "url": "https://docs.pytest.org/en/stable/getting-started.html", "channel": "web", "file": "15-pytest.md" },
+    { "topic": "日志 logging", "url": "https://docs.python.org/zh-cn/3/howto/logging.html", "channel": "web", "file": "16-logging.md" },
+    { "topic": "uv/poetry 工程化", "url": "https://docs.astral.sh/uv/guides/projects/", "channel": "web", "file": "17-uv-poetry.md" }
+  ]
+}

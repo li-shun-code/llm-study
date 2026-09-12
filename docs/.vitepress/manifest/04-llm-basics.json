@@ -1,0 +1,65 @@
+{
+  "module": "04-llm-basics",
+  "articles": [
+    {
+      "topic": "从词向量到 Transformer",
+      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter1/%E7%AC%AC%E4%B8%80%E7%AB%A0%20NLP%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5.md",
+      "channel": "raw",
+      "file": "01-word-vectors-to-transformer.md"
+    },
+    {
+      "topic": "注意力机制",
+      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md",
+      "channel": "raw",
+      "file": "02-attention-mechanism.md"
+    },
+    {
+      "topic": "GPT 系列演进",
+      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter3/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%A2%84%E8%AE%AD%E7%BB%83%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md",
+      "channel": "raw",
+      "file": "03-gpt-evolution.md"
+    },
+    {
+      "topic": "Token 与上下文窗口",
+      "url": "https://huggingface.co/learn/llm-course/chapter6/5",
+      "channel": "web",
+      "file": "04-tokens-and-context-window.md"
+    },
+    {
+      "topic": "采样参数（temperature/top_p）",
+      "url": "https://huggingface.co/docs/transformers/generation_strategies",
+      "channel": "web",
+      "file": "05-sampling-parameters.md"
+    },
+    {
+      "topic": "训练范式总览（预训练→SFT→RLHF/DPO）",
+      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md",
+      "channel": "raw",
+      "file": "06-training-paradigms.md"
+    },
+    {
+      "topic": "主流模型生态对比（2026-09）",
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models",
+      "channel": "web",
+      "file": "07-model-landscape.md"
+    },
+    {
+      "topic": "幻觉成因与缓解",
+      "url": "https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md",
+      "channel": "raw",
+      "file": "08-hallucination.md"
+    },
+    {
+      "topic": "推理模型（o1/R1 类）",
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
+      "channel": "web",
+      "file": "09-reasoning-models.md"
+    },
+    {
+      "topic": "多模态模型概览",
+      "url": "https://huggingface.co/blog/vlms-2025",
+      "channel": "raw",
+      "file": "10-multimodal-models.md"
+    }
+  ]
+}

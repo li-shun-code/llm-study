@@ -1,0 +1,15 @@
+{
+  "module": "05-prompt-engineering",
+  "articles": [
+    { "topic": "提示词基本结构", "url": "https://www.promptingguide.ai/introduction/elements", "channel": "web", "file": "docs/05-prompt-engineering/01-prompt-structure.md" },
+    { "topic": "零样本与少样本", "url": "https://www.promptingguide.ai/techniques/fewshot", "channel": "web", "file": "docs/05-prompt-engineering/02-zero-and-few-shot.md" },
+    { "topic": "思维链 CoT", "url": "https://www.promptingguide.ai/techniques/cot", "channel": "web", "file": "docs/05-prompt-engineering/03-chain-of-thought.md" },
+    { "topic": "自洽性与多路采样", "url": "https://www.promptingguide.ai/techniques/consistency", "channel": "web", "file": "docs/05-prompt-engineering/04-self-consistency.md" },
+    { "topic": "ReAct 提示模式", "url": "https://www.promptingguide.ai/techniques/react", "channel": "web", "file": "docs/05-prompt-engineering/05-react-pattern.md" },
+    { "topic": "结构化输出（JSON/Schema）", "url": "https://cookbook.openai.com/examples/structured_outputs_intro", "channel": "web", "file": "docs/05-prompt-engineering/06-structured-outputs.md" },
+    { "topic": "系统提示词设计", "url": "https://cookbook.openai.com/examples/gpt4-1_prompting_guide", "channel": "web", "file": "docs/05-prompt-engineering/07-system-prompt-design.md" },
+    { "topic": "提示注入攻击与防护", "url": "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/", "channel": "web", "file": "docs/05-prompt-engineering/08-prompt-injection.md" },
+    { "topic": "多模态提示", "url": "https://cookbook.openai.com/examples/multimodal/document_and_multimodal_understanding_tips", "channel": "web", "file": "docs/05-prompt-engineering/09-multimodal-prompting.md" },
+    { "topic": "提示迭代评估方法", "url": "https://cookbook.openai.com/examples/gpt-5/prompt-optimization-cookbook", "channel": "web", "file": "docs/05-prompt-engineering/10-iterate-and-evaluate.md" }
+  ]
+}

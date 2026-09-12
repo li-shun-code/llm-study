@@ -293,7 +293,76 @@ export default [
         "text": "模块 3 · Python 进阶与框架",
         "link": "/03-python-advanced/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "装饰器（Decorator）完全入门",
+            "link": "/03-python-advanced/01-decorators"
+          },
+          {
+            "text": "迭代器与生成器",
+            "link": "/03-python-advanced/02-iterators-and-generators"
+          },
+          {
+            "text": "上下文管理器与 with 语句",
+            "link": "/03-python-advanced/03-context-managers"
+          },
+          {
+            "text": "并发编程：GIL、threading 与 concurrent.futures",
+            "link": "/03-python-advanced/04-concurrency"
+          },
+          {
+            "text": "asyncio 异步编程",
+            "link": "/03-python-advanced/05-asyncio"
+          },
+          {
+            "text": "类型注解（Type Hints）",
+            "link": "/03-python-advanced/06-type-hints"
+          },
+          {
+            "text": "正则表达式（re 模块）",
+            "link": "/03-python-advanced/07-regex"
+          },
+          {
+            "text": "requests：HTTP for Humans",
+            "link": "/03-python-advanced/08-requests"
+          },
+          {
+            "text": "httpx：requests 的现代继任者（含异步）",
+            "link": "/03-python-advanced/09-httpx"
+          },
+          {
+            "text": "Pydantic v2 数据校验：从类型注解到结构化输出",
+            "link": "/03-python-advanced/10-pydantic"
+          },
+          {
+            "text": "FastAPI 入门与 API Key 鉴权",
+            "link": "/03-python-advanced/11-fastapi"
+          },
+          {
+            "text": "Docker 容器化 Python 应用",
+            "link": "/03-python-advanced/12-docker"
+          },
+          {
+            "text": "Gradio：几分钟给模型做个 Web 演示",
+            "link": "/03-python-advanced/13-gradio"
+          },
+          {
+            "text": "Streamlit：把 Python 脚本变成数据应用",
+            "link": "/03-python-advanced/14-streamlit"
+          },
+          {
+            "text": "pytest 测试入门",
+            "link": "/03-python-advanced/15-pytest"
+          },
+          {
+            "text": "日志 logging：LLM 应用排障必备",
+            "link": "/03-python-advanced/16-logging"
+          },
+          {
+            "text": "uv / poetry：Python 工程化项目管理",
+            "link": "/03-python-advanced/17-uv-poetry"
+          }
+        ]
       }
     ]
   },
@@ -305,13 +374,95 @@ export default [
         "text": "模块 4 · LLM 基础",
         "link": "/04-llm-basics/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "从词向量到 Transformer",
+            "link": "/04-llm-basics/01-word-vectors-to-transformer"
+          },
+          {
+            "text": "注意力机制",
+            "link": "/04-llm-basics/02-attention-mechanism"
+          },
+          {
+            "text": "GPT 系列演进",
+            "link": "/04-llm-basics/03-gpt-evolution"
+          },
+          {
+            "text": "Token 与上下文窗口",
+            "link": "/04-llm-basics/04-tokens-and-context-window"
+          },
+          {
+            "text": "采样参数：temperature 与 top_p",
+            "link": "/04-llm-basics/05-sampling-parameters"
+          },
+          {
+            "text": "训练范式总览：预训练 → SFT → RLHF/DPO",
+            "link": "/04-llm-basics/06-training-paradigms"
+          },
+          {
+            "text": "主流模型生态对比（2026-09）",
+            "link": "/04-llm-basics/07-model-landscape"
+          },
+          {
+            "text": "幻觉：成因与缓解",
+            "link": "/04-llm-basics/08-hallucination"
+          },
+          {
+            "text": "推理模型（o1/R1 类）",
+            "link": "/04-llm-basics/09-reasoning-models"
+          },
+          {
+            "text": "多模态模型概览",
+            "link": "/04-llm-basics/10-multimodal-models"
+          }
+        ]
       },
       {
         "text": "模块 5 · Prompt 工程",
         "link": "/05-prompt-engineering/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "提示词的基本要素与格式",
+            "link": "/05-prompt-engineering/01-prompt-structure"
+          },
+          {
+            "text": "零样本与少样本提示",
+            "link": "/05-prompt-engineering/02-zero-and-few-shot"
+          },
+          {
+            "text": "思维链提示（Chain-of-Thought）",
+            "link": "/05-prompt-engineering/03-chain-of-thought"
+          },
+          {
+            "text": "自洽性与多路采样（Self-Consistency）",
+            "link": "/05-prompt-engineering/04-self-consistency"
+          },
+          {
+            "text": "ReAct 提示模式：推理与行动交替",
+            "link": "/05-prompt-engineering/05-react-pattern"
+          },
+          {
+            "text": "结构化输出：让模型严格遵循 JSON Schema",
+            "link": "/05-prompt-engineering/06-structured-outputs"
+          },
+          {
+            "text": "系统提示词设计",
+            "link": "/05-prompt-engineering/07-system-prompt-design"
+          },
+          {
+            "text": "提示注入：最坏会发生什么？",
+            "link": "/05-prompt-engineering/08-prompt-injection"
+          },
+          {
+            "text": "多模态提示：视觉与文档理解",
+            "link": "/05-prompt-engineering/09-multimodal-prompting"
+          },
+          {
+            "text": "提示词的迭代与评估方法",
+            "link": "/05-prompt-engineering/10-iterate-and-evaluate"
+          }
+        ]
       },
       {
         "text": "模块 6 · API 与应用开发",

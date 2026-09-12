@@ -7,6 +7,8 @@ export default defineConfig({
   description:
     '从 Python 零基础到 LLM 应用开发：抓取全网优质教程的中文学习路线',
   head: [['meta', { name: 'theme-color', content: '#3eaf7c' }]],
+  // 教程正文中的 localhost 示例链接（如 Gradio/FastAPI demo）不是站点死链
+  ignoreDeadLinks: [/^https?:\/\/localhost/],
   themeConfig: {
     siteTitle: 'LLM 学习路线',
     outline: { level: [2, 3], label: '本页目录' },
