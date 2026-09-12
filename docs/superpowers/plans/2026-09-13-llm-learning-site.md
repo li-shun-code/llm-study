@@ -23,12 +23,13 @@
 - 每个内容任务完成标准：该目录全部文章通过 `node scripts/check-frontmatter.mjs docs/<dir>` 且 `npx vitepress build docs` 成功，然后 commit。
 - 翻译质量要求：全文翻译、保留代码块不译（注释可译）、术语首现标注英文（如"注意力机制（Attention）"）。
 - 不做用户系统/评论/上线部署。
+- **技术时效性约束（硬性）**：全部内容以抓取时点（2026-09）的最新稳定版为准——Python 3.13+（新特性用现代写法，不用 Python 2 遗风）、OpenAI 以 Responses API 与 Chat Completions 并讲（Assistants API 已废弃，禁止作为教学内容）、LangChain 仅收 ≥1.0 的新教程（`create_agent` 等，旧 Chain 写法不收）、AutoGen 仅以 Microsoft Agent Framework 现状讲授、vLLM 按 V1 引擎、前端构建用 VitePress 最新稳定版；过时 API/库只允许出现在"演进/历史"语境中一笔带过。模型对比类文章以抓取时最新模型为准（GPT/Claude/Gemini/DeepSeek/Qwen/GLM 当前版本号执行时核实）。每篇文章 frontmatter 增加可选 `versions` 字段记录所涉库/API 版本。
 
 ## Content Task Playbook（所有内容任务的共同步骤，不重复书写）
 
 每个内容任务（Task 5-16）按以下固定流程执行，任务条目只写该模块独有的输入（来源清单、目录、目标篇数、知识点清单）：
 
-1. **补充 manifest**：把本模块来源写入 `docs/.vitepress/manifest.json` 对应模块节点（字段：`topic, url, channel: "raw"|"web"`）；GitHub raw 通道可批量抓的开源书，用 `node scripts/fetch-raw.mjs <module>` 一次拉取；web 通道文章逐篇用 WebFetch 抓取、转为中文 Markdown（英文原文先翻译再入库）。
+1. **补充 manifest**：把本模块来源写入 `docs/.vitepress/manifest.json` 对应模块节点（字段：`topic, url, channel: "raw"|"web"`）；GitHub raw 通道可批量抓的开源书，用 `node scripts/fetch-raw.mjs <module>` 一次拉取；web 通道文章逐篇用 WebFetch 抓取、转为中文 Markdown（英文原文先翻译再入库）。**抓取前核对来源时效性**：文档类优先官方文档当前版页面，博客类确认所涉 API 未废弃（对照上面的技术时效性约束），过时来源换新或按"历史演进"定位改写。
 2. **写入文章**：每篇保存为 `docs/<dir>/NN-slug.md`，头部加 frontmatter 与署名块（格式见 Global Constraints）；正文保留原文结构，图片若外链可用原文链接，抓不到的图删去并在文中以文字说明。
 3. **失败登记**：抓不到的 URL 写入 `docs/.vitepress/sources-report.md`，并从候选备选列表补一篇同主题文章，保证模块篇数达标。
 4. **校验**：`node scripts/check-frontmatter.mjs docs/<dir>`，期望 `PASS (N articles)`。
@@ -65,8 +66,9 @@ cat > package.json <<'EOF'
   }
 }
 EOF
+（注：随后用 `npm install -D vitepress@latest` 安装最新稳定版覆盖此占位版本号）
 printf 'node_modules/\ndocs/.vitepress/cache/\ndocs/.vitepress/dist/\n' > .gitignore
-npm install
+npm install -D vitepress@latest
 ```
 
 - [ ] **Step 2: 写配置与首页**
@@ -220,76 +222,76 @@ test('parseFrontmatter 解析标量与布尔', () => {
 
 ---
 
-### Task 5: 内容 · 模块 0 Python 基础（~18 篇）
+### Task 5: 内容 · 模块 0 Python 基础（~22 篇）
 
 **目录** `docs/00-python-basics/`。**候选来源（执行时验证可抓性，失败按 Playbook 替换）**：廖雪峰 Python 教程 liaoxuefeng.com（web）、菜鸟教程 runoob.com/python3（web）、Python 官方教程中文（docs.python.org/zh-cn/3/tutorial，web）、GitHub 上开源中文 Python 书（raw）。
-**知识点 → 文章**（每点一篇，可合并相邻小点但总数 ≥18）：环境搭建与第一个程序；变量与基本类型；数字与字符串；列表；元组；字典；集合；条件判断；循环；函数定义与参数；lambda 与高阶函数；类与对象；继承/多态/魔法方法；模块与包；异常处理；文件 IO；JSON 与时间日期；pip 与虚拟环境。
+**知识点 → 文章**（每点一篇，可合并相邻小点但总数 ≥22）：环境搭建与第一个程序；变量与基本类型；数字与字符串（f-string 与 UTF-8 编码）；列表推导式；列表；元组；字典；集合；条件判断；循环；函数定义与参数；lambda 与高阶函数；类与对象；继承/多态/魔法方法；可变/不可变与深浅拷贝；模块与包；异常处理；文件 IO；JSON 与时间日期；pip 与虚拟环境；环境变量与 API Key 管理（.env/python-dotenv）。
 **执行**：Playbook 全步骤（manifest → 抓/译 → 写入 → 登记 → 校验 → 构建 → `content: 模块 0 Python 基础 完成`）。
 
-### Task 6: 内容 · 模块 1 数据结构与算法（~19 篇）
+### Task 6: 内容 · 模块 1 数据结构与算法（~21 篇）
 
 **目录** `docs/01-dsa/`。**主来源（raw 批量，star 最多中文开源算法书）**：`https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_<chap>/<file>.md`（章节：preface/complexity_analysis、array_and_linkedlist、stack_and_queue、hash_table、tree、heap、graph、searching、sorting、divide_and_conquer、backtracking、dynamic_programming、greedy；具体文件名执行时用 GitHub API 列目录核实）。
-**知识点 → 文章**：复杂度分析；数组；链表；栈；队列；哈希表；树；二叉树遍历；BST；堆；图；DFS/BFS；冒泡/插入/选择排序；快排/归并；二分查找；双指针与滑动窗口；递归与回溯；动态规划；贪心。
+**知识点 → 文章**（顺序即学习顺序）：复杂度分析；数组；链表；栈；队列；哈希表；递归入门（前置于树）；树；二叉树遍历；BST；堆；图；DFS/BFS；拓扑排序（呼应模块 9 LangGraph 的 DAG 执行）；最短路径；排序（冒泡/插入/快排/归并）；二分查找；双指针与滑动窗口；递归与回溯（面试选学）；动态规划（面试选学）；贪心（面试选学）。
 **执行**：Playbook 全步骤，`content: 模块 1 数据结构与算法 完成`。
 
-### Task 7: 内容 · 模块 2 计算机基础（~19 篇，英文翻译）
+### Task 7: 内容 · 模块 2 计算机基础（~23 篇，英文翻译）
 
-**目录** `docs/02-cs-fundamentals/`。**候选来源（全部英文翻译，禁小林 coding）**：OSTEP 免费章节 ostep.org（web，注意其许可要求署名非商业）；Beej's Guide to Network Concepts beej.us/guide/bgnet（web）；Cloudflare Learning Center cloudflare.com/learning（web）；MDN HTTP docs（developer.mozilla.org/en-US/docs/Web/HTTP，web）；MIT Missing Semester missing.csail.mit.edu（web，CC BY-SA）；The Linux Command Line 免费章节 linuxcommand.org（web）。
-**知识点 → 文章**：OS 概述；进程；线程；CPU 调度；内存管理；虚拟内存；文件系统；并发与锁；网络分层模型；TCP；UDP；HTTP；HTTPS；DNS；REST 风格；Linux 常用命令；Shell 脚本入门；文件权限；SSH。
+**目录** `docs/02-cs-fundamentals/`。**候选来源（全部英文翻译，禁小林 coding）**：OSTEP 免费章节 ostep.org（web，注意其许可要求署名非商业）；Beej's Guide to Network Concepts beej.us/guide/bgnet（web）；Cloudflare Learning Center cloudflare.com/learning（web）；MDN HTTP docs（developer.mozilla.org/en-US/docs/Web/HTTP，web）；MIT Missing Semester missing.csail.mit.edu（web，CC BY-SA）；The Linux Command Line 免费章节 linuxcommand.org（web）；Pro Git 教程章节 git-scm.com/book（web，CC BY-NC-SA，翻译需署名非商业）；Docker 官方入门 docs.docker.com（web，Apache 2.0）。
+**知识点 → 文章**（Linux 与 Git 前置到最前）：Linux 常用命令；Shell 脚本入门；文件权限；SSH；Git 基础（暂存/提交/回退）；Git 分支/合并/PR 协作；OS 概述；进程；线程；CPU 调度；内存管理；虚拟内存；文件系统；并发与锁；I/O 多路复用（select/epoll）；网络分层模型；TCP；UDP；HTTP；HTTPS；SSE 与 WebSocket（流式输出的网络基础）；DNS；REST 风格。
 **执行**：Playbook 全步骤，`content: 模块 2 计算机基础 完成（英文翻译）`。
 
-### Task 8: 内容 · 模块 3 Python 进阶与框架（~14 篇）
+### Task 8: 内容 · 模块 3 Python 进阶与框架（~18 篇）
 
-**目录** `docs/03-python-advanced/`。**候选来源**：realpython.com（web，部分允许引用——不可转载的改为翻译摘要+原文链接并在 sources-report 标注）；FastAPI 官方文档中文版 fastapi.tiangolo.com/zh（web，MIT）；Flask 文档 flask.palletsprojects.com（web）；Gradio/Streamlit 官方文档（web）；requests/httpx/Pydantic 官方文档（web）；pytest 文档（web）；astral.sh/uv 文档（web）。
-**知识点 → 文章**：装饰器；迭代器与生成器；上下文管理器；asyncio 异步；类型注解；requests；httpx；Pydantic；FastAPI 入门；FastAPI 请求/响应模型进阶；Flask 入门；Gradio；Streamlit；uv/poetry 工程化与 pytest。
+**目录** `docs/03-python-advanced/`。**候选来源**：realpython.com（web，部分允许引用——不可转载的改为翻译摘要+原文链接并在 sources-report 标注）；FastAPI 官方文档中文版 fastapi.tiangolo.com/zh（web，MIT）；Docker 官方文档 docs.docker.com（web，Apache 2.0）；Gradio/Streamlit 官方文档（web）；requests/httpx/Pydantic/pytest 官方文档（web）；astral.sh/uv 文档（web）；Python 官方 docs（re/日志/logging/concurrent.futures 章节，web）。
+**知识点 → 文章**：装饰器；迭代器与生成器；上下文管理器；并发编程（GIL/threading/concurrent.futures）；asyncio 异步；类型注解；正则表达式；requests；httpx；Pydantic；FastAPI 入门与 API Key 鉴权；Docker 容器化（为模块 9/10 生产化铺前置）；Gradio；Streamlit；pytest 测试；日志（logging，LLM 应用排障必备）；uv/poetry 工程化。
 **执行**：Playbook 全步骤，`content: 模块 3 Python 进阶与框架 完成`。
 
-### Task 9: 内容 · 模块 4 LLM 基础（~10 篇）
+### Task 9: 内容 · 模块 4 LLM 基础（~11 篇）
 
-**目录** `docs/04-llm-basics/`。**候选来源**：DataWhale happy-llm（raw：`raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter2/...` 等，执行时 API 核实）；DataWhale so-large-lm（raw）；Hugging Face LLM Course huggingface.co/learn/llm-course（web，Apache）；Lilian Weng "What is a Language Model"?（lilianweng.github.io，web）；OpenAI 官方文档 What is a token / models 页（web）；Anthropic docs（web）。
-**知识点 → 文章**：从词向量到 Transformer；注意力机制；GPT 系列演进；Token 与上下文窗口；采样参数（temperature/top_p）；主流模型生态对比；幻觉成因与缓解；推理模型（o1/R1 类）；Scaling Laws；多模态模型概览。
+**目录** `docs/04-llm-basics/`。**候选来源**：DataWhale happy-llm（raw：`raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter2/...` 等，执行时 API 核实）；DataWhale so-large-lm（raw）；Hugging Face LLM Course huggingface.co/learn/llm-course（web，Apache）；Lilian Weng 博客（lilianweng.github.io，web）；OpenAI 官方文档 What is a token / models 页（web）；Anthropic docs（web）；Hugging Face Chatbot/RLHF 博客（RLHF 概念，web）。
+**知识点 → 文章**：从词向量到 Transformer；注意力机制；GPT 系列演进；Token 与上下文窗口（BPE 原理、中文 token 成本、tiktoken 计数）；采样参数（temperature/top_p）；训练范式总览（预训练→SFT→RLHF/DPO，为模块 5 的系统提示服从性与模块 10 的微调铺概念地基）；主流模型生态对比（以抓取时 2026-09 最新模型为准：GPT/Claude/Gemini/DeepSeek/Qwen/GLM 当前版本执行时核实）；幻觉成因与缓解；推理模型（o1/R1 类）；多模态模型概览。
 **执行**：Playbook 全步骤，`content: 模块 4 LLM 基础 完成`。
 
 ### Task 10: 内容 · 模块 5 Prompt 工程（~10 篇）
 
-**目录** `docs/05-prompt-engineering/`。**候选来源**：promptingguide.ai（有官方中文 raw 仓库 `raw.githubusercontent.com/NirDiamant/...`不对——正确是 `promptingguide.ai` 官网 web + GitHub `raw.githubusercontent.com/promptingguide/promptingguide/main/...` 执行时核实）；Anthropic Prompt Engineering 文档（web）；OpenAI GPT Best Practices（web）；Google Gemini prompting guide（web）；Lilian Weng Prompt Engineering（web）。
+**目录** `docs/05-prompt-engineering/`。**候选来源**：promptingguide.ai（web，经典教材，与 2025+ 官方指南互补使用）；Anthropic Prompt Engineering 官方文档（web，当前版）；OpenAI Prompt Engineering guide（platform.openai.com/docs/guides/prompt-engineering，2025+ 版；旧"GPT Best Practices"已过时不收）；Google Gemini prompting guide（web）；Lilian Weng Prompt Engineering（web，概念经典，涉及 API 示例处按新 API 改写并注明）。
 **知识点 → 文章**：提示词基本结构；零样本与少样本；思维链 CoT；自洽性与多路采样；ReAct 提示模式；结构化输出（JSON/Schema）；系统提示词设计；提示注入攻击与防护；多模态提示；提示迭代评估方法。
 **执行**：Playbook 全步骤，`content: 模块 5 Prompt 工程 完成`。
 
-### Task 11: 内容 · 模块 6 API 与应用开发（~13 篇）
+### Task 11: 内容 · 模块 6 API 与应用开发（~14 篇）
 
-**目录** `docs/06-api-development/`。**候选来源**：OpenAI Cookbook `raw.githubusercontent.com/openai/openai-cookbook/main/...`（raw，MIT）；platform.openai.com/docs guides（web）；Anthropic docs tool use / streaming（web）；DataWhale llm-cookbook / llm-universe 相应章节（raw）；LiteLLM docs（web，MIT）；LangChain 官方教程（web）。
-**知识点 → 文章**：第一个 Chat API 调用；消息角色与多轮会话管理；流式输出；Function Calling/Tool Use；JSON Mode 与结构化输出；Embedding API 与文本相似度；视觉理解 API；错误处理/重试/限流；成本与 Token 优化；OpenAI 兼容端点与 LiteLLM；LangChain 快速入门；用 FastAPI 封装 LLM 服务；实战：命令行聊天机器人。
+**目录** `docs/06-api-development/`。**候选来源**：OpenAI Cookbook `raw.githubusercontent.com/openai/openai-cookbook/main/...`（raw，MIT；选取基于 Responses API/新 SDK 的当前版 notebook）；platform.openai.com/docs guides（web，Responses API 与 Chat Completions 当前版）；Anthropic docs tool use / streaming / prompt caching（web）；DataWhale llm-cookbook / llm-universe 相应章节（raw，旧 SDK 写法按新 API 校订）；LiteLLM docs（web，MIT）；LangChain 官方教程（web，仅收 LangChain ≥1.0 `create_agent` 风格新教程）。
+**知识点 → 文章**：第一个 API 调用（OpenAI Responses API 为主、Chat Completions 对照）；消息角色与多轮会话管理；流式输出（SSE）；Function Calling/Tool Use；JSON Mode 与结构化输出（Structured Outputs/JSON Schema）；Embedding API 与文本相似度；视觉理解 API；语音 API（ASR/TTS/Realtime，选学）；错误处理/重试/限流；成本与 Token 优化（**显式覆盖 Prompt Caching 与 Batch API 两个机制**）；OpenAI 兼容端点与 LiteLLM；LangChain 快速入门（≥1.0 `create_agent` 风格）；用 FastAPI 封装 LLM 服务（API Key 用模块 0 的 .env 方案，交叉引用）；实战：命令行聊天机器人。
 **执行**：Playbook 全步骤，`content: 模块 6 API 与应用开发 完成`。
 
-### Task 12: 内容 · 模块 7 数据库（~15 篇）
+### Task 12: 内容 · 模块 7 数据库（~17 篇）
 
 **目录** `docs/07-databases/`。**候选来源**：sqlbolt.com（web，教学交互式——转文字教程）；PostgreSQL 官方教程（web）；SQLite 文档（web，公有领域）；Redis 官方文档介绍页（web，RSAL/RRedis 许可注意——只转载介绍性文档，替换为博客 if 不可）；MongoDB University 免费课讲义/官方 docs（web）；Milvus/Chroma/Qdrant/pgvector 官方文档（web，多为 Apache/MIT）；SQLAlchemy 官方教程（web）；相关高质量英文博客翻译。
-**知识点 → 文章**：关系模型与 SQL 入门；SELECT 增删改查；JOIN 多表；索引原理与使用；事务与 ACID；SQLite 上手；PostgreSQL 入门；SQLAlchemy ORM；Redis 核心数据结构与缓存；MongoDB 文档模型；向量数据库原理；Milvus/Chroma/Qdrant/pgvector 各一篇上手（合并为 2 篇对比+2 篇实战）；向量库选型对比。
+**知识点 → 文章**：关系模型与 SQL 入门；E-R 建模与范式（以"会话-消息"表设计为例）；SELECT 增删改查；聚合与分组（GROUP BY/HAVING/聚合函数）；JOIN 多表；索引原理与使用；事务与 ACID；SQLite 上手；PostgreSQL 入门；SQLAlchemy ORM（含连接池）；Redis 核心数据结构与缓存；MongoDB 文档模型；向量数据库原理；Milvus/Chroma/Qdrant/pgvector 各一篇上手（合并为 2 篇对比+2 篇实战）；向量库选型对比。
 **执行**：Playbook 全步骤，`content: 模块 7 数据库 完成`。
 
-### Task 13: 内容 · 模块 8 RAG（~14 篇）
+### Task 13: 内容 · 模块 8 RAG（~16 篇）
 
-**目录** `docs/08-rag/`。**候选来源**：NirDiamant/GenAI_Agents 与 RAG 技术仓库 notebooks（raw，Apache/MIT：`raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/...` 执行时核实）；Anthropic/OpenAI RAG 指南（web）；LlamaIndex 文档 Understanding RAG（web）；LangChain RAG tutorial（web）；Weaviate/Pinecone/LangChain 博客 RAG 系列（web，部分允许署名转载）；Pinecone learning center（web）。
-**知识点 → 文章**：什么是 RAG；Embedding 深入；文档分块策略；向量检索与相似度；最小 RAG 全流程实战（Python）；RAG 评估（RAGAS 等）；混合检索（BM25+向量）；重排序 rerank；Query 改写与扩展；多模态 RAG；GraphRAG；Agentic RAG；生产化架构与常见问题排查；RAG 案例集。
+**目录** `docs/08-rag/`。**候选来源**：NirDiamant/RAG_Techniques notebooks（raw，Apache/MIT：`raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/...` 执行时核实）；Anthropic/OpenAI RAG 与 Contextual Retrieval 指南（web）；LlamaIndex 文档 Understanding RAG（web）；LangChain RAG tutorial（web）；Weaviate/Pinecone 博客 RAG 系列（web，部分允许署名转载）；文档解析工具官方文档 Docling/MinerU/Unstructured（web，均为开源）；Text2SQL 相关开源项目文档/博客（web）。
+**知识点 → 文章**（文档解析紧跟概念篇、先于分块）：什么是 RAG；文档解析与摄取（PDF/扫描件/表格→Markdown，Docling/MinerU/Unstructured 实战）；Embedding 深入；文档分块策略（含 Contextual Retrieval）；向量检索与相似度；最小 RAG 全流程实战（Python）；RAG 评估（RAGAS 等）；混合检索（BM25+向量）；重排序 rerank；Query 改写与扩展；多模态 RAG；GraphRAG；Agentic RAG；Text2SQL 实战（结构化数据检索与向量检索并行路线）；生产化架构与常见问题排查。
 **执行**：Playbook 全步骤，`content: 模块 8 RAG 完成`。
 
-### Task 14: 内容 · 模块 9 Agent（~17 篇）
+### Task 14: 内容 · 模块 9 Agent（~19 篇）
 
-**目录** `docs/09-agents/`。**候选来源**：Lilian Weng "LLM Powered Autonomous Agents"（web）；Anthropic "Building effective agents"（web，允许翻译需署名——执行时核对）；Hugging Face Agents Course（web，Apache）；LangGraph 官方教程（web）；AutoGen/CrewAI/OpenAI Agents SDK 文档（web）；modelcontextprotocol.io 官方文档（web）；NirDiamant/GenAI_Agents（raw）；Microsoft "AI Agents for Beginners" `raw.githubusercontent.com/microsoft/ai-agents-for-beginners/main/...`（raw，MIT，含中文翻译可对照）。
-**知识点 → 文章**：什么是 Agent；ReAct 范式；Tool Use 实战；规划与任务分解；记忆机制（短期/长期）；MCP 协议详解；MCP server 实战；Function Calling vs MCP；多智能体模式；LangGraph 入门；AutoGen 与 CrewAI；OpenAI Agents SDK；代码解释器型 Agent；Computer Use/浏览器操作 Agent；Agent 评测；Agent 安全与权限；生产化部署与成本。
+**目录** `docs/09-agents/`。**候选来源**：Lilian Weng "LLM Powered Autonomous Agents"（web）；Anthropic "Building effective agents"（web，允许翻译需署名——执行时核对）；Hugging Face Agents Course（web，Apache）；LangGraph 官方教程（web，含 interrupt/HITL 章节）；AutoGen/CrewAI/OpenAI Agents SDK 文档（web；**AutoGen 已并入 Microsoft Agent Framework，文章需标注版本现状**）；modelcontextprotocol.io 官方文档（web）；Langfuse/LangSmith 文档（web，Tracing）；NirDiamant/GenAI_Agents（raw）；Microsoft "AI Agents for Beginners" `raw.githubusercontent.com/microsoft/ai-agents-for-beginners/main/...`（raw，MIT，含中文翻译可对照）。
+**知识点 → 文章**：什么是 Agent；ReAct 范式；Tool Use 实战；规划与任务分解；记忆机制（短期/长期）；MCP 协议详解；MCP server 实战；Function Calling vs MCP；多智能体模式；LangGraph 入门；Human-in-the-loop（LangGraph interrupt 中断恢复与人工审批）；AutoGen 与 CrewAI（标注 Microsoft Agent Framework 现状）；OpenAI Agents SDK；代码解释器型 Agent；Computer Use/浏览器操作 Agent；可观测性与 Tracing（Langfuse/LangSmith/OpenTelemetry，生产排障第一工具）；Agent 评测；Agent 安全与权限、生产化部署与成本。
 **执行**：Playbook 全步骤，`content: 模块 9 Agent 完成`。
 
-### Task 15: 内容 · 模块 10 微调与部署（~12 篇）
+### Task 15: 内容 · 模块 10 微调与部署（~17 篇）
 
-**目录** `docs/10-finetuning-deployment/`。**候选来源**：DataWhale happy-llm 微调章节 / self-llm（raw）；Hugging Face PEFT/TRL 文档与 smol-course（web/raw，Apache）；Ollama 官方文档（web，MIT）；vLLM 文档（web，Apache）；llama.cpp 文档（web，MIT）；HF Blog 微调指南（web）；OpenSSF/相关评测文档 lm-eval（web）。
-**知识点 → 文章**：微调 vs RAG vs 提示工程选型；全参微调流程；LoRA 原理；QLoRA 与显存优化；训练数据准备与清洗；PEFT/TRL 实战；模型量化基础；Ollama 本地部署；vLLM 高吞吐部署；开源模型选型；LLM 评测方法与基准；安全、合规与内容护栏。
+**目录** `docs/10-finetuning-deployment/`。**候选来源**：DataWhale happy-llm 微调章节 / self-llm（raw）；Hugging Face PEFT/TRL 文档与 smol-course（web/raw，Apache，TRL 含 DPO 实践）；Ollama 官方文档（web，MIT）；vLLM 文档与官方博客（web，Apache，博客含 PagedAttention/continuous batching 原理）；llama.cpp 文档（web，MIT）；HF Blog 微调与蒸馏指南（web）；lm-eval 文档（web）；GPU 环境参考 AutoDL 帮助文档/Google Colab 文档（web）。
+**知识点 → 文章**：微调 vs RAG vs 提示工程选型；训练范式回顾与全参微调流程（承接模块 4 的训练范式总览）；GPU 环境基础（CUDA、显存估算、AutoDL/Colab 上手）；LoRA 原理；QLoRA 与显存优化；训练数据准备与清洗；数据蒸馏与合成（用大模型造小模型训练数据）；训练超参与过拟合诊断（学习率/epoch/loss 曲线判读）；PEFT/TRL 实战（SFT）；DPO 与偏好优化（TRL 实践）；模型量化基础；推理原理（KV Cache、continuous batching、PagedAttention——回答"vLLM 为什么快"）；Ollama 本地部署；vLLM 高吞吐部署（含 Docker 容器化，交叉引用模块 3）；开源模型选型；LLM 评测方法与基准；安全、合规与内容护栏。
 **执行**：Playbook 全步骤，`content: 模块 10 微调与部署 完成`。
 
-### Task 16: 内容 · 模块 11 Vibe Coding（~14 篇）
+### Task 16: 内容 · 模块 11 Vibe Coding（~16 篇）
 
-**目录** `docs/11-vibe-coding/`。**候选来源**：Anthropic "Claude Code Best Practices"（web，翻译署名）；Cursor docs cursor.com/docs（web，含 rules/contexts）；GitHub Copilot docs（web）；OpenAI Codex docs（web）；Geoffrey Huntley 博客 ragdo/spec-driven 系列（web）；"AGENTS.md" 官方站 agents.md（web）；Cline/Windsurf 文档（web）；ctxii/相关英文博客（执行时搜索补充）。
-**知识点 → 文章**：Vibe Coding 是什么与工程争议；AI 编程工具全景对比；Claude Code 工作流与最佳实践（翻译）；Cursor 入门与 Rules；AGENTS.md/CLAUDE.md 项目规范文件；Spec 驱动开发；上下文工程（Context Engineering）；MCP 在编码中的应用；AI 结对与代码审查；TDD with AI；多智能体协作编码；AI 代码的安全与质量陷阱；从 0 到 1 用 AI 做产品的实战流程；Vibe Coding 工具链生态（Cline/Windsurf 等）。
+**目录** `docs/11-vibe-coding/`。**候选来源**：Anthropic "Claude Code Best Practices"（web，翻译署名）；Claude Skills 官方文档 code.claude.com/docs/skills（web）；Cursor docs cursor.com/docs（web，含 rules/contexts）；GitHub Copilot docs（web）；OpenAI Codex docs（web）；Geoffrey Huntley 博客 ragdo/spec-driven 系列（web）；"AGENTS.md" 官方站 agents.md（web）；Cline/Windsurf 文档（web）；其余高质量英文博客（执行时搜索补充）。
+**知识点 → 文章**：Vibe Coding 是什么与工程争议；AI 编程工具全景对比；Claude Code 工作流与最佳实践（翻译）；Cursor 入门与 Rules；AGENTS.md/CLAUDE.md 项目规范文件；Claude Skills（可复用技能包，与 AGENTS.md/Rules 并列的项目级约定）；Git in AI 工作流（commit 即存档、分支隔离实验、AI 生成代码的 review 流，交叉引用模块 2 Git 基础）；Spec 驱动开发；上下文工程（Context Engineering）；MCP 在编码中的应用；AI 结对与代码审查；TDD with AI（前置：模块 3 pytest）；多智能体协作编码；AI 代码的安全与质量陷阱；从 0 到 1 用 AI 做产品的实战流程；Vibe Coding 工具链生态（Cline/Windsurf/Headless CI 中的 AI 编码）。
 **执行**：Playbook 全步骤，`content: 模块 11 Vibe Coding 完成`。
 
 ---
