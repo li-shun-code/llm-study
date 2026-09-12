@@ -1,0 +1,95 @@
+{
+  "module": "08-rag",
+  "articles": [
+    {
+      "topic": "什么是 RAG",
+      "url": "https://www.pinecone.io/learn/retrieval-augmented-generation/",
+      "channel": "web",
+      "file": "01-what-is-rag.md"
+    },
+    {
+      "topic": "文档解析与摄取（Docling/MinerU/Unstructured）",
+      "url": "https://raw.githubusercontent.com/docling-project/docling/main/README.md",
+      "channel": "raw",
+      "file": "02-document-parsing-ingestion.md"
+    },
+    {
+      "topic": "Embedding 深入",
+      "url": "https://huggingface.co/blog/getting-started-with-embeddings",
+      "channel": "raw",
+      "file": "03-embedding-deep-dive.md"
+    },
+    {
+      "topic": "文档分块策略（含 Anthropic Contextual Retrieval）",
+      "url": "https://www.pinecone.io/learn/chunking-strategies/",
+      "channel": "web",
+      "file": "04-chunking-strategies.md"
+    },
+    {
+      "topic": "向量检索与相似度",
+      "url": "https://www.pinecone.io/learn/vector-similarity/",
+      "channel": "web",
+      "file": "05-vector-search-similarity.md"
+    },
+    {
+      "topic": "最小 RAG 全流程实战",
+      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/simple_rag.ipynb",
+      "channel": "raw",
+      "file": "06-minimal-rag-walkthrough.md"
+    },
+    {
+      "topic": "RAG 评估（RAGAS）",
+      "url": "https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md",
+      "channel": "raw",
+      "file": "07-rag-evaluation-ragas.md"
+    },
+    {
+      "topic": "混合检索（BM25+向量）",
+      "url": "https://www.pinecone.io/learn/hybrid-search-intro/",
+      "channel": "web",
+      "file": "08-hybrid-search-bm25.md"
+    },
+    {
+      "topic": "重排序 rerank",
+      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/reranking.ipynb",
+      "channel": "raw",
+      "file": "09-reranking.md"
+    },
+    {
+      "topic": "Query 改写与扩展",
+      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/query_transformations.ipynb",
+      "channel": "raw",
+      "file": "10-query-rewriting-expansion.md"
+    },
+    {
+      "topic": "多模态 RAG",
+      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/multi_model_rag_with_captioning.ipynb",
+      "channel": "raw",
+      "file": "11-multimodal-rag.md"
+    },
+    {
+      "topic": "GraphRAG",
+      "url": "https://raw.githubusercontent.com/microsoft/graphrag/main/README.md",
+      "channel": "raw",
+      "file": "12-graphrag.md"
+    },
+    {
+      "topic": "Agentic RAG",
+      "url": "https://weaviate.io/blog/what-is-agentic-rag",
+      "channel": "web",
+      "file": "13-agentic-rag.md"
+    },
+    {
+      "topic": "Text2SQL 实战",
+      "url": "https://raw.githubusercontent.com/vanna-ai/vanna/main/README.md",
+      "channel": "raw",
+      "file": "14-text2sql.md"
+    },
+    {
+      "topic": "生产化架构与常见问题排查",
+      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/reliable_rag.ipynb",
+      "channel": "raw",
+      "file": "15-production-rag-troubleshooting.md"
+    }
+  ]
+}

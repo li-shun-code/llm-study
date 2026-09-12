@@ -1,0 +1,89 @@
+{
+  "module": "06-api-development",
+  "articles": [
+    {
+      "topic": "第一个 API 调用（Responses API 为主、Chat Completions 对照）",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
+      "channel": "raw",
+      "file": "01-first-api-call.md"
+    },
+    {
+      "topic": "消息角色与多轮会话管理",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb",
+      "channel": "raw",
+      "file": "02-message-roles-multi-turn.md"
+    },
+    {
+      "topic": "流式输出（SSE）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb",
+      "channel": "raw",
+      "file": "03-streaming-sse.md"
+    },
+    {
+      "topic": "Function Calling/Tool Use",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_call_functions_with_chat_models.ipynb",
+      "channel": "raw",
+      "file": "04-function-calling.md"
+    },
+    {
+      "topic": "JSON Mode 与结构化输出（Structured Outputs/JSON Schema）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Structured_Outputs_Intro.ipynb",
+      "channel": "raw",
+      "file": "05-json-mode-structured-outputs.md"
+    },
+    {
+      "topic": "Embedding API 与文本相似度",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Get_embeddings_from_dataset.ipynb",
+      "channel": "raw",
+      "file": "06-embeddings-similarity.md"
+    },
+    {
+      "topic": "视觉理解 API",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
+      "channel": "raw",
+      "file": "07-vision-api.md"
+    },
+    {
+      "topic": "语音 API（ASR/TTS/Realtime，选学）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Speech_transcription_methods.ipynb",
+      "channel": "raw",
+      "file": "08-speech-api.md"
+    },
+    {
+      "topic": "错误处理/重试/限流",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_handle_rate_limits.ipynb",
+      "channel": "raw",
+      "file": "09-error-retry-rate-limits.md"
+    },
+    {
+      "topic": "成本与 Token 优化（Prompt Caching 与 Batch API）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Prompt_Caching101.ipynb",
+      "channel": "raw",
+      "file": "10-cost-token-optimization.md"
+    },
+    {
+      "topic": "OpenAI 兼容端点与 LiteLLM",
+      "url": "https://docs.litellm.ai/docs/",
+      "channel": "web",
+      "file": "11-openai-compatible-litellm.md"
+    },
+    {
+      "topic": "LangChain 快速入门（≥1.0 create_agent）",
+      "url": "https://docs.langchain.com/oss/python/langchain/quickstart",
+      "channel": "web",
+      "file": "12-langchain-quickstart.md"
+    },
+    {
+      "topic": "用 FastAPI 封装 LLM 服务（.env 方案，交叉引用模块 0）",
+      "url": "https://fastapi.tiangolo.com/zh/tutorial/first-steps/",
+      "channel": "web",
+      "file": "13-fastapi-llm-service.md"
+    },
+    {
+      "topic": "实战：命令行聊天机器人",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb",
+      "channel": "raw",
+      "file": "14-cli-chatbot-practice.md"
+    }
+  ]
+}

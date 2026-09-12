@@ -468,19 +468,202 @@ export default [
         "text": "模块 6 · API 与应用开发",
         "link": "/06-api-development/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "第一个 API 调用：Responses API 与 Chat Completions",
+            "link": "/06-api-development/01-first-api-call"
+          },
+          {
+            "text": "消息角色与多轮会话管理",
+            "link": "/06-api-development/02-message-roles-multi-turn"
+          },
+          {
+            "text": "流式输出（SSE）",
+            "link": "/06-api-development/03-streaming-sse"
+          },
+          {
+            "text": "Function Calling / Tool Use：让模型调用你的函数",
+            "link": "/06-api-development/04-function-calling"
+          },
+          {
+            "text": "JSON Mode 与结构化输出（Structured Outputs）",
+            "link": "/06-api-development/05-json-mode-structured-outputs"
+          },
+          {
+            "text": "Embedding API 与文本相似度",
+            "link": "/06-api-development/06-embeddings-similarity"
+          },
+          {
+            "text": "视觉理解 API：把图片喂给多模态模型",
+            "link": "/06-api-development/07-vision-api"
+          },
+          {
+            "text": "语音 API：转写、合成与实时会话（选学）",
+            "link": "/06-api-development/08-speech-api"
+          },
+          {
+            "text": "错误处理、重试与限流",
+            "link": "/06-api-development/09-error-retry-rate-limits"
+          },
+          {
+            "text": "成本与 Token 优化：Prompt Caching 与 Batch API",
+            "link": "/06-api-development/10-cost-token-optimization"
+          },
+          {
+            "text": "OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型",
+            "link": "/06-api-development/11-openai-compatible-litellm"
+          },
+          {
+            "text": "LangChain 快速入门（1.0 · create_agent）",
+            "link": "/06-api-development/12-langchain-quickstart"
+          },
+          {
+            "text": "用 FastAPI 封装 LLM 服务",
+            "link": "/06-api-development/13-fastapi-llm-service"
+          },
+          {
+            "text": "实战：命令行聊天机器人",
+            "link": "/06-api-development/14-cli-chatbot-practice"
+          }
+        ]
       },
       {
         "text": "模块 7 · 数据库",
         "link": "/07-databases/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "关系模型与 SQL 入门",
+            "link": "/07-databases/01-relational-model-and-sql"
+          },
+          {
+            "text": "E-R 建模与范式：以\"会话-消息\"表设计为例",
+            "link": "/07-databases/02-er-model-and-normalization"
+          },
+          {
+            "text": "SELECT 与增删改查（CRUD）",
+            "link": "/07-databases/03-crud-basics"
+          },
+          {
+            "text": "聚合与分组：GROUP BY、HAVING 与聚合函数",
+            "link": "/07-databases/04-aggregation-and-group-by"
+          },
+          {
+            "text": "JOIN 多表查询",
+            "link": "/07-databases/05-joins"
+          },
+          {
+            "text": "索引原理与使用",
+            "link": "/07-databases/06-indexes"
+          },
+          {
+            "text": "事务与 ACID",
+            "link": "/07-databases/07-transactions-and-acid"
+          },
+          {
+            "text": "SQLite 上手",
+            "link": "/07-databases/08-sqlite-getting-started"
+          },
+          {
+            "text": "PostgreSQL 入门",
+            "link": "/07-databases/09-postgresql-getting-started"
+          },
+          {
+            "text": "SQLAlchemy ORM 入门（2.0 风格，含连接池）",
+            "link": "/07-databases/10-sqlalchemy-orm"
+          },
+          {
+            "text": "Redis 核心数据结构与缓存",
+            "link": "/07-databases/11-redis-data-structures-and-cache"
+          },
+          {
+            "text": "MongoDB 文档模型",
+            "link": "/07-databases/12-mongodb-document-model"
+          },
+          {
+            "text": "向量数据库原理",
+            "link": "/07-databases/13-vector-database-principles"
+          },
+          {
+            "text": "Chroma 与 Qdrant 单库实战",
+            "link": "/07-databases/14-chroma-qdrant-quickstart"
+          },
+          {
+            "text": "Milvus 与 pgvector 实战",
+            "link": "/07-databases/15-milvus-pgvector-quickstart"
+          },
+          {
+            "text": "向量库选型对比",
+            "link": "/07-databases/16-vector-db-comparison"
+          }
+        ]
       },
       {
         "text": "模块 8 · RAG",
         "link": "/08-rag/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "什么是 RAG：检索增强生成入门",
+            "link": "/08-rag/01-what-is-rag"
+          },
+          {
+            "text": "文档解析与摄取：把 PDF、扫描件和表格变成干净的 Markdown",
+            "link": "/08-rag/02-document-parsing-ingestion"
+          },
+          {
+            "text": "Embedding 深入：从语义向量到语义搜索",
+            "link": "/08-rag/03-embedding-deep-dive"
+          },
+          {
+            "text": "文档分块策略：从固定切分到上下文检索（Contextual Retrieval）",
+            "link": "/08-rag/04-chunking-strategies"
+          },
+          {
+            "text": "向量检索与相似度：欧氏距离、点积与余弦相似度",
+            "link": "/08-rag/05-vector-search-similarity"
+          },
+          {
+            "text": "最小 RAG 全流程实战：从 PDF 到带依据的回答",
+            "link": "/08-rag/06-minimal-rag-walkthrough"
+          },
+          {
+            "text": "RAG 评估实战：用 RAGAS 量化检索与生成质量",
+            "link": "/08-rag/07-rag-evaluation-ragas"
+          },
+          {
+            "text": "混合检索：BM25 词法检索 + 向量语义检索",
+            "link": "/08-rag/08-hybrid-search-bm25"
+          },
+          {
+            "text": "重排序（Rerank）：LLM 打分与 Cross-Encoder 精排",
+            "link": "/08-rag/09-reranking"
+          },
+          {
+            "text": "Query 改写与扩展：改写、退后提示与子查询分解",
+            "link": "/08-rag/10-query-rewriting-expansion"
+          },
+          {
+            "text": "多模态 RAG：图文混合文档的\"图片打字幕\"方案",
+            "link": "/08-rag/11-multimodal-rag"
+          },
+          {
+            "text": "GraphRAG：用知识图谱回答\"全局性\"问题",
+            "link": "/08-rag/12-graphrag"
+          },
+          {
+            "text": "Agentic RAG：从固定管线到会思考的检索",
+            "link": "/08-rag/13-agentic-rag"
+          },
+          {
+            "text": "Text2SQL 实战：用 Vanna 让自然语言直达数据库",
+            "link": "/08-rag/14-text2sql"
+          },
+          {
+            "text": "生产化 RAG：可靠管线与常见问题排查",
+            "link": "/08-rag/15-production-rag-troubleshooting"
+          }
+        ]
       },
       {
         "text": "模块 9 · Agent",
