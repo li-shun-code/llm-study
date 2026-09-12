@@ -1,0 +1,40 @@
+{
+  "modules": {
+    "00-python-basics": {
+      "articles": []
+    },
+    "01-dsa": {
+      "articles": []
+    },
+    "02-cs-fundamentals": {
+      "articles": []
+    },
+    "03-python-advanced": {
+      "articles": []
+    },
+    "04-llm-basics": {
+      "articles": []
+    },
+    "05-prompt-engineering": {
+      "articles": []
+    },
+    "06-api-development": {
+      "articles": []
+    },
+    "07-databases": {
+      "articles": []
+    },
+    "08-rag": {
+      "articles": []
+    },
+    "09-agents": {
+      "articles": []
+    },
+    "10-finetuning-deployment": {
+      "articles": []
+    },
+    "11-vibe-coding": {
+      "articles": []
+    }
+  }
+}
