@@ -222,6 +222,28 @@ test('parseFrontmatter 解析标量与布尔', () => {
 
 ---
 
+### Task 4A: AI 学习助手（用户自配 LLM，浏览器加密存储）
+
+**Files:**
+- Create: `docs/.vitepress/theme/utils/secureStore.mjs`（加密存储）、`docs/.vitepress/theme/utils/chatClient.mjs`（SSE 流式对话）、`docs/.vitepress/theme/components/AiAssistant.vue`、`tests/secure-store.test.mjs`
+- Modify: `docs/.vitepress/theme/index.ts`（NotRender 下挂载 AiAssistant）
+
+**Interfaces:**
+- Produces:
+  - `secureStore.mjs`：`getOrCreateKey() -> Promise<CryptoKey>`（IndexedDB `llm-site-kv`/`keys`，AES-GCM，`extractable: false`，已存在则复用）；`encryptWithKey(key, plain) -> Promise<{iv, ct}>`（base64）；`decryptWithKey(key, {iv, ct}) -> Promise<string>`；`saveConfig({baseUrl, model, apiKeyEncrypted})` / `loadConfig(key)` / `clearConfig()`（localStorage 键 `llm-assistant-config`，baseUrl/model 明文、apiKey 仅密文；未配置时 `loadConfig` 返回 `null`）。
+  - `chatClient.mjs`：`streamChat({baseUrl, apiKey, model, messages, onDelta, signal})`——POST `{baseUrl}/chat/completions`，`stream: true`，解析 SSE `data:` 行，增量文本回调 `onDelta`；HTTP 非 2xx 抛出带响应文本的错误。
+  - `AiAssistant.vue`：右下角悬浮按钮 → 聊天面板（消息列表/输入框/流式渲染）；未配置时显示设置表单（Base URL、模型、API Key、"测试连接"）；已配置可重新编辑或"清除配置"；System Prompt 固定为"你是本站（LLM 应用开发学习路线）的学习助手，用中文简洁回答，优先结合站内模块体系建议学习路径"。历史消息仅存内存。
+
+- [ ] **Step 1: 写失败测试** `tests/secure-store.test.mjs`（node:test + globalThis.crypto）：`encryptWithKey/decryptWithKey` 往返一致；密文与明文不同、不含明文子串；同一明文两次加密 iv 不同；`decryptWithKey` 用错 key 抛错；`saveConfig` 后 localStorage 原始字符串不包含 API Key 明文。
+- [ ] **Step 2: 确认失败**：`node --test tests/` → FAIL
+- [ ] **Step 3: 实现** secureStore.mjs 与 chatClient.mjs（fetch + ReadableStream 读 SSE，浏览器/Node 通用）
+- [ ] **Step 4: 测试通过**：`node --test tests/` PASS
+- [ ] **Step 5: 实现 AiAssistant.vue 并挂载**（VitePress 客户端组件，`onMounted` 后取 key/解密配置）
+- [ ] **Step 6: 构建验证**：`npx vitepress build docs` 成功；`npm run dev` 人工冒烟（配真实端点可选，UI 无 JS 报错即可）
+- [ ] **Step 7: Commit**：`feat: AI 学习助手——自配 OpenAI 兼容端点，Key 加密存储`
+
+---
+
 ### Task 5: 内容 · 模块 0 Python 基础（~22 篇）
 
 **目录** `docs/00-python-basics/`。**候选来源（执行时验证可抓性，失败按 Playbook 替换）**：廖雪峰 Python 教程 liaoxuefeng.com（web）、菜鸟教程 runoob.com/python3（web）、Python 官方教程中文（docs.python.org/zh-cn/3/tutorial，web）、GitHub 上开源中文 Python 书（raw）。

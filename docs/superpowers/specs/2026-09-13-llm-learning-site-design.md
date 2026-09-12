@@ -55,6 +55,11 @@
 - VitePress 1.x 默认主题 + local search；首页 Hero + 12 模块路线图卡片；侧边栏按 3 板块 12 模块分组，顺序即学习顺序。
 - 项目根：`~/.zcode/workspace/default/llm-learning-site/`，站点文档在 `docs/`。
 - 抓取转换：Node 脚本（GitHub raw 批量）+ 网页抓取转换；英文篇由 AI 翻译为中文后收录。
+- **AI 学习助手（纯前端）**：全站右下角悬浮聊天组件；用户自行配置 OpenAI 兼容端点（Base URL / 模型名 / API Key），浏览器直连该端点发起流式对话。配置存储方案：
+  - API Key 用 Web Crypto **AES-GCM 加密后存 localStorage**；加密密钥为首次使用时生成、存于 IndexedDB 的**不可导出（non-extractable）CryptoKey**——localStorage 中任何时刻不存在明文 Key。
+  - Base URL 与模型名非敏感，明文存 localStorage。
+  - 提供"清除配置"一键删除；设置面板注明本地存储的安全边界（无法防御本机恶意软件）。
+  - 不经过任何自建服务端，无 Key 上传。
 - 不引入评论/统计等额外系统（YAGNI）。
 
 ## 5. 验证与交付
