@@ -669,13 +669,155 @@ export default [
         "text": "模块 9 · Agent",
         "link": "/09-agents/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "LLM 驱动的自主智能体（Agent）全景：规划、记忆与工具使用",
+            "link": "/09-agents/01-llm-powered-autonomous-agents"
+          },
+          {
+            "text": "ReAct 范式：思考、行动与观察的循环",
+            "link": "/09-agents/02-react-paradigm"
+          },
+          {
+            "text": "Tool Use 实战：工具的定义、注入与调用",
+            "link": "/09-agents/03-tool-use-in-practice"
+          },
+          {
+            "text": "规划与任务分解：构建高效智能体的工作流模式",
+            "link": "/09-agents/04-planning-decomposition"
+          },
+          {
+            "text": "Agent 记忆机制：LangGraph 的短期记忆与长期记忆",
+            "link": "/09-agents/05-agent-memory"
+          },
+          {
+            "text": "MCP 协议详解：架构、分层与核心原语（2026-07-28 版规范）",
+            "link": "/09-agents/06-mcp-protocol"
+          },
+          {
+            "text": "MCP Server 实战：从零构建一个天气查询服务器",
+            "link": "/09-agents/07-mcp-server-lab"
+          },
+          {
+            "text": "Function Calling vs MCP：两代工具接入方式如何取舍",
+            "link": "/09-agents/08-function-calling-vs-mcp"
+          },
+          {
+            "text": "多智能体模式：Anthropic 如何构建多智能体研究系统",
+            "link": "/09-agents/09-multi-agent-patterns"
+          },
+          {
+            "text": "LangGraph 入门：用 Graph API 与 Functional API 构建你的第一个智能体",
+            "link": "/09-agents/10-langgraph-quickstart"
+          },
+          {
+            "text": "Human-in-the-Loop：用 LangGraph interrupt 实现中断、恢复与人工审批",
+            "link": "/09-agents/11-human-in-the-loop"
+          },
+          {
+            "text": "AutoGen 与 CrewAI：多智能体框架现状（AutoGen 已并入 Microsoft Agent Framework）",
+            "link": "/09-agents/12-autogen-crewai"
+          },
+          {
+            "text": "OpenAI Agents SDK：轻量多智能体框架入门",
+            "link": "/09-agents/13-openai-agents-sdk"
+          },
+          {
+            "text": "代码解释器型 Agent：让 LLM 用代码思考（smolagents 与 CodeAct）",
+            "link": "/09-agents/14-code-interpreter-agents"
+          },
+          {
+            "text": "Computer Use 与浏览器操作 Agent：让模型亲手操作图形界面",
+            "link": "/09-agents/15-computer-use-agents"
+          },
+          {
+            "text": "可观测性与 Tracing：Agent 生产排障的第一工具（LangSmith / Langfuse / OpenTelemetry）",
+            "link": "/09-agents/16-observability-tracing"
+          },
+          {
+            "text": "Agent 评测：数据集、评估器与 LLM-as-Judge 实战",
+            "link": "/09-agents/17-agent-evaluation"
+          },
+          {
+            "text": "Agent 安全与权限、生产化部署与成本管理",
+            "link": "/09-agents/18-security-production"
+          }
+        ]
       },
       {
         "text": "模块 10 · 微调与部署",
         "link": "/10-finetuning-deployment/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "微调、RAG 还是提示工程：如何为你的场景选型",
+            "link": "/10-finetuning-deployment/01-finetune-vs-rag-vs-prompting"
+          },
+          {
+            "text": "训练范式回顾与全参微调流程（Transformers 实战）",
+            "link": "/10-finetuning-deployment/02-training-paradigms-full-finetuning"
+          },
+          {
+            "text": "GPU 环境基础：CUDA、显存估算与 AutoDL 上手",
+            "link": "/10-finetuning-deployment/03-gpu-environment-basics"
+          },
+          {
+            "text": "LoRA 原理：低秩适应为什么有效",
+            "link": "/10-finetuning-deployment/04-lora-principles"
+          },
+          {
+            "text": "QLoRA 与显存优化：单卡微调大模型",
+            "link": "/10-finetuning-deployment/05-qlora-memory-optimization"
+          },
+          {
+            "text": "训练数据准备与清洗：TRL 数据集格式全解",
+            "link": "/10-finetuning-deployment/06-training-data-preparation"
+          },
+          {
+            "text": "数据蒸馏与合成：用大模型造小模型的训练数据",
+            "link": "/10-finetuning-deployment/07-synthetic-data-distillation"
+          },
+          {
+            "text": "训练超参与过拟合诊断：学习率、秩与 loss 曲线判读",
+            "link": "/10-finetuning-deployment/08-hyperparams-overfitting"
+          },
+          {
+            "text": "PEFT/TRL 实战：SFTTrainer 做有监督微调",
+            "link": "/10-finetuning-deployment/09-trl-sft-practice"
+          },
+          {
+            "text": "DPO 与偏好优化：TRL DPOTrainer 实践",
+            "link": "/10-finetuning-deployment/10-dpo-preference-optimization"
+          },
+          {
+            "text": "模型量化基础：从 FP16 到 4-bit，部署侧量化怎么选",
+            "link": "/10-finetuning-deployment/11-quantization-basics"
+          },
+          {
+            "text": "推理原理：KV Cache、PagedAttention 与 continuous batching——vLLM 为什么快",
+            "link": "/10-finetuning-deployment/12-inference-principles"
+          },
+          {
+            "text": "Ollama 本地部署：一行命令把开源模型跑起来",
+            "link": "/10-finetuning-deployment/13-ollama-local-deployment"
+          },
+          {
+            "text": "vLLM 高吞吐部署：从 vllm serve 到 Docker 容器化",
+            "link": "/10-finetuning-deployment/14-vllm-high-throughput-deployment"
+          },
+          {
+            "text": "开源模型选型：Qwen、GLM、DeepSeek 全景（2026-09）",
+            "link": "/10-finetuning-deployment/15-open-model-selection"
+          },
+          {
+            "text": "LLM 评测方法与基准：lm-evaluation-harness 实战",
+            "link": "/10-finetuning-deployment/16-evaluation-benchmarks"
+          },
+          {
+            "text": "安全、合规与内容护栏：OWASP LLM Top 10 与 NeMo Guardrails",
+            "link": "/10-finetuning-deployment/17-safety-guardrails"
+          }
+        ]
       }
     ]
   },
@@ -687,7 +829,72 @@ export default [
         "text": "模块 11 · Vibe Coding",
         "link": "/11-vibe-coding/",
         "collapsed": false,
-        "items": []
+        "items": [
+          {
+            "text": "Vibe Coding 是什么：概念源起与工程争议",
+            "link": "/11-vibe-coding/01-what-is-vibe-coding"
+          },
+          {
+            "text": "AI 编程工具全景对比（2026-09 版）",
+            "link": "/11-vibe-coding/02-ai-coding-tools-landscape"
+          },
+          {
+            "text": "Claude Code 工作流与最佳实践",
+            "link": "/11-vibe-coding/03-claude-code-best-practices"
+          },
+          {
+            "text": "Cursor 入门与 Rules 规则系统",
+            "link": "/11-vibe-coding/04-cursor-rules"
+          },
+          {
+            "text": "AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件",
+            "link": "/11-vibe-coding/05-agents-md-claude-md"
+          },
+          {
+            "text": "Claude Skills：可复用技能包",
+            "link": "/11-vibe-coding/06-claude-skills"
+          },
+          {
+            "text": "Git in AI 工作流：commit 即存档、worktree 隔离与审查流",
+            "link": "/11-vibe-coding/07-git-in-ai-workflow"
+          },
+          {
+            "text": "Spec 驱动开发（Spec-Driven Development）",
+            "link": "/11-vibe-coding/08-spec-driven-development"
+          },
+          {
+            "text": "上下文工程（Context Engineering）",
+            "link": "/11-vibe-coding/09-context-engineering"
+          },
+          {
+            "text": "MCP 在编码中的应用",
+            "link": "/11-vibe-coding/10-mcp-for-coding"
+          },
+          {
+            "text": "AI 结对与代码审查",
+            "link": "/11-vibe-coding/11-ai-pairing-code-review"
+          },
+          {
+            "text": "TDD with AI：Kent Beck 的增强编程实践",
+            "link": "/11-vibe-coding/12-tdd-with-ai"
+          },
+          {
+            "text": "多智能体协作编码",
+            "link": "/11-vibe-coding/13-multi-agent-collaboration"
+          },
+          {
+            "text": "AI 代码的安全与质量陷阱",
+            "link": "/11-vibe-coding/14-ai-code-security-pitfalls"
+          },
+          {
+            "text": "从 0 到 1 用 AI 做产品的实战流程",
+            "link": "/11-vibe-coding/15-zero-to-one-with-ai"
+          },
+          {
+            "text": "工具链生态：Cline、Windsurf 与 Headless CI 中的 AI 编码",
+            "link": "/11-vibe-coding/16-toolchain-ecosystem"
+          }
+        ]
       }
     ]
   }

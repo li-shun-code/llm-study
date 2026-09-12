@@ -1,0 +1,113 @@
+{
+  "module": "09-agents",
+  "articles": [
+    {
+      "topic": "什么是 Agent",
+      "url": "https://lilianweng.github.io/posts/2023-06-23-agent/",
+      "channel": "web",
+      "file": "01-llm-powered-autonomous-agents.md"
+    },
+    {
+      "topic": "ReAct 范式",
+      "url": "https://raw.githubusercontent.com/huggingface/agents-course/main/units/en/unit1/thoughts.mdx",
+      "channel": "raw",
+      "file": "02-react-paradigm.md"
+    },
+    {
+      "topic": "Tool Use 实战",
+      "url": "https://raw.githubusercontent.com/huggingface/agents-course/main/units/en/unit1/tools.mdx",
+      "channel": "raw",
+      "file": "03-tool-use-in-practice.md"
+    },
+    {
+      "topic": "规划与任务分解",
+      "url": "https://www.anthropic.com/research/building-effective-agents",
+      "channel": "web",
+      "file": "04-planning-decomposition.md"
+    },
+    {
+      "topic": "记忆机制（短期/长期）",
+      "url": "https://docs.langchain.com/oss/python/langgraph/add-memory",
+      "channel": "web",
+      "file": "05-agent-memory.md"
+    },
+    {
+      "topic": "MCP 协议详解",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture.md",
+      "channel": "raw",
+      "file": "06-mcp-protocol.md"
+    },
+    {
+      "topic": "MCP server 实战",
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server.md",
+      "channel": "raw",
+      "file": "07-mcp-server-lab.md"
+    },
+    {
+      "topic": "Function Calling vs MCP",
+      "url": "https://raw.githubusercontent.com/openai/openai-agents-python/main/docs/mcp.md",
+      "channel": "raw",
+      "file": "08-function-calling-vs-mcp.md"
+    },
+    {
+      "topic": "多智能体模式",
+      "url": "https://www.anthropic.com/engineering/built-multi-agent-research-system",
+      "channel": "web",
+      "file": "09-multi-agent-patterns.md"
+    },
+    {
+      "topic": "LangGraph 入门",
+      "url": "https://docs.langchain.com/oss/python/langgraph/quickstart",
+      "channel": "web",
+      "file": "10-langgraph-quickstart.md"
+    },
+    {
+      "topic": "Human-in-the-loop（interrupt 中断恢复与人工审批）",
+      "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+      "channel": "web",
+      "file": "11-human-in-the-loop.md"
+    },
+    {
+      "topic": "AutoGen 与 CrewAI（Microsoft Agent Framework 现状）",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-framework/main/README.md",
+      "channel": "raw",
+      "file": "12-autogen-crewai.md"
+    },
+    {
+      "topic": "OpenAI Agents SDK",
+      "url": "https://raw.githubusercontent.com/openai/openai-agents-python/main/README.md",
+      "channel": "raw",
+      "file": "13-openai-agents-sdk.md"
+    },
+    {
+      "topic": "代码解释器型 Agent",
+      "url": "https://raw.githubusercontent.com/huggingface/smolagents/main/README.md",
+      "channel": "raw",
+      "file": "14-code-interpreter-agents.md"
+    },
+    {
+      "topic": "Computer Use/浏览器操作 Agent",
+      "url": "https://raw.githubusercontent.com/browser-use/browser-use/main/README.md",
+      "channel": "raw",
+      "file": "15-computer-use-agents.md"
+    },
+    {
+      "topic": "可观测性与 Tracing",
+      "url": "https://docs.langchain.com/langsmith/observability-concepts",
+      "channel": "web",
+      "file": "16-observability-tracing.md"
+    },
+    {
+      "topic": "Agent 评测",
+      "url": "https://docs.langchain.com/langsmith/evaluate-llm-application",
+      "channel": "web",
+      "file": "17-agent-evaluation.md"
+    },
+    {
+      "topic": "Agent 安全与权限、生产化部署与成本",
+      "url": "https://raw.githubusercontent.com/microsoft/ai-agents-for-beginners/main/10-ai-agents-production/README.md",
+      "channel": "raw",
+      "file": "18-security-production.md"
+    }
+  ]
+}

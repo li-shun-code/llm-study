@@ -1,0 +1,107 @@
+{
+  "module": "10-finetuning-deployment",
+  "articles": [
+    {
+      "topic": "微调 vs RAG vs 提示工程选型",
+      "url": "https://github.com/microsoft/generative-ai-for-beginners/blob/main/18-fine-tuning/README.md",
+      "channel": "raw",
+      "file": "01-finetune-vs-rag-vs-prompting.md"
+    },
+    {
+      "topic": "训练范式回顾与全参微调流程",
+      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter6/第六章 大模型训练流程实践.md",
+      "channel": "raw",
+      "file": "02-training-paradigms-full-finetuning.md"
+    },
+    {
+      "topic": "GPU 环境基础（CUDA、显存估算、AutoDL 上手）",
+      "url": "https://www.autodl.com/docs/quick_start/",
+      "channel": "web",
+      "file": "03-gpu-environment-basics.md"
+    },
+    {
+      "topic": "LoRA 原理",
+      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter6/第六章 大模型训练流程实践.md",
+      "channel": "raw",
+      "file": "04-lora-principles.md"
+    },
+    {
+      "topic": "QLoRA 与显存优化",
+      "url": "https://huggingface.co/docs/peft/developer_guides/quantization",
+      "channel": "raw",
+      "file": "05-qlora-memory-optimization.md"
+    },
+    {
+      "topic": "训练数据准备与清洗",
+      "url": "https://huggingface.co/docs/trl/dataset_formats",
+      "channel": "raw",
+      "file": "06-training-data-preparation.md"
+    },
+    {
+      "topic": "数据蒸馏与合成",
+      "url": "https://github.com/huggingface/smol-course/tree/main/v1/6_synthetic_datasets",
+      "channel": "raw",
+      "file": "07-synthetic-data-distillation.md"
+    },
+    {
+      "topic": "训练超参与过拟合诊断",
+      "url": "https://huggingface.co/docs/trl/lora_without_regret",
+      "channel": "raw",
+      "file": "08-hyperparams-overfitting.md"
+    },
+    {
+      "topic": "PEFT/TRL 实战（SFT）",
+      "url": "https://huggingface.co/docs/trl/sft_trainer",
+      "channel": "raw",
+      "file": "09-trl-sft-practice.md"
+    },
+    {
+      "topic": "DPO 与偏好优化（TRL 实践）",
+      "url": "https://huggingface.co/docs/trl/dpo_trainer",
+      "channel": "raw",
+      "file": "10-dpo-preference-optimization.md"
+    },
+    {
+      "topic": "模型量化基础",
+      "url": "https://github.com/bitsandbytes-foundation/bitsandbytes",
+      "channel": "raw",
+      "file": "11-quantization-basics.md"
+    },
+    {
+      "topic": "推理原理（KV Cache / continuous batching / PagedAttention）",
+      "url": "https://blog.vllm.ai/2023/06/20/vllm.html",
+      "channel": "web",
+      "file": "12-inference-principles.md"
+    },
+    {
+      "topic": "Ollama 本地部署",
+      "url": "https://github.com/ollama/ollama",
+      "channel": "raw",
+      "file": "13-ollama-local-deployment.md"
+    },
+    {
+      "topic": "vLLM 高吞吐部署（含 Docker 容器化）",
+      "url": "https://docs.vllm.ai/en/latest/getting_started/quickstart.html",
+      "channel": "raw",
+      "file": "14-vllm-high-throughput-deployment.md"
+    },
+    {
+      "topic": "开源模型选型",
+      "url": "https://github.com/QwenLM/Qwen3.5",
+      "channel": "raw",
+      "file": "15-open-model-selection.md"
+    },
+    {
+      "topic": "LLM 评测方法与基准（lm-eval）",
+      "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/main/README.md",
+      "channel": "raw",
+      "file": "16-evaluation-benchmarks.md"
+    },
+    {
+      "topic": "安全、合规与内容护栏",
+      "url": "https://genai.owasp.org/llm-top-10/",
+      "channel": "web",
+      "file": "17-safety-guardrails.md"
+    }
+  ]
+}

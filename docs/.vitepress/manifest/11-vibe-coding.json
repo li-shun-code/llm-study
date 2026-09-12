@@ -1,0 +1,101 @@
+{
+  "module": "11-vibe-coding",
+  "articles": [
+    {
+      "topic": "Vibe Coding 是什么与工程争议",
+      "url": "https://simonwillison.net/2025/Mar/19/vibe-coding/",
+      "channel": "web",
+      "file": "01-what-is-vibe-coding.md"
+    },
+    {
+      "topic": "AI 编程工具全景对比（2026-09 版）",
+      "url": "https://code.claude.com/docs/en/overview",
+      "channel": "web",
+      "file": "02-ai-coding-tools-landscape.md"
+    },
+    {
+      "topic": "Claude Code 工作流与最佳实践",
+      "url": "https://code.claude.com/docs/en/best-practices",
+      "channel": "web",
+      "file": "03-claude-code-best-practices.md"
+    },
+    {
+      "topic": "Cursor 入门与 Rules",
+      "url": "https://cursor.com/docs/context/rules",
+      "channel": "web",
+      "file": "04-cursor-rules.md"
+    },
+    {
+      "topic": "AGENTS.md/CLAUDE.md 项目规范文件",
+      "url": "https://agents.md/",
+      "channel": "web",
+      "file": "05-agents-md-claude-md.md"
+    },
+    {
+      "topic": "Claude Skills 可复用技能包",
+      "url": "https://code.claude.com/docs/en/skills",
+      "channel": "web",
+      "file": "06-claude-skills.md"
+    },
+    {
+      "topic": "Git in AI 工作流",
+      "url": "https://code.claude.com/docs/en/worktrees",
+      "channel": "web",
+      "file": "07-git-in-ai-workflow.md"
+    },
+    {
+      "topic": "Spec 驱动开发",
+      "url": "https://github.com/github/spec-kit",
+      "channel": "raw",
+      "file": "08-spec-driven-development.md"
+    },
+    {
+      "topic": "上下文工程（Context Engineering）",
+      "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+      "channel": "web",
+      "file": "09-context-engineering.md"
+    },
+    {
+      "topic": "MCP 在编码中的应用",
+      "url": "https://code.claude.com/docs/en/mcp",
+      "channel": "web",
+      "file": "10-mcp-for-coding.md"
+    },
+    {
+      "topic": "AI 结对与代码审查",
+      "url": "https://code.claude.com/docs/en/code-review",
+      "channel": "web",
+      "file": "11-ai-pairing-code-review.md"
+    },
+    {
+      "topic": "TDD with AI",
+      "url": "https://tidyfirst.substack.com/p/augmented-coding-beyond-the-vibes",
+      "channel": "web",
+      "file": "12-tdd-with-ai.md"
+    },
+    {
+      "topic": "多智能体协作编码",
+      "url": "https://code.claude.com/docs/en/agent-teams",
+      "channel": "web",
+      "file": "13-multi-agent-collaboration.md"
+    },
+    {
+      "topic": "AI 代码的安全与质量陷阱",
+      "url": "https://simonwillison.net/2026/Jul/22/openai-cyberattack/",
+      "channel": "web",
+      "file": "14-ai-code-security-pitfalls.md"
+    },
+    {
+      "topic": "从 0 到 1 用 AI 做产品的实战流程",
+      "url": "https://ghuntley.com/dothings/",
+      "channel": "web",
+      "file": "15-zero-to-one-with-ai.md"
+    },
+    {
+      "topic": "工具链生态（Cline/Windsurf/Headless CI）",
+      "url": "https://code.claude.com/docs/en/headless",
+      "channel": "web",
+      "file": "16-toolchain-ecosystem.md"
+    }
+  ]
+}
