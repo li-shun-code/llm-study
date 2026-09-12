@@ -1,9 +1,13 @@
-// 自定义主题入口：扩展默认主题，后续 AI 助手等全局组件在此挂载
+// 自定义主题入口：扩展默认主题，挂载全站 AI 学习助手
+import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
+import AiAssistant from './components/AiAssistant.vue'
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({ app }) {
-    // 全局组件在后续任务中注册
+  Layout() {
+    return h(DefaultTheme.Layout, null, {
+      'layout-bottom': () => h(AiAssistant)
+    })
   }
 }

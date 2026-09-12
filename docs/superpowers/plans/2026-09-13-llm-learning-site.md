@@ -181,9 +181,9 @@ test('parseFrontmatter 解析标量与布尔', () => {
 })
 ```
 
-- [ ] **Step 2: 运行测试确认失败**：`node --test tests/` → FAIL（模块不存在）
+- [ ] **Step 2: 运行测试确认失败**：`node --test "tests/*.test.mjs"` → FAIL（模块不存在）
 - [ ] **Step 3: 实现** `frontmatter.mjs` 与 `gen-sidebar.mjs`（扫描 `docs/` 下 12 个固定目录，按上述约定输出，写入 `docs/.vitepress/sidebar.generated.mjs`，内容为 `export default <JSON>`）
-- [ ] **Step 4: 测试通过 + 生成**：`node --test tests/` PASS；`node scripts/gen-sidebar.mjs && npx vitepress build docs` 成功
+- [ ] **Step 4: 测试通过 + 生成**：`node --test "tests/*.test.mjs"` PASS；`node scripts/gen-sidebar.mjs && npx vitepress build docs` 成功
 - [ ] **Step 5: Commit** `feat: 侧边栏自动生成脚本`
 
 ---
@@ -198,9 +198,9 @@ test('parseFrontmatter 解析标量与布尔', () => {
 - Produces: `node scripts/check-frontmatter.mjs <docsDir>...`；对每篇非 root 文章检查：必填字段齐全、`order` 为整数、署名块匹配 `^> \*\*来源\*\*：`、文件名序号与 `order` 一致；root 页只要求 `title/order/isRoot`。输出 `PASS (N articles)` 或逐条 `FAIL` 并以非零码退出。
 
 - [ ] **Step 1: 写失败测试**（夹具：缺字段文章、合规文章、root 页各一，断言合规通过/缺失报错退出码 1）
-- [ ] **Step 2: 确认失败**：`node --test tests/` → FAIL
+- [ ] **Step 2: 确认失败**：`node --test "tests/*.test.mjs"` → FAIL
 - [ ] **Step 3: 实现校验脚本**
-- [ ] **Step 4: 通过**：`node --test tests/` PASS
+- [ ] **Step 4: 通过**：`node --test "tests/*.test.mjs"` PASS
 - [ ] **Step 5: Commit** `feat: 文章 frontmatter 与署名校验脚本`
 
 ---
@@ -215,7 +215,7 @@ test('parseFrontmatter 解析标量与布尔', () => {
 - Produces: manifest 结构 `{ modules: { "<dir>": { articles: [ { topic, url, channel, file } ] } } }`；`node scripts/fetch-raw.mjs <moduleDir>` 读取 manifest 中该模块 `channel:"raw"` 条目（GitHub raw URL），下载并写入条目指定的 `file` 路径，单条失败打印警告继续，结束输出成功/失败计数。抓取的原始开源书文章允许保留原文（中文书直接入库；此时由执行者补 frontmatter+署名块）。
 
 - [ ] **Step 1: 写失败测试**：`tests/fetch-raw.test.mjs` 用本地 `file://` 不行则用 node:http 起临时服务器伪造 raw 响应，断言文件写入与失败计数
-- [ ] **Step 2: 确认失败** `node --test tests/` → FAIL
+- [ ] **Step 2: 确认失败** `node --test "tests/*.test.mjs"` → FAIL
 - [ ] **Step 3: 实现 fetch-raw.mjs**
 - [ ] **Step 4: 通过 + 真实冒烟**：manifest 加一条 hello-algo 真实 raw URL，运行脚本成功落盘后删除测试文件
 - [ ] **Step 5: Commit** `feat: raw 批量抓取脚本与 manifest`
@@ -235,9 +235,9 @@ test('parseFrontmatter 解析标量与布尔', () => {
   - `AiAssistant.vue`：右下角悬浮按钮 → 聊天面板（消息列表/输入框/流式渲染）；未配置时显示设置表单（Base URL、模型、API Key、"测试连接"）；已配置可重新编辑或"清除配置"；System Prompt 固定为"你是本站（LLM 应用开发学习路线）的学习助手，用中文简洁回答，优先结合站内模块体系建议学习路径"。历史消息仅存内存。
 
 - [ ] **Step 1: 写失败测试** `tests/secure-store.test.mjs`（node:test + globalThis.crypto）：`encryptWithKey/decryptWithKey` 往返一致；密文与明文不同、不含明文子串；同一明文两次加密 iv 不同；`decryptWithKey` 用错 key 抛错；`saveConfig` 后 localStorage 原始字符串不包含 API Key 明文。
-- [ ] **Step 2: 确认失败**：`node --test tests/` → FAIL
+- [ ] **Step 2: 确认失败**：`node --test "tests/*.test.mjs"` → FAIL
 - [ ] **Step 3: 实现** secureStore.mjs 与 chatClient.mjs（fetch + ReadableStream 读 SSE，浏览器/Node 通用）
-- [ ] **Step 4: 测试通过**：`node --test tests/` PASS
+- [ ] **Step 4: 测试通过**：`node --test "tests/*.test.mjs"` PASS
 - [ ] **Step 5: 实现 AiAssistant.vue 并挂载**（VitePress 客户端组件，`onMounted` 后取 key/解密配置）
 - [ ] **Step 6: 构建验证**：`npx vitepress build docs` 成功；`npm run dev` 人工冒烟（配真实端点可选，UI 无 JS 报错即可）
 - [ ] **Step 7: Commit**：`feat: AI 学习助手——自配 OpenAI 兼容端点，Key 加密存储`
