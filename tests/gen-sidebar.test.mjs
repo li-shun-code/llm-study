@@ -55,10 +55,11 @@ describe('buildSidebar', () => {
     const docs = makeTempDocs()
     try {
       const sidebar = buildSidebar(docs)
-      assert.equal(sidebar.length, 3)
-      const part1 = sidebar[0]
-      assert.equal(part1.text, '第一部分 · 开发者内功')
-      const mod0 = part1.items[0]
+      // 按模块路径前缀分区：每个模块一个 key，浏览该模块时只显示该模块的目录
+      const mod0Arr = sidebar['/00-python-basics/']
+      assert.ok(Array.isArray(mod0Arr))
+      assert.equal(mod0Arr.length, 1)
+      const mod0 = mod0Arr[0]
       assert.equal(mod0.text, '模块 0 · Python 基础')
       assert.equal(mod0.link, '/00-python-basics/')
       assert.deepEqual(
@@ -67,12 +68,9 @@ describe('buildSidebar', () => {
       )
       assert.equal(mod0.items[0].link, '/00-python-basics/01-setup')
       // 只有 root 的模块 items 为空数组
-      const part2 = sidebar[1]
-      const mod4 = part2.items.find((m) => m.link === '/04-llm-basics/')
-      assert.equal(mod4.text, '模块 4 · LLM 基础')
-      assert.deepEqual(mod4.items, [])
-      // 第三部分无目录时为空 items
-      assert.deepEqual(sidebar[2].items, [])
+      const mod4 = sidebar['/04-llm-basics/']
+      assert.equal(mod4[0].text, '模块 4 · LLM 基础')
+      assert.deepEqual(mod4[0].items, [])
     } finally {
       rmSync(docs, { recursive: true, force: true })
     }
