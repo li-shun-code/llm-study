@@ -3,6 +3,7 @@ import sidebar from './sidebar.generated.mjs'
 
 export default defineConfig({
   lang: 'zh-CN',
+  base: '/llm-study/',
   title: 'LLM 应用开发完全学习路线',
   description:
     '从 Python 零基础到 LLM 应用开发：抓取全网优质教程的中文学习路线',
