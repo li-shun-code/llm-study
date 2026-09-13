@@ -5,7 +5,7 @@ author: OpenAI（openai-python README · Vision）、OpenAI Cookbook（Tag capti
 license: Apache 2.0 / MIT
 fetched_at: 2026-09-13
 translated: true
-order: 7
+order: 10
 versions: openai-python 2026-09 最新稳定版（Responses API input_image）；GPT-4o / gpt-5.5 等多模态模型
 ---
 

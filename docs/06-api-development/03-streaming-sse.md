@@ -197,7 +197,7 @@ async with client.chat.completions.stream(
 原文的两点提醒值得记牢：
 
 1. **内容审核更困难**：`stream=True` 下内容是一段段到达的，部分内容难以在展示前整体评估，生产应用需要自己在流上叠加审核/过滤逻辑；
-2. **流不可自动重试**：openai-python 文档明确——消费 `Stream`/`AsyncStream` 时的读超时抛 `APITimeoutError`、其他请求失败抛 `APIConnectionError`，且**流式消费不会被 SDK 自动重试**，因为重放请求可能把已经输出给用户的内容再输出一遍（错误处理详见第 09 篇）。
+2. **流不可自动重试**：openai-python 文档明确——消费 `Stream`/`AsyncStream` 时的读超时抛 `APITimeoutError`、其他请求失败抛 `APIConnectionError`，且**流式消费不会被 SDK 自动重试**，因为重放请求可能把已经输出给用户的内容再输出一遍（错误处理详见第 06 篇）。
 
 ## 七、本篇小结
 

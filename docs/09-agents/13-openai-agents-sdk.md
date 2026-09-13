@@ -174,7 +174,7 @@ OpenAI 承诺继续把 Agents SDK 作为开源框架来构建，让社区能在�
 
 # 与本模块其他文章的关系
 
-- 它的 **Tools** 机制就是模块 6 讲过的 Function Calling 的 SDK 封装；**MCP** 一节则展示如何把任意 MCP 服务器的能力挂到 Agent 上（见第 8 篇对比）；
+- 它的 **Tools** 机制就是模块 6 讲过的 Function Calling 的 SDK 封装；**MCP** 一节则展示如何把任意 MCP 服务器的能力挂到 Agent 上（见第 4 篇对比）；
 - **Handoffs** 与 **Agents as tools** 是第 9 篇多智能体模式在 SDK 里的两种实现；
 - **Guardrails** 与 **Human in the loop** 分别对应第 11、18 篇的安全与审批主题；
 - **Tracing** 默认把运行轨迹上传到 OpenAI 控制台，也可导出为 OpenTelemetry 接入 Langfuse 等（第 16 篇）。

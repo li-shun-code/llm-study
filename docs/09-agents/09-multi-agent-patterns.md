@@ -120,4 +120,4 @@ Claude 现在具备 [Research 能力](https://www.anthropic.com/news/research)�
 
 ---
 
-> **来源**：本文翻译自 [How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)（2025-06-13 发布），作者 Jeremy Hadfield、Barry Zhang、Kenneth Lien、Florian Scholz、Jeremy Fox、Daniel Ford（Anthropic），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中的"编排者-工作者（orchestrator-worker）"模式即本模块第 4 篇 Anthropic 工作流模式在真实生产系统中的落地。
+> **来源**：本文翻译自 [How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)（2025-06-13 发布），作者 Jeremy Hadfield、Barry Zhang、Kenneth Lien、Florian Scholz、Jeremy Fox、Daniel Ford（Anthropic），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中的"编排者-工作者（orchestrator-worker）"模式即本模块第 7 篇 Anthropic 工作流模式在真实生产系统中的落地。

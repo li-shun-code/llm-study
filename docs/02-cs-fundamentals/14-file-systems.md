@@ -5,7 +5,7 @@ author: Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 39 章）
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 13
+order: 14
 ---
 
 至此我们见证了两个关键 OS 抽象的形成：**进程**（CPU 的虚拟化）与**地址空间**（内存的虚拟化）。二者合力，让程序仿佛运行在自己私有的隔离世界里：好像独占处理器、独占内存。这个幻觉让系统编程容易得多，如今不仅盛行于桌面与服务器，也日益普及到手机等一切可编程平台。

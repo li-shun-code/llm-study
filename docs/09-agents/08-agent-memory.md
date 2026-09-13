@@ -6,7 +6,7 @@ license: MIT
 fetched_at: 2026-09-13
 translated: true
 versions: LangGraph 1.x（docs.langchain.com 当前版）
-order: 5
+order: 8
 ---
 
 AI 应用需要**记忆（Memory）**来在多次交互之间共享上下文。在 LangGraph 中，你可以添加两种类型的记忆：

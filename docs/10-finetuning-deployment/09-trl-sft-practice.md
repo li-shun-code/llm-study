@@ -9,7 +9,7 @@ order: 9
 versions: TRL（2026-09 主分支文档，SFTTrainer/SFTConfig 现行 API）
 ---
 
-原理已在前面几篇铺垫完毕：SFT 学什么（[训练范式回顾](./02-training-paradigms-full-finetuning)）、数据什么格式（[数据准备](./06-training-data-preparation)）、超参怎么给（[超参与过拟合](./08-hyperparams-overfitting)）。这篇进入实战：用 TRL 的 `SFTTrainer`，十几行代码完成一次有监督微调。
+原理已在前面几篇铺垫完毕：SFT 学什么（[训练范式回顾](./03-training-paradigms-full-finetuning)）、数据什么格式（[数据准备](./06-training-data-preparation)）、超参怎么给（[超参与过拟合](./08-hyperparams-overfitting)）。这篇进入实战：用 TRL 的 `SFTTrainer`，十几行代码完成一次有监督微调。
 
 ## 概述
 
@@ -127,7 +127,7 @@ training_args = SFTConfig(packing=True)
 
 ### 只对 assistant 消息计算 loss
 
-使用对话数据集并设 `assistant_only_loss=True`：loss **只**在助手回复上计算，忽略用户/系统消息——这正是 [happy-llm 手写流程](./02-training-paradigms-full-finetuning)中 label 遮蔽逻辑的内置版：
+使用对话数据集并设 `assistant_only_loss=True`：loss **只**在助手回复上计算，忽略用户/系统消息——这正是 [happy-llm 手写流程](./03-training-paradigms-full-finetuning)中 label 遮蔽逻辑的内置版：
 
 ```python
 training_args = SFTConfig(assistant_only_loss=True)

@@ -5,7 +5,7 @@ author: Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 28 章）
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 14
+order: 10
 ---
 
 在并发导论中我们看到了并发编程的根本问题：我们希望**原子地**执行一系列指令，但由于单处理器上中断的存在（或多处理器上多线程的并发执行），做不到。本章正面强攻这个问题，引入称为**锁**（lock）的东西。程序员在源代码中用锁标注、把临界区包起来，从而确保任何这样的临界区都像单条原子指令一样执行。

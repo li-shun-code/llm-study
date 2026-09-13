@@ -6,7 +6,7 @@ license: MIT
 fetched_at: 2026-09-13
 translated: true
 versions: openai-agents 当前版（依赖 mcp>=1.19,<3，兼容 MCP Python SDK v1/v2）
-order: 8
+order: 4
 ---
 
 # 概念对比：Function Calling 与 MCP 的关系
@@ -260,4 +260,4 @@ Function Calling 是"模型怎么调工具"的机制，MCP 是"工具从哪来�
 
 ---
 
-> **来源**：本文主体翻译自 OpenAI Agents SDK 官方文档 [Model context protocol (MCP)](https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md)，作者 OpenAI，许可 MIT。抓取于 2026-09-13。"概念对比"一节为编者综述，依据的是同一份文档与 MCP 官方文档（本模块第 6 篇）两份一手资料。
+> **来源**：本文主体翻译自 OpenAI Agents SDK 官方文档 [Model context protocol (MCP)](https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md)，作者 OpenAI，许可 MIT。抓取于 2026-09-13。"概念对比"一节为编者综述，依据的是同一份文档与 MCP 官方文档（本模块第 5 篇）两份一手资料。

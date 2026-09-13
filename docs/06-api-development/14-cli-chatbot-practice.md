@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
 - `stream=True` + `delta.content` + 拼接：**第 03 篇**流式输出的标准循环（Cookbook 原文即用 `collected_messages` 收集、过滤 `None`、`''.join` 成全文）；
 - `role: "developer"` 系统指令与历史回填：**第 02 篇**消息角色；
-- 历史越滚越长，`usage.prompt_tokens` 会持续增长——观察并考虑裁剪策略（**第 10 篇**）。
+- 历史越滚越长，`usage.prompt_tokens` 会持续增长——观察并考虑裁剪策略（**第 07 篇**）。
 
 ## 三、版本二：Responses API + `previous_response_id`
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
 | --- | --- | --- |
 | 历史在哪 | 应用内存里，全量重发 | API 侧，客户端只存一个 id |
 | 上下文控制 | 自由（裁剪/摘要/注入） | 依赖 `store` 与 API 能力 |
-| 换模型/换厂商 | 任意 OpenAI 兼容端点（第 11 篇） | 需要 Responses API 支持 |
+| 换模型/换厂商 | 任意 OpenAI 兼容端点（第 08 篇） | 需要 Responses API 支持 |
 | 教学价值 | 理解无状态 API 的本质 | 体验有状态 API 的省心 |
 
 ## 四、继续打磨的方向
@@ -149,8 +149,8 @@ if __name__ == "__main__":
 
 1. **工具调用**（第 04 篇）：加一个 `get_time` 或 `get_weather` 函数，体会"模型出参数、你执行"的循环；
 2. **结构化输出**（第 05 篇）：让机器人在每轮回复末尾附一个 JSON 情绪标签；
-3. **错误处理**（第 09 篇）：把请求包进 try/except，`RateLimitError` 提示稍后再试、`APIConnectionError` 自动重试；
-4. **成本意识**（第 10 篇）：打印每轮 `usage`，估算一天的对话成本；
+3. **错误处理**（第 06 篇）：把请求包进 try/except，`RateLimitError` 提示稍后再试、`APIConnectionError` 自动重试；
+4. **成本意识**（第 07 篇）：打印每轮 `usage`，估算一天的对话成本；
 5. **服务化**（第 13 篇）：把逻辑搬进 FastAPI 的 `/chat/stream` 接口，终端只是它的一个客户端；
 6. **前端化**：本站右上角的 AI 学习助手组件就是"浏览器版聊天机器人"（SSE 流式 + 本地加密存储配置），可对照阅读源码。
 

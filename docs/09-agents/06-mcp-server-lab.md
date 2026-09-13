@@ -6,7 +6,7 @@ license: MIT
 fetched_at: 2026-09-13
 translated: true
 versions: MCP 规范 2026-07-28；Python MCP SDK ≥ 2.0.0
-order: 7
+order: 6
 ---
 
 # 构建一个 MCP Server

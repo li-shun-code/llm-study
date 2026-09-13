@@ -5,7 +5,7 @@ author: OpenAI Cookbook（Comparing Speech-to-Text Methods、Steering Text-to-Sp
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 8
+order: 11
 versions: gpt-4o-transcribe（转写）、tts-1-hd / gpt-4o-audio-preview（合成）、gpt-realtime-2（Realtime）；openai-agents VoicePipeline beta
 ---
 ## 一、语音转写（ASR）：四种方式怎么选
@@ -206,7 +206,7 @@ async for event in connection:
 - Realtime 的错误是事件不是异常，必须手动处理；
 - 一句话选型：录好的音频用文件转写；实时字幕/语音对话上 Realtime。
 
-至此，文本、图像、语音三类模态的 API 都过了一遍。下一篇回到工程主线：错误处理、重试与限流。
+至此，文本、图像、语音三类模态的 API 都过了一遍。第 06 篇回到工程主线：错误处理、重试与限流。
 
 ---
 

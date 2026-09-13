@@ -5,7 +5,7 @@ author: OpenAI Cookbook（Prompt Caching 101、Batch processing with the Batch A
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 10
+order: 7
 versions: Prompt Caching（提示词 >1024 token 自动启用）；Batch API（completion_window=24h，约 5 折）
 ---
 

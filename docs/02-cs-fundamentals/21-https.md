@@ -5,7 +5,7 @@ author: Mozilla 贡献者（MDN Web Docs）
 license: CC BY-SA 2.5
 fetched_at: 2026-09-13
 translated: true
-order: 20
+order: 21
 ---
 **传输层安全**（Transport Layer Security，TLS）是一种让客户端在不可信网络上与服务器**安全通信**的协议。它最著名的用途是为 HTTP 连接提供安全保障：这样得到的协议就叫 **HTTPS**。
 

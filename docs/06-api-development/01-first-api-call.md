@@ -206,7 +206,7 @@ response = client.responses.create(
 
 响应的 `output` 里会交替出现 `web_search_call`（搜索动作）与 `message`（带引用注释的回答）两种输出项。
 
-多模态输入也可以在一条请求里完成——图片 + 文本 + 工具的组合（`input_image` 内容块的用法详见本模块第 07 篇）：
+多模态输入也可以在一条请求里完成——图片 + 文本 + 工具的组合（`input_image` 内容块的用法详见本模块第 10 篇）：
 
 ```python
 response_multimodal = client.responses.create(

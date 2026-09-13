@@ -5,7 +5,7 @@ author: Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 13 章）
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 11
+order: 12
 ---
 
 早年间，构建计算机系统很容易。为什么？因为用户期望不高。正是那些对"易用性""高性能""可靠性"抱有期待的可恶用户，带来了这一切头疼的问题。下次遇到计算机用户，请感谢他们制造的所有麻烦。

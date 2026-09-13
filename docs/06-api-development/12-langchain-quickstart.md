@@ -63,7 +63,7 @@ result = agent.invoke(
 print(result["messages"][-1].content_blocks)
 ```
 
-换模型只改模型名前缀（如 `"claude-sonnet-4-6"`、`"google_genai:gemini-2.5-flash-lite"`、`"openrouter:anthropic/claude-sonnet-4-6"`、`"baseten:zai-org/GLM-5.2"`、`"ollama:devstral-2"`）并配好对应 Key——模型字符串的 `provider:model` 语法与上一篇 LiteLLM 的思路异曲同工。
+换模型只改模型名前缀（如 `"claude-sonnet-4-6"`、`"google_genai:gemini-2.5-flash-lite"`、`"openrouter:anthropic/claude-sonnet-4-6"`、`"baseten:zai-org/GLM-5.2"`、`"ollama:devstral-2"`）并配好对应 Key——模型字符串的 `provider:model` 语法与第 08 篇 LiteLLM 的思路异曲同工。
 
 当你提示旧金山天气时，Agent 会理解这是在问该市的天气，**自动调用天气工具**并组织回答。这就是模型 + 工具 + 循环的最小闭环（Function Calling 原理见第 04 篇，Agent 体系在模块 9 展开）。
 

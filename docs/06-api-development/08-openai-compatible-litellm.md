@@ -5,7 +5,7 @@ author: BerriAI（LiteLLM 官方文档）
 license: MIT（enterprise 目录除外）
 fetched_at: 2026-09-13
 translated: true
-order: 11
+order: 8
 versions: LiteLLM 2026-09 文档当前版（示例模型 gpt-5.6-terra / claude-sonnet-5 / gemini-3.1-pro-preview）
 ---
 
@@ -213,9 +213,9 @@ asyncio.run(completion_call())
 
 ## 五、进阶方向
 
-- **Router 与 fallback**：同一逻辑名挂多个部署，按限流/错误自动切换（第 09 篇的"降级模型"策略的库级实现）；
+- **Router 与 fallback**：同一逻辑名挂多个部署，按限流/错误自动切换（第 06 篇的"降级模型"策略的库级实现）；
 - **LLM Gateway（Proxy）**：以容器方式自托管网关，应用拿虚拟密钥（virtual keys）访问模型，网关统一记账、限流、观测——团队共享模型访问的常见架构；
-- **成本核算**：配合 `completion_cost` 等辅助能力把第 10 篇的成本意识落到账单层面。
+- **成本核算**：配合 `completion_cost` 等辅助能力把第 07 篇的成本意识落到账单层面。
 
 ## 六、本篇小结
 
@@ -224,7 +224,7 @@ asyncio.run(completion_call())
 - 流式（`stream=True`）、异步（`acompletion`）、多模态内容块都与 OpenAI SDK 习惯一致；
 - 多供应商容灾、网关化管理是它相对裸 SDK 的核心增量。
 
-下一篇换到编排层：LangChain 1.0 快速入门。
+第 12 篇换到编排层：LangChain 1.0 快速入门。
 
 ---
 

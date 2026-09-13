@@ -5,7 +5,7 @@ author: Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 7 章）
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 10
+order: 11
 ---
 
 到此为止，运行进程的低层机制（如上下文切换）应该已经清楚了；如果还不清楚，回头再读读前两篇。然而我们还没讲 OS 调度器采用的高层**策略**。本章将呈现一系列调度策略（有时称调度准则 disciplines）——它们是多年来各路聪明勤奋的人发展出来的。

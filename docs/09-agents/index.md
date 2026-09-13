@@ -13,11 +13,11 @@ isRoot: true
 - 什么是 Agent
 - ReAct 范式
 - Tool Use 实战
-- 规划与任务分解
-- 记忆机制
+- Function Calling vs MCP
 - MCP 协议详解
 - MCP server 实战
-- Function Calling vs MCP
+- 规划与任务分解
+- 记忆机制
 - 多智能体模式
 - LangGraph 入门
 - Human-in-the-loop

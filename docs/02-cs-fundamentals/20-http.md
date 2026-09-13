@@ -5,7 +5,7 @@ author: Mozilla 贡献者（MDN Web Docs）
 license: CC BY-SA 2.5
 fetched_at: 2026-09-13
 translated: true
-order: 19
+order: 20
 ---
 
 **HTTP** 是一种用于获取 HTML 文档等**资源**（resource）的协议。它是 Web 上任何数据交换的基础：它是一种**客户端-服务器**（client-server）协议，意味着请求由接收方发起——通常是 Web 浏览器。一份完整的文档通常由文本内容、布局说明、图片、视频、脚本等多种资源拼装而成。

@@ -5,7 +5,7 @@ author: Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 19 章）
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 12
+order: 13
 ---
 
 以**分页**（paging）作为支撑虚拟内存的核心机制，会带来高昂的性能开销：把地址空间切成小而固定大小的单元（页），意味着需要**大量**映射信息；而映射信息一般存在物理内存里，因此分页在逻辑上要求程序的**每个**虚拟地址生成时都多一次内存查找。每次取指令、每次显式加载/存储之前都要先访问内存取翻译信息——慢得令人发指。于是有了问题：

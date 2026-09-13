@@ -50,7 +50,7 @@ $ uv run fastapi dev
 ```text
 # .env —— 模块 0 的方案：Key 只放环境文件，绝不写进代码
 OPENAI_API_KEY=sk-...
-OPENAI_BASE_URL=https://api.openai.com/v1   # 换兼容端点时只改这里（见第 11 篇）
+OPENAI_BASE_URL=https://api.openai.com/v1   # 换兼容端点时只改这里（见第 08 篇）
 ```
 
 ```python
@@ -192,7 +192,7 @@ router = APIRouter(
 
 ## 五、下一步
 
-- 参数校验、`HTTPException`、统一错误处理：见模块 3 的 FastAPI 篇与第 09 篇错误处理的组合；
+- 参数校验、`HTTPException`、统一错误处理：见模块 3 的 FastAPI 篇与第 06 篇错误处理的组合；
 - 把本篇的 `/chat` 接口做成第 14 篇命令行聊天机器人的后端；
 - 生产部署（容器化）在模块 10 展开。
 

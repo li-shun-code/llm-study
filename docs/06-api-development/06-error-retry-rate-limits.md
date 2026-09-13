@@ -5,7 +5,7 @@ author: OpenAI Cookbook（How to handle rate limits）、OpenAI（openai-python 
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 9
+order: 6
 versions: openai-python 2026-09 最新稳定版（默认重试 2 次、默认超时 10 分钟）
 ---
 

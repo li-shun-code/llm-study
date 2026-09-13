@@ -5,7 +5,7 @@ author: Erik Schluntz、Barry Zhang（Anthropic）
 license: 署名转载（原文页面未附开源许可，仅作教学署名转载）
 fetched_at: 2026-09-13
 translated: true
-order: 4
+order: 7
 ---
 
 我们与数十个跨行业的团队合作构建过 LLM 智能体（Agent）。一个始终成立的结论是：最成功的实现用的都是简单、可组合的模式，而非复杂框架。

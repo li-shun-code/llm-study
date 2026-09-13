@@ -6,7 +6,7 @@ license: MIT
 fetched_at: 2026-09-13
 translated: true
 versions: MCP 规范 2026-07-28（当前最新）
-order: 6
+order: 5
 ---
 
 # 什么是 MCP（Model Context Protocol）

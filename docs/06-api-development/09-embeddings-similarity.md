@@ -5,7 +5,7 @@ author: OpenAI Cookbook（Get embeddings from dataset、Semantic text search usi
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 6
+order: 9
 versions: text-embedding-3-small（当前主力 Embedding 模型）；tiktoken o200k_base / cl100k_base
 ---
 

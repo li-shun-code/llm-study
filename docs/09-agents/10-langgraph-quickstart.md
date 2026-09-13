@@ -305,7 +305,7 @@ for snapshot in stream.values:
 
 **表：LangGraph 两种 API 的对比。**
 
-两条路线共享同一套底层运行时：检查点持久化（第 5 篇记忆机制）、中断（下一篇 Human-in-the-loop）、流式输出与 LangSmith 追踪。掌握其中一条，另一条只是"组织代码的方式"不同。
+两条路线共享同一套底层运行时：检查点持久化（第 8 篇记忆机制）、中断（下一篇 Human-in-the-loop）、流式输出与 LangSmith 追踪。掌握其中一条，另一条只是"组织代码的方式"不同。
 
 ---
 

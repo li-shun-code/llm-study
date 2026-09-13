@@ -233,24 +233,24 @@ export default {
           "link": "/02-cs-fundamentals/09-threads"
         },
         {
+          "text": "并发与锁",
+          "link": "/02-cs-fundamentals/10-concurrency-and-locks"
+        },
+        {
           "text": "CPU 调度：FIFO、SJF、STCF 与轮转",
-          "link": "/02-cs-fundamentals/10-cpu-scheduling"
+          "link": "/02-cs-fundamentals/11-cpu-scheduling"
         },
         {
           "text": "内存管理：地址空间抽象",
-          "link": "/02-cs-fundamentals/11-memory-management"
+          "link": "/02-cs-fundamentals/12-memory-management"
         },
         {
           "text": "虚拟内存：TLB 与地址翻译加速",
-          "link": "/02-cs-fundamentals/12-virtual-memory"
+          "link": "/02-cs-fundamentals/13-virtual-memory"
         },
         {
           "text": "文件系统：文件与目录",
-          "link": "/02-cs-fundamentals/13-file-systems"
-        },
-        {
-          "text": "并发与锁",
-          "link": "/02-cs-fundamentals/14-concurrency-and-locks"
+          "link": "/02-cs-fundamentals/14-file-systems"
         },
         {
           "text": "I/O 多路复用：阻塞、poll() 与 select()",
@@ -261,28 +261,28 @@ export default {
           "link": "/02-cs-fundamentals/16-network-layering"
         },
         {
+          "text": "DNS：域名系统",
+          "link": "/02-cs-fundamentals/17-dns"
+        },
+        {
           "text": "TCP：传输控制协议",
-          "link": "/02-cs-fundamentals/17-tcp"
+          "link": "/02-cs-fundamentals/18-tcp"
         },
         {
           "text": "UDP：用户数据报协议",
-          "link": "/02-cs-fundamentals/18-udp"
+          "link": "/02-cs-fundamentals/19-udp"
         },
         {
           "text": "HTTP 概述",
-          "link": "/02-cs-fundamentals/19-http"
+          "link": "/02-cs-fundamentals/20-http"
         },
         {
           "text": "HTTPS 与 TLS",
-          "link": "/02-cs-fundamentals/20-https"
+          "link": "/02-cs-fundamentals/21-https"
         },
         {
           "text": "SSE 与 WebSocket：流式输出的网络基础",
-          "link": "/02-cs-fundamentals/21-sse-websocket"
-        },
-        {
-          "text": "DNS：域名系统",
-          "link": "/02-cs-fundamentals/22-dns"
+          "link": "/02-cs-fundamentals/22-sse-websocket"
         },
         {
           "text": "REST 风格",
@@ -493,28 +493,28 @@ export default {
           "link": "/06-api-development/05-json-mode-structured-outputs"
         },
         {
-          "text": "Embedding API 与文本相似度",
-          "link": "/06-api-development/06-embeddings-similarity"
-        },
-        {
-          "text": "视觉理解 API：把图片喂给多模态模型",
-          "link": "/06-api-development/07-vision-api"
-        },
-        {
-          "text": "语音 API：转写、合成与实时会话（选学）",
-          "link": "/06-api-development/08-speech-api"
-        },
-        {
           "text": "错误处理、重试与限流",
-          "link": "/06-api-development/09-error-retry-rate-limits"
+          "link": "/06-api-development/06-error-retry-rate-limits"
         },
         {
           "text": "成本与 Token 优化：Prompt Caching 与 Batch API",
-          "link": "/06-api-development/10-cost-token-optimization"
+          "link": "/06-api-development/07-cost-token-optimization"
         },
         {
           "text": "OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型",
-          "link": "/06-api-development/11-openai-compatible-litellm"
+          "link": "/06-api-development/08-openai-compatible-litellm"
+        },
+        {
+          "text": "Embedding API 与文本相似度",
+          "link": "/06-api-development/09-embeddings-similarity"
+        },
+        {
+          "text": "视觉理解 API：把图片喂给多模态模型",
+          "link": "/06-api-development/10-vision-api"
+        },
+        {
+          "text": "语音 API：转写、合成与实时会话（选学）",
+          "link": "/06-api-development/11-speech-api"
         },
         {
           "text": "LangChain 快速入门（1.0 · create_agent）",
@@ -692,24 +692,24 @@ export default {
           "link": "/09-agents/03-tool-use-in-practice"
         },
         {
-          "text": "规划与任务分解：构建高效智能体的工作流模式",
-          "link": "/09-agents/04-planning-decomposition"
-        },
-        {
-          "text": "Agent 记忆机制：LangGraph 的短期记忆与长期记忆",
-          "link": "/09-agents/05-agent-memory"
+          "text": "Function Calling vs MCP：两代工具接入方式如何取舍",
+          "link": "/09-agents/04-function-calling-vs-mcp"
         },
         {
           "text": "MCP 协议详解：架构、分层与核心原语（2026-07-28 版规范）",
-          "link": "/09-agents/06-mcp-protocol"
+          "link": "/09-agents/05-mcp-protocol"
         },
         {
           "text": "MCP Server 实战：从零构建一个天气查询服务器",
-          "link": "/09-agents/07-mcp-server-lab"
+          "link": "/09-agents/06-mcp-server-lab"
         },
         {
-          "text": "Function Calling vs MCP：两代工具接入方式如何取舍",
-          "link": "/09-agents/08-function-calling-vs-mcp"
+          "text": "规划与任务分解：构建高效智能体的工作流模式",
+          "link": "/09-agents/07-planning-decomposition"
+        },
+        {
+          "text": "Agent 记忆机制：LangGraph 的短期记忆与长期记忆",
+          "link": "/09-agents/08-agent-memory"
         },
         {
           "text": "多智能体模式：Anthropic 如何构建多智能体研究系统",
@@ -765,12 +765,12 @@ export default {
           "link": "/10-finetuning-deployment/01-finetune-vs-rag-vs-prompting"
         },
         {
-          "text": "训练范式回顾与全参微调流程（Transformers 实战）",
-          "link": "/10-finetuning-deployment/02-training-paradigms-full-finetuning"
+          "text": "GPU 环境基础：CUDA、显存估算与 AutoDL 上手",
+          "link": "/10-finetuning-deployment/02-gpu-environment-basics"
         },
         {
-          "text": "GPU 环境基础：CUDA、显存估算与 AutoDL 上手",
-          "link": "/10-finetuning-deployment/03-gpu-environment-basics"
+          "text": "训练范式回顾与全参微调流程（Transformers 实战）",
+          "link": "/10-finetuning-deployment/03-training-paradigms-full-finetuning"
         },
         {
           "text": "LoRA 原理：低秩适应为什么有效",
