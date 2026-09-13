@@ -22,15 +22,15 @@
   --vp-home-hero-name-color: var(--vp-c-brand-1);
 }
 
-/* 阅读体验：中文最佳字体栈 + 加大字号与行距 */
+/* 阅读体验：Noto Sans SC（思源黑体）+ 加大字号与行距 */
 :root {
   --vp-font-family-base:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC',
+    'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     'Source Han Sans SC', sans-serif;
   --vp-font-family-mono:
     ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code', Consolas,
-    'PingFang SC', 'Microsoft YaHei', monospace;
+    'Noto Sans SC', 'Microsoft YaHei', monospace;
 }
 
 .vp-doc {

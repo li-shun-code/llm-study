@@ -7,7 +7,18 @@ export default defineConfig({
   title: 'LLM 应用开发完全学习路线',
   description:
     '从 Python 零基础到 LLM 应用开发：抓取全网优质教程的中文学习路线',
-  head: [['meta', { name: 'theme-color', content: '#0e9f6e' }]],
+  head: [
+    ['meta', { name: 'theme-color', content: '#0e9f6e' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    [
+      'link',
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap'
+      }
+    ]
+  ],
   // 教程正文中的 localhost 示例链接（如 Gradio/FastAPI demo）不是站点死链
   ignoreDeadLinks: [/^https?:\/\/localhost/],
   themeConfig: {
