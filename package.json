@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "turndown": "^7.2.4",
-    "vitepress": "^1.6.4"
+    "vitepress": "^1.6.4",
+    "vitepress-theme-teek": "^1.6.2"
   }
 }

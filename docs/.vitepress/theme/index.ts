@@ -1,12 +1,13 @@
-// 自定义主题入口：扩展默认主题，挂载全站 AI 学习助手
+// 自定义主题入口：基于 Teek 主题，挂载全站 AI 学习助手
 import { h } from 'vue'
-import DefaultTheme from 'vitepress/theme'
+import Teek from 'vitepress-theme-teek'
+import 'vitepress-theme-teek/index.css'
 import AiAssistant from './components/AiAssistant.vue'
 
 export default {
-  extends: DefaultTheme,
+  extends: Teek,
   Layout() {
-    return h(DefaultTheme.Layout, null, {
+    return h(Teek.Layout, null, {
       'layout-bottom': () => h(AiAssistant)
     })
   }
