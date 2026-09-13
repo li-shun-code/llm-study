@@ -23,7 +23,7 @@ Claude Code 是一个**智能体化编码工具**：读取你的代码库、编�
 - **自动化入口**：非交互模式 `claude -p` 可嵌入 CI 与脚本；Headless/Agent SDK 支持 TypeScript 与 Python 编程调用；GitHub Actions 集成可在云端响应 issue/PR。
 - **权限与安全**：auto mode（分类器模型代审操作）、沙箱化 Bash、权限白名单、企业级网关与托管配置。
 
-工作流与最佳实践详见本模块第 6 篇；Skills 详见第 11 篇；多智能体详见第 20 篇。
+工作流与最佳实践详见本模块第 7 篇；Skills 详见第 12 篇；多智能体详见第 21 篇。
 
 ## 二、Cursor（Anysphere）
 
@@ -32,7 +32,7 @@ Claude Code 是一个**智能体化编码工具**：读取你的代码库、编�
 Cursor 是 AI 原生的代码编辑器（基于 VS Code 分支），核心形态是"编辑器内的智能体"。2026 年的能力版图：
 
 - **Agent 体系**：编辑器内 Agent（含 Plan Mode 计划模式、Debug Mode）、Agents Window 多智能体窗口、Agent Review 审查流。
-- **Rules 规则系统**：项目规则（`.cursor/rules` 下的 `.mdc` 文件，支持 frontmatter 按 glob/描述/手动四种挂载方式）、用户规则、团队规则，并原生支持 AGENTS.md（详见本模块第 8 篇）。
+- **Rules 规则系统**：项目规则（`.cursor/rules` 下的 `.mdc` 文件，支持 frontmatter 按 glob/描述/手动四种挂载方式）、用户规则、团队规则，并原生支持 AGENTS.md（详见本模块第 9 篇）。
 - **自定义机制**：Plugins、Skills、Subagents、Hooks、MCP——与 Claude Code 的扩展词汇表已高度趋同。
 - **云端智能体**：Cloud Agents（云端跑任务、Builds）、Bugbot（PR 找 bug）、Security Agents、PR Routing & Approval、移动端。
 - **其他**：Grok Bot 集成、CLI、Origin、Teams/Enterprise 治理。
@@ -60,7 +60,7 @@ Cline 是一个**开源** AI 编码智能体，活在你的编辑器和终端里
 
 - **模型接入**：主打 BYOK（Bring Your Own Key）——Anthropic、OpenAI（含 Codex OAuth）、DeepSeek、Google Gemini、OpenRouter、阿里 Qwen、智谱 GLM 等 30+ 供应商皆可接入，也提供 Cline 计费、ClinePass 订阅与本地模型（Ollama/LM Studio）路径。对"用国产开源模型跑智能体"的开发者是重要选项。
 - **多形态**：IDE 扩展、CLI（交互 TUI 与 headless 自动化）、SDK，以及 **Cline Kanban**（用隔离 git worktree 并行跑多个编码智能体的看板）。
-- **CI 生态**：官方提供 GitHub Actions 集成样例——`@cline` 评论响应 issue、自动 PR 审查（详见本模块第 21 篇）。
+- **CI 生态**：官方提供 GitHub Actions 集成样例——`@cline` 评论响应 issue、自动 PR 审查（详见本模块第 22 篇）。
 
 ## 五、Windsurf / Devin Desktop（Cognition）
 
@@ -85,7 +85,7 @@ Codex 是 OpenAI 的编码智能体家族，当前包含：
 - **Codex App / `codex app`**：桌面应用形态；**Codex Web**（chatgpt.com/codex）：云端智能体。
 - **账号体系**：推荐用 ChatGPT 账号登录（Plus/Pro/Business/Edu/Enterprise 套餐内含用量），也可改用 API Key。
 
-Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完全开源核心的，且与 agents.md 规范（本模块第 10 篇）同源 OpenAI 系。
+Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完全开源核心的，且与 agents.md 规范（本模块第 11 篇）同源 OpenAI 系。
 
 ## 横向对比
 
@@ -102,19 +102,19 @@ Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完
 | 多智能体 | Agent Teams/Workflows/Worktrees | Agents Window | 多请求并行（Spaces 管理上下文） | Kanban+worktrees | 单会话为主 | 并行任务 |
 | 深度绑定 | Anthropic 模型 | 多模型可选 | GitHub 全家桶 | 任意模型 | Cognition 模型（SWE-1.5 等） | OpenAI 模型 |
 
-> 表中"项目规范文件"一列会在第 10 篇（AGENTS.md/CLAUDE.md）展开；各工具的 Rules/Skills/MCP 扩展词汇正在快速趋同——学透一个，迁移成本很低。
+> 表中"项目规范文件"一列会在第 11 篇（AGENTS.md/CLAUDE.md）展开；各工具的 Rules/Skills/MCP 扩展词汇正在快速趋同——学透一个，迁移成本很低。
 
 ## 选型建议
 
 结合官方文档与社区共识，给出几条务实的选型线索：
 
 1. **深度终端工作流 / 大型代码库重构**：Claude Code 或 Codex CLI 这类 CLI 智能体最顺手，headless 模式还能进 CI。
-2. **想要编辑器一体体验、强规则工程**：Cursor 的 Rules 体系（第 8 篇）目前最细；Devin Desktop（原 Windsurf）的规划智能体体验也自成一路。
+2. **想要编辑器一体体验、强规则工程**：Cursor 的 Rules 体系（第 9 篇）目前最细；Devin Desktop（原 Windsurf）的规划智能体体验也自成一路。
 3. **代码已在 GitHub、以 issue/PR 为中心协作**：Copilot coding agent 的"认领 issue → 开 PR"与 GitHub 流程零摩擦。
 4. **预算敏感 / 想用国产开源模型 / 要求数据自持**：Cline 的 BYOK + 本地模型路径独一无二，且核心开源可审计。
-5. **团队规范统一**：优先采用 AGENTS.md 这类跨工具标准（第 10 篇），避免规范文件被单一工具锁定。
+5. **团队规范统一**：优先采用 AGENTS.md 这类跨工具标准（第 11 篇），避免规范文件被单一工具锁定。
 
-> 无论选哪把锤子，本模块其余篇章的工作流方法论——可验证的完成标准（第 6 篇）、Git 存档与隔离（第 12 篇）、Spec 驱动（第 13 篇）、上下文工程（第 14 篇）——都是通用的。
+> 无论选哪把锤子，本模块其余篇章的工作流方法论——可验证的完成标准（第 7 篇）、Git 存档与隔离（第 13 篇）、Spec 驱动（第 14 篇）、上下文工程（第 15 篇）——都是通用的。
 
 ---
 

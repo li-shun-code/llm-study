@@ -67,7 +67,7 @@ output: 根据天气预报，今天天气是晴转多云，最高温度26摄氏�
 }
 ```
 
-SFT 时会针对模型设置特定格式模板（如 LLaMA 的 `### Instruction:\n{{content}}\n\n### Response:\n`）。注意：指令微调本质上仍是 CLM 训练，模型拟合的是 input + output 的整体序列，只是 **input 部分不参与 loss 计算**。
+SFT 时会针对模型设置特定格式模板（如 LLaMA 的 `### Instruction:\n{content}\n\n### Response:\n`）。注意：指令微调本质上仍是 CLM 训练，模型拟合的是 input + output 的整体序列，只是 **input 部分不参与 loss 计算**。
 
 **多轮对话能力完全来自 SFT 阶段**。构造多轮对话样本有三种方式——把整段对话串起来，用 [MASK] 占位每轮的"未知未来"：
 

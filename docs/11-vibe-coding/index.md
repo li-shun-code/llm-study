@@ -14,6 +14,7 @@ AI 时代的编程工作方式：从第一次 AI 结对到团队落地，Claude 
 
 - Vibe Coding 是什么与工程争议
 - AI 编程工具全景对比
+- AI 编码工具与模型评测基准（SWE-bench、Terminal-Bench 与模型卡口径）
 - 环境搭建：Claude Code/Cursor 安装与首次配置
 - 第一次 AI 结对：从零做一个命令行小工具（实操）
 - 心智模型：LLM 如何"看"你的代码（上下文与分词）
@@ -44,12 +45,14 @@ AI 时代的编程工作方式：从第一次 AI 结对到团队落地，Claude 
 - MCP 在编码中的应用
 - AI 结对与代码审查
 - 多智能体协作编码
-- 工具链生态（Cline/Windsurf）
+- 开源工具生态：Cline 与 Windsurf
 - Headless 与 CI 中的 AI 编码
 
 **质量与落地**
 
 - AI 代码的安全与质量陷阱
+- AI 编码供应链安全（幻觉包/Slopsquatting 与沙箱防线）
+- AI 生成代码的 IP 与合规
 - 成本管理：Token 消耗与用量优化
 - 团队落地：AI 编码规范的推广与度量
 - 从 0 到 1 用 AI 做产品实战（收尾）

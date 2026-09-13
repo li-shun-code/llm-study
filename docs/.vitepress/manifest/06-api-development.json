@@ -26,64 +26,82 @@
       "file": "04-function-calling.md"
     },
     {
+      "topic": "Responses API 托管工具（web_search/file_search/code_interpreter/图像生成）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb",
+      "channel": "raw",
+      "file": "05-hosted-tools.md"
+    },
+    {
       "topic": "JSON Mode 与结构化输出（Structured Outputs/JSON Schema）",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Structured_Outputs_Intro.ipynb",
       "channel": "raw",
-      "file": "05-json-mode-structured-outputs.md"
-    },
-    {
-      "topic": "Embedding API 与文本相似度",
-      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Get_embeddings_from_dataset.ipynb",
-      "channel": "raw",
-      "file": "06-embeddings-similarity.md"
-    },
-    {
-      "topic": "视觉理解 API",
-      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
-      "channel": "raw",
-      "file": "07-vision-api.md"
-    },
-    {
-      "topic": "语音 API（ASR/TTS/Realtime，选学）",
-      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Speech_transcription_methods.ipynb",
-      "channel": "raw",
-      "file": "08-speech-api.md"
+      "file": "06-json-mode-structured-outputs.md"
     },
     {
       "topic": "错误处理/重试/限流",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_handle_rate_limits.ipynb",
       "channel": "raw",
-      "file": "09-error-retry-rate-limits.md"
+      "file": "07-error-retry-rate-limits.md"
+    },
+    {
+      "topic": "Moderation API 与内容过滤（输入/输出/自定义审核）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_use_moderation.ipynb",
+      "channel": "raw",
+      "file": "08-moderation-api.md"
     },
     {
       "topic": "成本与 Token 优化（Prompt Caching 与 Batch API）",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Prompt_Caching101.ipynb",
       "channel": "raw",
-      "file": "10-cost-token-optimization.md"
+      "file": "09-cost-token-optimization.md"
     },
     {
       "topic": "OpenAI 兼容端点与 LiteLLM",
       "url": "https://docs.litellm.ai/docs/",
       "channel": "web",
-      "file": "11-openai-compatible-litellm.md"
+      "file": "10-openai-compatible-litellm.md"
+    },
+    {
+      "topic": "模型版本与弃用管理（Deprecations + Prompt 迁移 + Azure v1 生命周期）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/data/oai_docs/deprecations.txt",
+      "channel": "raw",
+      "file": "11-model-deprecation.md"
+    },
+    {
+      "topic": "Embedding API 与文本相似度",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Get_embeddings_from_dataset.ipynb",
+      "channel": "raw",
+      "file": "12-embeddings-similarity.md"
+    },
+    {
+      "topic": "视觉理解 API",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
+      "channel": "raw",
+      "file": "13-vision-api.md"
+    },
+    {
+      "topic": "语音 API（ASR/TTS/Realtime，选学）",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Speech_transcription_methods.ipynb",
+      "channel": "raw",
+      "file": "14-speech-api.md"
     },
     {
       "topic": "LangChain 快速入门（≥1.0 create_agent）",
       "url": "https://docs.langchain.com/oss/python/langchain/quickstart",
       "channel": "web",
-      "file": "12-langchain-quickstart.md"
+      "file": "15-langchain-quickstart.md"
     },
     {
       "topic": "用 FastAPI 封装 LLM 服务（.env 方案，交叉引用模块 0）",
       "url": "https://fastapi.tiangolo.com/zh/tutorial/first-steps/",
       "channel": "web",
-      "file": "13-fastapi-llm-service.md"
+      "file": "16-fastapi-llm-service.md"
     },
     {
       "topic": "实战：命令行聊天机器人",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb",
       "channel": "raw",
-      "file": "14-cli-chatbot-practice.md"
+      "file": "17-cli-chatbot-practice.md"
     }
   ]
 }

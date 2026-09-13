@@ -14,148 +14,166 @@
       "file": "02-ai-coding-tools-landscape.md"
     },
     {
+      "topic": "AI 编码工具与模型评测基准：SWE-bench 与 Terminal-Bench",
+      "url": "https://github.com/SWE-bench/SWE-bench",
+      "channel": "raw",
+      "file": "03-benchmarks-swe-bench.md"
+    },
+    {
       "topic": "环境搭建：Claude Code 与 Cursor 的安装及首次配置",
       "url": "https://code.claude.com/docs/en/quickstart",
       "channel": "web",
-      "file": "03-setup-claude-code-cursor.md"
+      "file": "04-setup-claude-code-cursor.md"
     },
     {
       "topic": "第一次 AI 结对：从零做一个命令行小工具",
       "url": "https://code.claude.com/docs/en/quickstart",
       "channel": "web",
-      "file": "04-first-ai-pairing-cli-tool.md"
+      "file": "05-first-ai-pairing-cli-tool.md"
     },
     {
       "topic": "心智模型：LLM 如何\"看\"你的代码",
       "url": "https://code.claude.com/docs/en/how-claude-code-works",
       "channel": "web",
-      "file": "05-llm-mental-model.md"
+      "file": "06-llm-mental-model.md"
     },
     {
       "topic": "Claude Code 工作流与最佳实践",
       "url": "https://code.claude.com/docs/en/best-practices",
       "channel": "web",
-      "file": "06-claude-code-best-practices.md"
+      "file": "07-claude-code-best-practices.md"
     },
     {
       "topic": "Claude Code 权限系统与安全机制",
       "url": "https://code.claude.com/docs/en/permissions",
       "channel": "web",
-      "file": "07-claude-code-permissions.md"
+      "file": "08-claude-code-permissions.md"
     },
     {
       "topic": "Cursor 入门与 Rules",
       "url": "https://cursor.com/docs/context/rules",
       "channel": "web",
-      "file": "08-cursor-rules.md"
+      "file": "09-cursor-rules.md"
     },
     {
       "topic": "Cursor 深入：Tab 补全、Agent 模式与调试/评审工作流",
       "url": "https://cursor.com/docs/agent/overview",
       "channel": "web",
-      "file": "09-cursor-modes.md"
+      "file": "10-cursor-modes.md"
     },
     {
       "topic": "AGENTS.md/CLAUDE.md 项目规范文件",
       "url": "https://agents.md/",
       "channel": "web",
-      "file": "10-agents-md-claude-md.md"
+      "file": "11-agents-md-claude-md.md"
     },
     {
       "topic": "Claude Skills 可复用技能包",
       "url": "https://code.claude.com/docs/en/skills",
       "channel": "web",
-      "file": "11-claude-skills.md"
+      "file": "12-claude-skills.md"
     },
     {
       "topic": "Git in AI 工作流",
       "url": "https://code.claude.com/docs/en/worktrees",
       "channel": "web",
-      "file": "12-git-in-ai-workflow.md"
+      "file": "13-git-in-ai-workflow.md"
     },
     {
       "topic": "Spec 驱动开发",
       "url": "https://github.com/github/spec-kit",
       "channel": "raw",
-      "file": "13-spec-driven-development.md"
+      "file": "14-spec-driven-development.md"
     },
     {
       "topic": "上下文工程（Context Engineering）",
       "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
       "channel": "web",
-      "file": "14-context-engineering.md"
+      "file": "15-context-engineering.md"
     },
     {
       "topic": "调试 with AI：让 AI 定位 Bug 的工作流",
       "url": "https://words.filippo.io/claude-debugging/",
       "channel": "web",
-      "file": "15-debugging-with-ai.md"
+      "file": "16-debugging-with-ai.md"
     },
     {
       "topic": "重构 with AI：从日常重构到百万行迁移的上下文策略",
       "url": "https://claude.com/blog/ai-code-migration",
       "channel": "web",
-      "file": "16-refactoring-with-ai.md"
+      "file": "17-refactoring-with-ai.md"
     },
     {
       "topic": "TDD with AI",
       "url": "https://tidyfirst.substack.com/p/augmented-coding-beyond-the-vibes",
       "channel": "web",
-      "file": "17-tdd-with-ai.md"
+      "file": "18-tdd-with-ai.md"
     },
     {
       "topic": "MCP 在编码中的应用",
       "url": "https://code.claude.com/docs/en/mcp",
       "channel": "web",
-      "file": "18-mcp-for-coding.md"
+      "file": "19-mcp-for-coding.md"
     },
     {
       "topic": "AI 结对与代码审查",
       "url": "https://code.claude.com/docs/en/code-review",
       "channel": "web",
-      "file": "19-ai-pairing-code-review.md"
+      "file": "20-ai-pairing-code-review.md"
     },
     {
       "topic": "多智能体协作编码",
       "url": "https://code.claude.com/docs/en/agent-teams",
       "channel": "web",
-      "file": "20-multi-agent-collaboration.md"
+      "file": "21-multi-agent-collaboration.md"
     },
     {
-      "topic": "工具链生态（Cline/Windsurf/Headless CI）",
+      "topic": "开源工具生态：Cline 与 Windsurf",
+      "url": "https://docs.cline.bot/cline-overview",
+      "channel": "web",
+      "file": "22-cline-windsurf-ecosystem.md"
+    },
+    {
+      "topic": "Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体",
       "url": "https://code.claude.com/docs/en/headless",
       "channel": "web",
-      "file": "21-toolchain-ecosystem.md"
-    },
-    {
-      "topic": "Headless 与 CI 中的 AI 编码：Agent SDK、GitHub Actions 与 Copilot 云端智能体",
-      "url": "https://code.claude.com/docs/en/agent-sdk",
-      "channel": "web",
-      "file": "22-headless-ci-coding.md"
+      "file": "23-headless-ci-coding.md"
     },
     {
       "topic": "AI 代码的安全与质量陷阱",
       "url": "https://simonwillison.net/2026/Jul/22/openai-cyberattack/",
       "channel": "web",
-      "file": "23-ai-code-security-pitfalls.md"
+      "file": "24-ai-code-security-pitfalls.md"
+    },
+    {
+      "topic": "AI 编码供应链安全：幻觉包、Slopsquatting 与沙箱防线",
+      "url": "https://simonwillison.net/2024/Apr/1/diving-deeper-into-ai-package-hallucinations/",
+      "channel": "web",
+      "file": "25-ai-supply-chain-security.md"
+    },
+    {
+      "topic": "AI 生成代码的 IP 与合规：版权承诺、责任边界与可版权性",
+      "url": "https://blogs.microsoft.com/on-the-issues/2023/09/07/copilot-copyright-commitment-ai-legal-concerns/",
+      "channel": "web",
+      "file": "26-ai-code-ip-compliance.md"
     },
     {
       "topic": "成本管理：Token 消耗、订阅选择与用量优化",
       "url": "https://code.claude.com/docs/en/costs",
       "channel": "web",
-      "file": "24-cost-management.md"
+      "file": "27-cost-management.md"
     },
     {
       "topic": "团队落地：AI 编码规范的团队推广与度量",
       "url": "https://code.claude.com/docs/en/admin-setup",
       "channel": "web",
-      "file": "25-team-adoption.md"
+      "file": "28-team-adoption.md"
     },
     {
-      "topic": "从 0 到 1 用 AI 做产品的实战流程",
+      "topic": "从 0 到 1 用 AI 做产品：未来属于能直接动手的人",
       "url": "https://ghuntley.com/dothings/",
       "channel": "web",
-      "file": "26-zero-to-one-with-ai.md"
+      "file": "29-zero-to-one-with-ai.md"
     }
   ]
 }

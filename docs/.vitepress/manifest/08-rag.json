@@ -20,76 +20,100 @@
       "file": "03-embedding-deep-dive.md"
     },
     {
+      "topic": "Embedding 模型选型实战（中文优先，BGE/MTEB/Qwen3）",
+      "url": "https://raw.githubusercontent.com/FlagOpen/FlagEmbedding/master/README.md",
+      "channel": "raw",
+      "file": "04-embedding-model-selection.md"
+    },
+    {
       "topic": "文档分块策略（含 Anthropic Contextual Retrieval）",
       "url": "https://www.pinecone.io/learn/chunking-strategies/",
       "channel": "web",
-      "file": "04-chunking-strategies.md"
+      "file": "05-chunking-strategies.md"
     },
     {
       "topic": "向量检索与相似度",
       "url": "https://www.pinecone.io/learn/vector-similarity/",
       "channel": "web",
-      "file": "05-vector-search-similarity.md"
+      "file": "06-vector-search-similarity.md"
     },
     {
-      "topic": "最小 RAG 全流程实战",
+      "topic": "元数据过滤与多维过滤检索",
+      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/multi_faceted_filtering.ipynb",
+      "channel": "raw",
+      "file": "07-metadata-filtering.md"
+    },
+    {
+      "topic": "最小 RAG（Simple RAG）系统",
       "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/simple_rag.ipynb",
       "channel": "raw",
-      "file": "06-minimal-rag-walkthrough.md"
+      "file": "08-minimal-rag-walkthrough.md"
     },
     {
       "topic": "RAG 评估（RAGAS）",
       "url": "https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md",
       "channel": "raw",
-      "file": "07-rag-evaluation-ragas.md"
+      "file": "09-rag-evaluation-ragas.md"
     },
     {
       "topic": "混合检索（BM25+向量）",
       "url": "https://www.pinecone.io/learn/hybrid-search-intro/",
       "channel": "web",
-      "file": "08-hybrid-search-bm25.md"
+      "file": "10-hybrid-search-bm25.md"
     },
     {
       "topic": "重排序 rerank",
       "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/reranking.ipynb",
       "channel": "raw",
-      "file": "09-reranking.md"
+      "file": "11-reranking.md"
+    },
+    {
+      "topic": "句子窗口与父子块（small-to-big）",
+      "url": "https://raw.githubusercontent.com/run-llama/llama_index/main/docs/examples/node_postprocessor/MetadataReplacementDemo.ipynb",
+      "channel": "raw",
+      "file": "12-sentence-window-parent-child.md"
     },
     {
       "topic": "Query 改写与扩展",
       "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/query_transformations.ipynb",
       "channel": "raw",
-      "file": "10-query-rewriting-expansion.md"
+      "file": "13-query-rewriting-expansion.md"
     },
     {
       "topic": "多模态 RAG",
       "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/multi_model_rag_with_captioning.ipynb",
       "channel": "raw",
-      "file": "11-multimodal-rag.md"
+      "file": "14-multimodal-rag.md"
+    },
+    {
+      "topic": "多向量检索与 ColBERT/ColPali",
+      "url": "https://raw.githubusercontent.com/stanford-futuredata/ColBERT/main/README.md",
+      "channel": "raw",
+      "file": "15-multi-vector-colbert-colpali.md"
     },
     {
       "topic": "GraphRAG",
       "url": "https://raw.githubusercontent.com/microsoft/graphrag/main/README.md",
       "channel": "raw",
-      "file": "12-graphrag.md"
+      "file": "16-graphrag.md"
     },
     {
       "topic": "Agentic RAG",
       "url": "https://weaviate.io/blog/what-is-agentic-rag",
       "channel": "web",
-      "file": "13-agentic-rag.md"
+      "file": "17-agentic-rag.md"
     },
     {
       "topic": "Text2SQL 实战",
       "url": "https://raw.githubusercontent.com/vanna-ai/vanna/main/README.md",
       "channel": "raw",
-      "file": "14-text2sql.md"
+      "file": "18-text2sql.md"
     },
     {
       "topic": "生产化架构与常见问题排查",
       "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/reliable_rag.ipynb",
       "channel": "raw",
-      "file": "15-production-rag-troubleshooting.md"
+      "file": "19-production-rag-troubleshooting.md"
     }
   ]
 }

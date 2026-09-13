@@ -195,7 +195,7 @@ from peft import LoraConfig
 peft_config = LoraConfig(target_modules="all-linear")
 ```
 
-**2. 秩与任务类型匹配。** SFT 建议 `r=256` 左右（配合 all-linear），强化学习类任务每轮只有约 1 bit 的信息量，`r=1–32` 即可；`lora_alpha/r` 的缩放使学习率近似与秩无关，LoRA 学习率通常比全参微调高一到两个数量级。详见本模块 [训练超参与过拟合诊断](./08-hyperparams-overfitting)。
+**2. 秩与任务类型匹配。** SFT 建议 `r=256` 左右（配合 all-linear），强化学习类任务每轮只有约 1 bit 的信息量，`r=1–32` 即可；`lora_alpha/r` 的缩放使学习率近似与秩无关，LoRA 学习率通常比全参微调高一到两个数量级。详见本模块 [训练超参与过拟合诊断](./09-hyperparams-overfitting)。
 
 **3. 合并权重消除推理开销。** 训练完的 adapter 可以直接加载使用，也可以合并回基座模型消除旁路计算；PEFT 支持 `merge_and_unload()` 一行完成。LoRA 与量化组合即 QLoRA，见下一篇文章。
 

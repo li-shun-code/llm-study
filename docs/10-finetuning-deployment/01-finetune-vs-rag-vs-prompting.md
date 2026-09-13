@@ -96,7 +96,7 @@ versions: 课程版本 2026-09 主分支（含 Microsoft Foundry 当前微调技
 ## 延伸阅读
 
 - 原课程的配套视频《To fine-tune or not to fine-tune》
-- 本模块后续文章：[训练范式回顾与全参微调](./03-training-paradigms-full-finetuning)、[LoRA 原理](./04-lora-principles)、[DPO 与偏好优化](./10-dpo-preference-optimization)
+- 本模块后续文章：[训练范式回顾与全参微调](./03-training-paradigms-full-finetuning)、[LoRA 原理](./04-lora-principles)、[DPO 与偏好优化](./11-dpo-preference-optimization)
 
 ---
 

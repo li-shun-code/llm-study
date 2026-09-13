@@ -16,15 +16,19 @@ Linux 与 Git 先行，再补操作系统与计算机网络；本模块内容优
 - SSH
 - Git 基础
 - Git 分支/合并/PR 协作
+- Git 进阶：rebase、cherry-pick 与冲突解决
+- GitHub Actions 与 CI 基础
 - 操作系统概述
 - 进程
 - 线程
 - 并发与锁
+- 信号与进程间通信 IPC
 - CPU 调度
 - 内存管理
 - 虚拟内存
 - 文件系统
 - I/O 多路复用
+- epoll 与事件循环
 - 网络分层模型
 - DNS
 - TCP

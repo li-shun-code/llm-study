@@ -1,58 +1,58 @@
 # 模块 10 · 微调与部署（10-finetuning-deployment）来源报告
 
-抓取日期：2026-09-13。目标 ≥16 篇，实际完成 **17 篇**（任务清单 17 个知识点全部落篇），全部通过 `node scripts/check-frontmatter.mjs docs/10-finetuning-deployment`。
+抓取日期：2026-09-13（本次补充与重做）。目标 20 篇（17 篇既有 + 3 篇新增 + 4 篇重做），全部通过 `node scripts/check-frontmatter.mjs docs/10-finetuning-deployment`（PASS, 20 articles）。
 
-## 来源与许可
+## 本次变更概览
+
+- **新增 3 篇**：08 继续预训练 CPT 与领域自适应、12 GRPO 与 RLVR、17 推理服务生产化运维；
+- **重做 4 篇**（编者总结正文替换为原文完整翻译）：13 模型量化基础、15 Ollama 本地部署、18 开源模型选型、19 LLM 评测方法与基准；
+- **重排**：原 08–17 顺延（08→09、09→10、10→11、11→13、12→14、13→15、14→16、15→18、16→19、17→20，两段式重命名），frontmatter order 同步；
+- 新增/重做正文主体均为官方仓库/官方文档的**完整翻译**，编者内容仅限导语、节间衔接与署名块说明，逐节署名见各篇文末。
+
+## 来源与许可（含既有篇目）
 
 | 来源 | 用途 | 许可 | 署名方式 |
 | --- | --- | --- | --- |
-| [microsoft/generative-ai-for-beginners](https://github.com/microsoft/generative-ai-for-beginners) 第 18 课 Fine-Tuning Your LLM | 01 主来源（全文翻译；Azure Foundry 平台操作步骤节选并标注） | MIT | 01 frontmatter + 署名块 |
-| [DataWhale happy-llm](https://github.com/datawhalechina/happy-llm) 第六章《大模型训练流程实践》 | 02 主来源（预训练 + SFT 全流程，中文转载；超长分布式脚本节选并标注）；04 主来源（6.3 高效微调与 LoRA 原理，中文转载） | CC BY-NC-SA 4.0（LICENSE.txt 核实） | 02/04 frontmatter + 署名块 |
-| [AutoDL 帮助文档](https://www.autodl.com/docs/)（《快速开始》《GPU 选型》《CUDA/cuDNN》） | 03 主来源（中文转载） | 原文页面未附开源许可，按署名转载处理 | 03 frontmatter + 署名块 |
-| [Hugging Face PEFT 文档](https://huggingface.co/docs/peft)（developer_guides/quantization；conceptual_guides/adapter@v0.19.0） | 05 主来源（全文翻译）；04 编者注（PEFT 现状与 all-linear 最佳实践） | Apache 2.0 | 05 frontmatter + 署名块；04 署名块注明含编者补充 |
-| [bitsandbytes README](https://github.com/bitsandbytes-foundation/bitsandbytes) | 05 背景（三大特性翻译）；11 训练侧量化主来源之一 | Apache 2.0（仓库 LICENSE 徽章核实） | 05/11 frontmatter + 署名块 |
-| [Hugging Face TRL 文档](https://huggingface.co/docs/trl)（dataset_formats / sft_trainer / dpo_trainer / lora_without_regret / distillation_trainer，主分支） | 06 主来源；09 主来源；10 主来源；08 主来源；07 蒸馏部分主来源 | Apache 2.0 | 各篇 frontmatter + 署名块 |
-| [huggingface/smol-course](https://github.com/huggingface/smol-course)（v1/6_synthetic_datasets、v1/4_evaluation） | 07 合成数据部分主来源（全文翻译）；06 清洗清单、16 评测策略部分 | Apache 2.0（LICENSE 核实） | 07/16 署名块；06 署名块注明编译来源 |
-| [vLLM 官方博客](https://blog.vllm.ai/2023/06/20/vllm.html)（PagedAttention 发布文）与[官方文档](https://docs.vllm.ai)（quickstart / deployment/docker / design/arch_overview / features/quantization） | 12 主来源（博客全文 + V1 架构概览翻译）；14 主来源（quickstart + docker 全文翻译）；11 部署侧量化主来源 | Apache 2.0（vLLM 项目） | 各篇 frontmatter + 署名块 |
-| [Ollama 官方 README](https://github.com/ollama/ollama) 与[官方文档](https://docs.ollama.com)（quickstart / cli / openai compatibility / docker / modelfile） | 13 主来源（全文翻译） | MIT | 13 frontmatter + 署名块 |
-| [QwenLM/Qwen3.5](https://github.com/QwenLM/Qwen3.5)、[zai-org/GLM-5](https://github.com/zai-org/GLM-5)、[deepseek-ai/DeepSeek-V3.2](https://github.com/deepseek-ai/DeepSeek-V3.2) 官方 README | 15 主来源（三仓库综合编译） | Apache 2.0（Qwen/GLM）、MIT（DeepSeek） | 15 frontmatter + 署名块并列标注 |
-| [EleutherAI/lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) README | 16 主来源（overview/安装/用法/vLLM 后端全文翻译） | MIT（LICENSE.md 核实） | 16 frontmatter + 署名块 |
-| [OWASP GenAI Security Project](https://genai.owasp.org/llm-top-10/)（LLM Top 10 2025 主页 + LLM01–LLM10 十个风险条目页） | 17 主来源（十大风险全文翻译） | CC BY-SA 4.0（站点页脚核实；本篇译文以相同方式共享） | 17 frontmatter + 署名块 |
-| [NVIDIA NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails) README | 17 护栏实现部分主来源（全文翻译） | Apache 2.0（LICENSE.md 核实） | 17 frontmatter + 署名块 |
+| [microsoft/generative-ai-for-beginners](https://github.com/microsoft/generative-ai-for-beginners) 第 18 课 | 01 选型 | MIT | frontmatter + 署名块 |
+| [DataWhale happy-llm](https://github.com/datawhalechina/happy-llm) 第六章 | 02 训练范式、04 LoRA 原理 | CC BY-NC-SA 4.0 | frontmatter + 署名块 |
+| [AutoDL 帮助文档](https://www.autodl.com/docs/) | 03 GPU 环境 | 未附开源许可，署名转载 | frontmatter + 署名块 |
+| [Hugging Face PEFT 文档](https://huggingface.co/docs/peft) + bitsandbytes README | 05 QLoRA | Apache 2.0 | frontmatter + 署名块 |
+| [Hugging Face TRL 文档](https://huggingface.co/docs/trl)（GitHub sparse clone，主分支） | 06 数据格式、09 超参、10 SFT、11 DPO（原 08/09/10）、**08 新增**之一（dataset_formats 语言建模 + sft_trainer 数据类型 + reducing_memory_usage packing）、**12 新增**之二（grpo_trainer 全页） | Apache 2.0 | 各篇 frontmatter + 署名块 |
+| [huggingface/smol-course](https://github.com/huggingface/smol-course) | 07 合成数据 | Apache 2.0 | frontmatter + 署名块 |
+| [hiyouga/LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) data/README.md（Pre-training Dataset） | **08 新增**之二：LLaMA-Factory 预训练数据集格式全译 | Apache 2.0 | 08 frontmatter + 文末逐节署名 |
+| [QwenLM/Qwen3.5](https://github.com/QwenLM/Qwen3.5) 与 [QwenLM/Qwen3](https://github.com/QwenLM/Qwen3) README Finetuning 章节 | **08 新增**之三：Qwen 官方微调文档要点全译 | Apache 2.0 | 08 frontmatter + 文末逐节署名 |
+| [deepseek-ai/DeepSeek-R1](https://github.com/deepseek-ai/DeepSeek-R1) README（Introduction / Model Summary / Usage Recommendations / vLLM 用法） | **12 新增**之一：纯 RL 推理模型与可验证奖励（RLVR）背景全译 | MIT（LICENSE 核实） | 12 frontmatter + 文末逐节署名 |
+| [vLLM 官方博客](https://blog.vllm.ai/2023/06/20/vllm.html)与官方文档 | 14 推理原理（原 12）、16 vLLM 部署（原 14） | Apache 2.0 | 各篇 frontmatter + 署名块 |
+| [Ollama 官方 README](https://raw.githubusercontent.com/ollama/ollama/main/README.md) + docs.ollama.com（quickstart/cli/import/gpu/faq/docker 六页，llms.txt 索引） | **15 重做**：README 全译 + 六份官方文档页全译 | MIT | 15 frontmatter + 文末逐节署名 |
+| [vLLM 官方文档 deployment 章节](https://docs.vllm.ai/en/latest/deployment/k8s/)（k8s.md / production-stack.md / nginx.md，GitHub 仓库 docs/ 同源） | **17 新增**：Kubernetes 原生部署、production stack（Helm + 路由 + LMCache）、Nginx 负载均衡全译 | Apache 2.0 | 17 frontmatter + 文末逐节署名 |
+| [Hugging Face Transformers 文档 Quantization Overview](https://huggingface.co/docs/transformers/quantization/overview)（GitHub 仓库 docs/source/en/quantization/overview.md）+ [bitsandbytes README](https://github.com/bitsandbytes-foundation/bitsandbytes) | **13 重做**：量化方法选型总览（完整选型表）+ bitsandbytes（三大特性 + 完整平台支持矩阵）全译 | Apache 2.0 / MIT | 13 frontmatter + 文末逐节署名 |
+| [QwenLM/Qwen3.5](https://github.com/QwenLM/Qwen3.5)、[zai-org/GLM-5](https://github.com/zai-org/GLM-5)、[deepseek-ai/DeepSeek-V3.2](https://github.com/deepseek-ai/DeepSeek-V3.2) 官方 README | **18 重做**：三家模型卡完整翻译对照（Qwen3.8/3.6/3.5 全系、GLM-5.3/5.2/5.1/5、DeepSeek-V3.2-Exp 含基准表） | Apache 2.0 / MIT | 18 frontmatter + 文末逐节署名 |
+| [EleutherAI/lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) README | **19 重做**：README 全译（News/Plugins/概览/安装/HF 与 GGUF 后端/accelerate 多 GPU/原生 TP/nemo/Megatron-LM/vLLM/SGLang/ONNX 双后端/Windows ML/API 总表/高级用法/缓存/可视化/贡献/extras 三表） | MIT（LICENSE.md 核实） | 19 frontmatter + 文末逐节署名 |
+| [OWASP GenAI Security Project](https://genai.owasp.org/llm-top-10/) + [NVIDIA NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails) | 20 安全护栏（原 17） | CC BY-SA 4.0 / Apache 2.0 | frontmatter + 署名块 |
 
 ## 抓取失败与替代记录
 
 | 主题 | 原 URL | 失败原因 | 替代方案 |
 | --- | --- | --- | --- |
-| LoRA 原理（备选） | huggingface.co/docs/peft/conceptual_guides/lora | huggingface.co 对本机网络完全不可达（curl HTTP=000，WebFetch 亦 ECONNREFUSED）；且该页在 PEFT v0.15 起已从文档移除 | LoRA 原理改用 DataWhale happy-llm 6.3（中文，CC BY-NC-SA）；PEFT 现状经 git sparse clone 仓库内文档（developer_guides/methods）核实后写入编者注 |
-| QLoRA（备选） | huggingface.co/docs/peft/conceptual_guides/qlora | 同上（页面已移除） | 改用仓库内 developer_guides/quantization.md（git clone，PEFT 当前版，Apache 2.0） |
-| TRL SFT/DPO/数据格式文档 | huggingface.co/docs/trl/* | 同上（网络不可达） | git sparse clone huggingface/trl 仓库 docs/source/ 取主分支文档源文件（与站点内容一致，Apache 2.0） |
-| 推理原理（continuous batching 备选） | www.anyscale.com/blog/continuous-batching-LLM-inference | 页面 JS 渲染，html2md 仅得 34 字节空壳 | continuous batching 概念以编者注形式补充（对照表），并引用 vLLM 官方文档 V1 架构概览（engine core 忙循环连续调度）作为一手来源 |
-| GPU 环境（Colab 部分） | research.google.com/colaboratory/faq.html | curl 超时（exit 28，网络不可达） | Colab 以编者注形式简述（免费 T4、用途定位），主来源改为 AutoDL 帮助文档三篇（任务候选清单内来源） |
-| 模型选型（核实 Qwen 最新仓库） | github.com/QwenLM/Qwen3（README 停在 Qwen3-2507） | 内容过时（时效性约束） | git sparse raw 探测发现 QwenLM/Qwen3.5 仓库（Qwen3.8，2026-08 更新），改用之；GLM 用 zai-org/GLM-5（GLM-5.3，2026 年）；DeepSeek 用 deepseek-ai/DeepSeek-V3.2（DeepSeek-V4 经 raw 探测不存在，404） |
+| TRL continued_pretraining.md | raw.githubusercontent.com/huggingface/trl/main/docs/source/continued_pretraining.md | 404（main 分支与 v0.19–v0.24 各 tag 均无此文件，已逐一探测） | 改用 TRL 现役官方文档中最贴近 CPT 的三页（dataset_formats 语言建模、sft_trainer 数据类型、reducing_memory_usage packing）完整翻译 |
+| HF 博客 continuation-pretraining 篇 | huggingface.co/blog/continuation-pretraining | 该 slug 的博文不存在（huggingface/blog 官方仓库 2643 个文件 grep 无此篇；社区博文不在仓库内）；且 huggingface.co 全站对本环境不可达（curl HTTP 000，同上次会话） | 以 LLaMA-Factory 官方 data/README 预训练数据集节（Qwen 官方推荐框架）+ Qwen 官方 README 微调章节替代，已在 08 篇署名块完整披露 |
+| huggingface.co（Transformers/TRL 文档站与博客） | huggingface.co/docs/... | 全站网络不可达（000） | 一律改走 GitHub 仓库源文件（transformers docs/source/en/quantization/overview.md、trl docs/source/*.md，与站点渲染内容一致、许可相同） |
+| docs.vllm.ai 网页版 | docs.vllm.ai/en/latest/deployment/k8s/ | JS 渲染（curl 得空壳） | 官方仓库 vllm-project/vllm docs/ 目录 sparse clone（与文档站同源 mkdocs 源） |
+| docs.ollama.com | docs.ollama.com/faq.md 等 | 可达 | 直接以 .md 端点抓取成功（llms.txt 索引） |
+| QwenLM/Qwen3.5 仓库 clone | github.com/QwenLM/Qwen3.5 | sparse clone 超时 | README 经 raw.githubusercontent.com 直抓成功 |
+| LoRA 备选/Colab/Anyscale/MCP docs 网页版等 | （同上次会话记录） | 维持上次结论 | 不变 |
 
-## 时效性核实与改写记录（硬约束执行）
+## 时效性核实与改写记录
 
-抓取时点 2026-09-13。所有代码与 API 均按当前稳定版校订，改写处在各篇署名块/编者注中显式标注：
+抓取时点 2026-09-13：
 
-| 文章 | 原文中的过时/平台特定内容 | 处理方式 |
-| --- | --- | --- |
-| 01 选型 | generative-ai-for-beginners 第 18 课的 Azure Foundry 平台操作步骤 | SFT/DPO/RFT 技术对照与最佳实践全文翻译；Foundry 操作步骤节选为编者注并给出原文链接 |
-| 02 训练范式 | happy-llm 使用 Qwen-2.5-1.5B 为示例 | 如实保留（原文即当前版）；篇末编者注指出 TRL `SFTTrainer` 为其现代等价物 |
-| 04 LoRA | happy-llm 原理篇"只调注意力四矩阵、r=4/8/16"为 2021 年论文结论 | 如实转载，编者注补充 2025《LoRA Without Regret》结论（all-linear、SFT r=256）与本站交叉引用 |
-| 05 QLoRA | — | PEFT 当前 API（BitsAndBytesConfig/prepare_model_for_kbit_training）；补充显存账单表 |
-| 06–10 TRL 各篇 | — | 全部为主分支文档：`loss_type="chunked_nll"`、`assistant_only_loss`、`DistillationTrainer`（on-policy GKD）、`LoraConfig(target_modules="all-linear")`、DPO 多损失组合（MPO）等均为当前特性；删除了文档内嵌的 trackio iframe（VitePress 不适用）并在文内以文字说明 |
-| 12 推理原理 | vLLM 博客为 2023 年发布文（数据如"24x HF"） | 如实翻译并保留历史语境；V1 架构部分译自 2026-09 官方 arch_overview（多进程/ZMQ/--api-server-count 等 V1 专有内容） |
-| 13 Ollama | — | 2026-09 当前版：`ollama launch` 集成、gemma4 示例、docs.ollama.com 新文档站内容（OpenAI 兼容端点为 `/v1`） |
-| 14 vLLM 部署 | — | V1 引擎当前文档：`uv pip install vllm --torch-backend=auto`、`vllm serve`、docker 非根用户（UID 2000）、编译缓存卷 |
-| 15 模型选型 | — | 联网核实至 2026-09：Qwen3.8（2026-08-14 发布）、GLM-5.3、DeepSeek-V3.2；DeepSeek-V4 探测不存在 |
-| 16 评测 | — | lm-eval 当前安装方式（可选 extras：`lm_eval[hf,vllm,api]`）与 `lm-eval run` 新 CLI |
-| 17 安全 | — | OWASP LLM Top 10 为 2025 版（当前最新）；十项风险名称按 2025 版（含 LLM07 System Prompt Leakage 等新条目） |
-
-## 其他说明
-
-- 目标 ≥16 篇，实际 17 篇，任务清单 17 个知识点一一对应，无合并、无缺漏。
-- huggingface.co 全站对本环境网络不可达（curl/WebFetch/web-reader 三通道均失败/限流），PEFT/TRL/HF 课程文档一律改走 **GitHub 仓库 git sparse clone**（文档源文件与站点渲染内容一致，且同为 Apache 2.0 许可），来源未降低权威性。
-- GitHub REST API 触发匿名限流（rate limit），改用 raw.githubusercontent.com 与 git 协议获取，无影响。
-- 各篇编者补充（显存估算、loss 曲线判读、选型建议、合规清单等）均以"编者注/编者补充"显式区隔，不与原文混写；术语首现均标注英文。
-- 09 篇文档原警示中 Jinja 标签（`{% generation %}`）以行内代码形式保留。
+| 文章 | 处理方式 |
+| --- | --- |
+| 08 CPT | TRL 为主分支当前版（language modeling 数据集、BFD/bfd_split/wrapped 三种 packing 策略含 Qwen3-Coder-Next 技术报告对 wrapped 的批评）；LLaMA-Factory 为 main 当前版；Qwen 为 Qwen3.5/Qwen3 当前 README |
+| 12 GRPO | TRL grpo_trainer 为主分支当前版：loss_type 含 dapo/dr_grpo/sapo（及 cispo/vespo 指标）、vLLM colocate/server 两模式（nccl 权重迁移 + processed_logprobs）、训练-推理失配与 TIS/MIS 重要性采样、transformers continuous batching、Agent Training（tools/environments/多环境/多模态工具响应/OpenEnv/OpenReward/Harbor）、自适应熵（Skywork-OR1）；DeepSeek-R1 README 为当前版（温度 0.5–0.7、禁 system prompt、\</think\> 强制开头等原始建议） |
+| 13 量化 | Transformers overview 为主分支当前版（22 种量化方法选型表：含 GPTQModel 接替 AutoGPTQ 为 GPTQ 行、新增 AutoRound/Four Over Six/FP-Quant/HIGGS/Metal/NVFP4/SINQ/FBGEMM_FP8/SpQR/Quark 等）；bitsandbytes 为当前开发分支支持矩阵（Linux/Windows/macOS × x86-64/aarch64/arm64 × NVIDIA/AMD/Intel/Gaudi/Metal/CPU） |
+| 15 Ollama | 2026-09 当前版：ollama launch 集成（Claude Code/Codex/OpenCode/VS Code/Droid）、gemma4 示例、cloud 模式与 `OLLAMA_NO_CLOUD`/`disable_ollama_cloud` 纯本地模式、`OLLAMA_CONTEXT_LENGTH` 默认 4096、ROCm v7、Vulkan 默认启用、GGUF/gguf 双评测路径在 lm-eval 侧的说明 |
+| 17 生产化 | vLLM 文档 latest：k8s CPU/GPU(NVIDIA/AMD ROCm)/gRPC 健康探针、KeyboardInterrupt 排查；production stack（Helm chart、模型感知/前缀感知路由、LMCache KV 卸载 `--kv-offloading-backend lmcache`）；Nginx least_conn 负载均衡 |
+| 18 选型 | 联网核实至 2026-09：Qwen3.8（2026-08-14 发布，27B 与 2.4T-A95B）、GLM-5.3/5.3-Flash（320B-A18B 混合注意力 + mHC）、DeepSeek-V3.2-Exp（DSA，含 2025-11-17 RoPE indexer 修复公告）；DeepSeek-V4 经 raw 探测不存在（404） |
+| 19 评测 | lm-eval 主分支当前版：2026/09 Plugins 机制、2025/12 CLI 子命令重构与更轻安装（`lm_eval[hf/vllm/api]` extras）、gguf 后端（llama.cpp server、id_slot 槽位钉扎）、原生 tp_plan 张量并行、Megatron-LM 后端、Windows ML/ONNX 双后端 |
+| 既有各篇 | 未改动正文；仅重命名与 order 同步 |

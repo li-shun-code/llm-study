@@ -233,7 +233,7 @@ dataset = dataset.map(extract_prompt).remove_columns("rejected").rename_column("
 格式之外，**质量决定上限**。以下清单综合自 smol-course 与 generative-ai-for-beginners：
 
 - **质量胜过数量**：先以 50–100 条高质量样本验证任务方向，再扩到 500+ 条；果断删除低质量、重复、自相矛盾的样本。
-- **切分验证集**：始终保留一个 held-out 验证集，训练时观察验证 loss——这是判断过拟合的第一工具（见 [训练超参与过拟合诊断](./08-hyperparams-overfitting)）。
+- **切分验证集**：始终保留一个 held-out 验证集，训练时观察验证 loss——这是判断过拟合的第一工具（见 [训练超参与过拟合诊断](./09-hyperparams-overfitting)）。
 - **去重与去污染**：训练集与评测集重叠会让评测虚高；多轮对话类数据注意同一会话被同时切进训练/验证的问题。
 - **对齐 Chat Template**：沿用与目标基座模型一致的对话模板；换模板等于换"输入分布"，可能损伤已学的指令遵循能力。
 - **检查长度分布**：统计 token 长度、剔除超长异常样本；截断可能把答案截掉，让模型学到"说半截话"。

@@ -146,7 +146,7 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-异步写法在 Web 服务（本模块第 13 篇的 FastAPI）与高并发批处理场景中是标配。
+异步写法在 Web 服务（本模块第 16 篇的 FastAPI）与高并发批处理场景中是标配。
 
 ## 六、Responses API 的差异化能力：有状态与托管工具
 
@@ -206,7 +206,7 @@ response = client.responses.create(
 
 响应的 `output` 里会交替出现 `web_search_call`（搜索动作）与 `message`（带引用注释的回答）两种输出项。
 
-多模态输入也可以在一条请求里完成——图片 + 文本 + 工具的组合（`input_image` 内容块的用法详见本模块第 10 篇）：
+多模态输入也可以在一条请求里完成——图片 + 文本 + 工具的组合（`input_image` 内容块的用法详见本模块第 13 篇）：
 
 ```python
 response_multimodal = client.responses.create(

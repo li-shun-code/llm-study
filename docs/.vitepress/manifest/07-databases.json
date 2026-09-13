@@ -7,15 +7,18 @@
     { "topic": "聚合与分组（GROUP BY/HAVING）", "url": "https://www.postgresql.org/docs/current/tutorial-agg.html", "channel": "web", "file": "docs/07-databases/04-aggregation-and-group-by.md" },
     { "topic": "JOIN 多表", "url": "https://www.postgresql.org/docs/current/tutorial-join.html", "channel": "web", "file": "docs/07-databases/05-joins.md" },
     { "topic": "索引原理与使用", "url": "https://www.postgresql.org/docs/current/indexes-intro.html", "channel": "web", "file": "docs/07-databases/06-indexes.md" },
-    { "topic": "事务与 ACID", "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html", "channel": "web", "file": "docs/07-databases/07-transactions-and-acid.md" },
+    { "topic": "事务与 ACID（含 MVCC 隔离级别）", "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html", "channel": "web", "file": "docs/07-databases/07-transactions-and-acid.md" },
     { "topic": "SQLite 上手", "url": "https://www.sqlite.org/whentouse.html", "channel": "web", "file": "docs/07-databases/08-sqlite-getting-started.md" },
     { "topic": "PostgreSQL 入门", "url": "https://www.postgresql.org/docs/current/tutorial-createdb.html", "channel": "web", "file": "docs/07-databases/09-postgresql-getting-started.md" },
-    { "topic": "SQLAlchemy ORM（2.0 风格，含连接池）", "url": "https://docs.sqlalchemy.org/en/20/orm/quickstart.html", "channel": "web", "file": "docs/07-databases/10-sqlalchemy-orm.md" },
-    { "topic": "Redis 核心数据结构与缓存", "url": "https://redis.io/docs/latest/develop/data-types/", "channel": "web", "file": "docs/07-databases/11-redis-data-structures-and-cache.md" },
-    { "topic": "MongoDB 文档模型", "url": "https://www.mongodb.com/docs/manual/core/document/", "channel": "web", "file": "docs/07-databases/12-mongodb-document-model.md" },
-    { "topic": "向量数据库原理", "url": "https://milvus.io/docs/overview.md", "channel": "web", "file": "docs/07-databases/13-vector-database-principles.md" },
-    { "topic": "Chroma/Qdrant 单库实战", "url": "https://github.com/qdrant/qdrant", "channel": "web", "file": "docs/07-databases/14-chroma-qdrant-quickstart.md" },
-    { "topic": "Milvus/pgvector 合并实战", "url": "https://milvus.io/docs/quickstart.md", "channel": "web", "file": "docs/07-databases/15-milvus-pgvector-quickstart.md" },
-    { "topic": "向量库选型对比", "url": "https://milvus.io/docs/comparison.md", "channel": "web", "file": "docs/07-databases/16-vector-db-comparison.md" }
+    { "topic": "PostgreSQL 全文检索（含中文分词 zhparser/pg_jieba）", "url": "https://www.postgresql.org/docs/current/textsearch.html", "channel": "web", "file": "docs/07-databases/10-postgresql-full-text-search.md" },
+    { "topic": "SQLAlchemy ORM（2.0 风格，含连接池）", "url": "https://docs.sqlalchemy.org/en/20/orm/quickstart.html", "channel": "web", "file": "docs/07-databases/11-sqlalchemy-orm.md" },
+    { "topic": "Alembic 数据库迁移", "url": "https://alembic.sqlalchemy.org/en/latest/tutorial.html", "channel": "web", "file": "docs/07-databases/12-alembic-database-migrations.md" },
+    { "topic": "Redis 核心数据结构与缓存", "url": "https://redis.io/docs/latest/develop/data-types/", "channel": "web", "file": "docs/07-databases/13-redis-data-structures-and-cache.md" },
+    { "topic": "Redis 语义缓存与 RediSearch（含向量检索）", "url": "https://raw.githubusercontent.com/redis/docs/main/content/develop/ai/search-and-query/_index.md", "channel": "raw", "file": "docs/07-databases/14-redis-semantic-cache-and-redisearch.md" },
+    { "topic": "MongoDB 文档模型", "url": "https://www.mongodb.com/docs/manual/core/document/", "channel": "web", "file": "docs/07-databases/15-mongodb-document-model.md" },
+    { "topic": "向量数据库原理", "url": "https://milvus.io/docs/overview.md", "channel": "web", "file": "docs/07-databases/16-vector-database-principles.md" },
+    { "topic": "Chroma/Qdrant 单库实战", "url": "https://github.com/qdrant/qdrant", "channel": "web", "file": "docs/07-databases/17-chroma-qdrant-quickstart.md" },
+    { "topic": "Milvus/pgvector 合并实战", "url": "https://milvus.io/docs/quickstart.md", "channel": "web", "file": "docs/07-databases/18-milvus-pgvector-quickstart.md" },
+    { "topic": "向量库选型对比", "url": "https://milvus.io/docs/comparison.md", "channel": "web", "file": "docs/07-databases/19-vector-db-comparison.md" }
   ]
 }

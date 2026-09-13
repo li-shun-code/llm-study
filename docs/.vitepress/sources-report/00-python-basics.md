@@ -28,3 +28,16 @@
 - 19 篇：原文使用已弃用的 `datetime.utcnow()`/`utcfromtimestamp()`，保留原文并加"编者注"给出 3.12+ 推荐写法（`datetime.now(timezone.utc)`）。
 - 20 篇：文末加"编者注"提示 uv 等现代工具作为 pip/venv 工作流的补充。
 - 03 篇：f-string 注明为当前推荐的字符串格式化方式。
+
+## 2026-09-13 补缺追加（22 → 25 篇 + 2 处并入 + 04/05 顺序对调）
+
+| 序号 | 主题 | 来源 | 许可 | 说明 |
+| --- | --- | --- | --- | --- |
+| 09（新增） | collections 标准库容器 | [docs.python.org/zh-cn/3/library/collections.html](https://docs.python.org/zh-cn/3/library/collections.html) | PSF 许可证第 2 版 | 官方中文文档整页转载（ChainMap/Counter/deque/defaultdict/namedtuple/OrderedDict/UserDict/UserList/UserString 全部章节），仅删除版本注记与导航样板、绝对化链接、代码块转为围栏；`translated: false`（原文即中文） |
+| 19（新增） | 调试入门（pdb 与断点） | [docs.python.org/zh-cn/3/library/pdb.html](https://docs.python.org/zh-cn/3/library/pdb.html) + [functions.html#breakpoint](https://docs.python.org/zh-cn/3/library/functions.html#breakpoint) | PSF 许可证第 2 版 | pdb 页面全文转载（模块介绍/命令行接口/Pdb 类/调试器命令全部条目），原文两段英文导语由本站完整翻译为中文；文末补充官方 `breakpoint()` 内置函数一节（文内分别署名） |
+| 21（新增） | pathlib 现代路径处理 | [docs.python.org/zh-cn/3/library/pathlib.html](https://docs.python.org/zh-cn/3/library/pathlib.html) | PSF 许可证第 2 版 | 官方中文文档整页转载（基础使用/异常/纯路径/具体路径/模式语言/与 glob 和 os.path 比较/相关工具映射表全部章节），继承关系图指向官方图片绝对地址 |
+| 05（并入） | 列表推导式 · 追加「字典与集合推导式」 | [docs.python.org/zh-cn/3/tutorial/datastructures.html](https://docs.python.org/zh-cn/3/tutorial/datastructures.html) 5.4 集合与 5.5 字典两节 | PSF 许可证第 2 版 | 官方教程对应两节全文节选，插入在原文小结之后、文末署名块之前，以「补充」引用块注明来源 |
+| 12（并入） | 函数 · 追加「任意实参列表与解包（*args / **kwargs）」 | [docs.python.org/zh-cn/3/tutorial/controlflow.html#arbitrary-argument-lists](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#arbitrary-argument-lists) 4.9.4 与 4.9.5 两节 | PSF 许可证第 2 版 | 官方教程两节全文节选（含 write_multiple_items、concat、range(*args)、parrot(**d) 全部示例），插入在「强制位置参数」之后，以「补充」引用块注明来源 |
+| 04 ↔ 05（对调） | 先「列表」后「列表推导式」 | — | — | 应编排要求对调：文件改名 04-list.md / 05-list-comprehension.md，frontmatter order 同步，index.md 与 manifest 已同步；两篇正文内容未改动（05 篇仅追加上述补充节） |
+
+格式转换说明（对本次 3 篇官方文档新文与 2 处并入统一适用）：Sphinx 导航/页脚/目录样板删除；`Added in version x.y`/`在 x.y 版本发生变更` 等版本注记删除（按任务约定）；`[¶](#anchor)` 标题锚点删除；站内相对链接改写为 docs.python.org/zh-cn/3 绝对地址（仅保留链接文本或指向原文对应页）；doctest/REPL 代码以 ```plain 围栏、可执行片段以 ```python 围栏呈现；头部位（head）不放置任何署名内容，署名块统一位于文末。
