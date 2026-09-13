@@ -5,7 +5,7 @@ author: GitHub（Spec Kit 项目 README，主篇）；Geoffrey Huntley（Ralph �
 license: MIT（Spec Kit README）；Ralph 文章署名转载
 fetched_at: 2026-09-13
 translated: true
-order: 8
+order: 13
 ---
 
 ## 什么是 Spec 驱动开发（Spec-Driven Development）？
@@ -175,7 +175,7 @@ while :; do cat PROMPT.md | npx claude-code ; done
 
 这个循环粗糙但有效：预算封顶、可随时打断、产物是 PR。它的精神内核——把"做什么"写清楚，把"怎么做"交给循环——正是 Spec Kit 把它工程化的起点。
 
-> 译注：Spec 驱动与本模块其他篇章的关系——Spec Kit 的 `/speckit-implement` 本质是第 3 篇"可验证的完成标准"的项目化；`/speckit-tasks` 对应第 15 篇 0→1 流程中的任务拆解；`/speckit-converge` 与第 11 篇代码审查共享同一个思想：**让另一个上下文对照规格检查实现**。
+> 译注：Spec 驱动与本模块其他篇章的关系——Spec Kit 的 `/speckit-implement` 本质是第 6 篇"可验证的完成标准"的项目化；`/speckit-tasks` 对应第 26 篇 0→1 流程中的任务拆解；`/speckit-converge` 与第 19 篇代码审查共享同一个思想：**让另一个上下文对照规格检查实现**。
 
 ---
 

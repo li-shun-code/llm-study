@@ -846,60 +846,100 @@ export default {
           "link": "/11-vibe-coding/02-ai-coding-tools-landscape"
         },
         {
+          "text": "环境搭建：Claude Code 与 Cursor 的安装及首次配置",
+          "link": "/11-vibe-coding/03-setup-claude-code-cursor"
+        },
+        {
+          "text": "第一次 AI 结对：从零做一个命令行小工具",
+          "link": "/11-vibe-coding/04-first-ai-pairing-cli-tool"
+        },
+        {
+          "text": "心智模型：LLM 如何\"看\"你的代码",
+          "link": "/11-vibe-coding/05-llm-mental-model"
+        },
+        {
           "text": "Claude Code 工作流与最佳实践",
-          "link": "/11-vibe-coding/03-claude-code-best-practices"
+          "link": "/11-vibe-coding/06-claude-code-best-practices"
+        },
+        {
+          "text": "Claude Code 权限系统与安全机制",
+          "link": "/11-vibe-coding/07-claude-code-permissions"
         },
         {
           "text": "Cursor 入门与 Rules 规则系统",
-          "link": "/11-vibe-coding/04-cursor-rules"
+          "link": "/11-vibe-coding/08-cursor-rules"
+        },
+        {
+          "text": "Cursor 深入：Tab 补全、Agent 模式与调试/评审工作流",
+          "link": "/11-vibe-coding/09-cursor-modes"
         },
         {
           "text": "AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件",
-          "link": "/11-vibe-coding/05-agents-md-claude-md"
+          "link": "/11-vibe-coding/10-agents-md-claude-md"
         },
         {
           "text": "Claude Skills：可复用技能包",
-          "link": "/11-vibe-coding/06-claude-skills"
+          "link": "/11-vibe-coding/11-claude-skills"
         },
         {
           "text": "Git in AI 工作流：commit 即存档、worktree 隔离与审查流",
-          "link": "/11-vibe-coding/07-git-in-ai-workflow"
+          "link": "/11-vibe-coding/12-git-in-ai-workflow"
         },
         {
           "text": "Spec 驱动开发（Spec-Driven Development）",
-          "link": "/11-vibe-coding/08-spec-driven-development"
+          "link": "/11-vibe-coding/13-spec-driven-development"
         },
         {
           "text": "上下文工程（Context Engineering）",
-          "link": "/11-vibe-coding/09-context-engineering"
+          "link": "/11-vibe-coding/14-context-engineering"
         },
         {
-          "text": "MCP 在编码中的应用",
-          "link": "/11-vibe-coding/10-mcp-for-coding"
+          "text": "调试 with AI：让 AI 定位 Bug 的工作流",
+          "link": "/11-vibe-coding/15-debugging-with-ai"
         },
         {
-          "text": "AI 结对与代码审查",
-          "link": "/11-vibe-coding/11-ai-pairing-code-review"
+          "text": "重构 with AI：从日常重构到百万行迁移的上下文策略",
+          "link": "/11-vibe-coding/16-refactoring-with-ai"
         },
         {
           "text": "TDD with AI：Kent Beck 的增强编程实践",
-          "link": "/11-vibe-coding/12-tdd-with-ai"
+          "link": "/11-vibe-coding/17-tdd-with-ai"
+        },
+        {
+          "text": "MCP 在编码中的应用",
+          "link": "/11-vibe-coding/18-mcp-for-coding"
+        },
+        {
+          "text": "AI 结对与代码审查",
+          "link": "/11-vibe-coding/19-ai-pairing-code-review"
         },
         {
           "text": "多智能体协作编码",
-          "link": "/11-vibe-coding/13-multi-agent-collaboration"
-        },
-        {
-          "text": "AI 代码的安全与质量陷阱",
-          "link": "/11-vibe-coding/14-ai-code-security-pitfalls"
-        },
-        {
-          "text": "从 0 到 1 用 AI 做产品的实战流程",
-          "link": "/11-vibe-coding/15-zero-to-one-with-ai"
+          "link": "/11-vibe-coding/20-multi-agent-collaboration"
         },
         {
           "text": "工具链生态：Cline、Windsurf 与 Headless CI 中的 AI 编码",
-          "link": "/11-vibe-coding/16-toolchain-ecosystem"
+          "link": "/11-vibe-coding/21-toolchain-ecosystem"
+        },
+        {
+          "text": "Headless 与 CI 中的 AI 编码：Agent SDK、GitHub Actions 与 Copilot 云端智能体",
+          "link": "/11-vibe-coding/22-headless-ci-coding"
+        },
+        {
+          "text": "AI 代码的安全与质量陷阱",
+          "link": "/11-vibe-coding/23-ai-code-security-pitfalls"
+        },
+        {
+          "text": "成本管理：Token 消耗、订阅选择与用量优化",
+          "link": "/11-vibe-coding/24-cost-management"
+        },
+        {
+          "text": "团队落地：AI 编码规范的团队推广与度量",
+          "link": "/11-vibe-coding/25-team-adoption"
+        },
+        {
+          "text": "从 0 到 1 用 AI 做产品的实战流程",
+          "link": "/11-vibe-coding/26-zero-to-one-with-ai"
         }
       ]
     }

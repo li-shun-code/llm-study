@@ -5,7 +5,7 @@ author: Anthropic（Claude Code 官方文档，主篇）；Simon Willison / Geof
 license: 署名翻译（官方文档 Copyright Anthropic PBC；引言部分为博客署名转载）
 fetched_at: 2026-09-13
 translated: true
-order: 7
+order: 12
 ---
 
 ## 引言：为什么 Git 在 AI 时代更重了
@@ -156,7 +156,7 @@ git worktree remove ../hotfix-456
 1. **开任务即开分支/worktree**：`claude --worktree <task>`，物理隔离实验。
 2. **commit 即存档**：要求智能体每完成一个可验证的单元就提交（Geoffrey Huntley 的做法是最短每 30 分钟 push 一次）；跑偏就 `/rewind` 或 `git reset`——存档点越密，试错越便宜。
 3. **让智能体自理分支与 PR**：命名分支、写提交信息、收尾 squash，智能体都能胜任；你省下的时间花在审查上。
-4. **审查是唯一闸门**：AI 生成代码一律走 PR review——Writer/Reviewer 双会话（第 3 篇）、`/code-review` 技能或 Copilot/Bugbot（第 2 篇）、加上人眼终审。审查流程详见第 11 篇。
+4. **审查是唯一闸门**：AI 生成代码一律走 PR review——Writer/Reviewer 双会话（第 6 篇）、`/code-review` 技能或 Copilot/Bugbot（第 2 篇）、加上人眼终审。审查流程详见第 19 篇。
 5. **合并不代表责任转移**：按 Simon Willison 的黄金法则——你不能向别人解释的代码，不进你的仓库。
 
 ---

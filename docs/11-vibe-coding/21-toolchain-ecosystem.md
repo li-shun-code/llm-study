@@ -5,7 +5,7 @@ author: Anthropic（主篇，Headless/Agent SDK 文档）；Cline Docs、Cogniti
 license: 署名翻译（官方文档 Copyright Anthropic PBC；Cline/Cognition 部分为官方文档教学翻译，均署名）
 fetched_at: 2026-09-13
 translated: true
-order: 16
+order: 21
 ---
 
 AI 编码工具链的"下半场"不在编辑器里，而在**没有人的地方**：CI 流水线、定时任务、issue 自动响应、PR 自动审查。本篇讲三件事：Claude Code 的 Headless/Agent SDK（`claude -p` 进脚本与 CI）、Cline 的 CLI/Kanban 生态、以及 Windsurf（并入 Devin Desktop）的现况。
@@ -107,7 +107,7 @@ claude -p "Review this codebase for performance issues"
 claude -p "Now focus on the database queries" --continue
 ```
 
-**进 GitHub Actions**：把以上任何形态放进 workflow——用官方 Claude Code GitHub Actions（可在 issue/PR 里 `@claude` 触发，支持经 Amazon Bedrock、Google Cloud 或 Microsoft Foundry 走非 Anthropic API），或直接在 workflow step 里跑 `claude -p`（环境变量给 API Key，加 `--bare` 保证环境一致）。配合第 10 篇的 MCP 与第 11 篇的 `/code-review --comment`，就能搭出"issue 认领 → 实现 → PR → 自动审查"的全自动链路。
+**进 GitHub Actions**：把以上任何形态放进 workflow——用官方 Claude Code GitHub Actions（可在 issue/PR 里 `@claude` 触发，支持经 Amazon Bedrock、Google Cloud 或 Microsoft Foundry 走非 Anthropic API），或直接在 workflow step 里跑 `claude -p`（环境变量给 API Key，加 `--bare` 保证环境一致）。配合第 18 篇的 MCP 与第 19 篇的 `/code-review --comment`，就能搭出"issue 认领 → 实现 → PR → 自动审查"的全自动链路。
 
 ## 生态两翼：Cline 与 Windsurf/Devin Desktop
 
@@ -118,7 +118,7 @@ claude -p "Now focus on the database queries" --continue
 Cline 是活在编辑器和终端里的开源 AI 编码智能体：读写文件、跑终端命令、用浏览器，**每个动作都需要你明确批准**。它的工具链覆盖四种形态：IDE 扩展、CLI、SDK 与 Kanban。模型接入走 BYOK（Bring Your Own Key）：Anthropic、OpenAI（含 Codex OAuth）、DeepSeek、Gemini、OpenRouter、Qwen、GLM 等 30+ 供应商，也支持本地模型（Ollama/LM Studio）与 Cline 自营计费。
 
 - **CLI headless**：交互 TUI 与自动化两种模式，官方样例直接给出 GitHub Actions 集成——issue 评论 `@cline` 自动响应根因分析、PR 自动审查（`docs.cline.bot/cli/samples/github-integration`、`/github-pr-review`）；
-- **Cline Kanban**：用**隔离 git worktree** 并行运行多个编码智能体的看板（创建任务 → 跑智能体 → 审查变更 → 合并），是多智能体并行的另一种产品化（对照第 13 篇）；
+- **Cline Kanban**：用**隔离 git worktree** 并行运行多个编码智能体的看板（创建任务 → 跑智能体 → 审查变更 → 合并），是多智能体并行的另一种产品化（对照第 20 篇）；
 - **ACP**：Cline 可作为编码智能体接入 Zed、JetBrains、Neovim、Emacs 等任何支持 Agent Client Protocol 的客户端。
 
 ### Windsurf：并入 Devin Desktop 的 Cascade
@@ -143,7 +143,7 @@ Cline 是活在编辑器和终端里的开源 AI 编码智能体：读写文件�
 | CLI headless | `claude -p`、`cline` CLI、`codex exec` | workflow step 里跑命令 | 自定义流水线、批处理、定时任务 |
 | 开源自托管 | Cline（Apache-2.0）、Codex CLI（Apache-2.0） | BYOK + 本地/私有模型 | 数据自持、成本控制 |
 
-无论哪条路线，决定成败的都是同一组工程要素：**无人值守时的权限收敛**（allowlist/dontAsk/none）、**可验证的完成标准**（第 3、12 篇）、**产物走 PR 与审查**（第 7、11 篇）。工具会继续换名字——方法论不会。
+无论哪条路线，决定成败的都是同一组工程要素：**无人值守时的权限收敛**（allowlist/dontAsk/none）、**可验证的完成标准**（第 6、17 篇）、**产物走 PR 与审查**（第 12、19 篇）。工具会继续换名字——方法论不会。
 
 ---
 

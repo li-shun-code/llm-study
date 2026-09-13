@@ -5,7 +5,7 @@ author: Anthropic（Claude Code 官方文档）
 license: 署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途全文翻译并署名）
 fetched_at: 2026-09-13
 translated: true
-order: 3
+order: 6
 ---
 
 Claude Code 是一个智能体化的编码环境（Agentic Coding Environment）。与"回答问题然后等待"的聊天机器人不同，Claude Code 可以读取你的文件、运行命令、修改代码，并在你旁观、随时纠偏、甚至完全离开的情况下自主解决问题。这改变了你的工作方式：你不再亲自写代码再让 Claude 审查，而是描述你想要什么，由 Claude 弄清楚怎么构建。Claude 会探索、规划、实现。但这种自主性仍伴随一条学习曲线——Claude 在某些约束条件下工作，你需要理解它们。本指南汇总了在 Anthropic 内部团队以及各类代码库、语言、环境中被反复验证有效的实践模式。关于智能体循环（Agentic Loop）的底层机制，参见官方文档《How Claude Code works》。
@@ -436,7 +436,7 @@ nothing outside the task's scope changed. Report gaps, not style preferences.
 - Common workflows：调试、测试、PR 等日常任务的分步配方
 - CLAUDE.md：存放项目约定与持久上下文
 
-> 译注：本文与模块 5《Prompt 工程》、模块 9《Agent》多有呼应：给 Claude 可运行的验证手段即"让智能体闭合回路"，子智能体与并行会话即模块 13《多智能体协作编码》的实践基础，CLAUDE.md 与 Skills 则详见本模块第 5、6 篇。
+> 译注：本文与模块 5《Prompt 工程》、模块 9《Agent》多有呼应：给 Claude 可运行的验证手段即"让智能体闭合回路"，子智能体与并行会话即本模块第 20 篇《多智能体协作编码》的实践基础，CLAUDE.md 与 Skills 则详见本模块第 10、11 篇。
 
 ---
 

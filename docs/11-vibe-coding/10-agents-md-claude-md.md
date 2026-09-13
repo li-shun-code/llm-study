@@ -5,7 +5,7 @@ author: OpenAI 等生态共建方（agents.md 官方站）；Anthropic（Claude 
 license: 署名翻译（agents.md 站点及 openai/agents.md 仓库内容为开放格式说明文档；CLAUDE.md 部分为官方文档教学翻译，均署名）
 fetched_at: 2026-09-13
 translated: true
-order: 5
+order: 10
 ---
 
 ## 为什么需要 AGENTS.md？
@@ -167,7 +167,7 @@ ln -s AGENTS.md CLAUDE.md
 - **文件太大？**把多步骤流程移到 skills，把局部规则移到 `.claude/rules/`（按路径限定作用域的规则文件）。
 - **`/compact` 之后指令像丢了？**在 CLAUDE.md 里写明压缩时应保留哪些关键上下文。
 
-> 译注：本站实践建议——个人项目从一份 20 行以内的 AGENTS.md 起步，只写"AI 猜不到且会反复出错"的内容；团队项目把 AGENTS.md 作为唯一事实源，CLAUDE.md 用 `@AGENTS.md` 导入。Skills（第 6 篇）承接"多步骤流程"，Rules（第 4 篇）承接"按路径/按需加载"，三层各司其职。
+> 译注：本站实践建议——个人项目从一份 20 行以内的 AGENTS.md 起步，只写"AI 猜不到且会反复出错"的内容；团队项目把 AGENTS.md 作为唯一事实源，CLAUDE.md 用 `@AGENTS.md` 导入。Skills（第 11 篇）承接"多步骤流程"，Rules（第 8 篇）承接"按路径/按需加载"，三层各司其职。
 
 ---
 

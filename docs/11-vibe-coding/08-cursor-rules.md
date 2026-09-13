@@ -5,7 +5,7 @@ author: Anysphere（Cursor 官方文档）
 license: 署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）
 fetched_at: 2026-09-13
 translated: true
-order: 4
+order: 8
 ---
 
 ## Cursor 入门速览
@@ -17,7 +17,7 @@ Cursor 是 AI 原生代码编辑器。按官方文档的当前结构，它的能
 - **云端智能体（Cloud Agents）**：云端跑任务与 Builds、Bugbot（PR 找虫）、Security Agents、PR 路由与审批、移动端。
 - **CLI 与 SDK**：命令行与编程接口。
 
-本文主体翻译其中最常用、也最能体现"项目级约定"思想的 **Rules** 一章。Cursor 之外的工具（Claude Code 的 CLAUDE.md、Cline 的 `.clinerules` 等）都在解决同一个问题——见本模块第 5 篇《AGENTS.md/CLAUDE.md 项目规范文件》。
+本文主体翻译其中最常用、也最能体现"项目级约定"思想的 **Rules** 一章。Cursor 之外的工具（Claude Code 的 CLAUDE.md、Cline 的 `.clinerules` 等）都在解决同一个问题——见本模块第 10 篇《AGENTS.md/CLAUDE.md 项目规范文件》。
 
 ## Rules：给 Agent 的系统级指令
 
@@ -286,7 +286,7 @@ Team 与 Enterprise 套餐可以在 Cursor 管理后台为整个组织创建并�
 
 管理员在后台直接创建与管理规则；规则创建后自动对全体成员生效，并在后台可见。
 
-> 译注：把"反复纠正过的错误"沉淀为规则、把"示例文件引用而非内容复制"作为规则写法，与本模块第 5 篇 AGENTS.md 的官方建议、第 3 篇 Claude Code 对 CLAUDE.md"像代码一样维护"的要求完全同构——项目规范文件的工程学是跨工具通用的。
+> 译注：把"反复纠正过的错误"沉淀为规则、把"示例文件引用而非内容复制"作为规则写法，与本模块第 10 篇 AGENTS.md 的官方建议、第 6 篇 Claude Code 对 CLAUDE.md"像代码一样维护"的要求完全同构——项目规范文件的工程学是跨工具通用的。
 
 ---
 

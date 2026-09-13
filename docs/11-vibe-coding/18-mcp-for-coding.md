@@ -5,7 +5,7 @@ author: Anthropic（Claude Code 官方文档）
 license: 署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）
 fetched_at: 2026-09-13
 translated: true
-order: 10
+order: 18
 ---
 
 Claude Code 可以通过**模型上下文协议（Model Context Protocol，MCP）**连接数百种外部工具与数据源——这是一个面向 AI 工具集成的开源标准。MCP 服务器让 Claude Code 访问你的工具、数据库和 API。
@@ -211,7 +211,7 @@ Find customers who haven't made a purchase in 90 days
 
 许多云端 MCP 服务器需要认证，Claude Code 支持 OAuth 2.0。当远程服务器返回 `401 Unauthorized` 或 `403 Forbidden` 时，Claude Code 会将其标记为需要认证，随后引导完成 OAuth 流程；命令行也提供 `/mcp` 内的认证入口（详见原文"Authenticate with remote MCP servers"一节）。
 
-> 译注：编码场景选 MCP 服务器的小抄——issue/PR 协作选 GitHub/GitLab 官方服务器；设计对齐选 Figma；数据库用 DBHub 之类 + 只读账号；内部系统自建 stdio 服务器并放进项目级 `.mcp.json`（凭据走环境变量）。MCP 与 Function Calling 的取舍对比见模块 9；在 CI 中用 MCP 的完整链路见本模块第 16 篇。
+> 译注：编码场景选 MCP 服务器的小抄——issue/PR 协作选 GitHub/GitLab 官方服务器；设计对齐选 Figma；数据库用 DBHub 之类 + 只读账号；内部系统自建 stdio 服务器并放进项目级 `.mcp.json`（凭据走环境变量）。MCP 与 Function Calling 的取舍对比见模块 9；在 CI 中用 MCP 的完整链路见本模块第 21 篇。
 
 ---
 

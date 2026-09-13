@@ -5,7 +5,7 @@ author: Geoffrey Huntley
 license: 署名转载（作者博客允许引用转载，需署名并附原文链接；本文为节译，原文后半部分为付费订阅内容）
 fetched_at: 2026-09-13
 translated: true
-order: 15
+order: 26
 ---
 
 ## 我把话放这儿
@@ -31,7 +31,7 @@ Gumroad 创始人 Sahil Lavingia 做过一个著名的实验：用 AI 智能体�
 
 ## 从想法到规格：计划就是图
 
-Huntley 在文中强调的一个技巧：**用 Mermaid 图表达计划**。当你和智能体把想法聊清楚后，让它把计划画成 Mermaid 流程图/依赖图——图比散文更难产生歧义，还能直接被下一轮智能体读取执行。这个"计划即图、规格即交接物"的思路，在他的 Ralph 循环（本模块第 8 篇有引述）里被推到极致：spec.md 是给未来每一轮智能体的交接文档。
+Huntley 在文中强调的一个技巧：**用 Mermaid 图表达计划**。当你和智能体把想法聊清楚后，让它把计划画成 Mermaid 流程图/依赖图——图比散文更难产生歧义，还能直接被下一轮智能体读取执行。这个"计划即图、规格即交接物"的思路，在他的 Ralph 循环（本模块第 13 篇有引述）里被推到极致：spec.md 是给未来每一轮智能体的交接文档。
 
 ## 技术加固点：什么让智能体开发变得可靠
 
@@ -56,7 +56,7 @@ Huntley 在文中强调的一个技巧：**用 Mermaid 图表达计划**。当�
 
 ## 编者按：把这套流程落成你自己的 0→1 清单
 
-> 本节为本站编者补充。综合 Huntley 的流程与第 3 篇 Claude Code 最佳实践（探索→计划→实现→提交）、第 8 篇 Spec Kit（constitution→specify→plan→tasks→implement→converge），一个可执行的从 0 到 1 清单：
+> 本节为本站编者补充。综合 Huntley 的流程与第 6 篇 Claude Code 最佳实践（探索→计划→实现→提交）、第 13 篇 Spec Kit（constitution→specify→plan→tasks→implement→converge），一个可执行的从 0 到 1 清单：
 
 **表：从 0 到 1 用 AI 做产品的实战清单**
 
