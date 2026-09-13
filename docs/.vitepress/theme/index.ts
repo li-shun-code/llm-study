@@ -2,6 +2,7 @@
 import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import AiAssistant from './components/AiAssistant.vue'
+import './style.css'
 
 export default {
   extends: DefaultTheme,

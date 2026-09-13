@@ -1,0 +1,30 @@
+/* JavaGuide 式品牌色：文档绿 + 深色模式适配 */
+:root {
+  --vp-c-brand-1: #0e9f6e;
+  --vp-c-brand-2: #0b8a5f;
+  --vp-c-brand-3: #31c48d;
+  --vp-c-brand-soft: rgba(14, 159, 110, 0.14);
+  --vp-c-brand: var(--vp-c-brand-1);
+}
+
+.dark {
+  --vp-c-brand-1: #31c48d;
+  --vp-c-brand-2: #0e9f6e;
+  --vp-c-brand-3: #5fd3a4;
+  --vp-c-brand-soft: rgba(49, 196, 141, 0.16);
+}
+
+/* 品牌色应用到默认主题的按钮、链接与侧边栏激活态 */
+:root {
+  --vp-button-brand-bg: var(--vp-c-brand-1);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-bg: var(--vp-c-brand-2);
+  --vp-home-hero-name-color: var(--vp-c-brand-1);
+}
+
+.VPNavBar .title,
+.VPSidebarItem.level-1.is-link > .item .text,
+.VPSidebarItem.level-2.is-link > .item .text {
+  /* 保持默认文字色，避免导航过绿 */
+  color: inherit;
+}

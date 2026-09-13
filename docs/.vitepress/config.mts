@@ -7,11 +7,36 @@ export default defineConfig({
   title: 'LLM 应用开发完全学习路线',
   description:
     '从 Python 零基础到 LLM 应用开发：抓取全网优质教程的中文学习路线',
-  head: [['meta', { name: 'theme-color', content: '#3eaf7c' }]],
+  head: [['meta', { name: 'theme-color', content: '#0e9f6e' }]],
   // 教程正文中的 localhost 示例链接（如 Gradio/FastAPI demo）不是站点死链
   ignoreDeadLinks: [/^https?:\/\/localhost/],
   themeConfig: {
     siteTitle: 'LLM 学习路线',
+    nav: [
+      { text: '首页', link: '/' },
+      {
+        text: '开发者内功',
+        items: [
+          { text: '🐍 Python 基础', link: '/00-python-basics/' },
+          { text: '🧮 数据结构与算法', link: '/01-dsa/' },
+          { text: '💻 计算机基础', link: '/02-cs-fundamentals/' },
+          { text: '⚙️ Python 进阶与框架', link: '/03-python-advanced/' }
+        ]
+      },
+      {
+        text: 'LLM 应用开发',
+        items: [
+          { text: '🧠 LLM 基础', link: '/04-llm-basics/' },
+          { text: '💬 Prompt 工程', link: '/05-prompt-engineering/' },
+          { text: '🔌 API 与应用开发', link: '/06-api-development/' },
+          { text: '🗄️ 数据库', link: '/07-databases/' },
+          { text: '📚 RAG', link: '/08-rag/' },
+          { text: '🤖 Agent 智能体', link: '/09-agents/' },
+          { text: '🛠️ 微调与部署', link: '/10-finetuning-deployment/' }
+        ]
+      },
+      { text: '✨ Vibe Coding', link: '/11-vibe-coding/' }
+    ],
     outline: { level: [2, 3], label: '本页目录' },
     docFooter: { prev: '上一篇', next: '下一篇' },
     lastUpdated: {
