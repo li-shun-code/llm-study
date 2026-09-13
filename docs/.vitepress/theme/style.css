@@ -102,3 +102,114 @@ body,
 .VPDocOutlineItem {
   font-size: 15px;
 }
+
+/* ============ 阅读体验增强（ux-pro-max 指引落地） ============ */
+
+/* 行长控制：中文正文每行约 42-46 字（65-75 字符等效），大屏不拉满 */
+@media (min-width: 1280px) {
+  .vp-doc {
+    max-width: 820px;
+  }
+}
+
+/* 标题换行均衡，避免孤字成行；正文用 pretty 减少孤行 */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  text-wrap: balance;
+}
+.vp-doc p,
+.vp-doc li {
+  text-wrap: pretty;
+}
+
+/* h2 加分隔线（JavaGuide 式章节感） */
+.vp-doc h2 {
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+/* 正文链接：带下划线偏移，可扫读且不吵 */
+.vp-doc p a,
+.vp-doc li a {
+  text-decoration: underline;
+  text-decoration-color: var(--vp-c-brand-soft);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+.vp-doc p a:hover,
+.vp-doc li a:hover {
+  text-decoration-color: var(--vp-c-brand-1);
+}
+
+/* 图片：圆角 + 细边框 + 自适应 */
+.vp-doc img {
+  border-radius: 10px;
+  border: 1px solid var(--vp-c-divider);
+  max-width: 100%;
+}
+
+/* 代码块：更大内边距、圆角、细边框、限高滚动条 */
+.vp-doc div[class*='language-'] {
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  margin: 22px 0;
+}
+.vp-doc div[class*='language-'] pre {
+  padding: 16px 20px;
+}
+.vp-doc div[class*='language-']::-webkit-scrollbar,
+.vp-doc div[class*='language-'] pre::-webkit-scrollbar {
+  height: 8px;
+}
+.vp-doc div[class*='language-']::-webkit-scrollbar-thumb,
+.vp-doc div[class*='language-'] pre::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider);
+  border-radius: 8px;
+}
+
+/* 表格：全宽、表头底色、斑马纹与悬停行、窄屏横向滚动 */
+.vp-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+.vp-doc th {
+  background: var(--vp-c-bg-soft);
+  font-weight: 600;
+}
+.vp-doc th,
+.vp-doc td {
+  border: 1px solid var(--vp-c-divider);
+  padding: 9px 14px;
+}
+.vp-doc tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--vp-c-bg-soft) 55%, transparent);
+}
+.vp-doc tbody tr:hover {
+  background: var(--vp-c-brand-soft);
+}
+
+/* 文末署名块：弱化为信息脚注，不与正文抢注意力 */
+.vp-doc blockquote {
+  margin: 20px 0;
+}
+
+/* 文本选中色用品牌色，强化的归属感 */
+.vp-doc ::selection {
+  background: rgba(14, 159, 110, 0.22);
+}
+
+/* 分隔线弱化 */
+.vp-doc hr {
+  border: none;
+  border-top: 1px dashed var(--vp-c-divider);
+  margin: 32px 0;
+}
+
+/* 锚点平滑滚动（尊重系统减弱动态偏好） */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
