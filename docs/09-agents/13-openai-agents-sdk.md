@@ -9,8 +9,6 @@ versions: openai-agents（PyPI 当前版，Python 3.10+）
 order: 13
 ---
 
-> **来源**：本文翻译自 [OpenAI Agents SDK (Python)](https://github.com/openai/openai-agents-python) 官方 README，作者 OpenAI，许可 MIT。抓取于 2026-09-13。该 SDK 即 2025 年 3 月发布的"Agents SDK"（Swarm 的生产化继任者）的当前形态；下文按抓取时的最新版翻译，包含沙箱智能体（Sandbox Agent）与实时语音智能体（Realtime Agent）等新能力。
-
 # OpenAI Agents SDK
 
 OpenAI Agents SDK 是一个轻量而强大的多智能体工作流框架。它是**提供商无关**（provider-agnostic）的：支持 OpenAI Responses 与 Chat Completions API，也支持 100 多个其他 LLM。
@@ -182,3 +180,7 @@ OpenAI 承诺继续把 Agents SDK 作为开源框架来构建，让社区能在�
 - **Tracing** 默认把运行轨迹上传到 OpenAI 控制台，也可导出为 OpenTelemetry 接入 Langfuse 等（第 16 篇）。
 
 一个"最小可用"的心智模型：`Agent` = 指令 + 工具 + 交接；`Runner` = 驱动循环；`result.final_output` = 产出。其余概念都是在这条主干上做加法。
+
+---
+
+> **来源**：本文翻译自 [OpenAI Agents SDK (Python)](https://github.com/openai/openai-agents-python) 官方 README，作者 OpenAI，许可 MIT。抓取于 2026-09-13。该 SDK 即 2025 年 3 月发布的"Agents SDK"（Swarm 的生产化继任者）的当前形态；下文按抓取时的最新版翻译，包含沙箱智能体（Sandbox Agent）与实时语音智能体（Realtime Agent）等新能力。

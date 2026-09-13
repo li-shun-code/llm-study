@@ -8,8 +8,6 @@ translated: false
 order: 5
 ---
 
-> **来源**：本文转载自 [Python3 列表](https://www.runoob.com/python3/python3-list.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。
-
 序列是 Python 中最基本的数据结构。
 
 序列中的每个值都有对应的位置值，称之为索引，第一个索引是 0，第二个索引是 1，依此类推。
@@ -242,3 +240,7 @@ Python包含以下方法:
 | 9 | [list.sort( key=None, reverse=False)](https://www.runoob.com/python3/python3-att-list-sort.html)：对原列表进行排序 |
 | 10 | [list.clear()](https://www.runoob.com/python3/python3-att-list-clear.html)：清空列表 |
 | 11 | [list.copy()](https://www.runoob.com/python3/python3-att-list-copy.html)：复制列表 |
+
+---
+
+> **来源**：本文转载自 [Python3 列表](https://www.runoob.com/python3/python3-list.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。

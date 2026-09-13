@@ -9,8 +9,6 @@ versions: browser-use 当前版（Python >= 3.11）
 order: 15
 ---
 
-> **来源**：本文主体翻译自 [browser-use/browser-use](https://github.com/browser-use/browser-use) 官方 README，作者 Magnus Müller、Gregor Žunič（browser-use），许可 MIT。抓取于 2026-09-13。译文补充概念导语，对比"Computer Use"与"浏览器 Agent"两条路线。
-
 # 概念：让模型"长出手和眼"
 
 前面几篇的智能体都通过 API 与世界交互：调函数、查数据库。但大量人类工作发生在**图形界面**里——填表单、点按钮、切换标签页。Computer Use 类智能体给模型配上"眼睛"（截图/无障碍树/DOM 快照）与"手"（鼠标键盘动作或浏览器 API），让它像人一样操作软件。当前有三条实现路线：
@@ -193,3 +191,7 @@ if __name__ == "__main__":
   url = {https://github.com/browser-use/browser-use}
 }
 ```
+
+---
+
+> **来源**：本文主体翻译自 [browser-use/browser-use](https://github.com/browser-use/browser-use) 官方 README，作者 Magnus Müller、Gregor Žunič（browser-use），许可 MIT。抓取于 2026-09-13。译文补充概念导语，对比"Computer Use"与"浏览器 Agent"两条路线。

@@ -9,8 +9,6 @@ order: 5
 versions: PostgreSQL 18 官方教程（第 2 章 2.6 节）
 ---
 
-> **来源**：本文翻译自 [2.6. Joins Between Tables](https://www.postgresql.org/docs/current/tutorial-join.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
-
 到目前为止，我们的查询一次只访问一张表。查询也可以同时访问多张表，或者以同时处理同一张表多行的方式访问它。这类同时访问多张表（或同一张表的多个实例）的查询称为**连接（Join）查询**：它把一张表的行与另一张表的行组合起来，用一个表达式指定哪些行相互配对。
 
 例如，要返回所有天气记录及其所属城市的地理位置，数据库需要把 weather 表每行的 `city` 列与 cities 表所有行的 `name` 列做比较，选出取值配对的行（原文脚注：这只是概念模型——数据库实际执行连接的方式通常比逐对比较高效得多，只是对用户不可见）：
@@ -110,3 +108,7 @@ SELECT *
 这种缩写风格你会非常频繁地遇到。
 
 > 站内提示：本模块 02 篇设计的"会话-消息"表就是典型的 JOIN 场景——取出某个会话的全部消息用 `messages m JOIN conversations c ON m.conversation_id = c.id`；若要连未发送任何消息的空会话也列出来，就该用 `LEFT OUTER JOIN`（会话在左）。
+
+---
+
+> **来源**：本文翻译自 [2.6. Joins Between Tables](https://www.postgresql.org/docs/current/tutorial-join.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。

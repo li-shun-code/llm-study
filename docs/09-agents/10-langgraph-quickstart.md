@@ -9,8 +9,6 @@ versions: LangGraph 1.x（docs.langchain.com 当前版）
 order: 10
 ---
 
-> **来源**：本文翻译自 LangGraph 官方文档 [Quickstart](https://docs.langchain.com/oss/python/langgraph/quickstart)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。本文按 LangGraph 1.x 当前 API 翻译（`langchain.messages`、`init_chat_model`、`@entrypoint`/`@task` 等新写法；旧版教程中的 `create_react_agent` 快捷方式与 `langchain_core.messages` 导入路径已在 1.x 中更新）。原文另含 TypeScript 版本与给 AI 编程助手使用的 Prompt 模板，译文从略。
-
 # 快速开始
 
 本快速入门演示如何用 LangGraph 的 **Graph API** 或 **Functional API** 构建一个计算器智能体（Agent）。
@@ -308,3 +306,7 @@ for snapshot in stream.values:
 **表：LangGraph 两种 API 的对比。**
 
 两条路线共享同一套底层运行时：检查点持久化（第 5 篇记忆机制）、中断（下一篇 Human-in-the-loop）、流式输出与 LangSmith 追踪。掌握其中一条，另一条只是"组织代码的方式"不同。
+
+---
+
+> **来源**：本文翻译自 LangGraph 官方文档 [Quickstart](https://docs.langchain.com/oss/python/langgraph/quickstart)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。本文按 LangGraph 1.x 当前 API 翻译（`langchain.messages`、`init_chat_model`、`@entrypoint`/`@task` 等新写法；旧版教程中的 `create_react_agent` 快捷方式与 `langchain_core.messages` 导入路径已在 1.x 中更新）。原文另含 TypeScript 版本与给 AI 编程助手使用的 Prompt 模板，译文从略。

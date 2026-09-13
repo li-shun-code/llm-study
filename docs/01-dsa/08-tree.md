@@ -8,9 +8,6 @@ translated: false
 order: 8
 ---
 
-> **来源**：本文转载自 [二叉树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 <u>二叉树（binary tree）</u>是一种非线性数据结构，代表“祖先”与“后代”之间的派生关系，体现了“一分为二”的分治逻辑。与链表类似，二叉树的基本单元是节点，每个节点包含值、左子节点引用和右子节点引用。
 
 
@@ -141,3 +138,8 @@ n1.left = n2
 | 高度为 h 的树的叶节点数量 | 2^h              | 1     |
 | 高度为 h 的树的节点总数   | 2^(h+1) - 1      | h + 1 |
 | 节点总数为 n 的树的高度   | log₂ (n+1) - 1 | n - 1 |
+
+---
+
+> **来源**：本文转载自 [二叉树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

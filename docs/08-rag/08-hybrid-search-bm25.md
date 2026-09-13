@@ -8,9 +8,6 @@ translated: true
 order: 8
 ---
 
-> **来源**：本文翻译自 [Getting Started with Hybrid Search](https://www.pinecone.io/learn/hybrid-search-intro/)，作者 James Briggs（Pinecone Learn Center），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。
-> 编者注（时效性说明）：原文写于 2023 年，其中 Pinecone 客户端代码（`pinecone.init` / pod 索引）属旧版 API，已被当前 serverless 客户端取代。概念与稀疏/稠密向量构造代码与客户端无关、照原文翻译；涉及旧客户端的段落按"演进"语境转写并给出当前等价思路。
-
 向量检索（Vector Search）为信息检索的相关性与效率打开了新大门，用例在近年爆发式增长。但它并非完美技术：在没有大规模领域数据集做微调时，传统检索仍有优势。
 
 我们反复观察到：向量检索能解锁"聪明"的检索，却难以适配新领域；传统检索能应对新领域，但性能上限固定。两者各有利弊——如果能把它们合体呢？做一个**混合（Hybrid）检索**：既要有向量检索的性能上限，又要有传统检索的零样本适应性。
@@ -215,3 +212,8 @@ hybrid_query(question, top_k=3, alpha=1)
 ## 小结
 
 混合检索 = 稠密（语义）+ 稀疏（词法）。它同时拿下两类查询：用户用日常语言描述需求时靠语义检索，用户引用精确的缩写、产品名、错误码时靠词法检索。Anthropic 的上下文检索实验（第 04 篇）也证实：嵌入 + BM25 优于纯嵌入，且两者收益可叠加。下一篇《重排序 Rerank》将展示在混合检索之后如何进一步精排。
+
+---
+
+> **来源**：本文翻译自 [Getting Started with Hybrid Search](https://www.pinecone.io/learn/hybrid-search-intro/)，作者 James Briggs（Pinecone Learn Center），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。
+> 编者注（时效性说明）：原文写于 2023 年，其中 Pinecone 客户端代码（`pinecone.init` / pod 索引）属旧版 API，已被当前 serverless 客户端取代。概念与稀疏/稠密向量构造代码与客户端无关、照原文翻译；涉及旧客户端的段落按"演进"语境转写并给出当前等价思路。

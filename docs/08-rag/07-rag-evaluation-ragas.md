@@ -8,8 +8,6 @@ translated: true
 order: 7
 ---
 
-> **来源**：本文翻译自 RAGAS 官方文档 [Evaluate a simple RAG system](https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md) 与 [Testset Generation for RAG](https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_testset_generation.md)，作者 RAGAS 项目（Exploding Gradients），许可 Apache 2.0。抓取于 2026-09-13。
-
 RAG 改了一版分块策略、换了一个嵌入模型，效果到底变好还是变坏？"感觉上更准了"不算数，你需要可复现的量化评估。RAGAS 是当前最流行的 RAG 评估框架之一，本篇翻译其官方入门文档，覆盖两条主线：**评估一个简单 RAG 系统**与**为评估自动生成测试集**。
 
 ## 一、评估一个简单的 RAG 系统
@@ -273,3 +271,7 @@ testset.to_pandas()
 ```
 
 > 编者注：评估驱动开发（Eval-Driven Development）是 RAG 工程的核心方法论——先固定评估集与指标，再迭代分块、检索、重排等每一环（呼应第 04 篇末尾的建议）。后续的混合检索、重排序等优化，都应该以本篇的评估流程为准绳验证收益。
+
+---
+
+> **来源**：本文翻译自 RAGAS 官方文档 [Evaluate a simple RAG system](https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md) 与 [Testset Generation for RAG](https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_testset_generation.md)，作者 RAGAS 项目（Exploding Gradients），许可 Apache 2.0。抓取于 2026-09-13。

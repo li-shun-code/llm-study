@@ -8,11 +8,6 @@ translated: true
 order: 9
 versions: httpx 0.28+
 ---
-
-> **来源**：本文翻译自 [QuickStart - HTTPX](https://www.python-httpx.org/quickstart/)，作者 Tom Christie 及 HTTPX 贡献者，许可 BSD 三条款许可证。抓取于 2026-09-13。
-
-> 编者注：httpx 的 API 与 requests 高度相似（`httpx.get(...)` 几乎无缝替换 `requests.get(...)`），同时原生支持 **HTTP/2** 与 **async/await 异步请求**——这是它在 LLM 应用中最大的价值：配合 asyncio 并发调用多个 API，或用流式接口逐 token 读取模型输出。
-
 ## 快速开始
 
 首先，导入 HTTPX：
@@ -299,3 +294,11 @@ asyncio.run(main())
 ```
 
 三个请求并发执行，只占用一个事件循环线程——这正是本模块第 4、5 篇并发知识的落地场景。
+
+---
+
+> **来源**：本文翻译自 [QuickStart - HTTPX](https://www.python-httpx.org/quickstart/)，作者 Tom Christie 及 HTTPX 贡献者，许可 BSD 三条款许可证。抓取于 2026-09-13。
+
+---
+
+> 编者注：httpx 的 API 与 requests 高度相似（`httpx.get(...)` 几乎无缝替换 `requests.get(...)`），同时原生支持 **HTTP/2** 与 **async/await 异步请求**——这是它在 LLM 应用中最大的价值：配合 asyncio 并发调用多个 API，或用流式接口逐 token 读取模型输出。

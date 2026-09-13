@@ -8,9 +8,6 @@ translated: true
 order: 9
 ---
 
-> **来源**：本文翻译自 [Reranking Methods in RAG Systems](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reranking.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
-> 编者注（时效性校订）：原 notebook 演示末段使用了 LangChain 旧版 `RetrievalQA` 链与旧 import 路径，本文按当前稳定版改写为直接函数调用（`prompt | llm` 组合），语义不变；涉及处均在文中标注。
-
 ## 概述
 
 重排序（Reranking）是 RAG 系统中提升检索相关性与质量的关键步骤：对初检召回的文档重新评估、重新排序，确保最相关的信息被优先送入后续的生成或展示环节。
@@ -228,3 +225,8 @@ for i, doc in enumerate(top_docs):
 ## 小结
 
 重排序是显著提升检索信息质量的强力技术：宽召回（初检 k 取大）保证不漏，精排序（LLM 或 Cross-Encoder 重排）保证不滥。配合第 04 篇 Anthropic 的数据——上下文检索再加重排可把检索失败率降低 67%——它是高级 RAG 实现的必备组件。
+
+---
+
+> **来源**：本文翻译自 [Reranking Methods in RAG Systems](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reranking.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
+> 编者注（时效性校订）：原 notebook 演示末段使用了 LangChain 旧版 `RetrievalQA` 链与旧 import 路径，本文按当前稳定版改写为直接函数调用（`prompt | llm` 组合），语义不变；涉及处均在文中标注。

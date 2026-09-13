@@ -8,9 +8,6 @@ translated: false
 order: 15
 ---
 
-> **来源**：本文转载自 [最短路径](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/shortest-path.md)，作者 OI Wiki 项目，许可 CC BY-SA 4.0。抓取于 2026-09-13。
-> 原文面向算法竞赛、代码示例为 C++；本文选取基础定义与最常用的 Dijkstra 算法，Bellman–Ford / Floyd 等其余算法见原文与文末对比表。
-
 ## 定义
 
 （还记得这些定义吗？在阅读下列内容之前，请务必了解 [图论相关概念](https://oi-wiki.org/concept/) 中的基础部分．）
@@ -171,3 +168,8 @@ Dijkstra（/ˈdikstrɑ/或/ˈdɛikstrɑ/）算法由荷兰计算机科学家 E. 
 | 时间复杂度   | O(N³)   | O(NM)      | O(Mlog M) | O(NMlog M) |
 
 注：表中的 Dijkstra 算法在计算复杂度时均用 `priority_queue` 实现．
+
+---
+
+> **来源**：本文转载自 [最短路径](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/shortest-path.md)，作者 OI Wiki 项目，许可 CC BY-SA 4.0。抓取于 2026-09-13。
+> 原文面向算法竞赛、代码示例为 C++；本文选取基础定义与最常用的 Dijkstra 算法，Bellman–Ford / Floyd 等其余算法见原文与文末对比表。

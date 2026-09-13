@@ -8,8 +8,6 @@ translated: true
 order: 1
 ---
 
-> **来源**：本文翻译自 [Course Overview + The Shell](https://missing.csail.mit.edu/2020/course-shell/)，作者 Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT），许可 CC BY-SA 4.0。抓取于 2026-09-13。
-
 计算机科学的学生都知道，计算机最擅长帮助人类完成重复性工作。但我们常常忘记：这一点不仅适用于程序要执行的计算，也同样适用于我们**使用计算机**的方式。我们的指尖上有大量现成的工具，可以让任何与计算机相关的工作更高效、能解决更复杂的问题；可大多数人只用到了其中很小的一部分——只会死记硬背几条"咒语"，遇到问题就从网上盲目复制粘贴命令。本讲正是为了解决这个问题。
 
 对后端与 LLM 应用开发者来说，命令行是绕不开的基本功：连接服务器、看日志、管进程、跑脚本，全都要在 Shell 里完成。本篇覆盖 Shell 的基本概念与最常用的一批命令。
@@ -214,3 +212,7 @@ $ echo 1 | sudo tee /sys/class/leds/input6::scrolllock/brightness
 11. 写一条命令，从 `/sys` 读出笔记本电池电量或台式机 CPU 温度。注意：macOS 没有 sysfs，可跳过本练习。
 
 > 译注：本模块下一篇《Shell 脚本入门》对应原课程的第二讲；文中提到的"数据整理"等主题，可按需在 Missing Semester 站点查阅原讲义。
+
+---
+
+> **来源**：本文翻译自 [Course Overview + The Shell](https://missing.csail.mit.edu/2020/course-shell/)，作者 Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT），许可 CC BY-SA 4.0。抓取于 2026-09-13。

@@ -8,11 +8,6 @@ translated: true
 order: 12
 versions: Docker Engine / Docker Compose 当前稳定版，Python 3.12 基础镜像
 ---
-
-> **来源**：本文翻译自 [Containerize a Python application — Docker Docs](https://docs.docker.com/language/python/containerize/)，作者 Docker Inc. 及 Docker 文档贡献者，许可 Apache License 2.0。抓取于 2026-09-13。
-
-> 编者注：本篇节选翻译 Docker 官方 Python 语言指南的"容器化"部分（Dockerfile / Compose / 构建 / 运行）。Docker 是模块 10 中 vLLM、Ollama 等模型服务部署的通用载体，也是模块 9 中 LangGraph、数据库等本地开发环境的标准打包方式。
-
 ## 为什么 LLM 应用需要 Docker
 
 "在我机器上能跑"是工程协作中最贵的借口。你的 FastAPI 服务依赖特定版本的 Python、特定版本的库，还要连 Redis、向量数据库——Docker 把这一切打包成镜像（image）：一次构建，处处运行；开发、测试、生产用同一个环境。
@@ -175,3 +170,11 @@ $ docker compose down
 | `docker compose down` | 停止并删除编排中的容器与网络 |
 
 延伸阅读：官方 Get Started 的《Build and run your first image》《Publish your image》等章节，以及《Dockerfile reference》。当你读完模块 10 的"vLLM 高吞吐部署"，回头看 Docker 只是那篇里的一条 `FROM` 而已。
+
+---
+
+> **来源**：本文翻译自 [Containerize a Python application — Docker Docs](https://docs.docker.com/language/python/containerize/)，作者 Docker Inc. 及 Docker 文档贡献者，许可 Apache License 2.0。抓取于 2026-09-13。
+
+---
+
+> 编者注：本篇节选翻译 Docker 官方 Python 语言指南的"容器化"部分（Dockerfile / Compose / 构建 / 运行）。Docker 是模块 10 中 vLLM、Ollama 等模型服务部署的通用载体，也是模块 9 中 LangGraph、数据库等本地开发环境的标准打包方式。

@@ -8,8 +8,6 @@ translated: true
 order: 12
 ---
 
-> **来源**：本文整合翻译自 [microsoft/graphrag 官方 README](https://raw.githubusercontent.com/microsoft/graphrag/main/README.md)（MIT 许可）与 Microsoft Research 博客 [GraphRAG: Unlocking LLM discovery on narrative private data](https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/)（作者 Jonathan Larson、Steven Truitt），作者 Microsoft Research。抓取于 2026-09-13。
-
 LLM 最大的挑战与机遇，是把强大能力延伸到训练数据之外，在从未见过的数据上取得相当的结果——比如在私有数据上做主题与语义概念的发现。传统 RAG（本文称 Baseline RAG）以向量相似度为检索手段，而微软研究院的 **GraphRAG** 用 LLM 生成的知识图谱来回答问题，在复杂信息分析上带来实质性提升。这里"私有数据"指 LLM 未在训练中见过的数据：企业专有研究、业务文档、通信记录等。
 
 ## 项目现状（2026，务必先读）
@@ -69,3 +67,7 @@ GraphRAG 能回答，因为 LLM 生成的知识图谱本身就揭示了数据集
 - 责任 AI（RAI）相关说明见仓库 [RAI_TRANSPARENCY.md](https://github.com/microsoft/graphrag/blob/main/RAI_TRANSPARENCY.md)。
 
 > 编者注：GraphRAG 的索引成本（对全语料反复调用 LLM 抽实体/关系/摘要）是落地时最大的现实约束；中文场景下还需注意实体抽取提示词的本地化调优。与第 07 篇的 RAGAS 对照——知识图谱构建质量本身也可以用评估集量化，避免"为建图而建图"。
+
+---
+
+> **来源**：本文整合翻译自 [microsoft/graphrag 官方 README](https://raw.githubusercontent.com/microsoft/graphrag/main/README.md)（MIT 许可）与 Microsoft Research 博客 [GraphRAG: Unlocking LLM discovery on narrative private data](https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/)（作者 Jonathan Larson、Steven Truitt），作者 Microsoft Research。抓取于 2026-09-13。

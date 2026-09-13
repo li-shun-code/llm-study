@@ -8,11 +8,6 @@ translated: true
 order: 2
 versions: 提示技术通用
 ---
-
-> **来源**：本文翻译自 [Few-Shot Prompting](https://www.promptingguide.ai/techniques/fewshot)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。
-
-> **补充来源**：本文"零样本提示"一节编译自同站的 [Zero-Shot Prompting](https://www.promptingguide.ai/techniques/zeroshot)，许可同上。
-
 ## 零样本提示
 
 如今的大语言模型（LLM）经过指令微调（instruction tuning）并在海量数据上训练，已经能够以"零样本"（zero-shot）的方式完成不少任务。**零样本提示**指的是：与模型交互的提示词中不包含任何示例或演示，直接指示模型执行任务。
@@ -166,3 +161,11 @@ The answer is True.
 
 - 演示的**标签空间**与**格式**比标签本身的正确性更重要；
 - 涉及多步推理的任务，先给示例未必有用——需要把"推理过程"本身演示出来，这正是 CoT 的出发点。
+
+---
+
+> **来源**：本文翻译自 [Few-Shot Prompting](https://www.promptingguide.ai/techniques/fewshot)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"零样本提示"一节编译自同站的 [Zero-Shot Prompting](https://www.promptingguide.ai/techniques/zeroshot)，许可同上。

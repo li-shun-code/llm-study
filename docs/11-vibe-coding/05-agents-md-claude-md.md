@@ -8,8 +8,6 @@ translated: true
 order: 5
 ---
 
-> **来源**：本文主体翻译自 [AGENTS.md 官方站](https://agents.md/)（与 GitHub 仓库 [openai/agents.md](https://github.com/openai/agents.md) README 同源），作者 OpenAI 等生态共建方，许可署名翻译（开放格式说明文档）；延伸阅读一节译自 Anthropic《[How Claude remembers your project](https://code.claude.com/docs/en/memory)》（Claude Code 官方文档）。抓取于 2026-09-13。
-
 ## 为什么需要 AGENTS.md？
 
 README.md 是写给人看的：快速上手、项目介绍、贡献指南。
@@ -170,3 +168,7 @@ ln -s AGENTS.md CLAUDE.md
 - **`/compact` 之后指令像丢了？**在 CLAUDE.md 里写明压缩时应保留哪些关键上下文。
 
 > 译注：本站实践建议——个人项目从一份 20 行以内的 AGENTS.md 起步，只写"AI 猜不到且会反复出错"的内容；团队项目把 AGENTS.md 作为唯一事实源，CLAUDE.md 用 `@AGENTS.md` 导入。Skills（第 6 篇）承接"多步骤流程"，Rules（第 4 篇）承接"按路径/按需加载"，三层各司其职。
+
+---
+
+> **来源**：本文主体翻译自 [AGENTS.md 官方站](https://agents.md/)（与 GitHub 仓库 [openai/agents.md](https://github.com/openai/agents.md) README 同源），作者 OpenAI 等生态共建方，许可署名翻译（开放格式说明文档）；延伸阅读一节译自 Anthropic《[How Claude remembers your project](https://code.claude.com/docs/en/memory)》（Claude Code 官方文档）。抓取于 2026-09-13。

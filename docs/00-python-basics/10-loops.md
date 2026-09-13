@@ -8,8 +8,6 @@ translated: false
 order: 10
 ---
 
-> **来源**：本文转载自 [循环 - Python教程](https://liaoxuefeng.com/books/python/basic/loop/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。
-
 要计算1+2+3，我们可以直接写表达式：
 
 ```plain
@@ -162,3 +160,7 @@ while n < 10:
 有些时候，如果代码写得有问题，会让程序陷入"死循环"，也就是永远循环下去。这时可以用`Ctrl+C`退出程序，或者强制结束Python进程。
 
 请试写一个死循环程序。
+
+---
+
+> **来源**：本文转载自 [循环 - Python教程](https://liaoxuefeng.com/books/python/basic/loop/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。

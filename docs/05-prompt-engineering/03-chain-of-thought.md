@@ -9,8 +9,6 @@ order: 3
 versions: 提示技术通用
 ---
 
-> **来源**：本文翻译自 [Chain-of-Thought Prompting](https://www.promptingguide.ai/techniques/cot)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。
-
 **思维链提示**（Chain-of-Thought, CoT）由 Wei et al. (2022) 提出，通过中间推理步骤（intermediate reasoning steps）来启用复杂推理能力。它可以与少样本提示结合，在那些"回答前需要先推理"的复杂任务上取得更好的效果。
 
 ![思维链示意图](https://www.promptingguide.ai/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcot.1933d9fe.png&w=1920&q=75)
@@ -131,3 +129,7 @@ Auto-CoT 的代码开源于 [amazon-science/auto-cot](https://github.com/amazon-
 - CoT 的本质：把"推理过程"作为演示/输出的一部分，让模型在给出最终答案前先展开中间步骤；
 - 三种形态：少样本 CoT（演示含推理）、零样本 CoT（"step by step" 咒语）、Auto-CoT（自动构造多样化推理演示）；
 - CoT 是后续"自洽性"与 ReAct 的共同基础，也是如今推理模型训练范式的源头之一。
+
+---
+
+> **来源**：本文翻译自 [Chain-of-Thought Prompting](https://www.promptingguide.ai/techniques/cot)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。

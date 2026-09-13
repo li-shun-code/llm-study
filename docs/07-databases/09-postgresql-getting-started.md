@@ -8,11 +8,6 @@ translated: true
 order: 9
 versions: PostgreSQL 18 官方教程（第 1 章 1.2、1.3 节）
 ---
-
-> **来源**：本文翻译自 [1.3. Creating a Database](https://www.postgresql.org/docs/current/tutorial-createdb.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
-
-> **补充来源**：本文"系统架构基础"一节翻译自同一教程的 [1.2. Architectural Fundamentals](https://www.postgresql.org/docs/current/tutorial-arch.html)，许可同上；"本地快速跑起来"小节为本站编者补充。
-
 ## 系统架构基础
 
 继续之前，你应当了解 PostgreSQL 的基本系统架构——理解各部分如何交互，后面的内容会清晰许多。
@@ -85,3 +80,11 @@ psql -h localhost -U postgres
 ```
 
 `psql` 是随发行版发布的交互式终端客户端：提示符下输入 SQL（分号结尾）回车即执行，`\l` 列出数据库、`\dt` 列出表、`\q` 退出。配合本模块 03-07 篇的 SQL 示例，即可完整练手。
+
+---
+
+> **来源**：本文翻译自 [1.3. Creating a Database](https://www.postgresql.org/docs/current/tutorial-createdb.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"系统架构基础"一节翻译自同一教程的 [1.2. Architectural Fundamentals](https://www.postgresql.org/docs/current/tutorial-arch.html)，许可同上；"本地快速跑起来"小节为本站编者补充。

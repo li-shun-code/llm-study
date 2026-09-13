@@ -8,8 +8,6 @@ translated: true
 order: 5
 ---
 
-> **来源**：本文翻译自 Pro Git（第 2 版）第 2 章 "Git Basics"（2.1 Getting a Git Repository、2.2 Recording Changes to the Repository、2.3 Viewing the Commit History、2.4 Undoing Things 四节合译），作者 Scott Chacon、Ben Straub，许可 CC BY-NC-SA 3.0。抓取于 2026-09-13。
-
 如果能只读一章就开始用 Git，那就是本章。它覆盖了你今后使用 Git 时绝大多数场景所需的基本命令。读完本章，你将能够：配置并初始化一个仓库、开始与停止跟踪文件、暂存（stage）并提交（commit）修改。我们还会介绍如何让 Git 忽略特定文件、如何快速撤销误操作、如何浏览项目历史并查看提交之间的差异。
 
 ## 获取 Git 仓库
@@ -510,3 +508,7 @@ Changes to be committed:
 > **重要**：`git restore <file>`（及 `git checkout -- <file>`）是危险命令——你对文件做过的本地修改会**全部丢失**，Git 直接用最近暂存或提交的版本覆盖它。除非百分之百确定不要那些未保存的本地修改，否则不要用。想暂存改动又不想提交？用 Git 提供的 stash 与分支（见下一篇）通常是更好的选择。
 
 最后记住一条规律：**凡是提交（commit）过的东西几乎总能恢复**——被删除分支上的提交、被 `--amend` 覆盖的提交都救得回来；但从未提交过的东西一旦丢了，多半就永远消失了。
+
+---
+
+> **来源**：本文翻译自 Pro Git（第 2 版）第 2 章 "Git Basics"（2.1 Getting a Git Repository、2.2 Recording Changes to the Repository、2.3 Viewing the Commit History、2.4 Undoing Things 四节合译），作者 Scott Chacon、Ben Straub，许可 CC BY-NC-SA 3.0。抓取于 2026-09-13。

@@ -16,7 +16,7 @@ function makeDocs(files) {
 }
 
 const GOOD = (n) =>
-  `---\ntitle: 文章${n}\nsource_url: https://a.com/${n}\nauthor: 张三\nlicense: CC BY-NC-SA\nfetched_at: 2026-09-13\ntranslated: true\norder: ${n}\n---\n\n> **来源**：本文翻译自 [t](https://a.com/${n})，作者 张三，许可 CC BY-NC-SA。抓取于 2026-09-13。\n\n正文\n`
+  `---\ntitle: 文章${n}\nsource_url: https://a.com/${n}\nauthor: 张三\nlicense: CC BY-NC-SA\nfetched_at: 2026-09-13\ntranslated: true\norder: ${n}\n---\n\n正文段落。\n\n---\n\n> **来源**：本文翻译自 [t](https://a.com/${n})，作者 张三，许可 CC BY-NC-SA。抓取于 2026-09-13。\n`
 
 describe('checkDir', () => {
   it('合规文章与 root 页通过', () => {
@@ -42,15 +42,18 @@ describe('checkDir', () => {
         '---\ntitle: 缺字段\norder: 1\n---\n> **来源**：x\n',
       '01-dsa/02-noattr.md':
         '---\ntitle: 缺署名\nsource_url: https://a.com\nauthor: x\nlicense: MIT\nfetched_at: 2026-09-13\ntranslated: false\norder: 2\n---\n正文没有署名块\n',
+      '01-dsa/04-head-attr.md':
+        '---\ntitle: 署名在头部\nsource_url: https://a.com\nauthor: x\nlicense: MIT\nfetched_at: 2026-09-13\ntranslated: false\norder: 4\n---\n> **来源**：本文翻译自 [t](https://a.com)，作者 x，许可 MIT。抓取于 2026-09-13。\n\n正文\n',
       '01-dsa/03-mismatch.md':
         '---\ntitle: 序号不一致\nsource_url: https://a.com\nauthor: x\nlicense: MIT\nfetched_at: 2026-09-13\ntranslated: false\norder: 7\n---\n> **来源**：x\n'
     })
     try {
       const res = checkDir(join(docs, '01-dsa'))
-      assert.equal(res.articleCount, 3)
+      assert.equal(res.articleCount, 4)
       assert.ok(res.errors.some((e) => e.includes('01-missing.md')))
       assert.ok(res.errors.some((e) => e.includes('02-noattr.md')))
       assert.ok(res.errors.some((e) => e.includes('03-mismatch.md')))
+      assert.ok(res.errors.some((e) => e.includes('04-head-attr.md')))
     } finally {
       rmSync(docs, { recursive: true, force: true })
     }

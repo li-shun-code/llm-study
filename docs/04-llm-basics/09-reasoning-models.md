@@ -8,9 +8,6 @@ translated: true
 order: 9
 ---
 
-> **来源**：本文翻译自 [Microsoft Learn · Azure OpenAI reasoning models](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning)（微软官方文档，CC BY 4.0），作者 Microsoft。抓取/翻译于 2026-09-13。
-> "R1 类开源推理模型"与"演进脉络"两节为本站补充，数据核实自 DeepSeek API 文档与各官方页面（2026-09-13）；文中 API 示例按 Responses API 时代写法保留。
-
 ## 一、什么是推理模型
 
 推理模型（reasoning models）是为应对推理与问题解决任务设计的模型：它们会花**更多时间处理和理解用户请求**，把问题拆解、权衡不同路径、放弃走不通的思路，然后在科学、编码、数学等领域的表现远超普通模型（译自 Microsoft Learn 文档）。
@@ -142,3 +139,8 @@ print(response.choices[0].message.content)
 2. DeepSeek, *API Docs*.（`thinking` / `reasoning_effort` 参数）
 3. OpenAI, *Learning to Reason with LLMs*（o1 技术报告页，2024）.
 4. DeepSeek-AI, *DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning*（arXiv:2501.12948）.
+
+---
+
+> **来源**：本文翻译自 [Microsoft Learn · Azure OpenAI reasoning models](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning)（微软官方文档，CC BY 4.0），作者 Microsoft。抓取/翻译于 2026-09-13。
+> "R1 类开源推理模型"与"演进脉络"两节为本站补充，数据核实自 DeepSeek API 文档与各官方页面（2026-09-13）；文中 API 示例按 Responses API 时代写法保留。

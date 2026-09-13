@@ -8,11 +8,6 @@ translated: true
 order: 10
 versions: Pydantic 2.x
 ---
-
-> **来源**：本文翻译自 [Models — Pydantic 文档](https://docs.pydantic.dev/latest/concepts/models/)，作者 Pydantic Services Inc. 及 Pydantic 贡献者，许可 MIT License。抓取于 2026-09-13。
-
-> 编者注：本篇**全部为 Pydantic v2 语法**（`model_dump()` / `model_validate()` / `model_config = ConfigDict(...)`）。网上旧教程里的 v1 写法（`.dict()`、`.parse_obj()`、`class Config:`）已过时，请勿照抄。Pydantic 是 LLM 应用的基础设施：解析模型返回的 JSON、声明结构化输出 Schema、FastAPI 请求体校验，用的都是它。
-
 ## 模型是什么
 
 在 Pydantic 中定义 Schema 的主要方式是通过模型。模型简单地继承 `BaseModel` 并把字段定义为**带类型注解的属性**：
@@ -298,3 +293,11 @@ except ValidationError as e:
 ## 延伸
 
 官方文档 Concepts 部分还有这些与模型相关的重要主题，值得按需深入：**Fields**（`Field()` 自定义默认值、约束、别名）、**Validators**（自定义字段/模型验证器）、**Serialization**（`model_dump` 的 include/exclude/by_alias 等参数）、**JSON Schema**、**Strict mode**、**Settings**（环境变量配置管理）、**泛型模型** 与 **动态模型创建**。FastAPI 的请求体/响应模型正是构建在 Pydantic 模型之上——请继续阅读本模块下一篇。
+
+---
+
+> **来源**：本文翻译自 [Models — Pydantic 文档](https://docs.pydantic.dev/latest/concepts/models/)，作者 Pydantic Services Inc. 及 Pydantic 贡献者，许可 MIT License。抓取于 2026-09-13。
+
+---
+
+> 编者注：本篇**全部为 Pydantic v2 语法**（`model_dump()` / `model_validate()` / `model_config = ConfigDict(...)`）。网上旧教程里的 v1 写法（`.dict()`、`.parse_obj()`、`class Config:`）已过时，请勿照抄。Pydantic 是 LLM 应用的基础设施：解析模型返回的 JSON、声明结构化输出 Schema、FastAPI 请求体校验，用的都是它。

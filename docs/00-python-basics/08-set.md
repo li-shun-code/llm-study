@@ -8,8 +8,6 @@ translated: false
 order: 8
 ---
 
-> **来源**：本文转载自 [Python3 集合](https://www.runoob.com/python3/python3-set.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。
-
 集合（set）是一个无序的不重复元素序列。
 
 集合中的元素不会重复，并且可以进行交集、并集、差集等常见的集合操作。
@@ -240,3 +238,7 @@ False
 | [union()](https://www.runoob.com/python3/ref-set-union.html) | 返回两个集合的并集 |
 | [update()](https://www.runoob.com/python3/ref-set-update.html) | 给集合添加元素 |
 | [len()](https://www.runoob.com/python3/python3-string-len.html) | 计算集合元素个数 |
+
+---
+
+> **来源**：本文转载自 [Python3 集合](https://www.runoob.com/python3/python3-set.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。

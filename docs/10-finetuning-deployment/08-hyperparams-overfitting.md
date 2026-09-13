@@ -9,8 +9,6 @@ order: 8
 versions: TRL（2026-09 主分支文档）/ SFTConfig 现行 API
 ---
 
-> **来源**：本文翻译自 [LoRA Without Regret（TRL 官方指南）](https://huggingface.co/docs/trl/lora_without_regret)，作者 Hugging Face（TRL 文档，基于 Thinking Machines Lab（Schulman et al., 2025）的研究），许可 Apache 2.0。抓取于 2026-09-13。"loss 曲线判读与过拟合诊断"一节为编者补充，已显式标注。
-
 微调调的是什么超参？学习率、epoch、batch size、LoRA 秩……它们互相纠缠，网上建议互相矛盾。这份 TRL 官方指南把《LoRA Without Regret》的核心结论翻译成了可复现的配置：**配置正确的 LoRA 可以追平全参微调（Full Fine-Tuning，FullFT），而只花约 67% 的算力**。
 
 ## LoRA 相比全参微调的好处
@@ -149,3 +147,7 @@ TRL 团队用 SmolLM3-3B 在 OpenR1-Math-220k 数据集上（RL/GRPO 任务，Lo
 - LoRA 配置正确可追平全参微调：all-linear + 足够秩（SFT 256 / RL 1–32）+ 更高学习率 + 有效 batch < 32。
 - 过拟合的判据是训练/验证 loss 的剪刀差；选 checkpoint 以验证指标为准。
 - 调参方法论：一次一个变量、小规模快跑、先看曲线再下结论。
+
+---
+
+> **来源**：本文翻译自 [LoRA Without Regret（TRL 官方指南）](https://huggingface.co/docs/trl/lora_without_regret)，作者 Hugging Face（TRL 文档，基于 Thinking Machines Lab（Schulman et al., 2025）的研究），许可 Apache 2.0。抓取于 2026-09-13。"loss 曲线判读与过拟合诊断"一节为编者补充，已显式标注。

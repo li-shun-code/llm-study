@@ -8,11 +8,6 @@ translated: true
 order: 14
 versions: Streamlit 当前稳定版
 ---
-
-> **来源**：本文翻译自 [Basic concepts of Streamlit — Streamlit Docs](https://docs.streamlit.io/get-started/fundamentals/main-concepts)，作者 Streamlit（Snowflake）及文档贡献者，许可 Apache License 2.0。抓取于 2026-09-13。
-
-> 编者注：本篇主体为官方《Basic concepts》指南的中文翻译，开头安装部分节选自官方 [Install Streamlit](https://docs.streamlit.io/get-started/installation)。Streamlit 与上一篇的 Gradio 定位互补：Gradio 面向"给模型包一个演示界面"，Streamlit 面向"把数据处理/LLM 交互流程写成脚本式应用"（如批量对话评测看板、RAG 检索调试器）。另：如果你用 AI 编程代理，Streamlit 官方还提供 `streamlit skills` 命令安装官方技能包，让代理遵循当前 API（见模块 11）。
-
 ## 安装
 
 在终端执行以下命令即可完成环境搭建并测试安装（推荐配合 `venv` 或本模块第 17 篇的 uv）：
@@ -237,3 +232,11 @@ for i in range(100):
 - **Gradio**：模型 Demo、聊天界面（`gr.ChatInterface` 开箱即用）、Hugging Face Spaces 托管——"给一个函数套 UI"；
 - **Streamlit**：多步骤数据应用、看板、带状态的交互流程——"整个应用就是一份脚本，交互即重跑"；
 - 两者都是纯 Python、无需前端知识，先按手头任务试最小示例，选顺手的那个深入即可。
+
+---
+
+> **来源**：本文翻译自 [Basic concepts of Streamlit — Streamlit Docs](https://docs.streamlit.io/get-started/fundamentals/main-concepts)，作者 Streamlit（Snowflake）及文档贡献者，许可 Apache License 2.0。抓取于 2026-09-13。
+
+---
+
+> 编者注：本篇主体为官方《Basic concepts》指南的中文翻译，开头安装部分节选自官方 [Install Streamlit](https://docs.streamlit.io/get-started/installation)。Streamlit 与上一篇的 Gradio 定位互补：Gradio 面向"给模型包一个演示界面"，Streamlit 面向"把数据处理/LLM 交互流程写成脚本式应用"（如批量对话评测看板、RAG 检索调试器）。另：如果你用 AI 编程代理，Streamlit 官方还提供 `streamlit skills` 命令安装官方技能包，让代理遵循当前 API（见模块 11）。

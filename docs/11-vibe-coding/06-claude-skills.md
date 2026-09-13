@@ -8,8 +8,6 @@ translated: true
 order: 6
 ---
 
-> **来源**：本文翻译自 [Extend Claude with skills](https://code.claude.com/docs/en/skills)，作者 Anthropic（Claude Code 官方文档），许可署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）。抓取于 2026-09-13。篇幅所限，claude.ai 同步技能与插件打包的少量实现细节从略（原文可查）。
-
 Skills 扩展 Claude 的能力。创建一个带指令的 `SKILL.md` 文件，Claude 就会把它加入自己的工具箱。Claude 会在相关时自动使用 skill，你也可以用 `/skill-name` 直接调用。
 
 **什么时候该建 skill**：当你不断往对话里粘贴同样的指令、检查清单或多步骤流程时；当 CLAUDE.md 里的某一节已经长成"流程"而不是"事实"时。与 CLAUDE.md 内容不同，**skill 的正文只有被用到时才加载**——大段参考资料在需要之前几乎零成本。
@@ -203,3 +201,7 @@ my-skill/
 把三者放进一张图：**CLAUDE.md/AGENTS.md 放"每次会话都要在"的事实与规则**（常驻、最小化）；**Rules/paths 放"处理特定文件才需要"的规则**（按路径挂载）；**Skills 放"多步骤流程与大段参考资料"**（按需加载、可带脚本与支持文件、可 fork 到子智能体）。三者都是"写给智能体的项目知识"，差别只在加载时机与成本模型——选型的判据永远是上下文经济学。
 
 > 译注：Agent Skills 开放标准（agentskills.io）意味着 SKILL.md 格式不限于 Claude Code——Cursor 也已提供 Skills 支持（见第 4 篇文档结构），生态正在收敛。
+
+---
+
+> **来源**：本文翻译自 [Extend Claude with skills](https://code.claude.com/docs/en/skills)，作者 Anthropic（Claude Code 官方文档），许可署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）。抓取于 2026-09-13。篇幅所限，claude.ai 同步技能与插件打包的少量实现细节从略（原文可查）。

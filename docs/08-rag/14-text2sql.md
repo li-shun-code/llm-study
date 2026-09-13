@@ -8,9 +8,6 @@ translated: true
 order: 14
 ---
 
-> **来源**：本文翻译自 [Vanna 2.0: Turn Questions into Data Insights](https://raw.githubusercontent.com/vanna-ai/vanna/main/README.md)，作者 Vanna 项目（Vanna AI），许可 MIT。抓取于 2026-09-13。
-> 编者注：原文的时序图为 Mermaid 图，本站改写为文字流程；原文代码完整保留。
-
 RAG 一直在讨论"非结构化文档"，但企业里最规整、最有价值的知识往往躺在数据库里。**Text2SQL**（自然语言转 SQL）是结构化数据检索的并行路线：不把表内容嵌进向量库，而是把**表结构（Schema）与问答示例**做检索增强，让 LLM 生成 SQL 去数据库里查。Vanna 是这一路线最有代表性的开源框架（GitHub 2 万+ star），其 2.0 版本是一套"用户感知"的 Text2SQL Agent 框架。
 
 Vanna 2.0 的定位：**自然语言 → SQL → 答案**，并新增企业级安全与用户感知权限。
@@ -209,3 +206,8 @@ Vanna 2.0 是聚焦"用户感知 Agent 与生产部署"的完全重写，关键�
 ---
 
 > 编者注：Text2SQL 与文档向量 RAG 不是二选一，而是互补的两条检索路线——"上季度华东区销量前十的产品是什么？"该走 SQL，"产品说明书里对保修条款怎么说的？"该走向量检索。生产系统常用一个路由层（或第 13 篇的 Agent）先判断问题类型，再分别调用 SQL 工具与向量检索工具。Text2SQL 的评估同样重要：SQL 语法正确不等于语义正确（执行结果对不对），可以用"生成 SQL 与基准 SQL 的执行结果比对"来构建评估集，方法参照第 07 篇。
+
+---
+
+> **来源**：本文翻译自 [Vanna 2.0: Turn Questions into Data Insights](https://raw.githubusercontent.com/vanna-ai/vanna/main/README.md)，作者 Vanna 项目（Vanna AI），许可 MIT。抓取于 2026-09-13。
+> 编者注：原文的时序图为 Mermaid 图，本站改写为文字流程；原文代码完整保留。

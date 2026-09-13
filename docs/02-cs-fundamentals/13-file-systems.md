@@ -8,8 +8,6 @@ translated: true
 order: 13
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 39 章 [Interlude: Files and Directories](https://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 至此我们见证了两个关键 OS 抽象的形成：**进程**（CPU 的虚拟化）与**地址空间**（内存的虚拟化）。二者合力，让程序仿佛运行在自己私有的隔离世界里：好像独占处理器、独占内存。这个幻觉让系统编程容易得多，如今不仅盛行于桌面与服务器，也日益普及到手机等一切可编程平台。
 
 本篇往虚拟化拼图里再添一块关键拼图：**持久存储**。持久存储设备（如经典硬盘或更现代的固态存储设备）永久地（至少长期）保存信息。与断电即失的内存不同，持久存储设备会让数据完好无损。因此 OS 必须对这类设备格外上心：**用户真正在乎的数据都放在这里**。
@@ -447,3 +445,7 @@ AFS on /afs type afs (rw)
 - 多数文件系统都有启用/禁用共享的机制：基础形态由权限位提供；更精细的 ACL 允许精确指定谁能访问与操作信息。
 
 > 译注：本篇讲的是文件系统**接口**；文件系统如何**实现**（inode 与多级索引如何组织数据块、日志如何保证崩溃一致性等）见 OSTEP 第 40 章《File System Implementation》。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 39 章 [Interlude: Files and Directories](https://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

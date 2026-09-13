@@ -9,8 +9,6 @@ order: 10
 versions: Prompt Caching（提示词 >1024 token 自动启用）；Batch API（completion_window=24h，约 5 折）
 ---
 
-> **来源**：本文翻译自 [Prompt Caching 101](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Prompt_Caching101.ipynb) 与 [Batch processing with the Batch API](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/batch_processing.ipynb)（OpenAI Cookbook，MIT），作者 OpenAI，许可 MIT。抓取于 2026-09-13。
-
 控制 LLM 应用成本，先想清楚两个"被动省钱"机制——它们不需要你改模型行为，只需要改**请求的组织方式**：
 
 - **Prompt Caching（提示词缓存）**：重复的提示词前缀命中缓存，降低延迟与费用——优化"实时请求"的成本；
@@ -226,3 +224,7 @@ Cookbook 的收尾建议：批处理 API 与 Chat Completions 端点参数一致
 - 实时流量用 Caching，离线负载转 Batch，两者不冲突。
 
 下一篇开始进入"生态"：OpenAI 兼容端点与 LiteLLM 统一路由。
+
+---
+
+> **来源**：本文翻译自 [Prompt Caching 101](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Prompt_Caching101.ipynb) 与 [Batch processing with the Batch API](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/batch_processing.ipynb)（OpenAI Cookbook，MIT），作者 OpenAI，许可 MIT。抓取于 2026-09-13。

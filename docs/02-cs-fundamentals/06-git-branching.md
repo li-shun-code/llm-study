@@ -8,8 +8,6 @@ translated: true
 order: 6
 ---
 
-> **来源**：本文翻译自 Pro Git（第 2 版）第 3 章 "Git Branching"（3.1 Branches in a Nutshell、3.2 Basic Branching and Merging、3.4 Branching Workflows、3.5 Remote Branches 四节合译），作者 Scott Chacon、Ben Straub，许可 CC BY-NC-SA 3.0。抓取于 2026-09-13。
-
 几乎每种版本控制系统（VCS）都以某种形式支持分支。分支意味着你从主干开发线上分离开来，在不干扰主干的情况下继续工作。在许多 VCS 工具里，这是个代价高昂的过程——往往要复制一份源码目录，大项目可能耗时很久。
 
 有人把 Git 的分支模型称为它的"必杀技"，它确实让 Git 在 VCS 界独树一帜。为什么这么特别？因为 Git 创建分支**极其轻量**：分支操作近乎瞬时完成，分支之间来回切换也同样快。与其他 VCS 不同，Git 鼓励"频繁分支、频繁合并"的工作流——哪怕一天分合多次。理解并掌握这一特性，会彻底改变你的开发方式；本模块其他文章里"AI 结对编码用分支隔离实验"等实践，也都建立在这之上。
@@ -319,3 +317,7 @@ To https://github.com/schacon/simplegit
 ## 小结
 
 到这里你已经掌握了从本地到远程的完整分支协作链路：本地轻量开分支 → 快速切换上下文 → 三方合并（必要时解决冲突）→ 推送到远程 → 通过跟踪分支同步协作者进度 → 删除用完的分支。在 GitHub/GitLab 上发起与评审 Pull Request 时，背后发生的正是这些动作。
+
+---
+
+> **来源**：本文翻译自 Pro Git（第 2 版）第 3 章 "Git Branching"（3.1 Branches in a Nutshell、3.2 Basic Branching and Merging、3.4 Branching Workflows、3.5 Remote Branches 四节合译），作者 Scott Chacon、Ben Straub，许可 CC BY-NC-SA 3.0。抓取于 2026-09-13。

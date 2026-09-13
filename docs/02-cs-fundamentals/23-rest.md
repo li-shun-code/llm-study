@@ -8,8 +8,6 @@ translated: true
 order: 23
 ---
 
-> **来源**：本文翻译自 [What is REST?](https://restfulapi.net/)，作者 Lokesh Gupta（restfulapi.net），许可为站点版权所有（转载署名，译文仅供学习交流）。抓取于 2026-09-13。
-
 REST 是 **RE**presentational **S**tate **T**ransfer（表述性状态转移）的缩写，是一种面向**分布式超媒体系统**的架构风格。Roy Fielding 于 2000 年在其著名的博士论文中首次提出。从那时起，它已成为构建 Web API（应用编程接口）最广泛使用的方式之一。
 
 REST 不是协议也不是标准，而是**架构风格**。在开发阶段，API 开发者可以用多种方式实现 REST。
@@ -173,3 +171,7 @@ Fielding 在其论文中没有给出任何实现上的指引——包括任何�
 > 译注：读完本模块你会发现一条完整的线索——REST 请求沿 DNS（找到主机）→ TCP（可靠连接）→ TLS（加密）→ HTTP（统一接口）层层落地；而流式 LLM 输出（SSE）是这条链上的新形态。设计 LLM 应用的 API 时，本文的六条约束（尤其是无状态与统一接口）依然是最好的起点。
 
 原文还提供了 REST 学习路线图：REST 约束、资源命名、缓存、压缩、内容协商、HATEOAS、幂等性、安全、版本化、无状态、分页/排序/过滤、限流、最佳实践，以及 PUT vs POST、Richardson 成熟度模型、HTTP 状态码等 FAQ（见 restfulapi.net 站点导航）。
+
+---
+
+> **来源**：本文翻译自 [What is REST?](https://restfulapi.net/)，作者 Lokesh Gupta（restfulapi.net），许可为站点版权所有（转载署名，译文仅供学习交流）。抓取于 2026-09-13。

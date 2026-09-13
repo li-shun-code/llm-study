@@ -8,9 +8,6 @@ translated: false
 order: 4
 ---
 
-> **来源**：本文转载自 [栈](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/stack.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 <u>栈（stack）</u>是一种遵循先入后出逻辑的线性数据结构。
 
 我们可以将栈类比为桌面上的一摞盘子，规定每次只能移动一个盘子，那么想取出底部的盘子，则需要先将上面的盘子依次移走。我们将盘子替换为各种类型的元素（如整数、字符、对象等），就得到了栈这种数据结构。
@@ -112,3 +109,8 @@ is_empty: bool = len(stack) == 0
 
 - **浏览器中的后退与前进、软件中的撤销与反撤销**。每当我们打开新的网页，浏览器就会对上一个网页执行入栈，这样我们就可以通过后退操作回到上一个网页。后退操作实际上是在执行出栈。如果要同时支持后退和前进，那么需要两个栈来配合实现。
 - **程序内存管理**。每次调用函数时，系统都会在栈顶添加一个栈帧，用于记录函数的上下文信息。在递归函数中，向下递推阶段会不断执行入栈操作，而向上回溯阶段则会不断执行出栈操作。
+
+---
+
+> **来源**：本文转载自 [栈](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/stack.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

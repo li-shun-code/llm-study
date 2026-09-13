@@ -9,8 +9,6 @@ order: 1
 versions: 课程版本 2026-09 主分支（含 Microsoft Foundry 当前微调技术说明）
 ---
 
-> **来源**：本文翻译自 [Fine-Tuning Your LLM（generative-ai-for-beginners 第 18 课）](https://github.com/microsoft/generative-ai-for-beginners/blob/main/18-fine-tuning/README.md)，作者 Microsoft（generative-ai-for-beginners 课程团队），许可 MIT。抓取于 2026-09-13。
-
 用大语言模型构建生成式 AI 应用会带来新的挑战。一个关键问题是：如何保证模型针对给定用户请求所生成内容的质量（准确性与相关性）。在前面的课程中，我们讨论过提示工程（Prompt Engineering）与检索增强生成（Retrieval-Augmented Generation，RAG）这两种技术，它们都通过**修改输入给现有模型的提示词**来解决问题。本课讨论第三种技术——**微调（Fine-Tuning）**，它尝试通过**用额外数据重新训练模型本身**来应对这一挑战。
 
 ## 什么是面向语言模型的微调
@@ -99,3 +97,7 @@ versions: 课程版本 2026-09 主分支（含 Microsoft Foundry 当前微调技
 
 - 原课程的配套视频《To fine-tune or not to fine-tune》
 - 本模块后续文章：[训练范式回顾与全参微调](./02-training-paradigms-full-finetuning)、[LoRA 原理](./04-lora-principles)、[DPO 与偏好优化](./10-dpo-preference-optimization)
+
+---
+
+> **来源**：本文翻译自 [Fine-Tuning Your LLM（generative-ai-for-beginners 第 18 课）](https://github.com/microsoft/generative-ai-for-beginners/blob/main/18-fine-tuning/README.md)，作者 Microsoft（generative-ai-for-beginners 课程团队），许可 MIT。抓取于 2026-09-13。

@@ -9,8 +9,6 @@ order: 6
 versions: TRL（2026-09 主分支文档，含 Tool Calling / Harmony 格式）
 ---
 
-> **来源**：本文翻译自 [Dataset formats and types（TRL 官方文档）](https://huggingface.co/docs/trl/dataset_formats)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。"数据清洗最佳实践"一节编译自 [smol-course](https://github.com/huggingface/smol-course)（Apache 2.0）与 generative-ai-for-beginners 课程（MIT），已标注。
-
 微调效果的上限由数据决定。这份 TRL 官方指南是训练数据准备的"标准答案"：无论用哪个 Trainer，先把数据整理成它期望的**格式（format）**与**类型（type）**，再谈超参数。
 
 ## 格式与类型：两个正交的维度
@@ -247,3 +245,7 @@ dataset = dataset.map(extract_prompt).remove_columns("rejected").rename_column("
 - 记住两个正交维度：**格式**（标准/对话）× **类型**（语言建模/仅提示/提示-补全/偏好/非配对偏好）。
 - SFT 用语言建模或提示-补全；DPO 用偏好；RL 类（GRPO）用仅提示。
 - 数据准备的标准动作：统一格式 → 清洗去重 → 切分验证集 → 校验模板与长度分布。
+
+---
+
+> **来源**：本文翻译自 [Dataset formats and types（TRL 官方文档）](https://huggingface.co/docs/trl/dataset_formats)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。"数据清洗最佳实践"一节编译自 [smol-course](https://github.com/huggingface/smol-course)（Apache 2.0）与 generative-ai-for-beginners 课程（MIT），已标注。

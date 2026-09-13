@@ -8,11 +8,6 @@ translated: false
 order: 16
 versions: Python 3.14 / logging
 ---
-
-> **来源**：本文转载自 [日志指南 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/howto/logging.html)，作者 Vinay Sajip（Python 官方文档团队），许可 PSF 许可证第 2 版。抓取于 2026-09-13。
-
-> 编者注：LLM 应用大量依赖外部服务（模型 API、向量库、数据库），一次请求要跨多个组件，没有日志几乎无法排障。本篇节选官方《日志指南》HOWTO 的基础与进阶教程；进阶实践（结构化日志、Trace ID 串联）见文末编者补充。
-
 ## 日志基础教程
 
 日志是对软件执行时所发生事件的一种追踪方式。软件开发人员对他们的代码添加日志调用，借此来指示某事件的发生。一个事件通过一些包含变量数据的描述信息来描述（比如：每个事件发生时的数据都是不同的）。开发者还会区分事件的重要性，重要性也被称为**等级**或**严重性**。
@@ -221,3 +216,11 @@ logging.getLogger('foo').addHandler(logging.NullHandler())
 2. **每次调用 LLM 都记 INFO**：请求参数摘要、模型名、耗时、token 用量——`logger.info('llm call model=%s latency=%.2fs tokens=%d', model, dt, tokens)`。出错时用 `logger.exception('llm call failed')` 把堆栈一起记下来（配合本模块第 4/9 篇的异常处理）。
 3. **请求 ID 串联**：给每次用户请求生成一个 request id，放进日志格式或用 `logging.Filter` 注入，排障时一个 ID 就能检索整条链路；需要跨服务追踪时再上 OpenTelemetry（模块 9 的可观测性篇）。
 4. **进阶阅读**：官方《日志专题手册》（Logging Cookbook，https://docs.python.org/zh-cn/3/howto/logging-cookbook.html ）覆盖多模块日志、按大小/时间轮转文件、结构化日志等生产场景。
+
+---
+
+> **来源**：本文转载自 [日志指南 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/howto/logging.html)，作者 Vinay Sajip（Python 官方文档团队），许可 PSF 许可证第 2 版。抓取于 2026-09-13。
+
+---
+
+> 编者注：LLM 应用大量依赖外部服务（模型 API、向量库、数据库），一次请求要跨多个组件，没有日志几乎无法排障。本篇节选官方《日志指南》HOWTO 的基础与进阶教程；进阶实践（结构化日志、Trace ID 串联）见文末编者补充。

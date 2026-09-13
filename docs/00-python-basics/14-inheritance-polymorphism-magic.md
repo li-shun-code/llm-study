@@ -8,8 +8,6 @@ translated: false
 order: 14
 ---
 
-> **来源**：本文转载自 [继承和多态 - Python教程](https://liaoxuefeng.com/books/python/oop/extend/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。文末补充节选了同书 [定制类](https://liaoxuefeng.com/books/python/oop-adv/special-method/index.html) 一章，作者与许可同上。
-
 在OOP程序设计中，当我们定义一个class的时候，可以从某个现有的class继承，新的class称为子类（Subclass），而被继承的class称为基类、父类或超类（Base class、Super class）。
 
 比如，我们已经编写了一个名为`Animal`的class，有一个`run()`方法可以直接打印：
@@ -340,3 +338,7 @@ class Fib(object):
 ```
 
 通过上面的方法，我们自己定义的类表现得和Python自带的list、tuple、dict没什么区别，这完全归功于动态语言的"鸭子类型"，不需要强制继承某个接口。
+
+---
+
+> **来源**：本文转载自 [继承和多态 - Python教程](https://liaoxuefeng.com/books/python/oop/extend/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。文末补充节选了同书 [定制类](https://liaoxuefeng.com/books/python/oop-adv/special-method/index.html) 一章，作者与许可同上。

@@ -8,8 +8,6 @@ translated: false
 order: 13
 ---
 
-> **来源**：本文转载自 [类和实例 - Python教程](https://liaoxuefeng.com/books/python/oop/class/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。文末补充节选了同书 [访问限制](https://liaoxuefeng.com/books/python/oop/access/index.html) 一章，作者与许可同上。
-
 面向对象最重要的概念就是类（Class）和实例（Instance），必须牢记类是抽象的模板，比如Student类，而实例是根据类创建出来的一个个具体的"对象"，每个对象都拥有相同的方法，但各自的数据可能不同。
 
 仍以Student类为例，在Python中，定义类是通过`class`关键字：
@@ -221,3 +219,7 @@ class Student(object):
 有些时候，你会看到以一个下划线开头的实例变量名，比如`_name`，这样的实例变量外部是可以访问的，但是，按照约定俗成的规定，当你看到这样的变量时，意思就是，"虽然我可以被访问，但是，请把我视为私有变量，不要随意访问"。
 
 总的来说就是，Python本身没有任何机制阻止你干坏事，一切全靠自觉。
+
+---
+
+> **来源**：本文转载自 [类和实例 - Python教程](https://liaoxuefeng.com/books/python/oop/class/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。文末补充节选了同书 [访问限制](https://liaoxuefeng.com/books/python/oop/access/index.html) 一章，作者与许可同上。

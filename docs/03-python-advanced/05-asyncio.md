@@ -8,11 +8,6 @@ translated: false
 order: 5
 versions: Python 3.14 / asyncio
 ---
-
-> **来源**：本文转载自 [asyncio 的概念概述 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/howto/a-conceptual-overview-of-asyncio.html)，作者 Alexander Nordin（Python 官方文档团队），许可 PSF 许可证第 2 版。抓取于 2026-09-13。
-
-> 编者注：本篇主体为官方《asyncio 的概念概述》HOWTO（讲"为什么"），并节选了官方《协程与任务》参考页（https://docs.python.org/zh-cn/3/library/asyncio-task.html ，讲"怎么用"）中的实用 API 部分，文内分别署名。LLM 应用是典型的 I/O 密集场景（等 API 响应、等数据库），asyncio 是把并发等待做省资源的标准答案；FastAPI 原生基于 asyncio。
-
 ## asyncio 是什么
 
 `asyncio` 是用来编写**并发**代码的库，使用 **async/await** 语法。它被用作多个 Python 异步框架的基础，这些框架提供高性能网络和网站服务、数据库连接库、分布式任务队列等等。asyncio 往往是构建 IO 密集型和高层级**结构化**网络代码的最佳选择。
@@ -250,3 +245,11 @@ async def main():
 - 并发一批协程用 `asyncio.gather()`（老牌）或 `asyncio.TaskGroup`（3.11+，更安全）；
 - 睡眠用 `asyncio.sleep`，超时用 `asyncio.timeout`，阻塞调用考虑丢进线程池（`loop.run_in_executor`）；
 - 单线程事件循环最怕被同步阻塞代码卡住——`requests`、`time.sleep` 这类阻塞调用混进协程会拖垮整个循环，请改用异步库（如 httpx 的异步客户端）。
+
+---
+
+> **来源**：本文转载自 [asyncio 的概念概述 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/howto/a-conceptual-overview-of-asyncio.html)，作者 Alexander Nordin（Python 官方文档团队），许可 PSF 许可证第 2 版。抓取于 2026-09-13。
+
+---
+
+> 编者注：本篇主体为官方《asyncio 的概念概述》HOWTO（讲"为什么"），并节选了官方《协程与任务》参考页（https://docs.python.org/zh-cn/3/library/asyncio-task.html ，讲"怎么用"）中的实用 API 部分，文内分别署名。LLM 应用是典型的 I/O 密集场景（等 API 响应、等数据库），asyncio 是把并发等待做省资源的标准答案；FastAPI 原生基于 asyncio。

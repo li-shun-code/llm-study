@@ -8,11 +8,6 @@ translated: true
 order: 1
 vPre: true
 ---
-
-> **来源**：本文翻译自 [LLM Powered Autonomous Agents](https://lilianweng.github.io/posts/2023-06-23-agent/)，作者 Lilian Weng，许可 CC BY-NC 4.0。抓取于 2026-09-13。
-
-> **编者注**：本文写于 2023 年 6 月，是智能体（Agent）领域公认的概念奠基之作。文中提出的"规划 + 记忆 + 工具使用"三大组件框架至今仍是理解 Agent 的最佳起点。文中提到的 AutoGPT、ChatGPT Plugins 等产品如今多已演进或停服，属于历史脉络；核心概念部分（ReAct、Reflexion、记忆分层、MIPS 检索）并未过时，本模块后续文章将按 2025-2026 年的最新工具链（LangGraph、MCP、OpenAI Agents SDK 等）逐一展开。
-
 以大语言模型（LLM）为核心控制器来构建智能体（Agent）是一个很酷的概念。AutoGPT、GPT-Engineer、BabyAGI 等一批概念验证（Proof-of-Concept） demos 是极具启发性的例子。LLM 的潜力不止于生成写得不错的文案、故事、散文和程序——它还可以被构架为一个强大的通用问题求解器（General Problem Solver）。
 
 # Agent 系统总览
@@ -431,3 +426,11 @@ GPT-Engineer 是另一个项目：给定用自然语言描述的任务，生成�
   url     = "https://lilianweng.github.io/posts/2023-06-23-agent/"
 }
 ```
+
+---
+
+> **来源**：本文翻译自 [LLM Powered Autonomous Agents](https://lilianweng.github.io/posts/2023-06-23-agent/)，作者 Lilian Weng，许可 CC BY-NC 4.0。抓取于 2026-09-13。
+
+---
+
+> **编者注**：本文写于 2023 年 6 月，是智能体（Agent）领域公认的概念奠基之作。文中提出的"规划 + 记忆 + 工具使用"三大组件框架至今仍是理解 Agent 的最佳起点。文中提到的 AutoGPT、ChatGPT Plugins 等产品如今多已演进或停服，属于历史脉络；核心概念部分（ReAct、Reflexion、记忆分层、MIPS 检索）并未过时，本模块后续文章将按 2025-2026 年的最新工具链（LangGraph、MCP、OpenAI Agents SDK 等）逐一展开。

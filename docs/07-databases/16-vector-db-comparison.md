@@ -8,11 +8,6 @@ translated: true
 order: 16
 versions: Milvus 官方文档当前版（milvus-docs v3.0.x）
 ---
-
-> **来源**：本文翻译自 [Comparing Milvus with Alternatives](https://milvus.io/docs/comparison.md)，作者 Milvus（Zilliz），许可 Apache-2.0。抓取于 2026-09-13。
-
-> **编者按**：原文是厂商自写的"Milvus vs Pinecone"对比，立场天然偏向自家产品；本篇保留其中真正可迁移的两样东西——**选型该看哪些维度**与**各家术语对照**——并在文末以"站内补充"把本模块已译介的四个开源库（Chroma、Qdrant、Milvus、pgvector）放回同一张表。文中对竞争对手的引用仅代表原文观点，选型请以自己的基准测试为准。
-
 ## 选型方法论
 
 原文开宗明义：探索各种向量数据库选项时，应当理解各家方案的独特之处，选择最适合自身需求的那一个；客观评估的办法是用**基准测试工具**（如开源的 VectorDBBench）分析性能指标，而不是只看宣传。
@@ -83,3 +78,11 @@ versions: Milvus 官方文档当前版（milvus-docs v3.0.x）
 3. **检索形态**：重元数据过滤选 Qdrant；要稀疏+稠密混合与全文选 Milvus/Qdrant；只要"够用的语义检索"选 Chroma/pgvector。
 
 最后重申原文的忠告：别只看对比表——**用 VectorDBBench 这类工具在自己真实的数据与查询负载上跑基准**，才是选型的最终裁决。
+
+---
+
+> **来源**：本文翻译自 [Comparing Milvus with Alternatives](https://milvus.io/docs/comparison.md)，作者 Milvus（Zilliz），许可 Apache-2.0。抓取于 2026-09-13。
+
+---
+
+> **编者按**：原文是厂商自写的"Milvus vs Pinecone"对比，立场天然偏向自家产品；本篇保留其中真正可迁移的两样东西——**选型该看哪些维度**与**各家术语对照**——并在文末以"站内补充"把本模块已译介的四个开源库（Chroma、Qdrant、Milvus、pgvector）放回同一张表。文中对竞争对手的引用仅代表原文观点，选型请以自己的基准测试为准。

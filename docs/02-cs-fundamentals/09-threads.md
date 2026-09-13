@@ -8,8 +8,6 @@ translated: true
 order: 9
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 26 章 [Concurrency: An Introduction](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 前面我们看到了 OS 的基本抽象如何形成：把单个物理 CPU 变成多个虚拟 CPU，制造多程序同时运行的幻觉；为每个进程制造庞大私有虚拟内存的幻觉——地址空间这一抽象让每个程序表现得像独占内存，而实际上 OS 正偷偷在物理内存（有时还有磁盘）上复用地址空间。
 
 本章引入针对单个运行进程的新抽象：**线程**（thread）。经典视角下，程序只有一个执行点（即单个程序计数器 PC，指令从那里取来执行）；而多线程程序有**多个**执行点（多个 PC，各自取指执行）。另一种理解方式：每个线程都很像一个独立的进程，区别只有一点——**它们共享同一个地址空间，因此能访问相同的数据**。
@@ -214,3 +212,7 @@ memory-add 0x8049a1c, $0x1
 ## 小结：为什么在操作系统课上讲这些？
 
 一句话回答：**历史**。OS 是第一个并发程序，许多技术最初就是为 OS 内部创造的；后来随着多线程进程的出现，应用程序员也不得不面对同样的问题。比如两个进程都调用 `write()` 向同一文件追加数据：都要分配新块、在文件的 inode 中记录块位置、更改文件大小（等等）。因为中断随时可能发生，更新这些共享结构（分配位图、文件 inode 等）的代码都是临界区——自中断被引入之日起，OS 设计者就得操心 OS 内部结构的并发更新；不合时宜的中断会引发上述一切问题。毫不意外，页表、进程列表、文件系统结构乃至几乎每个内核数据结构，都必须以恰当的同步原语小心访问才能正确工作。你写的多线程应用同理——这也就是为什么每个后端工程师都需要懂并发。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 26 章 [Concurrency: An Introduction](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

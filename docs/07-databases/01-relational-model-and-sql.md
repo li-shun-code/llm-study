@@ -8,11 +8,6 @@ translated: true
 order: 1
 versions: 概念适用于所有关系数据库；示例对照 PostgreSQL 18 官方教程
 ---
-
-> **来源**：本文翻译自 [1.7: The Relational Data Model](https://eng.libretexts.org/Bookshelves/Computer_Science/Databases_and_Data_Structures/Database_Design_2e_(Watt)/01%3A_Chapters/1.07%3A_The_Relational_Data_Model)，作者 Adrienne Watt / Nelson Eng（Database Design - 2nd Edition），许可 CC BY 4.0。抓取于 2026-09-13。
-
-> **补充来源**：本文"SQL 语言是什么"一节编译自 PostgreSQL 18 官方教程 [2.1. Introduction](https://www.postgresql.org/docs/current/tutorial-sql-intro.html) 与 [2.2. Concepts](https://www.postgresql.org/docs/current/tutorial-concepts.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。原文配图已删去，图中信息以文字说明。
-
 在学习具体数据库产品之前，先建立"关系模型（Relational Model）"的概念框架：后面遇到的 SQLite、PostgreSQL、MySQL，乃至 SQLAlchemy ORM，本质上都是这一模型的不同实现。
 
 ## 关系数据模型
@@ -89,3 +84,11 @@ SQL 语言通过 `SELECT` 等语句对这些表做查询与修改，具体语法
 > 以下小节为本站编者补充，便于把上述概念对应到本站项目实战（会话-消息表设计），不属于译文内容。
 
 把一个"LLM 对话应用"按关系模型拆解：`conversations` 表的一行是一次会话（元组），`id`、`title`、`created_at` 等是它的属性，每个属性都有各自的域（如 `created_at` 的域是时间戳类型）；`messages` 表的一行是一条消息，通过 `conversation_id` 属性引用所属会话——这就是下一篇 E-R 建模要正式展开的"关系"。
+
+---
+
+> **来源**：本文翻译自 [1.7: The Relational Data Model](https://eng.libretexts.org/Bookshelves/Computer_Science/Databases_and_Data_Structures/Database_Design_2e_(Watt)/01%3A_Chapters/1.07%3A_The_Relational_Data_Model)，作者 Adrienne Watt / Nelson Eng（Database Design - 2nd Edition），许可 CC BY 4.0。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"SQL 语言是什么"一节编译自 PostgreSQL 18 官方教程 [2.1. Introduction](https://www.postgresql.org/docs/current/tutorial-sql-intro.html) 与 [2.2. Concepts](https://www.postgresql.org/docs/current/tutorial-concepts.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。原文配图已删去，图中信息以文字说明。

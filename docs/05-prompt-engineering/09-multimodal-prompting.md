@@ -8,11 +8,6 @@ translated: true
 order: 9
 versions: OpenAI Responses API；模型以 GPT-5.4 为例（2026-09 抓取时最新）
 ---
-
-> **来源**：本文翻译自 [Getting the Most out of GPT-5.4 for Vision and Document Understanding](https://cookbook.openai.com/examples/multimodal/document_and_multimodal_understanding_tips)，作者 OpenAI（OpenAI Cookbook 团队），许可 MIT（OpenAI Cookbook）。抓取于 2026-09-13。
-
-> **说明**：原文为 notebook，其中的图片（手写保险表单、报纸剪影、户型图、折线图、赛事对阵图、警方报告表单）随仓库分发，本文以文字描述替代，图样见原文链接。
-
 GPT-5.4 对真实世界的多模态工作负载是一大步跨越。过去让视觉系统捉襟见肘、或者不得不把 OCR、版面检测与自研解析器拼在一起的文档——高密度扫描件、手写表单、工程图纸、图表密集的报告——如今常常可以在**一次模型调用**中完成解读与推理。
 
 然而，能否达到最佳效果，关键在**模型配置**。图像细节（detail）、输出详尽度（verbosity）、推理力度（reasoning effort）与工具使用上的一些小选择，会显著影响性能。
@@ -285,3 +280,11 @@ bbox_results = json.loads(bbox_response.output_text)["b"]
 - **受限环境** → 只暴露轻量视觉工具（crop/zoom/rotate/区域 OCR 兜底），控制面更紧。
 
 这套"按失败模式调参"的思路同样适用于其他多模态模型（Gemini、Claude 视觉等）：参数名会不同，但"分辨率 ↔ 转写详尽度 ↔ 推理预算 ↔ 工具增强"四个旋钮的分工是相通的。
+
+---
+
+> **来源**：本文翻译自 [Getting the Most out of GPT-5.4 for Vision and Document Understanding](https://cookbook.openai.com/examples/multimodal/document_and_multimodal_understanding_tips)，作者 OpenAI（OpenAI Cookbook 团队），许可 MIT（OpenAI Cookbook）。抓取于 2026-09-13。
+
+---
+
+> **说明**：原文为 notebook，其中的图片（手写保险表单、报纸剪影、户型图、折线图、赛事对阵图、警方报告表单）随仓库分发，本文以文字描述替代，图样见原文链接。

@@ -9,8 +9,6 @@ order: 16
 versions: lm-eval（2026-09 主分支，lm_eval 可选后端 extras 安装方式）
 ---
 
-> **来源**：本文主体翻译自 [Language Model Evaluation Harness 官方 README](https://github.com/EleutherAI/lm-evaluation-harness)，作者 EleutherAI，许可 MIT；"基准的局限与评测策略"部分翻译自 [Automatic Benchmarks（smol-course v1 · Evaluation 单元）](https://github.com/huggingface/smol-course/tree/main/v1/4_evaluation)，作者 Hugging Face，许可 Apache 2.0。抓取于 2026-09-13。
-
 微调完的模型"到底变好了没有"，不能靠感觉——需要一个统一、可复现的评测框架。lm-evaluation-harness（lm-eval）是社区事实标准：Hugging Face Open LLM Leaderboard 的后端，被数百篇论文采用。
 
 ## lm-evaluation-harness 是什么
@@ -170,3 +168,7 @@ print(results["results"])
 - lm-eval 是开源模型评测事实标准：60+ 基准、多后端（hf/vllm/api/sglang）、支持 PEFT 适配器与本地模型。
 - 公开基准的三重价值是"可比、可复现、防退化"，但领域效果必须靠自建评测集。
 - 评测策略要分层：自动指标 + LLM-as-Judge + 人工/专家评审 + A/B。
+
+---
+
+> **来源**：本文主体翻译自 [Language Model Evaluation Harness 官方 README](https://github.com/EleutherAI/lm-evaluation-harness)，作者 EleutherAI，许可 MIT；"基准的局限与评测策略"部分翻译自 [Automatic Benchmarks（smol-course v1 · Evaluation 单元）](https://github.com/huggingface/smol-course/tree/main/v1/4_evaluation)，作者 Hugging Face，许可 Apache 2.0。抓取于 2026-09-13。

@@ -9,8 +9,6 @@ order: 8
 versions: 文章为 2023-04 经典论述，概念在当前 Agent 时代仍然适用；译注补充系列后续文章
 ---
 
-> **来源**：本文翻译自 [Prompt injection: What's the worst that can happen?](https://simonwillison.net/2023/Apr/14/worst-that-can-happen/)，作者 Simon Willison，许可 © Simon Willison（博客原文无开放许可声明；署名学习翻译）。抓取于 2026-09-13。
-
 围绕构建 LLM（大语言模型，如 GPT-3/4/ChatGPT 等）复杂应用的活动正呈野火之势蔓延。
 
 其中许多应用都可能存在**提示注入**（prompt injection）漏洞。在我看来，这一风险并没有得到应有的重视。
@@ -196,3 +194,7 @@ GPT-4 引入了"系统提示词"（system prompt）概念，让你把指令与�
 - 与本模块第 07 篇呼应：系统提示词能提高注入攻击的门槛（角色、规则更明确），但正如文末 GPT-4 实验所示，它不是边界，更不是防线。
 
 *本文观点与实验均属原作者 Simon Willison；译文仅供学习，请以[原文](https://simonwillison.net/2023/Apr/14/worst-that-can-happen/)为准。*
+
+---
+
+> **来源**：本文翻译自 [Prompt injection: What's the worst that can happen?](https://simonwillison.net/2023/Apr/14/worst-that-can-happen/)，作者 Simon Willison，许可 © Simon Willison（博客原文无开放许可声明；署名学习翻译）。抓取于 2026-09-13。

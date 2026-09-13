@@ -8,10 +8,6 @@ translated: false
 order: 7
 ---
 
-> **来源**：本文转载自 [迭代与递归](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[分治算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_divide_and_conquer/divide_and_conquer.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 迭代与递归
 
 
@@ -267,3 +263,9 @@ order: 7
 - **哈希表**：虽然哈希表并不直接应用分治，但某些哈希冲突解决方案间接应用了分治策略，例如，链式地址中的长链表会被转化为红黑树，以提升查询效率。
 
 可以看出，**分治是一种“润物细无声”的算法思想**，隐含在各种算法与数据结构之中。
+
+---
+
+> **来源**：本文转载自 [迭代与递归](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[分治算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_divide_and_conquer/divide_and_conquer.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

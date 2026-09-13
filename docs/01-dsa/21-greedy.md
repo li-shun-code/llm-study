@@ -8,10 +8,6 @@ translated: false
 order: 21
 ---
 
-> **来源**：本文转载自 [贪心算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/greedy_algorithm.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[分数背包问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.md)、[最大切分乘积问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 贪心算法
 
 
@@ -227,3 +223,9 @@ order: 21
 1. **所有因子 ≤ 3** ：假设最优切分方案中存在 ≥ 4 的因子 x ，那么一定可以将其继续划分为 2(x-2) ，从而获得更大（或相等）的乘积。这与假设矛盾。
 2. **切分方案不包含 1** ：假设最优切分方案中存在一个因子 1 ，那么它一定可以合并入另外一个因子中，以获得更大的乘积。这与假设矛盾。
 3. **切分方案最多包含两个 2** ：假设最优切分方案中包含三个 2 ，那么一定可以替换为两个 3 ，乘积更大。这与假设矛盾。
+
+---
+
+> **来源**：本文转载自 [贪心算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/greedy_algorithm.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[分数背包问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.md)、[最大切分乘积问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

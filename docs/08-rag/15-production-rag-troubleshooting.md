@@ -8,9 +8,6 @@ translated: true
 order: 15
 ---
 
-> **来源**：本文主体翻译自 [Reliable RAG](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reliable_rag.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
-> 编者注（时效性校订）：原 notebook 使用 Groq 上的 `mixtral-8x7b-32768`（该模型已退役）与旧 import 路径 `langchain.text_splitter`；本文分别改为当前可用模型（`llama-3.3-70b-versatile`）与当前包路径，逻辑不变。文末"生产架构检查清单"为本站补充。
-
 ## 概述：从"能跑"到"可靠"
 
 Demo 级 RAG 与生产级 RAG 的差距，在于**对失败模式的防御**。RAG 的输出由"检索质量 × 生成质量"共同决定，任何一环失守都会产生错误回答。"可靠 RAG（Reliable RAG）"的核心思想是：在管线中插入多个**验证关卡（Grader）**——检索后逐块核验相关性，生成后核查是否有依据，并给出可追溯的引用片段。本篇把这套流程完整走一遍：
@@ -305,3 +302,8 @@ for id, title, source, segment in zip(lookup_response.id, lookup_response.title,
 - **回答编造数字** → 缺幻觉检查关；表格类内容优先考虑多模态打字幕或 Text2SQL；
 - **延迟/成本高** → 初检减量、缓存查询嵌入、对热问题做语义缓存，重排只在必要时启用；
 - **改了分块策略不知道好坏** → 没有评估集就上线，等于盲飞（回到第 07 篇）。
+
+---
+
+> **来源**：本文主体翻译自 [Reliable RAG](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reliable_rag.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
+> 编者注（时效性校订）：原 notebook 使用 Groq 上的 `mixtral-8x7b-32768`（该模型已退役）与旧 import 路径 `langchain.text_splitter`；本文分别改为当前可用模型（`llama-3.3-70b-versatile`）与当前包路径，逻辑不变。文末"生产架构检查清单"为本站补充。

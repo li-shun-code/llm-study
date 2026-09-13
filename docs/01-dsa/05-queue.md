@@ -8,10 +8,6 @@ translated: false
 order: 5
 ---
 
-> **来源**：本文转载自 [队列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/queue.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[双向队列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/deque.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 队列
 
 
@@ -186,3 +182,9 @@ is_empty: bool = len(deq) == 0
 双向队列兼具栈与队列的逻辑，**因此它可以实现这两者的所有应用场景，同时提供更高的自由度**。
 
 我们知道，软件的“撤销”功能通常使用栈来实现：系统将每次更改操作 `push` 到栈中，然后通过 `pop` 实现撤销。然而，考虑到系统资源的限制，软件通常会限制撤销的步数（例如仅允许保存 50 步）。当栈的长度超过 50 时，软件需要在栈底（队首）执行删除操作。**但栈无法实现该功能，此时就需要使用双向队列来替代栈**。请注意，“撤销”的核心逻辑仍然遵循栈的先入后出原则，只是双向队列能够更加灵活地实现一些额外逻辑。
+
+---
+
+> **来源**：本文转载自 [队列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/queue.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[双向队列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/deque.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

@@ -9,9 +9,6 @@ order: 12
 versions: langchain ≥1.0（create_agent 风格）；deepagents ≥0.6 为可选扩展；Python 3.11+
 ---
 
-> **来源**：本文翻译自 [LangChain Quickstart](https://docs.langchain.com/oss/python/langchain/quickstart)（LangChain 官方文档，langchain-ai/docs 仓库，MIT），作者 LangChain。抓取于 2026-09-13。
-> 编者注：本站**仅收录 LangChain ≥1.0 的 `create_agent` 风格**新教程；网上大量基于旧版 `LLMChain` / `initialize_agent` / `AgentExecutor` 的教程已过时，请以官方当前文档为准。
-
 LangChain 1.0 把"用模型 + 工具 + 系统提示词组装一个 Agent"压缩成了一个函数：`create_agent`。官方 Quickstart 声称"几分钟内创建一个功能完整的 AI Agent"，本篇带你走完它。
 
 ## 一、安装依赖
@@ -234,3 +231,8 @@ export LANGSMITH_API_KEY="..."
 - 接 LangSmith 看 trace，是调试 Agent 行为的第一手段。
 
 Agent 的完整知识地图（ReAct、规划、记忆、多智能体、MCP）在模块 9。
+
+---
+
+> **来源**：本文翻译自 [LangChain Quickstart](https://docs.langchain.com/oss/python/langchain/quickstart)（LangChain 官方文档，langchain-ai/docs 仓库，MIT），作者 LangChain。抓取于 2026-09-13。
+> 编者注：本站**仅收录 LangChain ≥1.0 的 `create_agent` 风格**新教程；网上大量基于旧版 `LLMChain` / `initialize_agent` / `AgentExecutor` 的教程已过时，请以官方当前文档为准。

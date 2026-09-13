@@ -9,8 +9,6 @@ order: 17
 versions: OWASP GenAI LLM Top 10（2025 版）/ NeMo Guardrails（2026-09 主分支）
 ---
 
-> **来源**：本文第一部分翻译自 [OWASP Top 10 Risk & Mitigations for LLMs and Gen AI Apps（2025）](https://genai.owasp.org/llm-top-10/)（含各风险条目页），作者 OWASP GenAI Security Project，许可 CC BY-SA 4.0（本文以相同方式共享）；第二部分翻译自 [NVIDIA NeMo Guardrails README](https://github.com/NVIDIA/NeMo-Guardrails)，作者 NVIDIA，许可 Apache 2.0。抓取于 2026-09-13。"合规"一节为编者补充，已标注。
-
 微调与部署的最后一课是安全。你的模型一旦对外服务，就要面对提示注入、数据泄露、越权工具调用等真实攻击面。本文用两个权威来源回答：风险全景是什么（OWASP），工程上怎么加护栏（NeMo Guardrails）。
 
 ## OWASP LLM 应用十大风险（2025 版）
@@ -140,3 +138,7 @@ completion = rails.generate(
 - 提示注入无法被 RAG/微调根除，缓解靠纵深防御：约束行为、格式校验、输入输出过滤、最小特权、人工审批、内容隔离。
 - NeMo Guardrails 给出工程化的护栏实现：输入/对话/检索/执行/输出五类 rails，包住 LLM 的每个出入口。
 - 合规是部署的一部分：内容标识、数据合法性与安全评估不因"模型是开源的"而豁免。
+
+---
+
+> **来源**：本文第一部分翻译自 [OWASP Top 10 Risk & Mitigations for LLMs and Gen AI Apps（2025）](https://genai.owasp.org/llm-top-10/)（含各风险条目页），作者 OWASP GenAI Security Project，许可 CC BY-SA 4.0（本文以相同方式共享）；第二部分翻译自 [NVIDIA NeMo Guardrails README](https://github.com/NVIDIA/NeMo-Guardrails)，作者 NVIDIA，许可 Apache 2.0。抓取于 2026-09-13。"合规"一节为编者补充，已标注。

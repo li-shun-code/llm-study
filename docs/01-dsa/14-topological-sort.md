@@ -8,9 +8,6 @@ translated: false
 order: 14
 ---
 
-> **来源**：本文转载自 [拓扑排序](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/topo.md)，作者 OI Wiki 项目，许可 CC BY-SA 4.0。抓取于 2026-09-13。
-> 原文面向算法竞赛、代码示例为 C++；本站以 Python 为主，可对照学习其思路。本篇呼应模块 9：LangGraph 的 DAG 执行依赖拓扑序。
-
 ## 定义
 
 拓扑排序（Topological sorting）要解决的问题是如何给一个有向无环图的所有节点排序．
@@ -179,3 +176,8 @@ struct TopoSort {
 ### 求字典序最大/最小的拓扑排序
 
 将 Kahn 算法中的队列替换成最大堆/最小堆实现的优先队列即可，此时总的时间复杂度为 O(E+V logV)．
+
+---
+
+> **来源**：本文转载自 [拓扑排序](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/topo.md)，作者 OI Wiki 项目，许可 CC BY-SA 4.0。抓取于 2026-09-13。
+> 原文面向算法竞赛、代码示例为 C++；本站以 Python 为主，可对照学习其思路。本篇呼应模块 9：LangGraph 的 DAG 执行依赖拓扑序。

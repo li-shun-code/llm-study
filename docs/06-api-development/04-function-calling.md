@@ -9,8 +9,6 @@ order: 4
 versions: openai-python 2026-09 最新稳定版；Chat Completions 示例原文即基于 gpt-5/gpt-4o 时代
 ---
 
-> **来源**：本文翻译自 [How to call functions with chat models](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_call_functions_with_chat_models.ipynb) 与 [Multi-Tool Orchestration using OpenAI's Responses API](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_api_tool_orchestration.ipynb)（OpenAI Cookbook，MIT），作者 OpenAI，许可 MIT。抓取于 2026-09-13。
-
 Function Calling（函数调用，Anthropic 生态称 Tool Use，工具使用）让模型不只是"说话"，还能**决定何时调用你定义的函数、并生成符合规范的参数**。关键认知（Cookbook 原文）：**API 不会真的执行任何函数**——模型只输出"我想调用 X 函数，参数是 Y"，真正执行函数、把结果回传模型，都是开发者的责任。
 
 ## 一、基本概念：tools 参数
@@ -322,3 +320,7 @@ ResponseFunctionToolCall(arguments='{"query":"most common cause of death in the 
 - Responses API 除自定义函数外还提供免执行的托管工具。
 
 Agent 体系的工具使用（ReAct、MCP 与 Function Calling 的关系）将在模块 9 展开。
+
+---
+
+> **来源**：本文翻译自 [How to call functions with chat models](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_call_functions_with_chat_models.ipynb) 与 [Multi-Tool Orchestration using OpenAI's Responses API](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_api_tool_orchestration.ipynb)（OpenAI Cookbook，MIT），作者 OpenAI，许可 MIT。抓取于 2026-09-13。

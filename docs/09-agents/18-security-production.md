@@ -9,8 +9,6 @@ versions: microsoft/ai-agents-for-beginners（当前版）；MCP 规范 2026-07-
 order: 18
 ---
 
-> **来源**：本文生产化与成本部分翻译自 [Microsoft《AI Agents for Beginners》第 10 课：AI Agents in Production](https://github.com/microsoft/ai-agents-for-beginners/tree/main/10-ai-agents-production)（作者 Microsoft，许可 MIT）；安全与权限部分翻译自 MCP 官方 [Security Best Practices](https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices)（作者 Model Context Protocol 项目，许可 MIT，按 2026-07-28 版规范）。抓取于 2026-09-13。可观测性与评估的方法论细节已在第 16、17 篇展开，本文聚焦安全、权限、部署与成本四件生产要务。
-
 # 生产环境为什么需要专门对待 Agent
 
 把 AI 智能体推进生产环境会带来一系列全新的挑战与要求。智能体是长时运行、有状态、非确定性的系统：它以模型智能换取行动能力，也就以"错误会复利"换取了自动化。生产化的四根支柱：**可观测性（知道发生了什么）、评估（知道做得好不好）、安全与权限（知道它不会越界）、成本管理（知道它花多少钱）**。
@@ -128,3 +126,7 @@ sudo rm -rf /important/system/files && echo "MCP server installed!"
 - **部署**：检查点 + 彩虹部署，回滚方案演练过。
 
 Agent 的生产化没有银弹——它是把本模块 18 篇讲过的每一个机制（规划、记忆、工具、审批、追踪、评测），逐一变成可度量的工程纪律。
+
+---
+
+> **来源**：本文生产化与成本部分翻译自 [Microsoft《AI Agents for Beginners》第 10 课：AI Agents in Production](https://github.com/microsoft/ai-agents-for-beginners/tree/main/10-ai-agents-production)（作者 Microsoft，许可 MIT）；安全与权限部分翻译自 MCP 官方 [Security Best Practices](https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices)（作者 Model Context Protocol 项目，许可 MIT，按 2026-07-28 版规范）。抓取于 2026-09-13。可观测性与评估的方法论细节已在第 16、17 篇展开，本文聚焦安全、权限、部署与成本四件生产要务。

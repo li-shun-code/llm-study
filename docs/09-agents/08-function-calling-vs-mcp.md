@@ -9,8 +9,6 @@ versions: openai-agents 当前版（依赖 mcp>=1.19,<3，兼容 MCP Python SDK 
 order: 8
 ---
 
-> **来源**：本文主体翻译自 OpenAI Agents SDK 官方文档 [Model context protocol (MCP)](https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md)，作者 OpenAI，许可 MIT。抓取于 2026-09-13。"概念对比"一节为编者综述，依据的是同一份文档与 MCP 官方文档（本模块第 6 篇）两份一手资料。
-
 # 概念对比：Function Calling 与 MCP 的关系
 
 先澄清一个常见误解：**Function Calling 与 MCP 不是竞争关系，而是互补的两层**。
@@ -259,3 +257,7 @@ async with MCPServerStdio(
 3. **敏感操作无论哪种方式都要加审批**：`require_approval`（MCP）或工具内 `interrupt`（LangGraph，见第 11 篇），并把高危工具从"自动允许"清单里剔除。
 
 Function Calling 是"模型怎么调工具"的机制，MCP 是"工具从哪来、如何被发现和复用"的协议——理解了这层关系，就不会再把它们当成二选一。
+
+---
+
+> **来源**：本文主体翻译自 OpenAI Agents SDK 官方文档 [Model context protocol (MCP)](https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md)，作者 OpenAI，许可 MIT。抓取于 2026-09-13。"概念对比"一节为编者综述，依据的是同一份文档与 MCP 官方文档（本模块第 6 篇）两份一手资料。

@@ -8,8 +8,6 @@ translated: true
 order: 19
 ---
 
-> **来源**：本文翻译自 [Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)，作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13。
-
 **HTTP** 是一种用于获取 HTML 文档等**资源**（resource）的协议。它是 Web 上任何数据交换的基础：它是一种**客户端-服务器**（client-server）协议，意味着请求由接收方发起——通常是 Web 浏览器。一份完整的文档通常由文本内容、布局说明、图片、视频、脚本等多种资源拼装而成。
 
 客户端与服务器通过交换**一条条独立的消息**进行通信（而不是数据流）。客户端发出的消息称为**请求**（request）；服务器作为回答发出的消息称为**响应**（response）。
@@ -178,3 +176,7 @@ Content-Type: text/html
 HTTP 是易用且可扩展的协议。客户端-服务器结构加上添加头部的能力，让 HTTP 得以伴随 Web 能力的扩展一路前行。虽然 HTTP/2 为提升性能把消息嵌入帧、增加了一些复杂性，但消息的基本结构自 HTTP/1.0 以来保持不变；会话流程依旧基础，使它可以被 HTTP 网络监视器直接观察与调试。
 
 > 译注：对本站读者，HTTP 的一个"新面孔"用途值得点名——**LLM 应用的流式输出**：OpenAI/Anthropic 等兼容 API 的 `stream: true` 就是在一条 HTTP 响应上用 `Content-Type: text/event-stream`（SSE）逐段推送生成内容；底层正是本文讲的"持久 HTTP 连接 + TCP 可靠传输"。相关细节见本模块《SSE 与 WebSocket》与《TCP》。
+
+---
+
+> **来源**：本文翻译自 [Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)，作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13。

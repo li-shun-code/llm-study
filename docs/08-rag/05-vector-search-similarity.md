@@ -8,9 +8,6 @@ translated: true
 order: 5
 ---
 
-> **来源**：本文翻译自 [Vector Similarity Explained](https://www.pinecone.io/learn/vector-similarity/)，作者 Roie Schwaber-Cohen（Pinecone Learn Center），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。
-> 原文公式为图片无法搬运，编者以文字转写；文末"NumPy 手工实现"一节为本站补充。
-
 向量嵌入（Vector Embedding）已被证明是自然语言处理、计算机视觉等多个领域的有效工具。比较嵌入、判断相似度，是语义搜索（Semantic Search）、推荐系统、异常检测等系统的核心环节——也是 RAG 检索步的本质。
 
 选择相似度度量的**基本经验法则**：**与你嵌入模型训练时使用的度量保持一致**。例如 [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) 用余弦相似度训练——索引就该用余弦相似度，结果才最准确；模型若用欧氏距离训练，索引同样该用欧氏距离。
@@ -102,3 +99,8 @@ print(f"euclidean={euclidean:.4f}, dot={dot:.4f}, cosine={cosine:.4f}")
 ## 小结
 
 再次记住开头的原则：**索引的相似度度量与嵌入模型的训练度量保持一致**。若不知道模型用了什么度量（或向量生成方式本身没有对应度量），就实测多种度量，看哪种在你的数据上效果更好——始终用同一组真值评估来驱动这个决策。
+
+---
+
+> **来源**：本文翻译自 [Vector Similarity Explained](https://www.pinecone.io/learn/vector-similarity/)，作者 Roie Schwaber-Cohen（Pinecone Learn Center），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。
+> 原文公式为图片无法搬运，编者以文字转写；文末"NumPy 手工实现"一节为本站补充。

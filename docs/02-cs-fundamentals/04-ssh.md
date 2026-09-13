@@ -7,11 +7,6 @@ fetched_at: 2026-09-13
 translated: true
 order: 4
 ---
-
-> **来源**：本文翻译自 [Command-line Environment](https://missing.csail.mit.edu/2020/command-line/)（Remote Machines 一节），作者 Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT），许可 CC BY-SA 4.0。抓取于 2026-09-13。
-
-> 编者按：原讲义还包含作业控制（Job Control）、终端复用器（tmux）、别名与 dotfiles 等内容，本篇聚焦其中与远程开发直接相关的 SSH 部分并全文译出；SSH 配置文件 `~/.ssh/config` 本身也是一种 dotfile，与原讲义其余部分相互呼应。
-
 程序员日常工作里用远程服务器已经越来越普遍：无论部署后端软件，还是需要更强算力的机器（训练/调用模型也常常如此），你都离不开安全外壳协议（SSH，Secure Shell）。和本课程涉及的大多数工具一样，SSH 的可配置性极强，非常值得系统学习。
 
 ## 连接远程服务器
@@ -139,3 +134,11 @@ Host *.mit.edu
 5. 编辑服务器配置 `sudo vim /etc/ssh/sshd_config`：把 `PasswordAuthentication` 设为 no 禁用密码认证，把 `PermitRootLogin` 设为 no 禁止 root 登录，然后 `sudo service sshd restart` 重启 ssh 服务，再次尝试登录。
 6. （挑战）在虚拟机里安装 [mosh](https://mosh.org/) 并建立连接，然后断开服务器的网络适配器——mosh 能正确恢复吗？
 7. （挑战）查一查 `ssh` 的 `-N` 与 `-f` 参数的作用，写出让端口转发在后台运行的命令。
+
+---
+
+> **来源**：本文翻译自 [Command-line Environment](https://missing.csail.mit.edu/2020/command-line/)（Remote Machines 一节），作者 Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT），许可 CC BY-SA 4.0。抓取于 2026-09-13。
+
+---
+
+> 编者按：原讲义还包含作业控制（Job Control）、终端复用器（tmux）、别名与 dotfiles 等内容，本篇聚焦其中与远程开发直接相关的 SSH 部分并全文译出；SSH 配置文件 `~/.ssh/config` 本身也是一种 dotfile，与原讲义其余部分相互呼应。

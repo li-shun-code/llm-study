@@ -9,8 +9,6 @@ versions: langsmith>=0.3.13（Python SDK 当前版）
 order: 17
 ---
 
-> **来源**：本文主体翻译自 LangSmith 官方文档 [How to evaluate agents](https://docs.langchain.com/langsmith/evaluate-llm-application)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。选取 Python 路线全文翻译（原文另含 JS/TS 代码）；开头方法论一节综合了本文与 Anthropic《多智能体研究系统》（本模块第 9 篇）中的评估经验。
-
 # 方法论：为什么 Agent 评测与普通测试不同
 
 Agent 的执行路径是不确定的：同样的问题，这次走 3 步、下次走 10 步。传统单元测试"给定输入 X 必须走路径 Y"的思路失效了。本模块第 9 篇里 Anthropic 的经验值得复读一遍：
@@ -179,3 +177,7 @@ results = ls_client.evaluate(
 - **成本与延迟**：token 用量与耗时也是实验表格的一等公民——两个准确率相同的智能体，成本差 10 倍即是胜负。
 
 把评测挂进 CI：每次改提示、换模型、动工具描述后自动跑一遍数据集，分数回归即报警——这是把 Agent 从"玄学调参"带入工程的正道。
+
+---
+
+> **来源**：本文主体翻译自 LangSmith 官方文档 [How to evaluate agents](https://docs.langchain.com/langsmith/evaluate-llm-application)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。选取 Python 路线全文翻译（原文另含 JS/TS 代码）；开头方法论一节综合了本文与 Anthropic《多智能体研究系统》（本模块第 9 篇）中的评估经验。

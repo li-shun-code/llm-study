@@ -8,9 +8,6 @@ translated: false
 order: 10
 ---
 
-> **来源**：本文转载自 [二叉搜索树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 如下图所示，<u>二叉搜索树（binary search tree）</u>满足以下条件。
 
 1. 对于根节点，左子树中所有节点的值 < 根节点的值 < 右子树中所有节点的值。
@@ -105,3 +102,8 @@ order: 10
 - 用作系统中的多级索引，实现高效的查找、插入、删除操作。
 - 作为某些搜索算法的底层数据结构。
 - 用于存储数据流，以保持其有序状态。
+
+---
+
+> **来源**：本文转载自 [二叉搜索树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

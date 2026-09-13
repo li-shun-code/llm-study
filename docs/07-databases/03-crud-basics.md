@@ -8,11 +8,6 @@ translated: true
 order: 3
 versions: PostgreSQL 18 官方教程（第 2 章 2.3-2.5、2.8-2.9 节）
 ---
-
-> **来源**：本文翻译自 [2.5. Querying a Table](https://www.postgresql.org/docs/current/tutorial-select.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
-
-> **补充来源**：本文"建表""插入行""更新""删除"三节分别编译自同一教程的 [2.3. Creating a New Table](https://www.postgresql.org/docs/current/tutorial-table.html)、[2.4. Populating a Table With Rows](https://www.postgresql.org/docs/current/tutorial-populate.html)、[2.8. Updates](https://www.postgresql.org/docs/current/tutorial-update.html) 与 [2.9. Deletions](https://www.postgresql.org/docs/current/tutorial-delete.html)，许可同上。
-
 这一篇覆盖对单张表的完整增删改查（CRUD，Create / Read / Update / Delete）。示例沿用 PostgreSQL 官方教程的城市与天气两张表。
 
 ## 建表（CREATE TABLE）
@@ -189,3 +184,11 @@ DELETE FROM tablename;
 不带限定条件时，`DELETE` 会删除表中**所有**行，把表清空——系统不会先请求确认！
 
 > 站内提示：`WHERE` 条件写错或漏写是删库最常见的原因之一；生产环境可先用同条件的 `SELECT COUNT(*)` 确认影响范围，再执行 `UPDATE`/`DELETE`，并配合下一篇要讲的事务（TRANSACTION）留好回退余地。
+
+---
+
+> **来源**：本文翻译自 [2.5. Querying a Table](https://www.postgresql.org/docs/current/tutorial-select.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"建表""插入行""更新""删除"三节分别编译自同一教程的 [2.3. Creating a New Table](https://www.postgresql.org/docs/current/tutorial-table.html)、[2.4. Populating a Table With Rows](https://www.postgresql.org/docs/current/tutorial-populate.html)、[2.8. Updates](https://www.postgresql.org/docs/current/tutorial-update.html) 与 [2.9. Deletions](https://www.postgresql.org/docs/current/tutorial-delete.html)，许可同上。

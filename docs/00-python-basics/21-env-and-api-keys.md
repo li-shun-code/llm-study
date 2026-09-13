@@ -8,11 +8,6 @@ translated: true
 order: 21
 versions: python-dotenv 1.x
 ---
-
-> **来源**：本文翻译自 [python-dotenv - GitHub](https://github.com/theskumar/python-dotenv)，作者 Saurabh Kumar 及 python-dotenv 贡献者，许可 MIT License。抓取于 2026-09-13。
-
-> 编者注：调用 LLM API 时，API Key 属于敏感凭据，绝不应硬编码在代码或提交到 Git 仓库。业界通行做法是遵循 [12-factor](https://12factor.net/) 原则：把配置放在环境变量中，本地开发时用 `.env` 文件配合 python-dotenv 加载。本文是该工具官方 README 的中文翻译，正是这一方案的权威说明。
-
 python-dotenv 从 `.env` 文件中读取键值对，并将它们设置为环境变量。它有助于遵循 [12-factor](https://12factor.net/) 原则开发应用。
 
 ## 快速开始
@@ -213,3 +208,11 @@ python-dotenv 可以使用 POSIX 变量展开对变量做插值。
 ## 致谢
 
 本项目目前由 [Saurabh Kumar](https://saurabh-kumar.com) 和 [Bertrand Bonnefoy-Claudet](https://github.com/bbc2) 维护，离不开众多[贡献者](https://github.com/theskumar/python-dotenv/graphs/contributors)的支持。
+
+---
+
+> **来源**：本文翻译自 [python-dotenv - GitHub](https://github.com/theskumar/python-dotenv)，作者 Saurabh Kumar 及 python-dotenv 贡献者，许可 MIT License。抓取于 2026-09-13。
+
+---
+
+> 编者注：调用 LLM API 时，API Key 属于敏感凭据，绝不应硬编码在代码或提交到 Git 仓库。业界通行做法是遵循 [12-factor](https://12factor.net/) 原则：把配置放在环境变量中，本地开发时用 `.env` 文件配合 python-dotenv 加载。本文是该工具官方 README 的中文翻译，正是这一方案的权威说明。

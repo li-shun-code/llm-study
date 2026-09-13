@@ -8,8 +8,6 @@ translated: true
 order: 21
 ---
 
-> **来源**：本文主要翻译自 [Using server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)（WebSocket 部分译自 [Websockets API](https://developer.mozilla.org/en-US/docs/Web/API/Websockets_API)），作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13。
-
 开发使用**服务器推送事件**（server-sent events，SSE）的 Web 应用非常直接。服务器端需要少量代码把事件流式推送到前端；而客户端处理到达事件的代码，与 WebSocket 几乎如出一辙。这是一条**单向**连接：客户端不能向服务器发送事件。
 
 为什么 LLM 学习者要关心它？因为当今各大 LLM API（OpenAI、Anthropic 等）的**流式输出**（streaming）正是用 SSE 实现的：模型每生成一段文本，服务端就通过一条 HTTP 流推送一个事件，前端（或你的客户端）逐段渲染。
@@ -229,3 +227,7 @@ WebSocket 连接始于一次 **HTTP 升级握手**（这就把它与本模块的
 | 基础设施友好度 | 高（过 HTTP 代理/网关/CDN 无碍） | 需基础设施支持升级 |
 
 LLM 应用几乎总是"用户发一次请求、模型流式回一大段"的单向场景，SSE（或同形的分块 HTTP 流）是事实标准——各大 LLM API 的 `stream: true` 都基于它；需要双向低延迟（协同编辑、多人游戏、语音实时对话）时再考虑 WebSocket。而这两者的可靠性，都建立在上一篇《TCP》的序列号、确认与重传之上。
+
+---
+
+> **来源**：本文主要翻译自 [Using server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)（WebSocket 部分译自 [Websockets API](https://developer.mozilla.org/en-US/docs/Web/API/Websockets_API)），作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13。

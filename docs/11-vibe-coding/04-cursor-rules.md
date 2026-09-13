@@ -8,8 +8,6 @@ translated: true
 order: 4
 ---
 
-> **来源**：本文翻译自 [Rules - Cursor Docs](https://cursor.com/docs/context/rules)，作者 Anysphere（Cursor 官方文档），许可署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）。抓取于 2026-09-13。
-
 ## Cursor 入门速览
 
 Cursor 是 AI 原生代码编辑器。按官方文档的当前结构，它的能力面大致分几块：
@@ -289,3 +287,7 @@ Team 与 Enterprise 套餐可以在 Cursor 管理后台为整个组织创建并�
 管理员在后台直接创建与管理规则；规则创建后自动对全体成员生效，并在后台可见。
 
 > 译注：把"反复纠正过的错误"沉淀为规则、把"示例文件引用而非内容复制"作为规则写法，与本模块第 5 篇 AGENTS.md 的官方建议、第 3 篇 Claude Code 对 CLAUDE.md"像代码一样维护"的要求完全同构——项目规范文件的工程学是跨工具通用的。
+
+---
+
+> **来源**：本文翻译自 [Rules - Cursor Docs](https://cursor.com/docs/context/rules)，作者 Anysphere（Cursor 官方文档），许可署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）。抓取于 2026-09-13。

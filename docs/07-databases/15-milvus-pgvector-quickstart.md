@@ -8,11 +8,6 @@ translated: true
 order: 15
 versions: Milvus 官方文档 Quickstart（milvus-docs v3.0.x）；pgvector v0.8.6 README
 ---
-
-> **来源**：本文前半部分翻译自 [Milvus Quickstart](https://milvus.io/docs/quickstart.md)，作者 Milvus（Zilliz），许可 Apache-2.0。抓取于 2026-09-13。
-
-> **补充来源**：本文后半部分翻译自 [pgvector 官方仓库 README](https://github.com/pgvector/pgvector)（v0.8.6），作者 Andrew Kane，许可 PostgreSQL Licence。两库分别代表"专用向量数据库"与"在现有 PostgreSQL 上加向量能力"两条路线。
-
 ## Milvus：从 Milvus Lite 开始
 
 向量是神经网络模型的输出格式，能有效编码信息，在知识库、语义搜索、检索增强生成（RAG）等 AI 应用中扮演关键角色。Milvus 是一个开源向量数据库，适配各种规模的 AI 应用——从 Jupyter Notebook 里的演示聊天机器人，到服务数十亿用户的 Web 级搜索。本指南演示如何在几分钟内于本地搭好 Milvus，并用 Python 客户端生成、存储和检索向量。
@@ -267,3 +262,11 @@ SET hnsw.ef_search = 100;
 - **已有 PostgreSQL、数据量中等、想和业务数据同库同事务**：pgvector——向量与业务表直接 JOIN，备份/权限/生态全部复用（本模块 09 篇的 PG 技能直接迁移）。
 - **向量规模大、检索负载重、需要专门的分布式架构**：Milvus——Milvus Lite 本地起步，Standalone/Distributed 平滑扩容，API 不变；模块 8 的 RAG 实战会再见到它。
 - 下一篇把 Chroma、Qdrant、Milvus、pgvector 与云上托管方案放到同一张表里做选型对比。
+
+---
+
+> **来源**：本文前半部分翻译自 [Milvus Quickstart](https://milvus.io/docs/quickstart.md)，作者 Milvus（Zilliz），许可 Apache-2.0。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文后半部分翻译自 [pgvector 官方仓库 README](https://github.com/pgvector/pgvector)（v0.8.6），作者 Andrew Kane，许可 PostgreSQL Licence。两库分别代表"专用向量数据库"与"在现有 PostgreSQL 上加向量能力"两条路线。

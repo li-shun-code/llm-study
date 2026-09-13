@@ -8,8 +8,6 @@ translated: true
 order: 9
 ---
 
-> **来源**：本文翻译自 [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)（2025-09-29 发布），作者 Anthropic Applied AI 团队（Prithvi Rajasekaran、Ethan Dixon、Carly Ryan、Jeremy Hadfield，致谢 Rafi Ayub、Hannah Moran、Cal Rueb、Connor Jennings 等），许可署名翻译（原文页面未附开源许可，按官方博客教学署名翻译处理）。抓取于 2026-09-13。
-
 在应用 AI 领域被"提示工程（Prompt Engineering）"占据注意力数年之后，一个新术语崭露头角：**上下文工程（context engineering）**。用语言模型构建应用，越来越不是为提示词寻找恰如其分的措辞，而是回答一个更宏大的问题："什么样的上下文配置最有可能让模型产生我们想要的行为？"
 
 **上下文**指从 LLM 采样时纳入的 token 集合；这里的**工程**问题，就是在 LLM 固有约束下优化这些 token 的效用，以稳定达成预期结果。驾驭 LLM 往往需要*在上下文中思考（thinking in context）*——通盘考虑 LLM 在任一时刻可用的整体状态，以及这种状态可能引发的行为。
@@ -81,3 +79,7 @@ Anthropic 把上下文工程视为提示工程的自然演进。提示工程指�
 更聪明的模型需要更少的规约式工程，智能体将以更多自治运作。但即便能力扩张，把上下文当作珍贵而有限的资源，仍是构建可靠、有效智能体的核心。
 
 > 译注：把本文放进本模块读，你会发现 Claude Code 的每个机制都对应上下文经济学：CLAUDE.md 是"预置上下文"（第 5 篇），Skills 是"渐进披露"（第 6 篇），`/compact` 是压缩，子智能体是"把数万 token 的探索浓缩成 2000 token 的汇报"（第 3、13 篇）。工具对比（第 2 篇）各家趋同的扩展词汇表，比拼的正是这套上下文工程学。
+
+---
+
+> **来源**：本文翻译自 [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)（2025-09-29 发布），作者 Anthropic Applied AI 团队（Prithvi Rajasekaran、Ethan Dixon、Carly Ryan、Jeremy Hadfield，致谢 Rafi Ayub、Hannah Moran、Cal Rueb、Connor Jennings 等），许可署名翻译（原文页面未附开源许可，按官方博客教学署名翻译处理）。抓取于 2026-09-13。

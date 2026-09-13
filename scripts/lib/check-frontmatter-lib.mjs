@@ -1,5 +1,5 @@
 // 校验文章 frontmatter 契约（见设计文档）：
-// 必填字段、order 与文件名序号一致、frontmatter 后必须有署名块。
+// 必填字段、order 与文件名序号一致、文末必须有署名块（头部不得有）。
 // root 导读页（isRoot: true）只要求 title/order。
 import { readdirSync, readFileSync } from 'node:fs'
 import { join, basename } from 'node:path'
@@ -36,8 +36,11 @@ export function checkDir(dirPath) {
       errors.push(`${file}: 文件名序号 ${m[1]} 与 order ${data.order} 不一致`)
     if (data.fetched_at && !/^\d{4}-\d{2}-\d{2}$/.test(data.fetched_at))
       errors.push(`${file}: fetched_at 需要 YYYY-MM-DD 格式`)
-    if (!/^\s*>\s*\*\*来源\*\*：/.test(body))
-      errors.push(`${file}: frontmatter 后缺少署名块（> **来源**：…）`)
+    const firstNonEmpty = body.split(/\r?\n/).find((l) => l.trim() !== '')
+    if (firstNonEmpty && firstNonEmpty.trimStart().startsWith('>'))
+      errors.push(`${file}: 署名块应在文末而非头部`)
+    if (!/>\s*\*\*来源\*\*：/.test(body.slice(-1500)))
+      errors.push(`${file}: 文末缺少署名块（> **来源**：…）`)
   }
   return { errors, articleCount }
 }

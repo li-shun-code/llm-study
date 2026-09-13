@@ -8,8 +8,6 @@ translated: false
 order: 19
 ---
 
-> **来源**：本文转载自 [序列化 - Python教程](https://liaoxuefeng.com/books/python/io/serialization/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。文末补充节选了同书 [datetime - 常用内建模块](https://liaoxuefeng.com/books/python/built-in-modules/datetime/index.html) 一章，作者与许可同上。
-
 在程序运行的过程中，所有的变量都是在内存中，比如，定义一个dict：
 
 ```python
@@ -317,3 +315,7 @@ datetime.datetime(2015, 5, 18, 17, 2, 10, 871012, tzinfo=datetime.timezone(datet
 时区转换的关键在于，拿到一个`datetime`时，要获知其正确的时区，然后强制设置时区，作为基准时间。
 
 利用带时区的`datetime`，通过`astimezone()`方法，可以转换到任意时区。不是必须从UTC+0:00时区转换到其他时区，任何带时区的`datetime`都可以正确转换。
+
+---
+
+> **来源**：本文转载自 [序列化 - Python教程](https://liaoxuefeng.com/books/python/io/serialization/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。文末补充节选了同书 [datetime - 常用内建模块](https://liaoxuefeng.com/books/python/built-in-modules/datetime/index.html) 一章，作者与许可同上。

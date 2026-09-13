@@ -8,8 +8,6 @@ translated: true
 order: 11
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 13 章 [The Abstraction: Address Spaces](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 早年间，构建计算机系统很容易。为什么？因为用户期望不高。正是那些对"易用性""高性能""可靠性"抱有期待的可恶用户，带来了这一切头疼的问题。下次遇到计算机用户，请感谢他们制造的所有麻烦。
 
 ## 早期系统
@@ -131,3 +129,7 @@ location of stack: 0x7fff691aea64
 ```
 
 可以看到：代码在地址空间最前，然后是堆，栈则远在巨大虚拟空间的另一端。这些地址都是虚拟的，将由 OS 与硬件翻译，去真正的物理位置取值。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 13 章 [The Abstraction: Address Spaces](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

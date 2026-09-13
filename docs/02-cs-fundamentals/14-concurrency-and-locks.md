@@ -8,8 +8,6 @@ translated: true
 order: 14
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 28 章 [Locks](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 在并发导论中我们看到了并发编程的根本问题：我们希望**原子地**执行一系列指令，但由于单处理器上中断的存在（或多处理器上多线程的并发执行），做不到。本章正面强攻这个问题，引入称为**锁**（lock）的东西。程序员在源代码中用锁标注、把临界区包起来，从而确保任何这样的临界区都像单条原子指令一样执行。
 
 ## 锁：基本思想
@@ -443,3 +441,7 @@ store-conditional 何时失败？线程 A 调 lock()、执行 load-linked 返回
 以上就是如今真实世界的锁的构建方式：一些硬件支持（以更强大指令的形式）加一些操作系统支持（如 Solaris 的 park()/unpark 原语或 Linux 的 futex）。细节各异，具体加锁代码通常经过高度调优；想看更多细节可以去读 Solaris 或 Linux 的代码库——非常引人入胜。对现代多处理器上各种锁策略的出色比较，见 David 等人的工作。
 
 对本模块的学习路线而言，这条脉络已经清晰：线程共享数据 → 临界区与竞态 → 硬件原子指令（test-and-set/CAS/LL-SC/fetch-and-add）→ 自旋锁 → 混合睡眠策略（park/unpark、futex）。剩下的拼图是**条件变量**与**信号量**——它们解决"一个线程等待另一个"的同步问题，详见 OSTEP 第 30、31 章。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 28 章 [Locks](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

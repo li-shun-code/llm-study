@@ -9,8 +9,6 @@ versions: MCP 规范 2026-07-28（当前最新）
 order: 6
 ---
 
-> **来源**：本文翻译自 [Architecture overview](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture)，作者 Model Context Protocol 项目（Anthropic 等维护），许可 MIT。抓取于 2026-09-13。开头"什么是 MCP"一节译自 [What is the Model Context Protocol (MCP)?](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro)（同许可）。译文按 MCP 规范 **2026-07-28** 版（抓取时的最新版）翻译：该版引入了无状态的 `server/discover` 发现机制，并将 Sampling、Logging 两个客户端原语标记为废弃。
-
 # 什么是 MCP（Model Context Protocol）
 
 MCP（Model Context Protocol，模型上下文协议）是一个把 AI 应用连接到外部系统的开放标准。借助 MCP，Claude、ChatGPT 这类 AI 应用可以连接数据源（如本地文件、数据库）、工具（如搜索引擎、计算器）和工作流（如专用提示模板），从而获取关键信息并执行任务。
@@ -502,3 +500,7 @@ async def follow_tool_changes(client):
 # 小结
 
 MCP 用"客户端-服务器 + JSON-RPC 数据层 + STDIO/Streamable HTTP 传输层"的标准组合，把"给 LLM 接工具"这件事从各家自定义的胶水代码，变成了一个开放生态协议。理解三个参与者（Host/Client/Server）、三类服务器原语（Tools/Resources/Prompts）与发现-列举-调用这条主链路，就抓住了 MCP 的骨架；传输、授权、通知与扩展（如 Tasks、Elicitation）则是工程落地时的进阶主题。下一篇我们将亲手写一个 MCP server。
+
+---
+
+> **来源**：本文翻译自 [Architecture overview](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture)，作者 Model Context Protocol 项目（Anthropic 等维护），许可 MIT。抓取于 2026-09-13。开头"什么是 MCP"一节译自 [What is the Model Context Protocol (MCP)?](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro)（同许可）。译文按 MCP 规范 **2026-07-28** 版（抓取时的最新版）翻译：该版引入了无状态的 `server/discover` 发现机制，并将 Sampling、Logging 两个客户端原语标记为废弃。

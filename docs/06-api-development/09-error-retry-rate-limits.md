@@ -9,8 +9,6 @@ order: 9
 versions: openai-python 2026-09 最新稳定版（默认重试 2 次、默认超时 10 分钟）
 ---
 
-> **来源**：本文翻译自 [How to handle rate limits](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_handle_rate_limits.ipynb)（OpenAI Cookbook，MIT）与 [openai-python README · Handling errors / Retries / Timeouts](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-
 生产环境的 LLM 应用一定会遇到三类故障：请求太快被限流（429）、网络/超时、服务端 5xx。这一篇把 SDK 的异常体系、自动重试机制，以及 Cookbook 的限流应对策略一次讲全。
 
 ## 一、为什么存在限流（Rate Limits）
@@ -299,3 +297,7 @@ print(response.choices[0].message.content)
 - SDK 默认重试 2 次（连接/408/409/429/5xx）、默认超时 10 分钟，均可配置；流式不自动重试；
 - 自管重试的公式：指数退避 + 随机抖动 + 重试上限；
 - 系统性策略：降级模型、`max_tokens` 贴身设置、按限额倒数主动限速、合并请求省 RPM、大规模离线用并行脚本（或下一篇的 Batch API）。
+
+---
+
+> **来源**：本文翻译自 [How to handle rate limits](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_handle_rate_limits.ipynb)（OpenAI Cookbook，MIT）与 [openai-python README · Handling errors / Retries / Timeouts](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。

@@ -9,9 +9,6 @@ order: 2
 versions: openai-python 2026-09 最新稳定版；原 notebook 基于 gpt-3.5-turbo/gpt-4 时代撰写，本站示例按现行 API 校订
 ---
 
-> **来源**：本文翻译自 [How to format inputs to ChatGPT models](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb) 与 [responses_example.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)（OpenAI Cookbook，MIT），并参考 [openai-python README](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-> 编者注：原文示例基于 gpt-3.5-turbo/gpt-4 早期版本。消息角色的概念至今未变，但本站代码与参数说明已按现行 API（`developer` 角色、Responses API 会话状态）校订，过时细节（如 4K/8K 上下文上限）仅作历史对照。
-
 聊天模型把**一系列消息（messages）**作为输入，返回一条模型生成的消息作为输出。这一篇讲清楚：消息有哪些角色、如何组织多轮对话、以及"谁来记住历史"的两种方案。
 
 ## 一、消息与角色
@@ -220,3 +217,8 @@ def num_tokens_from_messages(messages, model="gpt-5.5"):
 - 少样本可用伪造对话 + `name: example_user/example_assistant` 标注；
 - 会话状态两条路线：应用自管 `messages`，或 Responses API 的 `previous_response_id` 托管；
 - 用 tiktoken 估算、用 `usage` 校准，控制历史长度。
+
+---
+
+> **来源**：本文翻译自 [How to format inputs to ChatGPT models](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb) 与 [responses_example.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)（OpenAI Cookbook，MIT），并参考 [openai-python README](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
+> 编者注：原文示例基于 gpt-3.5-turbo/gpt-4 早期版本。消息角色的概念至今未变，但本站代码与参数说明已按现行 API（`developer` 角色、Responses API 会话状态）校订，过时细节（如 4K/8K 上下文上限）仅作历史对照。

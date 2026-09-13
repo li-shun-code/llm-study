@@ -8,8 +8,6 @@ translated: true
 order: 2
 ---
 
-> **来源**：本文翻译自 Hugging Face Agents Course 第一单元 [Thought: Internal Reasoning and the ReAct Approach](https://huggingface.co/learn/agents-course/en/unit1/thoughts) 与 [Observe: Integrating Feedback to Reflect and Adapt](https://huggingface.co/learn/agents-course/en/unit1/observations) 两节，作者 Hugging Face Agents Course 团队，许可 Apache 2.0。抓取于 2026-09-13。
-
 # 思考（Thought）：内部推理与 ReAct 方法
 
 > **提示**：本节深入 AI 智能体的内部工作方式——它的推理与规划能力。我们将探索智能体如何利用"内心独白"来分析信息、把复杂问题拆解为可管理的步骤，并决定下一步采取什么行动。此外，我们还将介绍 ReAct 方法——一种鼓励模型在行动前"一步一步思考"的提示技术。
@@ -124,3 +122,7 @@ Action: Finish["It's 18°C and cloudy in Paris."]
 ---
 
 至此，我们学完了智能体的"思考-行动-观察"（Thought-Action-Observation）循环。如果有些地方还觉得模糊，不必担心——后续单元会重新回顾并深化这些概念。下一篇我们就来看看循环中"行动"一环的具体实现：工具。
+
+---
+
+> **来源**：本文翻译自 Hugging Face Agents Course 第一单元 [Thought: Internal Reasoning and the ReAct Approach](https://huggingface.co/learn/agents-course/en/unit1/thoughts) 与 [Observe: Integrating Feedback to Reflect and Adapt](https://huggingface.co/learn/agents-course/en/unit1/observations) 两节，作者 Hugging Face Agents Course 团队，许可 Apache 2.0。抓取于 2026-09-13。

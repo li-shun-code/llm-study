@@ -8,8 +8,6 @@ translated: false
 order: 7
 ---
 
-> **来源**：本文编译自多方官方公开资料，主引用 [Azure OpenAI models](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)（Microsoft Learn，CC BY 4.0），编者为本站，许可 CC BY 4.0（主引用），其余来源（Anthropic、Google DeepMind、DeepSeek、阿里云、智谱 Z.ai 官方页面）见文内链接。抓取于 2026-09-13，全部版本信息为该时点核实结果——模型迭代很快，阅读时请以官方页面为准。
-
 LLM 生态呈"少数闭源旗舰 + 多家开源权重"的双轨格局。本文按 2026 年 9 月 13 日核实的官方信息，梳理六大主流系列的当前版本、定位与差异，帮你建立选型坐标系。
 
 ## 一、全景速览
@@ -108,3 +106,7 @@ LLM 生态呈"少数闭源旗舰 + 多家开源权重"的双轨格局。本文�
 - DeepSeek: [API 文档首页](https://api-docs.deepseek.com/)
 - 阿里云: [百炼模型列表](https://help.aliyun.com/zh/model-studio/models)；GitHub: [QwenLM/Qwen3](https://github.com/QwenLM/Qwen3)
 - 智谱: GitHub [zai-org/GLM-5](https://github.com/zai-org/GLM-5)；[GLM-5.3 发布博客](https://z.ai/blog/glm-5.3)
+
+---
+
+> **来源**：本文编译自多方官方公开资料，主引用 [Azure OpenAI models](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)（Microsoft Learn，CC BY 4.0），编者为本站，许可 CC BY 4.0（主引用），其余来源（Anthropic、Google DeepMind、DeepSeek、阿里云、智谱 Z.ai 官方页面）见文内链接。抓取于 2026-09-13，全部版本信息为该时点核实结果——模型迭代很快，阅读时请以官方页面为准。

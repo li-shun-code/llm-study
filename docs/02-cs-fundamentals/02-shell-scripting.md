@@ -8,8 +8,6 @@ translated: true
 order: 2
 ---
 
-> **来源**：本文翻译自 [Shell Tools and Scripting](https://missing.csail.mit.edu/2020/shell-tools/)，作者 Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT），许可 CC BY-SA 4.0。抓取于 2026-09-13。
-
 本讲介绍把 bash 当作脚本语言使用的基础知识，以及一批覆盖命令行日常高频任务的 Shell 工具。
 
 ## Shell 脚本
@@ -269,3 +267,7 @@ rg --stats PATTERN
 
    如果你在 macOS 上，请注意系统默认的 BSD `find` 与 [GNU coreutils](https://en.wikipedia.org/wiki/List_of_GNU_Core_Utilities_commands) 的不同；可在 `find` 上用 `-print0`、在 `xargs` 上用 `-0`。macOS 用户还应知道：系统自带的命令行工具可能与 GNU 版本有差异，想要 GNU 版可通过 [brew 安装 coreutils](https://formulae.brew.sh/formula/coreutils)。
 5. （进阶）写一条命令或脚本，递归找出目录中最近修改的文件。更一般地，能按新近度列出全部文件吗？
+
+---
+
+> **来源**：本文翻译自 [Shell Tools and Scripting](https://missing.csail.mit.edu/2020/shell-tools/)，作者 Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT），许可 CC BY-SA 4.0。抓取于 2026-09-13。

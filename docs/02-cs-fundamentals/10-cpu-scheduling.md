@@ -8,8 +8,6 @@ translated: true
 order: 10
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 7 章 [Scheduling: Introduction](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 到此为止，运行进程的低层机制（如上下文切换）应该已经清楚了；如果还不清楚，回头再读读前两篇。然而我们还没讲 OS 调度器采用的高层**策略**。本章将呈现一系列调度策略（有时称调度准则 disciplines）——它们是多年来各路聪明勤奋的人发展出来的。
 
 调度起源其实早于计算机系统：早期方法取自运营管理（operations management）领域再应用到计算机上。这不足为奇：流水线与许多人类活动同样需要调度，同样对效率有着激光般的执念。于是问题来了：
@@ -163,3 +161,7 @@ CPU： [A][A][A][A][A][ B ][B][B][B][B]
 ## 小结
 
 本章介绍了调度背后的基本思想，并发展出两族方法：第一族优先运行剩余最短的作业（SJF/STCF），优化周转时间；第二族在所有作业间轮流切换（RR），优化响应时间。两者恰好在对方擅长的地方表现糟糕——这是系统中常见的固有取舍。我们还看到了如何把 I/O 纳入考量（CPU 突发拆分与重叠），但 OS "无法预见未来"的根本难题尚未解决。用"过去的最近行为预测未来"，正是下一站的内容。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 7 章 [Scheduling: Introduction](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

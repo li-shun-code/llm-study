@@ -9,8 +9,6 @@ order: 12
 versions: vLLM V1 引擎（架构部分译自 2026-09 官方文档）
 ---
 
-> **来源**：本文主体翻译自 [vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html)，作者 Woosuk Kwon、Zhuohan Li（UC Berkeley，vLLM 团队），许可 Apache 2.0（vLLM 项目）；"V1 架构"一节翻译自 [vLLM 官方文档 Architecture Overview](https://docs.vllm.ai/en/latest/design/arch_overview.html)（Apache 2.0）。抓取于 2026-09-13。"continuous batching"一节为编者补充，已标注。
-
 "为什么 vLLM 这么快？"——答案不在算子，而在**显存管理**。本文从自回归解码的内存瓶颈讲起，解释 PagedAttention 的设计，再补充 V1 引擎架构与连续批处理，让你能完整回答"vLLM 为什么快"。
 
 ## 超越当时的最优性能
@@ -101,3 +99,7 @@ PagedAttention 解决"每条序列占多少显存"，**连续批处理（Continu
 - PagedAttention = 操作系统分页思想：KV cache 切块、块表映射、按需分配，浪费降到 4% 以内；还附带并行采样/beam search 的内存共享（写时复制）。
 - continuous batching = 请求级动态进出批，消除"短请求陪跑"，是在线低延迟高吞吐的关键。
 - V1 引擎以多进程架构把 API 处理、调度/KV 管理与前向执行解耦。
+
+---
+
+> **来源**：本文主体翻译自 [vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html)，作者 Woosuk Kwon、Zhuohan Li（UC Berkeley，vLLM 团队），许可 Apache 2.0（vLLM 项目）；"V1 架构"一节翻译自 [vLLM 官方文档 Architecture Overview](https://docs.vllm.ai/en/latest/design/arch_overview.html)（Apache 2.0）。抓取于 2026-09-13。"continuous batching"一节为编者补充，已标注。

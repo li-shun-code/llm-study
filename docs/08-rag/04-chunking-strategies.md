@@ -8,8 +8,6 @@ translated: true
 order: 4
 ---
 
-> **来源**：本文主体翻译自 [Chunking Strategies for LLM Applications](https://www.pinecone.io/learn/chunking-strategies/)（作者 Roie Schwaber-Cohen、Arjun Patel，Pinecone Learn Center），后半部分"上下文检索"翻译自 Anthropic 工程博客 [Introducing Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval)（作者 Daniel Ford 等，发表于 2024-09-19）。两篇原文页面均未附开源许可，仅作教学署名转载。抓取于 2026-09-13。
-
 在构建 LLM 应用时，**分块（Chunking）**指把大段文本切分成更小的片段（chunk）。它是决定向量数据库中内容相关性的关键预处理步骤：块要足够大以承载有意义的信息，又要足够小以保证检索增强生成（RAG）与智能体工作流的性能和低延迟。本文先讲清分块方法与权衡，再用 Anthropic 的上下文检索（Contextual Retrieval）回应分块最棘手的问题——"丢上下文"。
 
 ## 为什么必须分块？
@@ -195,3 +193,7 @@ Anthropic 的大量对比实验总结如下：
 ---
 
 > 编者注：两篇文章合读的启示是——分块不是一个孤立参数，而是一条"切块方式 × 是否补上下文 × 检索策略 × 重排"的组合链。实践时永远用固定的评估集（真值问答对）来驱动迭代，这也是下一篇《最小 RAG 全流程实战》与《RAG 评估》要展开的内容。
+
+---
+
+> **来源**：本文主体翻译自 [Chunking Strategies for LLM Applications](https://www.pinecone.io/learn/chunking-strategies/)（作者 Roie Schwaber-Cohen、Arjun Patel，Pinecone Learn Center），后半部分"上下文检索"翻译自 Anthropic 工程博客 [Introducing Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval)（作者 Daniel Ford 等，发表于 2024-09-19）。两篇原文页面均未附开源许可，仅作教学署名转载。抓取于 2026-09-13。

@@ -9,8 +9,6 @@ order: 1
 versions: Python 3.13+
 ---
 
-> **来源**：本文转载自 [安装Python - Python教程](https://liaoxuefeng.com/books/python/install/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。
-
 因为Python是跨平台的，它可以运行在Windows、Mac和各种Linux/Unix系统上。在Windows上写Python程序，放到Linux上也是能够运行的。
 
 要开始学习Python编程，首先就得把Python安装到你的电脑里。安装后，你会得到Python解释器（就是负责运行Python程序的），一个命令行交互环境，还有一个简单的集成开发环境。
@@ -133,3 +131,7 @@ PS C:\Users\liaoxuefeng> cd work
 PS C:\Users\liaoxuefeng\work> python hello.py
 Hello, world!
 ```
+
+---
+
+> **来源**：本文转载自 [安装Python - Python教程](https://liaoxuefeng.com/books/python/install/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。

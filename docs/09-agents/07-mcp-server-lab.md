@@ -9,8 +9,6 @@ versions: MCP 规范 2026-07-28；Python MCP SDK ≥ 2.0.0
 order: 7
 ---
 
-> **来源**：本文翻译自 [Build an MCP server](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server)，作者 Model Context Protocol 项目（Anthropic 等维护），许可 MIT。抓取于 2026-09-13。本文选取官方教程的 Python 路线全文翻译（原文另含 TypeScript 路线，结构相同）；代码按 Python MCP SDK 2.0+ 的 `MCPServer` 新写法，`uv` 工程化的环境搭建参见本站模块 3。
-
 # 构建一个 MCP Server
 
 本教程将构建一个简单的 MCP 天气服务器，并把它连接到一个 MCP 主机（Host）——Claude for Desktop。
@@ -318,3 +316,7 @@ tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
 - **调试指南**：高效调试 MCP 服务器与集成。
 
 到这里，你已经拥有了一个可以被任何 MCP 主机（Claude Desktop、VS Code、Cursor 等）复用的工具服务器——这正是 MCP "构建一次、处处集成"的价值所在。
+
+---
+
+> **来源**：本文翻译自 [Build an MCP server](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server)，作者 Model Context Protocol 项目（Anthropic 等维护），许可 MIT。抓取于 2026-09-13。本文选取官方教程的 Python 路线全文翻译（原文另含 TypeScript 路线，结构相同）；代码按 Python MCP SDK 2.0+ 的 `MCPServer` 新写法，`uv` 工程化的环境搭建参见本站模块 3。

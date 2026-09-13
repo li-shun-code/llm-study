@@ -9,8 +9,6 @@ versions: smolagents 当前版（Apache 2.0）
 order: 14
 ---
 
-> **来源**：本文翻译自 [huggingface/smolagents](https://github.com/huggingface/smolagents) 官方 README，作者 Aymeric Roucher 等（Hugging Face smolagents 团队），许可 Apache 2.0。抓取于 2026-09-13。译文补充了概念导语；"代码解释器型 Agent"的另一常见形态——把代码解释器作为单个托管工具（如 OpenAI Responses API 的 Code Interpreter 托管工具、Anthropic 的 code execution 工具）——思路相同，只是"执行代码"被收敛为一个工具调用，而非智能体的通用行动语言。
-
 # 概念：什么是代码解释器型 Agent
 
 本模块第 3 篇讲过，智能体的"动作"有两种主流表达：**JSON 工具调用**（Function Calling）与**代码**。代码解释器型 Agent（也叫 Code Agent、CodeAct 风格智能体）选择后者：把"生成并执行一段 Python 代码"作为智能体的通用动作语言，循环的每一轮都在一个受控的 Python 解释器里执行模型写下的代码，把执行结果（打印输出、变量状态、错误栈）作为观察反馈给模型。
@@ -177,3 +175,7 @@ for request in requests_to_search:
 **表：两种动作风格的对比。**
 
 与第 13 篇 OpenAI Agents SDK 的沙箱智能体、第 15 篇 Computer Use 对照着看：三者都在回答同一个问题——"给模型多大的行动自由，配多大的安全边界"。
+
+---
+
+> **来源**：本文翻译自 [huggingface/smolagents](https://github.com/huggingface/smolagents) 官方 README，作者 Aymeric Roucher 等（Hugging Face smolagents 团队），许可 Apache 2.0。抓取于 2026-09-13。译文补充了概念导语；"代码解释器型 Agent"的另一常见形态——把代码解释器作为单个托管工具（如 OpenAI Responses API 的 Code Interpreter 托管工具、Anthropic 的 code execution 工具）——思路相同，只是"执行代码"被收敛为一个工具调用，而非智能体的通用行动语言。

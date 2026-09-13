@@ -8,9 +8,6 @@ translated: true
 order: 6
 ---
 
-> **来源**：本文翻译自 [Simple RAG (Retrieval-Augmented Generation) System](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
-> 编者注（时效性校订）：原 notebook 的 LangChain import 走的是旧包路径（`langchain.document_loaders` 等），并依赖仓库内 helper 模块。本文按当前稳定版包结构（`langchain-community` / `langchain-text-splitters` / `langchain-openai`）校订 import，并把 helper 内联为独立可运行的函数；原文只在检索步收尾，编者按同一风格补上"生成回答"一步，构成完整闭环。
-
 ## 概述
 
 本篇实现一个基础的检索增强生成（RAG）系统：处理 PDF 文档并支持提问。系统把文档内容编码进向量库（Vector Store），随后可查询以检索相关信息——这是一切 RAG 变体的最小骨架。
@@ -175,3 +172,8 @@ print(answer_question(test_query, chunks_query_retriever))
 ## 小结
 
 这个最小 RAG 系统是构建更复杂信息检索与问答系统的地基：把文档内容编码进可搜索的向量库，就能针对查询高效取回相关信息。凡是需要在长文档或文档集合中快速定位信息的场景，都可以从这个骨架出发——后续篇章（混合检索、重排序、查询改写）都是在这个骨架的某一环上做增强。
+
+---
+
+> **来源**：本文翻译自 [Simple RAG (Retrieval-Augmented Generation) System](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
+> 编者注（时效性校订）：原 notebook 的 LangChain import 走的是旧包路径（`langchain.document_loaders` 等），并依赖仓库内 helper 模块。本文按当前稳定版包结构（`langchain-community` / `langchain-text-splitters` / `langchain-openai`）校订 import，并把 helper 内联为独立可运行的函数；原文只在检索步收尾，编者按同一风格补上"生成回答"一步，构成完整闭环。

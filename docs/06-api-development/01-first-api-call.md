@@ -9,8 +9,6 @@ order: 1
 versions: openai-python 2026-09 最新稳定版（HTTPX2 传输层）、示例模型 gpt-5.5 / gpt-4o-mini
 ---
 
-> **来源**：本文翻译自 [OpenAI Python API library（README）](https://raw.githubusercontent.com/openai/openai-python/main/README.md) 与 [What is the Responses API?（openai-cookbook/examples/responses_api/responses_example.ipynb）](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)，作者 OpenAI，许可 Apache 2.0 / MIT。抓取于 2026-09-13。
-
 本篇是整个模块的起点：安装官方 SDK、配置 API Key（用模块 0 讲过的 `.env` 方案，不要把 Key 写进代码），然后分别用 **Responses API** 与 **Chat Completions API** 发出第一个调用。OpenAI 现在的主推接口是 Responses API；Chat Completions 是长期支持（"supported indefinitely"）的上一代标准，两者并讲、互相印证。
 
 > 编者注：早期的 Assistants API 已废弃，本站一律不作为教学内容；如你读到基于 Assistants/Threads 的旧教程，请按本模块的 Responses API 写法对照迁移。
@@ -241,3 +239,7 @@ Cookbook 对两种 API 的工作流差异总结得很到位：同样"看图 + �
 - 异步用 `AsyncOpenAI`。
 
 下一篇我们把 `messages` / `input` 的角色体系与多轮会话管理讲透。
+
+---
+
+> **来源**：本文翻译自 [OpenAI Python API library（README）](https://raw.githubusercontent.com/openai/openai-python/main/README.md) 与 [What is the Responses API?（openai-cookbook/examples/responses_api/responses_example.ipynb）](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)，作者 OpenAI，许可 Apache 2.0 / MIT。抓取于 2026-09-13。

@@ -8,10 +8,6 @@ translated: false
 order: 19
 ---
 
-> **来源**：本文转载自 [回溯算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_backtracking/backtracking_algorithm.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[n 皇后问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_backtracking/n_queens_problem.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 回溯算法
 
 
@@ -204,3 +200,9 @@ def backtrack(state: State, choices: list[choice], res: list[state]):
 逐行放置 n 次，考虑列约束，则从第一行到最后一行分别有 n、n-1、…、2、1 个选择，使用 O(n!) 时间。当记录解时，需要复制矩阵 `state` 并添加进 `res` ，复制操作使用 O(n²) 时间。因此，**总体时间复杂度为 O(n! · n²)** 。实际上，根据对角线约束的剪枝也能够大幅缩小搜索空间，因而搜索效率往往优于以上时间复杂度。
 
 数组 `state` 使用 O(n²) 空间，数组 `cols`、`diags1` 和 `diags2` 皆使用 O(n) 空间。最大递归深度为 n ，使用 O(n) 栈帧空间。因此，**空间复杂度为 O(n²)** 。
+
+---
+
+> **来源**：本文转载自 [回溯算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_backtracking/backtracking_algorithm.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[n 皇后问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_backtracking/n_queens_problem.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

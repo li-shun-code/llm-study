@@ -8,8 +8,6 @@ translated: false
 order: 3
 ---
 
-> **来源**：本文转载自 [字符串和编码 - Python教程](https://liaoxuefeng.com/books/python/basic/string-encoding/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。
-
 ### 字符编码
 
 我们已经讲过了，字符串也是一种数据类型，但是，字符串比较特殊的是还有一个编码问题。
@@ -268,3 +266,7 @@ b'\xd6\xd0\xce\xc4'
 但这种方式纯属自找麻烦，如果没有特殊业务要求，请牢记仅使用`UTF-8`编码。
 
 格式化字符串的时候，可以用Python的交互式环境测试，方便快捷。
+
+---
+
+> **来源**：本文转载自 [字符串和编码 - Python教程](https://liaoxuefeng.com/books/python/basic/string-encoding/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。

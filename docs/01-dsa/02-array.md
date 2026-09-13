@@ -8,10 +8,6 @@ translated: false
 order: 2
 ---
 
-> **来源**：本文转载自 [数组](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[内存与缓存](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/ram_and_cache.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 数组
 
 
@@ -183,3 +179,9 @@ nums: list[int] = [1, 3, 2, 5, 4]
 
 - 在做算法题时，我们会倾向于选择基于数组实现的栈，因为它提供了更高的操作效率和随机访问的能力，代价仅是需要预先为数组分配一定的内存空间。
 - 如果数据量非常大、动态性很高、栈的预期大小难以估计，那么基于链表实现的栈更加合适。链表能够将大量数据分散存储于内存的不同部分，并且避免了数组扩容产生的额外开销。
+
+---
+
+> **来源**：本文转载自 [数组](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[内存与缓存](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/ram_and_cache.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

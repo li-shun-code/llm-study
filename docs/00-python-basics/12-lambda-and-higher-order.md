@@ -8,8 +8,6 @@ translated: false
 order: 12
 ---
 
-> **来源**：本文转载自 [高阶函数 - Python教程](https://liaoxuefeng.com/books/python/functional/higher-order-function/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。文中另节选了同书 [匿名函数](https://liaoxuefeng.com/books/python/functional/lambda/index.html)、[map/reduce](https://liaoxuefeng.com/books/python/functional/higher-order-function/map-reduce/index.html)、[filter](https://liaoxuefeng.com/books/python/functional/higher-order-function/filter/index.html)、[sorted](https://liaoxuefeng.com/books/python/functional/higher-order-function/sorted/index.html) 章节，作者与许可同上。
-
 高阶函数英文叫Higher-order function。什么是高阶函数？我们以实际代码为例子，一步一步深入概念。
 
 ### 变量可以指向函数
@@ -328,3 +326,7 @@ key指定的函数将作用于list的每一个元素上，并根据key函数返�
 从上述例子可以看出，高阶函数的抽象能力是非常强大的，而且，核心代码可以保持得非常简洁。
 
 `sorted()`也是一个高阶函数。用`sorted()`排序的关键在于实现一个映射函数。
+
+---
+
+> **来源**：本文转载自 [高阶函数 - Python教程](https://liaoxuefeng.com/books/python/functional/higher-order-function/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。文中另节选了同书 [匿名函数](https://liaoxuefeng.com/books/python/functional/lambda/index.html)、[map/reduce](https://liaoxuefeng.com/books/python/functional/higher-order-function/map-reduce/index.html)、[filter](https://liaoxuefeng.com/books/python/functional/higher-order-function/filter/index.html)、[sorted](https://liaoxuefeng.com/books/python/functional/higher-order-function/sorted/index.html) 章节，作者与许可同上。

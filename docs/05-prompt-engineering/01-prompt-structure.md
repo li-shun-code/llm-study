@@ -8,11 +8,6 @@ translated: true
 order: 1
 versions: 提示技术通用；示例适用于当前主流对话模型（GPT/Claude/Gemini 等）
 ---
-
-> **来源**：本文翻译自 [Elements of a Prompt](https://www.promptingguide.ai/introduction/elements)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。
-
-> **补充来源**：本文"与模型交互""提示词格式"两节同时编译自 [Basics of Prompting](https://www.promptingguide.ai/introduction/basics)，许可同上。原文示例中的 `gpt-3.5-turbo`/`gpt-4` 等旧模型名已按当前主流对话模型口径校订，概念本身仍然成立。
-
 随着提示词工程（Prompt Engineering）的例子和应用程序越来越多，你会发现一个提示词（prompt）是由若干固定的要素组合而成的。
 
 一个提示词可以包含以下任意要素：
@@ -174,3 +169,11 @@ Negative
 - 一个提示词 = 指令 + 上下文 + 输入数据 + 输出指示的任意组合；
 - 对话模型的世界观是"角色 + 消息列表"，系统消息设定行为，用户消息下达任务；
 - 标准格式（直接提问）对应零样本，附带演示的格式对应少样本——这是后续所有进阶技术（CoT、自洽性、ReAct）的地基。
+
+---
+
+> **来源**：本文翻译自 [Elements of a Prompt](https://www.promptingguide.ai/introduction/elements)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"与模型交互""提示词格式"两节同时编译自 [Basics of Prompting](https://www.promptingguide.ai/introduction/basics)，许可同上。原文示例中的 `gpt-3.5-turbo`/`gpt-4` 等旧模型名已按当前主流对话模型口径校订，概念本身仍然成立。

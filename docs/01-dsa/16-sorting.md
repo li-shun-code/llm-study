@@ -8,10 +8,6 @@ translated: false
 order: 16
 ---
 
-> **来源**：本文转载自 [排序算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/sorting_algorithm.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[冒泡排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/bubble_sort.md)、[插入排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/insertion_sort.md)、[选择排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/selection_sort.md)、[快速排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/quick_sort.md)、[归并排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/merge_sort.md)、[小结](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/summary.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 评价排序算法的维度
 
 
@@ -281,3 +277,9 @@ order: 16
 - 下图对比了主流排序算法的效率、稳定性、就地性和自适应性等。
 
 ![排序算法对比](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/summary.assets/sorting_algorithms_comparison.png)
+
+---
+
+> **来源**：本文转载自 [排序算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/sorting_algorithm.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[冒泡排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/bubble_sort.md)、[插入排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/insertion_sort.md)、[选择排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/selection_sort.md)、[快速排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/quick_sort.md)、[归并排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/merge_sort.md)、[小结](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/summary.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

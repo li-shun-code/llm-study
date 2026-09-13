@@ -8,9 +8,6 @@ translated: false
 order: 3
 ---
 
-> **来源**：本文转载自 [第三章 预训练语言模型 · 3.3 Decoder-Only PLM（GPT 一节）](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter3/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%A2%84%E8%AE%AD%E7%BB%83%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 第七节"GPT-3 之后：到 GPT-6 的演进"为本站基于 OpenAI 官方发布信息及 [Microsoft Learn：Azure OpenAI 模型文档](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)（CC BY 4.0）编写的时效性补充，版本信息核实于 2026-09-13。
-
 ## 一、Decoder-Only：大模型的基础架构
 
 在前两节中，happy-llm 分别讲解了由 Transformer 发展而来的两种模型架构——以 BERT 为代表的 Encoder-Only 模型和以 T5 为代表的 Encoder-Decoder 模型。很自然可以想见，除了上述两种架构，还可以有一种模型架构——**Decoder-Only**，即只使用 Decoder 堆叠而成的模型。
@@ -122,3 +119,8 @@ few-shot：请你判断'这真是一个绝佳的机会'的情感是正向还是�
 4. Long Ouyang, et al. (2022). *Training language models to follow instructions with human feedback.* arXiv:2203.02155.（InstructGPT/ChatGPT）
 5. OpenAI Help Center. *Model release notes.* https://help.openai.com/en/articles/9624314-model-release-notes
 6. Microsoft Learn. *Azure OpenAI models.* https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models
+
+---
+
+> **来源**：本文转载自 [第三章 预训练语言模型 · 3.3 Decoder-Only PLM（GPT 一节）](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter3/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%A2%84%E8%AE%AD%E7%BB%83%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 第七节"GPT-3 之后：到 GPT-6 的演进"为本站基于 OpenAI 官方发布信息及 [Microsoft Learn：Azure OpenAI 模型文档](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)（CC BY 4.0）编写的时效性补充，版本信息核实于 2026-09-13。

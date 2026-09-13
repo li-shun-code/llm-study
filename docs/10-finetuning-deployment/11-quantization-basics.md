@@ -9,8 +9,6 @@ order: 11
 versions: bitsandbytes（2026-09）/ vLLM（V1 引擎，2026-09 文档）
 ---
 
-> **来源**：本文第一、二部分翻译自 [bitsandbytes README](https://github.com/bitsandbytes-foundation/bitsandbytes) 与 [PEFT 文档 Quantization 指南](https://huggingface.co/docs/peft/developer_guides/quantization)（作者 Hugging Face / bitsandbytes 团队，许可 Apache 2.0）；第三部分翻译自 [vLLM 文档 Quantization](https://docs.vllm.ai/en/latest/features/quantization/)（vLLM 项目，许可 Apache 2.0）。抓取于 2026-09-13。编者补充内容均已标注。
-
 量化（Quantization）是用更少的比特表示模型参数的压缩技术：代价是精度，换来的是更小的显存占用与更高的推理吞吐。本篇讲清楚三件事：量化的基本原理与精度格式、训练侧量化（QLoRA 一族）如何工作、部署侧量化格式（GPTQ/AWQ/GGUF/FP8）怎么选。
 
 ## 量化为什么可行
@@ -96,3 +94,7 @@ vLLM（V1 引擎）当前支持的量化格式包括：
 - 训练侧 QLoRA 的本质是"量化底座只当特征提取器，LoRA 旁路负责学习"。
 - 部署侧按硬件选格式：Hopper+ 用 FP8，Ampere 用 GPTQ/AWQ/INT8，CPU/边缘用 GGUF。
 - WxAy 命名与硬件兼容表是选型的第一道过滤。
+
+---
+
+> **来源**：本文第一、二部分翻译自 [bitsandbytes README](https://github.com/bitsandbytes-foundation/bitsandbytes) 与 [PEFT 文档 Quantization 指南](https://huggingface.co/docs/peft/developer_guides/quantization)（作者 Hugging Face / bitsandbytes 团队，许可 Apache 2.0）；第三部分翻译自 [vLLM 文档 Quantization](https://docs.vllm.ai/en/latest/features/quantization/)（vLLM 项目，许可 Apache 2.0）。抓取于 2026-09-13。编者补充内容均已标注。

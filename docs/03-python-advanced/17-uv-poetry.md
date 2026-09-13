@@ -8,11 +8,6 @@ translated: true
 order: 17
 versions: uv 当前稳定版 / poetry 2.x
 ---
-
-> **来源**：本文翻译自 [Working on projects — uv 文档](https://docs.astral.sh/uv/guides/projects/)，作者 Astral 及 uv 贡献者，许可 MIT OR Apache-2.0。抓取于 2026-09-13。
-
-> 编者注：本篇主体为 uv 官方《Working on projects》指南的中文翻译，"uv 能做什么"一节节选自官方 [Features](https://docs.astral.sh/uv/getting-started/features/) 页；文末补充 poetry 对照。**2026 年的推荐顺序：新项目默认用 uv；维护已有 poetry 项目继续用 poetry，不必强行迁移。** FastAPI 官方文档的最新示例也已全面使用 `uv`（见本模块第 11 篇）。
-
 ## uv 是什么
 
 uv 是一个用 Rust 编写的极速 Python 包与项目管理器，一个工具覆盖了 pip、pip-tools、pipx、poetry、pyenv、virtualenv 等工具的大部分场景，速度通常快一个数量级以上。
@@ -222,3 +217,11 @@ hello_world-0.1.0.tar.gz
 - uv 官方概念文档：[Projects](https://docs.astral.sh/uv/concepts/projects/)、[Tools](https://docs.astral.sh/uv/concepts/tools/)、[Python versions](https://docs.astral.sh/uv/concepts/python-versions/)；
 - uv Guides：[安装 Python](https://docs.astral.sh/uv/guides/install-python/)、[使用脚本](https://docs.astral.sh/uv/guides/scripts/)、[发布包](https://docs.astral.sh/uv/guides/package/)；
 - poetry 官方文档：[python-poetry.org/docs](https://python-poetry.org/docs/)。
+
+---
+
+> **来源**：本文翻译自 [Working on projects — uv 文档](https://docs.astral.sh/uv/guides/projects/)，作者 Astral 及 uv 贡献者，许可 MIT OR Apache-2.0。抓取于 2026-09-13。
+
+---
+
+> 编者注：本篇主体为 uv 官方《Working on projects》指南的中文翻译，"uv 能做什么"一节节选自官方 [Features](https://docs.astral.sh/uv/getting-started/features/) 页；文末补充 poetry 对照。**2026 年的推荐顺序：新项目默认用 uv；维护已有 poetry 项目继续用 poetry，不必强行迁移。** FastAPI 官方文档的最新示例也已全面使用 `uv`（见本模块第 11 篇）。

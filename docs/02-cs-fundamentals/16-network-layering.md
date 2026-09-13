@@ -7,11 +7,6 @@ fetched_at: 2026-09-13
 translated: true
 order: 16
 ---
-
-> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/the-layered-network-model.html) 第 4 章 "The Layered Network Model"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。
-
-> 编者按：本篇原计划翻译 Cloudflare 学习中心的 "What is the OSI model?"，因该站拒绝抓取（HTTP 403）换用同主题英文一手资料；TCP、UDP、DNS 三篇同此处理，详见模块来源报告。
-
 开始之前，先认识几个术语：
 
 - **IP 地址（IP Address）**——历史上是 4 字节数字，唯一标识互联网上你的计算机。以"点分数字"记法书写，如 `198.51.100.99`。这是 IP 第 4 版（IPv4）地址；没有特别注明版本号时，通常默认指 v4。
@@ -127,3 +122,11 @@ order: 16
 - 既然 UDP 不可靠而 TCP 可靠，猜测一下人们为什么有时还会用 UDP。
 
 > 译注：后两个思考题分别对应本模块后续两篇《TCP》与《UDP》——"谁包住谁"体现的是依赖方向（传输层依赖网络层完成路由），而 UDP 的用武之地（低延迟、可容忍少量丢失的流媒体、DNS 查询等）也将在 UDP 篇中展开。
+
+---
+
+> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/the-layered-network-model.html) 第 4 章 "The Layered Network Model"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。
+
+---
+
+> 编者按：本篇原计划翻译 Cloudflare 学习中心的 "What is the OSI model?"，因该站拒绝抓取（HTTP 403）换用同主题英文一手资料；TCP、UDP、DNS 三篇同此处理，详见模块来源报告。

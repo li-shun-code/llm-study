@@ -8,8 +8,6 @@ translated: true
 order: 8
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 4 章 [The Abstraction: The Process](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 本章讨论 OS 提供给用户的最基本抽象之一：**进程**（process）。进程的非正式定义非常简单：**运行中的程序**。程序本身是死物——它只是躺在磁盘上的一堆指令（也许还有些静态数据），等待登场。是操作系统把这些字节变成运行的东西，把程序转化为有用的东西。
 
 人们常常想同时运行多个程序：浏览器、邮件、游戏、音乐播放器……一个典型系统表面上可能同时运行着几十甚至上百个进程。这让系统易于使用——你从不需要操心 CPU 是否空闲，只管运行程序。于是有了挑战：
@@ -164,3 +162,7 @@ struct proc {
 - **进程列表**记录系统中所有进程；每个条目存放在**进程控制块**（PCB）中——就是一个包含特定进程信息的结构体。
 
 有了进程这个概念视图，接下来是该抠细节了：实现进程所需的低层机制，以及智能调度进程所需的高层策略。把机制与策略结合起来，就能理解操作系统如何虚拟化 CPU——这正是后面"CPU 调度"一篇的主题。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 4 章 [The Abstraction: The Process](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

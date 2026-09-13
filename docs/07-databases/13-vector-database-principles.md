@@ -8,11 +8,6 @@ translated: true
 order: 13
 versions: Milvus 官方文档当前版（milvus-docs v3.0.x）
 ---
-
-> **来源**：本文翻译自 [What is Milvus?（Milvus 官方文档 Overview）](https://milvus.io/docs/overview.md)，作者 Milvus（Zilliz / LF AI & Data Foundation），许可 Apache-2.0。抓取于 2026-09-13。
-
-> **编者按**：原文以 Milvus 视角介绍向量数据库的原理与架构，本篇保留其通用原理部分（非结构化数据、Embedding、ANN 检索类型、性能与扩展性设计），并在文末以"站内补充"补充相似度度量与"精确检索 vs 近似检索"的最小概念集。文中 Milvus 特性的介绍同样译出，作为理解"一个向量数据库要解决哪些问题"的实例。
-
 ## 非结构化数据、Embedding 与向量数据库
 
 文本、图像、音频等**非结构化数据（Unstructured Data）**格式多样、底层语义丰富，分析起来很有挑战。为了管理这种复杂性，人们用 **Embedding（嵌入）**把非结构化数据转换成能捕捉其本质特征的数值向量，再把向量存入**向量数据库（Vector Database）**，从而实现快速、可扩展的搜索与分析。
@@ -74,3 +69,11 @@ Milvus 2022 年支持了十亿级向量，2023 年扩展到数百亿级并保持
 - **在 LLM 应用中的位置**：模块 8 的 RAG 流程是"文档 → 切块 → Embedding → 存入向量库 → 查询时 ANN 检索 → 重排 → 喂给 LLM"。本篇是"库"的原理，下一篇动手实操。
 
 原文另附 API/SDK（RESTful、PyMilvus、Go、Java、Node.js、C#、C++）、生态工具（Attu 图形界面、Birdwatcher 调试、Prometheus/Grafana 监控、Milvus Backup/CDC、Spark 连接器与 VTS 数据传输）与 AI 集成（PyMilvus 内置若干 Embedding/重排模型、LangChain 等框架的向量存储组件），此处从略，详见原文。
+
+---
+
+> **来源**：本文翻译自 [What is Milvus?（Milvus 官方文档 Overview）](https://milvus.io/docs/overview.md)，作者 Milvus（Zilliz / LF AI & Data Foundation），许可 Apache-2.0。抓取于 2026-09-13。
+
+---
+
+> **编者按**：原文以 Milvus 视角介绍向量数据库的原理与架构，本篇保留其通用原理部分（非结构化数据、Embedding、ANN 检索类型、性能与扩展性设计），并在文末以"站内补充"补充相似度度量与"精确检索 vs 近似检索"的最小概念集。文中 Milvus 特性的介绍同样译出，作为理解"一个向量数据库要解决哪些问题"的实例。

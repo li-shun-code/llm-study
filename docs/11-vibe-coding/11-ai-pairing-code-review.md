@@ -8,8 +8,6 @@ translated: true
 order: 11
 ---
 
-> **来源**：本文翻译自 [Code Review](https://code.claude.com/docs/en/code-review)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）。抓取于 2026-09-13。
-
 ## AI 结对：让"第二双眼睛"成为默认配置
 
 AI 时代写代码的常态是"人机结对"：智能体写实现，人负责方向与验收。这个模式最大的风险在于**作者自己审查自己**——无论是人审 AI 的产出，还是 AI 偏袒自己刚写的代码。业界因此收敛出三条互补做法（见第 3 篇 Claude Code 最佳实践）：
@@ -147,3 +145,7 @@ issues."
 `ultra` 级别（`/code-review ultra`）是云端深度多智能体审查：编队先找 bug、再独立验证，最后由汇总智能体按严重度统一汇报，适合合并前的关键变更终审（详见官方 ultrareview 文档）。`low`/`medium` 力度只报最有把握的发现（更少误报），`high` 到 `max` 扩大覆盖面。
 
 > 译注：把"审查指令"写进仓库（REVIEW.md）、把"审查成本"暴露给团队（分析面板）、把"审查结论"做成可机读输出（check run JSON）——这套设计让 AI 审查可以被工程化管理，而不是一个黑盒评分器。它对应着本模块的一个反复出现的母题：**AI 能力的每一次跃升，都把瓶颈推回工程纪律**。
+
+---
+
+> **来源**：本文翻译自 [Code Review](https://code.claude.com/docs/en/code-review)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）。抓取于 2026-09-13。

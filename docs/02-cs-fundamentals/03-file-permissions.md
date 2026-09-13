@@ -8,8 +8,6 @@ translated: true
 order: 3
 ---
 
-> **来源**：本文翻译自 [Learning the shell — Lesson 9: Permissions](http://linuxcommand.org/lc3_lts0090.php)，作者 William E. Shotts，许可为版权所有（原文允许保留版权声明的逐字复制，本译文署名出处、仅供学习）。抓取于 2026-09-13。
-
 Linux 这类类 Unix 操作系统与其他计算系统的一大区别：它们不仅是**多任务**（multitasking）的，还是**多用户**（multi-user）的。
 
 这是什么意思？意思是多个用户可以同时使用这台计算机。即便一台台式机/笔记本只有一套键盘和显示器，它也可能被不止一个用户使用：比如计算机接入网络后，远程用户可以通过 `ssh`（secure shell，安全外壳协议）登录并操作它——远程用户甚至可以执行图形程序、让输出显示在远程计算机上，X Window 系统就支持这一点。
@@ -163,3 +161,7 @@ root@linuxbox:~#
 
 - 《The Linux Command Line》第 9 章更详尽地覆盖了本主题（[linuxcommand.org/tlcl.php](http://linuxcommand.org/tlcl.php) 可免费获取）。
 > 译注：与本模块第一篇 Missing Semester 讲义中 `/sys` 亮度的例子对照着看，你会更理解"权限不足"报错到底发生在哪一步。
+
+---
+
+> **来源**：本文翻译自 [Learning the shell — Lesson 9: Permissions](http://linuxcommand.org/lc3_lts0090.php)，作者 William E. Shotts，许可为版权所有（原文允许保留版权声明的逐字复制，本译文署名出处、仅供学习）。抓取于 2026-09-13。

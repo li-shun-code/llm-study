@@ -8,8 +8,6 @@ translated: true
 order: 17
 ---
 
-> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/transmission-control-protocol-tcp.html) 第 14 章 "Transmission Control Protocol (TCP)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。
-
 当有人用挖掘机挖断了一根光缆，数据包就可能丢失。（曾有整国断网，只因船锚拖过海底网络光缆！）软件错误、计算机崩溃、路由器故障都能惹出麻烦。
 
 但我们不想操心这些。我们希望有个角色替我们处理这一切，然后在数据**完整、无损、按序**到位时告诉我们。
@@ -199,3 +197,7 @@ ACK 到来时，拥塞窗口按已确认的字节数增长。粗略地说：一�
 - 流量控制的目的是什么？
 
 > 译注：对照上一篇《网络分层模型》看，TCP 是"传输层负责数据完整性、分包与重组"这一职责在互联网上最成功的实现；它与下一篇《UDP》构成了传输层的阴阳两面——可靠但重，轻快但尽力而为。理解了三次握手、序列号/ACK、滑动窗口与拥塞控制，你也就能理解为什么 LLM 应用的流式输出（SSE over HTTP）能稳定地在公网上逐 token 推送：底层全是 TCP 在默默重传、排序、控速。
+
+---
+
+> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/transmission-control-protocol-tcp.html) 第 14 章 "Transmission Control Protocol (TCP)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。

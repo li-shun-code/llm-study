@@ -9,8 +9,6 @@ order: 4
 versions: PEFT ≥0.15（编者注部分）
 ---
 
-> **来源**：本文转载自 [第六章 6.3 高效微调（happy-llm）](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md)，作者 DataWhale happy-llm 项目组，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。文末"PEFT 现状与最佳实践"一节为编者补充，已显式标注。
-
 全参微调需要更新模型全部权重，对 7B 以上的模型来说资源压力非常大。LoRA（Low-Rank Adaptation，低秩适应）是目前高效微调 LLM 的主流方法。本文从"为什么只需要低秩更新"讲起，推导 LoRA 的数学原理，并看它的代码实现。
 
 ## 高效微调的两条路线
@@ -207,3 +205,7 @@ peft_config = LoraConfig(target_modules="all-linear")
 - 核心假设：下游任务适配时权重更新具有低本征秩，因此可以用 `ΔW = B·A`（秩 `r`）近似全量更新。
 - 冻结 `W0`、只训练 `A`/`B`；`A` 高斯初始化、`B` 零初始化保证起点无损。
 - LoRA 适合"教行为/教风格"；注入新知识仍需全参或更大容量方案。
+
+---
+
+> **来源**：本文转载自 [第六章 6.3 高效微调（happy-llm）](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md)，作者 DataWhale happy-llm 项目组，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。文末"PEFT 现状与最佳实践"一节为编者补充，已显式标注。

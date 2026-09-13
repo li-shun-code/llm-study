@@ -9,8 +9,6 @@ order: 15
 versions: Qwen3.5 系列（至 Qwen3.8，2026-08）/ GLM-5 系列（至 GLM-5.3）/ DeepSeek-V3.2（2026-09 核实）
 ---
 
-> **来源**：本文综合编译自三个官方仓库 README：[QwenLM/Qwen3.5](https://github.com/QwenLM/Qwen3.5)（Qwen 团队，Apache 2.0）、[zai-org/GLM-5](https://github.com/zai-org/GLM-5)（智谱 Z.ai，Apache 2.0）、[deepseek-ai/DeepSeek-V3.2](https://github.com/deepseek-ai/DeepSeek-V3.2)（DeepSeek AI，MIT）。抓取于 2026-09-13，模型现状以当日各仓库为准。"选型建议"与"落地清单"两节为编者补充，已标注。
-
 自部署/微调的第一步是选底座模型。本文按 2026 年 9 月的开源现状，整理三大国内主流开源模型家族的版本、规格与定位，供选型参考。
 
 ## Qwen（通义千问）：Qwen3.5 系列
@@ -105,3 +103,7 @@ DeepSeek-V3.2 仓库（deepseek-ai/DeepSeek-V3.2，README 以 DeepSeek-V3.2-Exp 
 - 2026-09 开源第一梯队由 Qwen3.5/3.8、GLM-5 系列、DeepSeek-V3.2 构成，全部可在国内渠道获取。
 - 选型四要素：任务场景 > 硬件预算 > 许可条款 > 部署栈兼容性。
 - 模型迭代极快——本文快照于 2026-09-13，选型前务必复核各仓库 README 的最新版本。
+
+---
+
+> **来源**：本文综合编译自三个官方仓库 README：[QwenLM/Qwen3.5](https://github.com/QwenLM/Qwen3.5)（Qwen 团队，Apache 2.0）、[zai-org/GLM-5](https://github.com/zai-org/GLM-5)（智谱 Z.ai，Apache 2.0）、[deepseek-ai/DeepSeek-V3.2](https://github.com/deepseek-ai/DeepSeek-V3.2)（DeepSeek AI，MIT）。抓取于 2026-09-13，模型现状以当日各仓库为准。"选型建议"与"落地清单"两节为编者补充，已标注。

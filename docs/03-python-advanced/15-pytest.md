@@ -8,11 +8,6 @@ translated: true
 order: 15
 versions: pytest 9.x
 ---
-
-> **来源**：本文翻译自 [Get Started — pytest documentation](https://docs.pytest.org/en/stable/getting-started.html)，作者 pytest-dev 团队及贡献者，许可 MIT License。抓取于 2026-09-13。
-
-> 编者注：pytest 是 Python 生态事实上的测试标准。LLM 应用的不确定性更高（模型输出、网络、解析都可能出错），"核心逻辑单测 + 关键路径集成测试"不是可选项而是生产化底线——模块 11 的"TDD with AI"也以本篇为前置。本篇为官方 Get Started 的中文翻译，略有删节。
-
 ## 安装 pytest
 
 1. 在命令行运行以下命令：
@@ -206,3 +201,11 @@ pytest --fixtures   # shows builtin and custom fixtures
 - **mock 外部依赖**：调 LLM API 的函数用假响应/录制的响应测试，不要在 CI 里烧真钱（可配合 `pytest.mark` 把真实 API 测试标记为需要手动触发）；
 - **测试目录约定**：测试文件与被测代码分开放（如 `tests/`），配合 `uv`/`pytest` 的配置把 `pyproject.toml` 里的 `[tool.pytest.ini_options]` 设好（见下一篇工程化）；
 - AI 编码工具写完代码，让它在提交前跑 `pytest` 全绿——这是模块 11"Vibe Coding"里最基本的质量闸门。
+
+---
+
+> **来源**：本文翻译自 [Get Started — pytest documentation](https://docs.pytest.org/en/stable/getting-started.html)，作者 pytest-dev 团队及贡献者，许可 MIT License。抓取于 2026-09-13。
+
+---
+
+> 编者注：pytest 是 Python 生态事实上的测试标准。LLM 应用的不确定性更高（模型输出、网络、解析都可能出错），"核心逻辑单测 + 关键路径集成测试"不是可选项而是生产化底线——模块 11 的"TDD with AI"也以本篇为前置。本篇为官方 Get Started 的中文翻译，略有删节。

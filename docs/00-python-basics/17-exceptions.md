@@ -8,8 +8,6 @@ translated: false
 order: 17
 ---
 
-> **来源**：本文转载自 [错误处理 - Python教程](https://liaoxuefeng.com/books/python/error-debug-test/error/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。
-
 在程序运行的过程中，如果发生了错误，可以事先约定返回一个错误代码，这样，就可以知道是否有错，以及出错的原因。在操作系统提供的调用中，返回错误码非常常见。比如打开文件的函数`open()`，成功时返回文件描述符（就是一个整数），出错时返回`-1`。
 
 用错误码来表示是否出错十分不便，因为函数本身应该返回的正常结果和错误码混在一起，造成调用者必须用大量的代码来判断是否出错：
@@ -348,3 +346,7 @@ Python内置的`try...except...finally`用来处理错误十分方便。出错�
 ### 参考源码
 
 [do_try.py](https://liaoxuefeng.com/books/python/error-debug-test/error/do_try.py) · [err.py](https://liaoxuefeng.com/books/python/error-debug-test/error/err.py) · [err_logging.py](https://liaoxuefeng.com/books/python/error-debug-test/error/err_logging.py) · [err_raise.py](https://liaoxuefeng.com/books/python/error-debug-test/error/err_raise.py) · [err_reraise.py](https://liaoxuefeng.com/books/python/error-debug-test/error/err_reraise.py)
+
+---
+
+> **来源**：本文转载自 [错误处理 - Python教程](https://liaoxuefeng.com/books/python/error-debug-test/error/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。

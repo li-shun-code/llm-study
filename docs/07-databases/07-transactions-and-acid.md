@@ -8,11 +8,6 @@ translated: true
 order: 7
 versions: PostgreSQL 18 官方教程（第 3 章 3.4 节）
 ---
-
-> **来源**：本文翻译自 [3.4. Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
-
-> **编者按**：原文按官方教程行文，未直接使用 ACID 缩写；本文在文末补充了教程概念与 ACID（原子性、一致性、隔离性、持久性）四要素的对应关系，便于与教材术语互认。
-
 ## 事务是什么
 
 **事务（Transaction）**是所有数据库系统的基本概念。其核心在于：把多个步骤打包成一个"全做或全不做"的操作。步骤之间的中间状态对其他并发事务不可见；如果发生故障阻止事务完成，那么任何一步都不会影响数据库。
@@ -92,3 +87,11 @@ COMMIT;
 | 持久性（Durability） | "事务被报告完成之前，其全部更新都已写入永久存储（磁盘）日志" |
 
 > 站内提示：下一篇 SQLAlchemy 的连接层会讲到"事务与 DBAPI 的协作"——应用代码里 `with engine.begin() as conn:` 的每一行,背后都是本篇的 `BEGIN`/`COMMIT`。
+
+---
+
+> **来源**：本文翻译自 [3.4. Transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
+
+---
+
+> **编者按**：原文按官方教程行文，未直接使用 ACID 缩写；本文在文末补充了教程概念与 ACID（原子性、一致性、隔离性、持久性）四要素的对应关系，便于与教材术语互认。

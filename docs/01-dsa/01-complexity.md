@@ -8,10 +8,6 @@ translated: false
 order: 1
 ---
 
-> **来源**：本文转载自 [算法效率评估](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/performance_evaluation.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.md)、[空间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 算法效率评估
 
 
@@ -480,3 +476,9 @@ def recur(n: int):
 **降低时间复杂度通常需要以提升空间复杂度为代价，反之亦然**。我们将牺牲内存空间来提升算法运行速度的思路称为“以空间换时间”；反之，则称为“以时间换空间”。
 
 选择哪种思路取决于我们更看重哪个方面。在大多数情况下，时间比空间更宝贵，因此“以空间换时间”通常是更常用的策略。当然，在数据量很大的情况下，控制空间复杂度也非常重要。
+
+---
+
+> **来源**：本文转载自 [算法效率评估](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/performance_evaluation.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.md)、[空间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

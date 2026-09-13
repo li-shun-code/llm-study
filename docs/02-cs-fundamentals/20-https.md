@@ -7,11 +7,6 @@ fetched_at: 2026-09-13
 translated: true
 order: 20
 ---
-
-> **来源**：本文翻译自 [Transport Layer Security (TLS)](https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security)，作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13。
-
-> 编者按：本篇原计划翻译 Cloudflare 学习中心的 "What is TLS/HTTPS?"，因该站拒绝抓取（HTTP 403）换用同主题英文一手资料（MDN），详见模块来源报告。
-
 **传输层安全**（Transport Layer Security，TLS）是一种让客户端在不可信网络上与服务器**安全通信**的协议。它最著名的用途是为 HTTP 连接提供安全保障：这样得到的协议就叫 **HTTPS**。
 
 TLS 以三种方式保护网络连接：
@@ -79,3 +74,11 @@ TLS 以三种方式保护网络连接：
 - 推荐 TLS 配置：[Mozilla 推荐配置](https://ssl-config.mozilla.org/)、[Cipherlist.eu](https://cipherlist.eu/)
 
 > 译注：把本篇与《HTTP》《TCP》连起来看：HTTPS = HTTP over TLS over TCP——TLS 夹在 HTTP（应用层）与 TCP（传输层）之间加密并认证流量，正对应 OSI 分层模型中"表示层：加密"的职责。对 LLM 应用开发者，这是一条硬性实践：**所有 API 流量（包括 SSE 流式响应）都必须走 HTTPS**，否则你的 API Key 与对话内容在链路上是明文；调用第三方 API 时也请确认 base URL 是 `https://` 开头。
+
+---
+
+> **来源**：本文翻译自 [Transport Layer Security (TLS)](https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security)，作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13。
+
+---
+
+> 编者按：本篇原计划翻译 Cloudflare 学习中心的 "What is TLS/HTTPS?"，因该站拒绝抓取（HTTP 403）换用同主题英文一手资料（MDN），详见模块来源报告。

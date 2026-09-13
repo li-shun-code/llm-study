@@ -9,8 +9,6 @@ order: 11
 versions: LiteLLM 2026-09 文档当前版（示例模型 gpt-5.6-terra / claude-sonnet-5 / gemini-3.1-pro-preview）
 ---
 
-> **来源**：本文翻译自 [LiteLLM Getting Started](https://docs.litellm.ai/docs/)、[Completion Input Params](https://docs.litellm.ai/docs/completion/input) 与 [Streaming Responses](https://docs.litellm.ai/docs/completion/stream)（LiteLLM 官方文档），作者 BerriAI，许可 MIT（enterprise 目录除外）。抓取于 2026-09-13。
-
 前面十篇都围绕 OpenAI 官方 SDK。现实中的 LLM 应用往往要**多家模型混用**：主力用 GPT、长文本用 Gemini、内网部署走 Ollama，切换与容灾是常态。好消息是：**OpenAI 的 Chat Completions 格式已经成为事实标准**——各家兼容端点与统一路由库都围绕它展开。
 
 ## 一、两条路线：兼容端点 vs 统一路由库
@@ -227,3 +225,7 @@ asyncio.run(completion_call())
 - 多供应商容灾、网关化管理是它相对裸 SDK 的核心增量。
 
 下一篇换到编排层：LangChain 1.0 快速入门。
+
+---
+
+> **来源**：本文翻译自 [LiteLLM Getting Started](https://docs.litellm.ai/docs/)、[Completion Input Params](https://docs.litellm.ai/docs/completion/input) 与 [Streaming Responses](https://docs.litellm.ai/docs/completion/stream)（LiteLLM 官方文档），作者 BerriAI，许可 MIT（enterprise 目录除外）。抓取于 2026-09-13。

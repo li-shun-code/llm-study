@@ -14,8 +14,9 @@
 
 - 站点根：`/Users/ls/.zcode/workspace/default/llm-learning-site/`，文档根 `docs/`。
 - 文章 frontmatter 必填字段：`title`（中文标题）、`source_url`、`author`、`license`、`fetched_at`（ISO 日期）、`translated`（bool）、`order`（模块内序号，整数）。
-- 每篇文章 frontmatter 之后第一段必须是署名块，精确格式：
+- 每篇文章文末（正文最后，用 `---` 分隔线隔开）必须是署名块，精确格式：
   `> **来源**：本文${translated ? "翻译" : "转载"}自 [${原文标题}](${source_url})，作者 ${author}，许可 ${license}。抓取于 ${fetched_at}。`
+  署名块禁止放在头部（2026-09-13 用户要求：来源统一放底部；校验脚本对头部署名块报错）。
 - 目录名固定 12 个：`00-python-basics`、`01-dsa`、`02-cs-fundamentals`、`03-python-advanced`、`04-llm-basics`、`05-prompt-engineering`、`06-api-development`、`07-databases`、`08-rag`、`09-agents`、`10-finetuning-deployment`、`11-vibe-coding`。
 - 文件命名：`NN-slug.md`（NN 为模块内两位序号，与 frontmatter `order` 一致）。
 - 模块 2 来源禁止使用小林 coding；优先英文一手资料翻译。
@@ -30,7 +31,7 @@
 每个内容任务（Task 5-16）按以下固定流程执行，任务条目只写该模块独有的输入（来源清单、目录、目标篇数、知识点清单）：
 
 1. **补充 manifest**：把本模块来源写入 `docs/.vitepress/manifest.json` 对应模块节点（字段：`topic, url, channel: "raw"|"web"`）；GitHub raw 通道可批量抓的开源书，用 `node scripts/fetch-raw.mjs <module>` 一次拉取；web 通道文章逐篇用 WebFetch 抓取、转为中文 Markdown（英文原文先翻译再入库）。**抓取前核对来源时效性**：文档类优先官方文档当前版页面，博客类确认所涉 API 未废弃（对照上面的技术时效性约束），过时来源换新或按"历史演进"定位改写。
-2. **写入文章**：每篇保存为 `docs/<dir>/NN-slug.md`，头部加 frontmatter 与署名块（格式见 Global Constraints）；正文保留原文结构，图片若外链可用原文链接，抓不到的图删去并在文中以文字说明。
+2. **写入文章**：每篇保存为 `docs/<dir>/NN-slug.md`，头部加 frontmatter、文末加署名块（格式见 Global Constraints）；正文保留原文结构，图片若外链可用原文链接，抓不到的图删去并在文中以文字说明。
 3. **失败登记**：抓不到的 URL 写入 `docs/.vitepress/sources-report.md`，并从候选备选列表补一篇同主题文章，保证模块篇数达标。
 4. **校验**：`node scripts/check-frontmatter.mjs docs/<dir>`，期望 `PASS (N articles)`。
 5. **构建**：`npx vitepress build docs`，期望成功无死链报错。

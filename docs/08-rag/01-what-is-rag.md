@@ -8,8 +8,6 @@ translated: true
 order: 1
 ---
 
-> **来源**：本文翻译自 [Retrieval-Augmented Generation (RAG)](https://www.pinecone.io/learn/retrieval-augmented-generation/)，作者 Jenna Pederson（Pinecone Learn Center），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。
-
 基础模型（Foundation Model）不仅"被困在过去"，还会刻意生成听起来自然、富有变化的回答。这两点叠加，就会产生自信却错误、且不相关的内容——这就是所谓的"幻觉（Hallucination）"。
 
 本文将介绍基础模型的局限性，以及检索增强生成（Retrieval-Augmented Generation，RAG）如何解决这些局限，让聊天、搜索和智能体（Agent）工作流都从中受益。
@@ -157,3 +155,7 @@ Using the CONTEXT provided, answer the QUESTION. Keep your answer grounded in th
 ---
 
 > 编者注：原文以 Pinecone 产品为示例。本站后续篇章将按学习路径依次展开：文档解析（02）、嵌入（03）、分块（04）、相似度检索（05），并用当前稳定版 SDK 完成最小 RAG 实战（06）。
+
+---
+
+> **来源**：本文翻译自 [Retrieval-Augmented Generation (RAG)](https://www.pinecone.io/learn/retrieval-augmented-generation/)，作者 Jenna Pederson（Pinecone Learn Center），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。

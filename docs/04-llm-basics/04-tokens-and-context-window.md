@@ -8,9 +8,6 @@ translated: true
 order: 4
 ---
 
-> **来源**：本文翻译自 [Hugging Face LLM Course · Chapter 6: Byte-Pair Encoding tokenization](https://huggingface.co/learn/llm-course/chapter6/5) 与 [Chapter 2: Tokenizers](https://huggingface.co/learn/llm-course/chapter2/2)（Hugging Face，Apache 2.0），并转载 [happy-llm 第一章 1.3.2 子词切分](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter1/%E7%AC%AC%E4%B8%80%E7%AB%A0%20NLP%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5.md)（DataWhale，CC BY-NC-SA 4.0）、改编 [OpenAI Cookbook: How to count tokens with tiktoken](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)（OpenAI，MIT）。抓取/翻译于 2026-09-13。
-> 文中"中文 token 成本"一节为本站用 tiktoken 实测补充；"上下文窗口"一节的模型窗口数据核实自各官方文档（2026-09-13），引用链接见文内。
-
 ## 一、为什么需要"子词"：从词到字符到子词
 
 在 NLP 任务中，我们往往需要将自然语言的输入转化为机器可以处理的向量。在输入神经网络之前，我们往往会先让自然语言输入通过分词器（tokenizer），分词器的作用是把自然语言输入切分成 token 并转化为一个固定的 index。例如，如果我们将词表大小设为 4，输入"我喜欢你"，分词器可以将输入转化成：
@@ -206,3 +203,8 @@ def num_tokens_from_messages(messages, model="gpt-4o-mini-2024-07-18"):
 2. DataWhale happy-llm, 第一章 1.3.2 子词切分. CC BY-NC-SA 4.0.
 3. OpenAI Cookbook, *How to count tokens with tiktoken*. MIT.
 4. Microsoft Learn, *Azure OpenAI models*. CC BY 4.0.
+
+---
+
+> **来源**：本文翻译自 [Hugging Face LLM Course · Chapter 6: Byte-Pair Encoding tokenization](https://huggingface.co/learn/llm-course/chapter6/5) 与 [Chapter 2: Tokenizers](https://huggingface.co/learn/llm-course/chapter2/2)（Hugging Face，Apache 2.0），并转载 [happy-llm 第一章 1.3.2 子词切分](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter1/%E7%AC%AC%E4%B8%80%E7%AB%A0%20NLP%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5.md)（DataWhale，CC BY-NC-SA 4.0）、改编 [OpenAI Cookbook: How to count tokens with tiktoken](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)（OpenAI，MIT）。抓取/翻译于 2026-09-13。
+> 文中"中文 token 成本"一节为本站用 tiktoken 实测补充；"上下文窗口"一节的模型窗口数据核实自各官方文档（2026-09-13），引用链接见文内。

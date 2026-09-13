@@ -8,9 +8,6 @@ translated: true
 order: 11
 ---
 
-> **来源**：本文翻译自 [Multi-Model RAG with Captioning](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/multi_model_rag_with_captioning.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
-> 编者注（时效性校订）：原 notebook 使用已弃用的 `google.generativeai` SDK 调用 Gemini，本文按当前稳定版 `google-genai` SDK 改写该段（其余 LangChain 部分：旧 import 路径 `langchain.text_splitter` 已改为 `langchain_text_splitters`）。
-
 ## 概述
 
 本篇实现多模态 RAG 的一种代表性做法：从 PDF 中抽取文本与图片，用多模态模型为图片/表格生成文字摘要（打字幕），把"文本 + 图片摘要"统一嵌入后做检索与问答。
@@ -199,3 +196,8 @@ BLEU 分数只出现在论文的表格（图片）里。正因为图片被 VLM �
 ## 小结
 
 "图片打字幕"是多模态 RAG 中最容易落地的路线：把非文本元素转成文字描述，复用整条文本 RAG 管线。它的局限也来自这里——字幕丢失了图片的原始细节（图表的精确数值、布局），若要更精细的答案，可延伸学习同仓库的 [multi_model_rag_with_colpali](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/multi_model_rag_with_colpali.ipynb)（用 ColPali 直接对页面图像做视觉检索）。
+
+---
+
+> **来源**：本文翻译自 [Multi-Model RAG with Captioning](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/multi_model_rag_with_captioning.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
+> 编者注（时效性校订）：原 notebook 使用已弃用的 `google.generativeai` SDK 调用 Gemini，本文按当前稳定版 `google-genai` SDK 改写该段（其余 LangChain 部分：旧 import 路径 `langchain.text_splitter` 已改为 `langchain_text_splitters`）。

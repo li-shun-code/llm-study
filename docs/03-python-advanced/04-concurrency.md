@@ -8,11 +8,6 @@ translated: false
 order: 4
 versions: Python 3.14
 ---
-
-> **来源**：本文转载自 [concurrent.futures — 启动并行任务 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/library/concurrent.futures.html)，作者 Python 软件基金会，许可 PSF 许可证第 2 版。抓取于 2026-09-13。
-
-> 编者注：为便于选型，开头补一节 GIL（全局解释器锁）与线程/进程的背景（摘编自官方术语表与 threading 文档），主体为 `concurrent.futures` 官方文档节选。注意：本篇的线程/进程池面向"并发执行阻塞任务"；如果要写高并发网络服务（如 LLM 应用中同时调用多家 API），首选下一篇的 asyncio。
-
 ## 背景先修：GIL 与线程 vs 进程（编者补充）
 
 **全局解释器锁（Global Interpreter Lock，GIL）**是 CPython 解释器用来确保同一时刻只有一个线程执行 Python 字节码的互斥锁。它简化了 CPython 的实现与对象模型的线程安全，但代价是：**多线程无法让纯 CPU 计算在多核上并行**。
@@ -189,3 +184,11 @@ if __name__ == '__main__':
 3. 批量同构任务用 `executor.map`，异构/需定位来源的任务用 `submit` + `as_completed`；
 4. 异常在 `future.result()` 调用时抛出，别忘了捕获；
 5. 你的下一把并发工具，未必是线程——遇到高并发 I/O 时，请阅读下一篇《asyncio 异步》。
+
+---
+
+> **来源**：本文转载自 [concurrent.futures — 启动并行任务 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/library/concurrent.futures.html)，作者 Python 软件基金会，许可 PSF 许可证第 2 版。抓取于 2026-09-13。
+
+---
+
+> 编者注：为便于选型，开头补一节 GIL（全局解释器锁）与线程/进程的背景（摘编自官方术语表与 threading 文档），主体为 `concurrent.futures` 官方文档节选。注意：本篇的线程/进程池面向"并发执行阻塞任务"；如果要写高并发网络服务（如 LLM 应用中同时调用多家 API），首选下一篇的 asyncio。

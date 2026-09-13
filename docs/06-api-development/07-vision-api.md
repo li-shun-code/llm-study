@@ -9,8 +9,6 @@ order: 7
 versions: openai-python 2026-09 最新稳定版（Responses API input_image）；GPT-4o / gpt-5.5 等多模态模型
 ---
 
-> **来源**：本文翻译自 [openai-python README · Vision](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0）与 [Tag and caption images with GPT-4o mini](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Tag_caption_images_with_GPT4V.ipynb)（OpenAI Cookbook，MIT），作者 OpenAI，许可 Apache 2.0 / MIT。抓取于 2026-09-13。
-
 多模态模型（vision-capable models）可以直接"看图"。给消息里加一个图片内容块，模型就能回答图里有什么、给商品打标签、写描述、读图表。本篇讲清楚：图片怎么传（URL 与 base64 两种）、多图怎么传、以及一个完整的电商打标应用。
 
 ## 一、两种传图方式
@@ -198,3 +196,7 @@ Cookbook 强调：同一工作流若用 Chat Completions，需要应用自己执
 - 多图 = 多个图片块；图片块可与文字块任意混排；
 - 商品打标实战的提示词要点：图 + 标题一起给、限定只描述目标商品、关键词格式写死；
 - 视觉理解与 Embedding（去重）、托管工具（看图联网）组合威力更大。
+
+---
+
+> **来源**：本文翻译自 [openai-python README · Vision](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0）与 [Tag and caption images with GPT-4o mini](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Tag_caption_images_with_GPT4V.ipynb)（OpenAI Cookbook，MIT），作者 OpenAI，许可 Apache 2.0 / MIT。抓取于 2026-09-13。

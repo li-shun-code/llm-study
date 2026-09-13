@@ -9,8 +9,6 @@ order: 5
 versions: 提示技术通用；实战示例按 OpenAI Responses API/函数调用校订（原文 LangChain 旧接口已废弃，见译注）
 ---
 
-> **来源**：本文翻译自 [ReAct Prompting](https://www.promptingguide.ai/techniques/react)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。
-
 Yao et al., 2022 提出了一个名为 **ReAct** 的框架：让 LLM 以交错（interleaved）的方式同时生成**推理轨迹**（reasoning traces）与**任务相关的行动**（task-specific actions）。
 
 生成推理轨迹让模型能够归纳、跟踪、更新行动计划，甚至处理异常情况；行动步骤则让模型可以与外部源（知识库、环境等）交互并从中获取信息。
@@ -166,3 +164,7 @@ def run_react(question: str, max_steps: int = 8) -> str:
 - ReAct = Reasoning + Acting：推理轨迹与外部行动交替，检索支撑推理、推理指导检索；
 - 提示形态：少样本给出"想法—行动—观测"轨迹示范；推理密集的任务多写 Thought，行动密集的任务少写；
 - 现代实现中，Action 通常由函数调用（function calling）承载，ReAct 从"纯提示技术"演化为 Agent 框架的执行内核。
+
+---
+
+> **来源**：本文翻译自 [ReAct Prompting](https://www.promptingguide.ai/techniques/react)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。

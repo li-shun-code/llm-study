@@ -8,8 +8,6 @@ translated: false
 order: 6
 ---
 
-> **来源**：本文转载自 [Python3 元组](https://www.runoob.com/python3/python3-tuple.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。
-
 Python 的元组与列表类似，不同之处在于元组的元素不能修改。
 
 元组使用小括号 ( )，列表使用方括号 [ ]。
@@ -188,3 +186,7 @@ TypeError: 'tuple' object does not support item assignment
 ```
 
 从以上实例可以看出，重新赋值的元组 tup，绑定到新的对象了，不是修改了原来的对象。
+
+---
+
+> **来源**：本文转载自 [Python3 元组](https://www.runoob.com/python3/python3-tuple.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。

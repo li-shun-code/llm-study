@@ -8,8 +8,6 @@ translated: true
 order: 18
 ---
 
-> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/user-datagram-protocol-udp.html) 第 15 章 "User Datagram Protocol (UDP)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。
-
 如果你喜欢一切从简，又是个乐观主义者，UDP 就是为你准备的。它是互联网上近乎终极的轻量级数据传输。
 
 你把 UDP 包发出去，然后**盼望**它们到达。也许到了，也许有人用挖掘机挖断了光缆、也许撞上了宇宙射线、也许某台路由器太拥挤（或太生气）就把它随手一丢。毫不客气。
@@ -218,3 +216,7 @@ s.close()
 - UDP 相对不可靠，为什么人们还是用它而不是 TCP？
 
 > 译注：与 DNS（下一篇）对照阅读效果最佳——一次 DNS 查询就是一个小 UDP 包的事，丢了就重问；而 QUIC（HTTP/3 的底层）则是"在 UDP 上重建可靠性与拥塞控制"的当代典范，恰好呼应本文 15.7 的第 2 条。
+
+---
+
+> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/user-datagram-protocol-udp.html) 第 15 章 "User Datagram Protocol (UDP)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。

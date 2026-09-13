@@ -8,8 +8,6 @@ translated: true
 order: 13
 ---
 
-> **来源**：本文主篇翻译自 [Orchestrate teams of Claude Code sessions](https://code.claude.com/docs/en/agent-teams)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；引言摘译自 Simon Willison《[Embracing the parallel coding agent lifestyle](https://simonwillison.net/2025/Oct/5/parallel-coding-agents/)》（2025-10-05），署名转载。抓取于 2026-09-13。长尾小节（显示模式配置细节、故障排查等）从略。
-
 ## 引言：并行编码智能体的生活方式
 
 > 以下摘译自 Simon Willison。
@@ -131,3 +129,7 @@ token 消耗随活跃队友数线性放大：研究、审查、新功能开发�
 - **避免文件冲突**：按文件边界切分任务，或给每个队友配 git worktree（见第 7 篇）
 
 > 译注：多智能体协作的三条适用判据——任务可独立切分、结果可验证、协调收益大于协调成本。三条都不满足时，请回到第 3 篇的"单个 Claude + 子智能体"基线。Agent teams 与模块 9《多智能体模式》（LangGraph 编排）是同一思想在不同层的实现：一个编排 IDE 里的会话，一个编排运行时的状态机。
+
+---
+
+> **来源**：本文主篇翻译自 [Orchestrate teams of Claude Code sessions](https://code.claude.com/docs/en/agent-teams)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；引言摘译自 Simon Willison《[Embracing the parallel coding agent lifestyle](https://simonwillison.net/2025/Oct/5/parallel-coding-agents/)》（2025-10-05），署名转载。抓取于 2026-09-13。长尾小节（显示模式配置细节、故障排查等）从略。

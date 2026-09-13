@@ -9,9 +9,6 @@ order: 3
 versions: openai-python 2026-09 最新稳定版（SSE 流式）
 ---
 
-> **来源**：本文翻译自 [How to stream completions](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb)（OpenAI Cookbook，MIT）与 [openai-python README · Streaming responses](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-> 编者注：原文基于 Chat Completions 演示，流式机制对 Responses API 完全一致（`stream=True`）；本篇按"Responses 为主、Chat Completions 对照"组织，SSE 的网络层原理另见模块 2《SSE 与 WebSocket》。
-
 默认情况下，API 会**等整个回复生成完毕**才一次性返回。如果回复很长，你可能要干等几秒甚至几十秒。流式输出（streaming）让响应在生成过程中就逐段（chunk）下发——首字节可以在 0.1 秒左右到达，而不是几秒。
 
 ## 一、开启流式：stream=True
@@ -208,3 +205,8 @@ async with client.chat.completions.stream(
 - Chat Completions 从 `chunk.choices[0].delta.content` 取增量；Responses API 迭代 `client.responses.create(..., stream=True)` 返回的事件流；
 - 拼接碎片得到完整文本；`stream_options={"include_usage": True}` 拿整次请求用量；
 - 流式不可自动重试，展示侧需自建审核与中断恢复逻辑。
+
+---
+
+> **来源**：本文翻译自 [How to stream completions](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb)（OpenAI Cookbook，MIT）与 [openai-python README · Streaming responses](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
+> 编者注：原文基于 Chat Completions 演示，流式机制对 Responses API 完全一致（`stream=True`）；本篇按"Responses 为主、Chat Completions 对照"组织，SSE 的网络层原理另见模块 2《SSE 与 WebSocket》。

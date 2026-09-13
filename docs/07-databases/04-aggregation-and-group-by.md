@@ -9,8 +9,6 @@ order: 4
 versions: PostgreSQL 18 官方教程（第 2 章 2.7 节）
 ---
 
-> **来源**：本文翻译自 [2.7. Aggregate Functions](https://www.postgresql.org/docs/current/tutorial-agg.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
-
 与其他关系数据库产品一样，PostgreSQL 支持**聚合函数（Aggregate Function）**：它从多个输入行计算出一个结果。常见的聚合函数有 `count`（计数）、`sum`（求和）、`avg`（平均值）、`max`（最大值）、`min`（最小值）。
 
 例如，查询所有地点的最低气温读数中的最大值：
@@ -137,3 +135,7 @@ SELECT city, count(*) FILTER (WHERE temp_lo < 45), max(temp_lo)
 `FILTER` 与 `WHERE` 很像，但它只从**它所修饰的那个聚合函数**的输入中剔除行。上例中 `count` 只统计 `temp_lo` 低于 45 的行，而 `max` 仍作用于所有行，所以依然找到了 46 这个读数。
 
 > 站内提示：在 LLM 应用里，聚合最典型的场景是运营统计——比如按天统计 token 消耗（`sum(total_tokens)`）、按模型统计调用量与平均延迟（`count(*)`、`avg(latency_ms)` 配合 `GROUP BY model`），再配合 `HAVING` 筛出异常高耗的会话。
+
+---
+
+> **来源**：本文翻译自 [2.7. Aggregate Functions](https://www.postgresql.org/docs/current/tutorial-agg.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。

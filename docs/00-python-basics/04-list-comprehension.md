@@ -8,8 +8,6 @@ translated: false
 order: 4
 ---
 
-> **来源**：本文转载自 [列表生成式 - Python教程](https://liaoxuefeng.com/books/python/advanced/list-comprehension/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。
-
 列表生成式即List Comprehensions，是Python内置的非常简单却强大的可以用来创建list的生成式。
 
 举个例子，要生成list `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`可以用`list(range(1, 11))`：
@@ -180,3 +178,7 @@ else:
 ### 小结
 
 运用列表生成式，可以快速生成list，可以通过一个list推导出另一个list，而代码却十分简洁。
+
+---
+
+> **来源**：本文转载自 [列表生成式 - Python教程](https://liaoxuefeng.com/books/python/advanced/list-comprehension/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。

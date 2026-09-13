@@ -9,8 +9,6 @@ order: 15
 versions: Python 3.14 文档
 ---
 
-> **来源**：本文转载自 [copy --- 浅层及深层拷贝操作 - Python 3 官方文档（中文）](https://docs.python.org/zh-cn/3/library/copy.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。文中另节选了 [Python 常见问题解答（FAQ）](https://docs.python.org/zh-cn/3/faq/programming.html)中的相关问答，作者与许可同上。
-
 Python 的赋值语句不复制对象，而是创建目标和对象的绑定关系。对于自身可变，或包含可变项的集合，有时要生成副本用于改变操作，而不必改变原始对象。本模块提供了通用的浅层复制和深层复制操作（如下所述）。
 
 接口摘要：
@@ -113,3 +111,7 @@ newdict = olddict.copy()
 ```python
 new_l = l[:]
 ```
+
+---
+
+> **来源**：本文转载自 [copy --- 浅层及深层拷贝操作 - Python 3 官方文档（中文）](https://docs.python.org/zh-cn/3/library/copy.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。文中另节选了 [Python 常见问题解答（FAQ）](https://docs.python.org/zh-cn/3/faq/programming.html)中的相关问答，作者与许可同上。

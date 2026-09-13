@@ -8,11 +8,6 @@ translated: false
 order: 6
 versions: Python 3.13+ / typing
 ---
-
-> **来源**：本文转载自 [typing — 对类型提示的支持 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/library/typing.html)，作者 Python 软件基金会，许可 PSF 许可证第 2 版。抓取于 2026-09-13。
-
-> 编者注：Python 运行时**不强制**要求函数与变量类型标注，类型提示（type hint）主要供类型检查器（mypy/pyright）、IDE 与库在静态或运行时使用。但现代 Python 生态已把类型注解当作"第一公民"：**Pydantic 用它在运行时校验数据，FastAPI 用它自动生成参数解析与 API 文档**（见本模块第 10、11 篇）。写 LLM 应用几乎绕不开它们。
-
 ## 第一个类型提示
 
 本模块提供了对类型提示的运行时支持。考虑下面的函数:
@@ -216,3 +211,11 @@ make_new_user(User())    # 错误: 预期为 type[User] 但得到 User
 - **FastAPI**（第 11 篇）：读取路径函数的参数注解，自动完成查询参数解析、请求体校验、OpenAPI 文档生成。
 
 还有一个工具值得放进工具箱：`mypy` 或 `pyright`（静态类型检查器），可在 CI 里对整个项目执行 `mypy .`，把"None 上调方法"这类错误挡在运行之前。官方推荐进一步阅读 [mypy 速查卡](https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html) 与 [Python 类型系统规范](https://typing.python.org/en/latest/spec/index.html)。
+
+---
+
+> **来源**：本文转载自 [typing — 对类型提示的支持 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/library/typing.html)，作者 Python 软件基金会，许可 PSF 许可证第 2 版。抓取于 2026-09-13。
+
+---
+
+> 编者注：Python 运行时**不强制**要求函数与变量类型标注，类型提示（type hint）主要供类型检查器（mypy/pyright）、IDE 与库在静态或运行时使用。但现代 Python 生态已把类型注解当作"第一公民"：**Pydantic 用它在运行时校验数据，FastAPI 用它自动生成参数解析与 API 文档**（见本模块第 10、11 篇）。写 LLM 应用几乎绕不开它们。

@@ -8,10 +8,6 @@ translated: false
 order: 12
 ---
 
-> **来源**：本文转载自 [图](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[图的基础操作](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_operations.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 图
 
 
@@ -143,3 +139,9 @@ order: 12
 | 内存空间占用 | O(n²) | O(n + m)     | O(n + m)       |
 
 观察上表，似乎邻接表（哈希表）的时间效率与空间效率最优。但实际上，在邻接矩阵中操作边的效率更高，只需一次数组访问或赋值操作即可。综合来看，邻接矩阵体现了“以空间换时间”的原则，而邻接表体现了“以时间换空间”的原则。
+
+---
+
+> **来源**：本文转载自 [图](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[图的基础操作](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_operations.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

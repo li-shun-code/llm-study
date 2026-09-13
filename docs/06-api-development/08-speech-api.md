@@ -8,11 +8,6 @@ translated: true
 order: 8
 versions: gpt-4o-transcribe（转写）、tts-1-hd / gpt-4o-audio-preview（合成）、gpt-realtime-2（Realtime）；openai-agents VoicePipeline beta
 ---
-
-> **来源**：本文翻译自 [Comparing Speech-to-Text Methods with the OpenAI API](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Speech_transcription_methods.ipynb)、[Steering Text-to-Speech for more dynamic audio generation](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/voice_solutions/steering_tts.ipynb)（OpenAI Cookbook，MIT）与 [openai-python README · Realtime API](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-
-> 本篇标注为**选学**：语音链路（ASR/TTS/Realtime）在 LLM 应用岗位中属加分项，不阻塞后续模块。ASR 即自动语音识别（Automatic Speech Recognition），TTS 即语音合成（Text-to-Speech）。
-
 ## 一、语音转写（ASR）：四种方式怎么选
 
 Cookbook 的对比表先给出全景（原文翻译）：
@@ -212,3 +207,11 @@ async for event in connection:
 - 一句话选型：录好的音频用文件转写；实时字幕/语音对话上 Realtime。
 
 至此，文本、图像、语音三类模态的 API 都过了一遍。下一篇回到工程主线：错误处理、重试与限流。
+
+---
+
+> **来源**：本文翻译自 [Comparing Speech-to-Text Methods with the OpenAI API](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Speech_transcription_methods.ipynb)、[Steering Text-to-Speech for more dynamic audio generation](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/voice_solutions/steering_tts.ipynb)（OpenAI Cookbook，MIT）与 [openai-python README · Realtime API](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
+
+---
+
+> 本篇标注为**选学**：语音链路（ASR/TTS/Realtime）在 LLM 应用岗位中属加分项，不阻塞后续模块。ASR 即自动语音识别（Automatic Speech Recognition），TTS 即语音合成（Text-to-Speech）。

@@ -8,8 +8,6 @@ translated: true
 order: 13
 ---
 
-> **来源**：本文翻译自 [What Is Agentic RAG? From LLM RAG to AI Agents](https://weaviate.io/blog/what-is-agentic-rag)，作者 Erika Cardona（Weaviate Blog），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。
-
 **一句话总结**：传统 RAG 管线是线性流程——查询向量化、检索、塞上下文、生成回答。Agentic RAG 用 AI 智能体（Agent）来编排检索、验证与工具调用，从而改进这一切：Agent 能决定搜什么、判断结果质量、必要时再搜、并在生成前综合多个来源。
 
 ## 什么是 Agentic RAG？
@@ -145,3 +143,7 @@ Weaviate 通过灵活的查询能力支持 Agentic RAG 实现：向量搜索、�
 ---
 
 > 编者注：把本篇与第 09/10 篇连起来读会发现一条主线——重排序、查询改写这些"增强检索"技术，正是 Agent 编排检索时调用的基本动作；而第 14 篇 Text2SQL 展示的则是 Agent 的另一类检索工具：面向结构化数据的自然语言查询。
+
+---
+
+> **来源**：本文翻译自 [What Is Agentic RAG? From LLM RAG to AI Agents](https://weaviate.io/blog/what-is-agentic-rag)，作者 Erika Cardona（Weaviate Blog），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。

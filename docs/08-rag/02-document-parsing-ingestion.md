@@ -8,9 +8,6 @@ translated: true
 order: 2
 ---
 
-> **来源**：本文整合翻译自三份官方 README——[Docling](https://raw.githubusercontent.com/docling-project/docling/main/README.md)（MIT）、[MinerU](https://raw.githubusercontent.com/opendatalab/MinerU/master/README.md)（MinerU 开源许可，基于 Apache 2.0 + 附加条款）、[Unstructured](https://raw.githubusercontent.com/Unstructured-IO/unstructured/main/README.md)（Apache 2.0），作者分别为 Docling 项目（IBM Research）、MinerU 项目（OpenDataLab）、Unstructured 项目。抓取于 2026-09-13。
-> 本文按"为什么难 → 三个工具各自的定位与实战 → 怎么选"组织，各工具章节忠实翻译原文，衔接性文字（标注"编者注"）为本站补充。
-
 在 RAG 系统里，文档解析（Document Parsing）是"第一公里"，也是最脏的一公里。Garbage in, garbage out：解析阶段丢掉的表格结构、读错的阅读顺序、识别不出的扫描文字，会在检索和生成阶段被成倍放大。本篇介绍三个当前最主流的开源解析工具，覆盖文本型 PDF、扫描件（OCR）、表格与公式三类硬骨头。
 
 ## 一、Docling：IBM 开源的统一文档解析库
@@ -161,3 +158,8 @@ docker exec -it unstructured bash
 | 典型场景 | 生成式 AI 应用摄取层，公式与表格还原 | 学术文献、中文文档、超长文档批量解析 | 多格式混合管道、需要细粒度元素控制 |
 
 实践建议：先用你的真实文档做小样本评测（同一份 PDF 分别转 Markdown，人工检查阅读顺序、表格与公式），再定工具；扫描件优先测 OCR 通道；表格密集型文档务必检查输出是 HTML 还是 Markdown 表格，这直接影响后续分块与检索质量。
+
+---
+
+> **来源**：本文整合翻译自三份官方 README——[Docling](https://raw.githubusercontent.com/docling-project/docling/main/README.md)（MIT）、[MinerU](https://raw.githubusercontent.com/opendatalab/MinerU/master/README.md)（MinerU 开源许可，基于 Apache 2.0 + 附加条款）、[Unstructured](https://raw.githubusercontent.com/Unstructured-IO/unstructured/main/README.md)（Apache 2.0），作者分别为 Docling 项目（IBM Research）、MinerU 项目（OpenDataLab）、Unstructured 项目。抓取于 2026-09-13。
+> 本文按"为什么难 → 三个工具各自的定位与实战 → 怎么选"组织，各工具章节忠实翻译原文，衔接性文字（标注"编者注"）为本站补充。

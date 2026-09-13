@@ -8,8 +8,6 @@ translated: false
 order: 3
 ---
 
-> **来源**：本文转载自 [AutoDL 帮助文档](https://www.autodl.com/docs/quick_start/)（《快速开始》《GPU 选型》《CUDA/cuDNN》三篇，作者 AutoDL 帮助文档，许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中"显存估算"与"Colab"两节为编者补充，已显式标注。
-
 微调大模型的第一道门槛不是算法，而是算力环境：选什么卡、装什么 CUDA、数据放哪、任务怎么跑起来。本文以国内常用的 GPU 租用平台 AutoDL 为例走通全流程，并补充一张显存估算速查表。
 
 ## 一、快速开始（AutoDL）
@@ -126,3 +124,7 @@ Google [Colab](https://colab.research.google.com/) 提供免费 T4 GPU（16 GB�
 - 按任务选卡：小模型/调试用入门卡，微调优先 Ampere 及之后架构 + 混合精度。
 - 框架自带 CUDA 运行时，通常无需单独装 CUDA；`nvidia-smi` 显示的是驱动上限。
 - 全参微调显存 ≈ 16–20P GB，LoRA ≈ 2P GB 底座 + 少量开销；QLoRA 是单卡微调 7B+ 的现实路径。
+
+---
+
+> **来源**：本文转载自 [AutoDL 帮助文档](https://www.autodl.com/docs/quick_start/)（《快速开始》《GPU 选型》《CUDA/cuDNN》三篇，作者 AutoDL 帮助文档，许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中"显存估算"与"Colab"两节为编者补充，已显式标注。

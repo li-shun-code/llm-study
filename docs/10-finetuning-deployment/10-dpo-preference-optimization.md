@@ -9,8 +9,6 @@ order: 10
 versions: TRL（2026-09 主分支文档，DPOTrainer/DPOConfig 现行 API）
 ---
 
-> **来源**：本文翻译自 [DPO Trainer（TRL 官方文档）](https://huggingface.co/docs/trl/dpo_trainer)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。开头"为什么需要偏好对齐"一节转载自 [happy-llm 第六章 6.4](https://github.com/datawhalechina/happy-llm)（CC BY-NC-SA 4.0），已标注。
-
 ## 为什么需要偏好对齐（happy-llm）
 
 Pretrain 更关注语言规律和世界知识的学习，SFT 更关注让模型学会遵循指令，而偏好对齐则更强调"什么样的回答更符合人类预期"。例如，在问答、代码生成或复杂推理任务中，模型不仅要给出答案，还要尽量做到表达清晰、内容安全、推理过程稳定，并尽量避免答非所问或有害输出。从训练流程上看，偏好对齐承接在 SFT 之后，是 Post-Training 中非常关键的一环。其核心思路不是让模型继续单纯地拟合文本，而是让模型学会在多个候选回答之间更偏向人类更喜欢的输出。
@@ -177,3 +175,7 @@ DPO 训练适配器时学习率约 1e-5——比 SFT 的 1e-4 低一个量级。
 - DPO 把 RLHF 的"奖励模型 + 强化学习"折叠成一个分类损失：拉大 chosen/rejected 相对参考模型的似然差。
 - 数据就是"提示 + 好答案 + 差答案"三元组；显式提示列是推荐写法。
 - 实战配置：SFT 起点 + LoRA + 学习率约 1e-5 + 默认 sigmoid loss；盯 `rewards/accuracies` 与 `logps/chosen`。
+
+---
+
+> **来源**：本文翻译自 [DPO Trainer（TRL 官方文档）](https://huggingface.co/docs/trl/dpo_trainer)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。开头"为什么需要偏好对齐"一节转载自 [happy-llm 第六章 6.4](https://github.com/datawhalechina/happy-llm)（CC BY-NC-SA 4.0），已标注。

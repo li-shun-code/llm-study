@@ -8,11 +8,6 @@ translated: true
 order: 6
 versions: OpenAI SDK ≥1.x，Responses API 时代（原文 2024-08 的 Chat Completions/Assistants API 示例已按 Responses API 校订）
 ---
-
-> **来源**：本文翻译自 [Introduction to Structured Outputs](https://cookbook.openai.com/examples/structured_outputs_intro)，作者 OpenAI（Aaron Chiam），许可 MIT（OpenAI Cookbook）。抓取于 2026-09-13。
-
-> **校订说明**：原文示例基于 2024-08 时的 Chat Completions API 与已废弃的 Assistants API 提法，本文按当前 Responses API 改写示例代码（`text.format` / `responses.parse`），Schema 定义、`strict` 语义与 Pydantic 用法保持不变。
-
 **结构化输出**（Structured Outputs）保证模型生成的回答始终遵循你提供的 JSON Schema。本文用几个例子演示这项能力。
 
 启用方式：在 API 调用中把 `strict` 设为 `true`，既可用于**响应格式**（response format），也可用于**函数定义**（function definitions）。
@@ -262,3 +257,11 @@ def get_response(user_input: str, context: str):
 - 三种入口：`text.format`（纯响应）、`responses.parse` + Pydantic（推荐）、函数定义里的 `strict: true`；
 - Schema 中所有字段都要 `required`、`additionalProperties: false`——严格模式的要求，也是形状确定性的来源；
 - 本文例 3 与模块 6"Function Calling/Tool Use"一篇相通：结构化输出是工具参数可靠性的基石。
+
+---
+
+> **来源**：本文翻译自 [Introduction to Structured Outputs](https://cookbook.openai.com/examples/structured_outputs_intro)，作者 OpenAI（Aaron Chiam），许可 MIT（OpenAI Cookbook）。抓取于 2026-09-13。
+
+---
+
+> **校订说明**：原文示例基于 2024-08 时的 Chat Completions API 与已废弃的 Assistants API 提法，本文按当前 Responses API 改写示例代码（`text.format` / `responses.parse`），Schema 定义、`strict` 语义与 Pydantic 用法保持不变。

@@ -9,9 +9,6 @@ order: 5
 versions: openai-python 2026-09 最新稳定版；gpt-4o-2024-08-06 起支持 Structured Outputs，现行模型均可用
 ---
 
-> **来源**：本文翻译自 [Introduction to Structured Outputs](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Structured_Outputs_Intro.ipynb)（OpenAI Cookbook，MIT）与 [openai-python · Structured Outputs Parsing Helpers](https://raw.githubusercontent.com/openai/openai-python/main/helpers.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-> 编者注：原文称 Structured Outputs 可用于 "Chat Completions API and Assistants API"——Assistants API 已废弃，现行为 **Chat Completions 与 Responses API 双支持**；Responses API 中同样的能力通过 `text.format` 参数（或 SDK `parse` 助手）使用。原文的 `client.beta.chat.completions.parse` 已转为正式 API `client.chat.completions.parse`（beta 前缀移除）。
-
 结构化输出（Structured Outputs）保证模型**永远生成符合你给定 JSON Schema 的响应**——与只保证"是合法 JSON"的 JSON Mode 相比，它约束的是 JSON 的**形状**，而不只是合法性。这让生产级应用可以放心地把输出 `json.loads` 后直接用。
 
 ## 一、两个层级：JSON Mode 与 Structured Outputs
@@ -298,3 +295,8 @@ def get_response(user_input, context):
 - 与函数调用结合时用 `pydantic_function_tool`，参数直接得到强类型对象。
 
 模块 5《结构化输出（JSON/Schema）》从提示词工程角度讲同一主题，可与本篇对照阅读。
+
+---
+
+> **来源**：本文翻译自 [Introduction to Structured Outputs](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Structured_Outputs_Intro.ipynb)（OpenAI Cookbook，MIT）与 [openai-python · Structured Outputs Parsing Helpers](https://raw.githubusercontent.com/openai/openai-python/main/helpers.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
+> 编者注：原文称 Structured Outputs 可用于 "Chat Completions API and Assistants API"——Assistants API 已废弃，现行为 **Chat Completions 与 Responses API 双支持**；Responses API 中同样的能力通过 `text.format` 参数（或 SDK `parse` 助手）使用。原文的 `client.beta.chat.completions.parse` 已转为正式 API `client.chat.completions.parse`（beta 前缀移除）。

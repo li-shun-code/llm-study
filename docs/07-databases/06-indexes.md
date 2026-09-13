@@ -8,11 +8,6 @@ translated: true
 order: 6
 versions: PostgreSQL 18 官方文档（第 11 章 11.1、11.2、11.12 节）
 ---
-
-> **来源**：本文翻译自 [11.1. Introduction](https://www.postgresql.org/docs/current/indexes-intro.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
-
-> **补充来源**：本文"索引类型"与"检查索引使用"两节分别编译自同一文档的 [11.2. Index Types](https://www.postgresql.org/docs/current/indexes-types.html) 与 [11.12. Examining Index Usage](https://www.postgresql.org/docs/current/indexes-examine.html)，许可同上。
-
 ## 索引为什么快
 
 假设有这样一张表：
@@ -100,3 +95,11 @@ PostgreSQL 的索引不需要维护或调优，但检查真实查询负载到底
 - **索引没被用时，测试阶段可以强制使用。**有一些运行时参数可关闭各类计划：比如关掉顺序扫描（`enable_seqscan`）和嵌套循环连接（`enable_nestloop`）这两个最基础的计划，会逼系统换用其他计划。如果这样它仍选顺序扫描，多半有更根本的原因——例如查询条件与索引不匹配。
 - **强制后索引被用上了**，则有两种可能：要么系统本来是对的（用索引确实不合适），要么计划成本估计失真。应当对查询分别计时比较，`EXPLAIN ANALYZE` 在这里很有用。
 - **如果确认成本估计有误**：总成本 = 各计划节点每行成本 × 选择性估计。成本常数可用运行时参数调整；选择性估计不准则是统计不足，可通过调整统计收集参数（`ALTER TABLE`）改善。都调不合适时，才考虑显式强制使用索引。
+
+---
+
+> **来源**：本文翻译自 [11.1. Introduction](https://www.postgresql.org/docs/current/indexes-intro.html)，作者 PostgreSQL Global Development Group，许可 PostgreSQL Licence。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"索引类型"与"检查索引使用"两节分别编译自同一文档的 [11.2. Index Types](https://www.postgresql.org/docs/current/indexes-types.html) 与 [11.12. Examining Index Usage](https://www.postgresql.org/docs/current/indexes-examine.html)，许可同上。

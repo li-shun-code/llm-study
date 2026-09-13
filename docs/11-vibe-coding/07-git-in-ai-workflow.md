@@ -8,8 +8,6 @@ translated: true
 order: 7
 ---
 
-> **来源**：本文主篇翻译自 [Run parallel sessions with worktrees](https://code.claude.com/docs/en/worktrees)，作者 Anthropic（Claude Code 官方文档），许可署名翻译（Copyright Anthropic PBC，教学用途）。引言部分摘译自 Simon Willison《[Vibe engineering](https://simonwillison.net/2025/Oct/7/vibe-engineering/)》与 Geoffrey Huntley《[Ralph Wiggum as a "software engineer"](https://ghuntley.com/ralph/)》，署名转载。抓取于 2026-09-13。
-
 ## 引言：为什么 Git 在 AI 时代更重了
 
 （本节摘译自两篇实践文章。）
@@ -160,3 +158,7 @@ git worktree remove ../hotfix-456
 3. **让智能体自理分支与 PR**：命名分支、写提交信息、收尾 squash，智能体都能胜任；你省下的时间花在审查上。
 4. **审查是唯一闸门**：AI 生成代码一律走 PR review——Writer/Reviewer 双会话（第 3 篇）、`/code-review` 技能或 Copilot/Bugbot（第 2 篇）、加上人眼终审。审查流程详见第 11 篇。
 5. **合并不代表责任转移**：按 Simon Willison 的黄金法则——你不能向别人解释的代码，不进你的仓库。
+
+---
+
+> **来源**：本文主篇翻译自 [Run parallel sessions with worktrees](https://code.claude.com/docs/en/worktrees)，作者 Anthropic（Claude Code 官方文档），许可署名翻译（Copyright Anthropic PBC，教学用途）。引言部分摘译自 Simon Willison《[Vibe engineering](https://simonwillison.net/2025/Oct/7/vibe-engineering/)》与 Geoffrey Huntley《[Ralph Wiggum as a "software engineer"](https://ghuntley.com/ralph/)》，署名转载。抓取于 2026-09-13。

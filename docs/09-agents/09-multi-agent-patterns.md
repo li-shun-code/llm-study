@@ -8,8 +8,6 @@ translated: true
 order: 9
 ---
 
-> **来源**：本文翻译自 [How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)（2025-06-13 发布），作者 Jeremy Hadfield、Barry Zhang、Kenneth Lien、Florian Scholz、Jeremy Fox、Daniel Ford（Anthropic），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中的"编排者-工作者（orchestrator-worker）"模式即本模块第 4 篇 Anthropic 工作流模式在真实生产系统中的落地。
-
 # 我们如何构建多智能体研究系统
 
 我们的 Research（研究）功能使用多个 Claude 智能体更高效地探索复杂主题。本文分享构建这套系统过程中的工程挑战与经验教训。
@@ -119,3 +117,7 @@ Claude 现在具备 [Research 能力](https://www.anthropic.com/news/research)�
 **长程对话管理。** 生产智能体常常进行跨数百轮的对话，需要精心的上下文管理策略。随着对话延长，标准上下文窗口不再够用，需要智能的压缩与记忆机制。我们实现的模式是：智能体在完成每个工作阶段后进行摘要，并把关键信息存入外部记忆，再开始新任务；接近上下文上限时，智能体可以生成拥有干净上下文的新子智能体、通过仔细的交接保持连续性；还能从记忆中取回存储的上下文（如研究计划），而不是在触及上下文上限时丢失之前的工作。这种分布式方法在长交互中防止上下文溢出、同时保持对话连贯。
 
 **子智能体输出到文件系统，减少"传话游戏"。** 某些类型的结果可以让子智能体绕过主协调者直接输出，同时改善保真度与性能。与其要求子智能体把所有内容都经领队转达，不如实现"工件（Artifact）系统"：专门化的智能体创建可独立持久化的输出。子智能体调用工具把工作存入外部系统，然后只把轻量引用传回协调者。这避免了多阶段处理中的信息丢失，也减少了"把大输出在对话历史中来回拷贝"的 token 开销。对代码、报告、数据可视化这类结构化输出尤其有效——子智能体的专门化提示产出，好于经过通用协调者的过滤。
+
+---
+
+> **来源**：本文翻译自 [How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)（2025-06-13 发布），作者 Jeremy Hadfield、Barry Zhang、Kenneth Lien、Florian Scholz、Jeremy Fox、Daniel Ford（Anthropic），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中的"编排者-工作者（orchestrator-worker）"模式即本模块第 4 篇 Anthropic 工作流模式在真实生产系统中的落地。

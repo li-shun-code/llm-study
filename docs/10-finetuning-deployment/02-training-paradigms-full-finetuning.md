@@ -8,11 +8,6 @@ translated: false
 order: 2
 versions: transformers Trainer / DeepSpeed ZeRO-2（2026-09 现行版本）
 ---
-
-> **来源**：本文转载自 [第六章 大模型训练流程实践（happy-llm）](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md)，作者 DataWhale happy-llm 项目组，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
-> **编者按**：模块 4 的《训练范式总览》从概念上介绍了预训练（Pre-training）→ 有监督微调（SFT）→ 偏好对齐（RLHF/DPO）三个阶段。本文承接该篇，以 Hugging Face Transformers 为主框架，完整走一遍"从初始化模型 → 预训练数据处理 → Trainer 训练 → DeepSpeed 分布式 → SFT 全参微调"的工程流程。原文以 Qwen-2.5-1.5B 为例；文中对过长的分布式脚本细节做了节选，均以"编者注"标明。
-
 ## 6.1 模型预训练
 
 在实际应用中，手写实现的 LLM 训练存在以下问题：
@@ -459,3 +454,11 @@ class SupervisedDataset(Dataset):
 
 - 下一节内容（高效微调 LoRA）见本模块 [LoRA 原理](./04-lora-principles)
 - 偏好对齐概览见本模块 [DPO 与偏好优化](./10-dpo-preference-optimization)
+
+---
+
+> **来源**：本文转载自 [第六章 大模型训练流程实践（happy-llm）](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md)，作者 DataWhale happy-llm 项目组，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+
+---
+
+> **编者按**：模块 4 的《训练范式总览》从概念上介绍了预训练（Pre-training）→ 有监督微调（SFT）→ 偏好对齐（RLHF/DPO）三个阶段。本文承接该篇，以 Hugging Face Transformers 为主框架，完整走一遍"从初始化模型 → 预训练数据处理 → Trainer 训练 → DeepSpeed 分布式 → SFT 全参微调"的工程流程。原文以 Qwen-2.5-1.5B 为例；文中对过长的分布式脚本细节做了节选，均以"编者注"标明。

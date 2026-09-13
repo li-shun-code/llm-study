@@ -9,8 +9,6 @@ order: 13
 versions: Ollama（2026-09 当前版，含 REST API 与 OpenAI 兼容接口）
 ---
 
-> **来源**：本文翻译自 [Ollama 官方 README](https://github.com/ollama/ollama) 与 [Ollama 官方文档](https://docs.ollama.com)（Quickstart / CLI Reference / OpenAI Compatibility / Docker / Modelfile 各页），作者 Ollama 团队，许可 MIT。抓取于 2026-09-13。
-
 微调好的模型要跑起来，最省事的本地部署工具就是 Ollama：macOS/Windows/Linux 一行命令安装，自动管理模型下载与量化版本，内置 REST API 与 OpenAI 兼容接口。
 
 ## 安装
@@ -190,3 +188,7 @@ Ollama 面向**个人/小团队本地使用**：零配置、自动量化、消�
 - Ollama = llama.cpp 引擎 + 模型仓库 + 标准 API，一行命令完成本地部署。
 - 两套 API：原生 REST（`/api/chat`）与 OpenAI 兼容（`/v1/...`），后者让存量代码零改动切换到本地模型。
 - 自己微调的模型经 Modelfile/导入流程接入；服务化生产流量则升级到 vLLM。
+
+---
+
+> **来源**：本文翻译自 [Ollama 官方 README](https://github.com/ollama/ollama) 与 [Ollama 官方文档](https://docs.ollama.com)（Quickstart / CLI Reference / OpenAI Compatibility / Docker / Modelfile 各页），作者 Ollama 团队，许可 MIT。抓取于 2026-09-13。

@@ -9,8 +9,6 @@ order: 22
 versions: Python 3.14 文档
 ---
 
-> **来源**：本文转载自 [Python 常见问题解答 · 编程 FAQ](https://docs.python.org/zh-cn/3/faq/programming.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。本文为该页中与初学者常见陷阱相关问答的节选汇编。
-
 ## 变量明明有值，为什么还会出现 UnboundLocalError？
 
 当在函数内部某处添加了一条赋值语句，因而导致之前正常工作的代码报出 `UnboundLocalError` 错误，这确实有点令人惊讶。
@@ -241,3 +239,7 @@ print(config.x)
 2.  第三方库模块（任何安装在 Python 的目录下的内容）——如 [dateutil](https://pypi.org/project/dateutil/)、[requests](https://pypi.org/project/requests/)、[tzdata](https://pypi.org/project/tzdata/)。
 
 3.  本地开发的模块。
+
+---
+
+> **来源**：本文转载自 [Python 常见问题解答 · 编程 FAQ](https://docs.python.org/zh-cn/3/faq/programming.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。本文为该页中与初学者常见陷阱相关问答的节选汇编。

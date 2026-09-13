@@ -8,8 +8,6 @@ translated: true
 order: 4
 ---
 
-> **来源**：本文翻译自 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)（Building effective agents，2024-12-19 发布），作者 Erik Schluntz、Barry Zhang（Anthropic），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中 Anthropic 的 2026 年更新提示与框架列表均按原文翻译并保留——框架生态变化很快，读"何时用/不用框架"的判断逻辑比记框架名更重要。
-
 我们与数十个跨行业的团队合作构建过 LLM 智能体（Agent）。一个始终成立的结论是：最成功的实现用的都是简单、可组合的模式，而非复杂框架。
 
 > **注**：自 2024 年 12 月本文发布以来，文中描述的许多工具生态已经变化。想了解我们当前的做法，参见《[How we built Claude Managed Agents](https://www.anthropic.com/engineering/managed-agents)》及 Managed Agents 文档。
@@ -233,3 +231,7 @@ LLM 有时可以同时处理一个任务，其输出由程序聚合。并行化�
 - 给你的工具做[防错设计（Poka-yoke）](https://en.wikipedia.org/wiki/Poka-yoke)：调整参数设计，让犯错变得更难。
 
 在为 [SWE-bench](https://www.anthropic.com/research/swe-bench-sonnet) 构建智能体时，我们花在优化工具上的时间实际上超过了优化整体提示词。例如，我们发现当智能体离开根目录后，模型在使用相对文件路径的工具时会出错。为修复这一点，我们把工具改成强制要求绝对文件路径——之后模型对这种用法运用得毫无瑕疵。
+
+---
+
+> **来源**：本文翻译自 [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)（Building effective agents，2024-12-19 发布），作者 Erik Schluntz、Barry Zhang（Anthropic），许可署名转载（原文页面未附开源许可，仅作教学署名转载）。抓取于 2026-09-13。文中 Anthropic 的 2026 年更新提示与框架列表均按原文翻译并保留——框架生态变化很快，读"何时用/不用框架"的判断逻辑比记框架名更重要。

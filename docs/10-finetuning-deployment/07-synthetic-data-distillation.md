@@ -9,8 +9,6 @@ order: 7
 versions: distilabel / TRL DistillationTrainer（2026-09 现行版）
 ---
 
-> **来源**：本文第一部分翻译自 [Generating Instruction Datasets（smol-course v1 · Synthetic Datasets 单元）](https://github.com/huggingface/smol-course/tree/main/v1/6_synthetic_datasets)，作者 Hugging Face（smol-course），许可 Apache 2.0；第二部分翻译自 [Distillation Trainer（TRL 官方文档）](https://huggingface.co/docs/trl/distillation_trainer)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。
-
 给小模型做 SFT，最贵的不是算力而是数据。两条主流的"造数据"路线：**合成（Synthetic Data）**——用大模型生成指令-回答对；**蒸馏（Distillation）**——让小模型直接学习大模型的输出分布。本文各用一份官方一手文档讲透。
 
 ## 第一部分：生成指令数据集（smol-course）
@@ -247,3 +245,7 @@ training_args = DistillationConfig(
 - 合成数据三件套：SelfInstruct 自展、EvolInstruct 进化、Magpie 借模板续写；流水线化（distilabel）才有工程质量。
 - 蒸馏的正确姿势是 on-policy：学生在自己的生成上匹配教师分布，JSD 损失 + 分块计算控制显存。
 - 合成数据必须过滤质量与多样性；蒸馏需要同时养得起师生两个模型。
+
+---
+
+> **来源**：本文第一部分翻译自 [Generating Instruction Datasets（smol-course v1 · Synthetic Datasets 单元）](https://github.com/huggingface/smol-course/tree/main/v1/6_synthetic_datasets)，作者 Hugging Face（smol-course），许可 Apache 2.0；第二部分翻译自 [Distillation Trainer（TRL 官方文档）](https://huggingface.co/docs/trl/distillation_trainer)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。

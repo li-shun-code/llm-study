@@ -8,11 +8,6 @@ translated: true
 versions: Microsoft Agent Framework（当前版，Python/.NET/Go）；CrewAI 0.x 当前版（Python >=3.10,<3.14）
 order: 12
 ---
-
-> **来源**：本文主体翻译自 [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) 官方 README（作者 Microsoft Agent Framework 团队，许可 MIT），CrewAI 部分译自 [crewAIInc/crewAI](https://github.com/crewAIInc/crewAI) 官方 README（作者 CrewAIInc 贡献者，许可 MIT）。抓取于 2026-09-13。
-
-> **重要版本现状（务必先读）**：**AutoGen 已并入 Microsoft Agent Framework（MAF）**。微软把 AutoGen（多智能体研究框架）与 Semantic Kernel（企业级 AI 编排框架）两条产品线合并，形成统一的 Microsoft Agent Framework。现在，AutoGen 官方仓库定位为研究/历史资料，**新的生产开发都发生在 `microsoft/agent-framework`**；微软官方提供了《[从 AutoGen 迁移](https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-autogen)》与《[从 Semantic Kernel 迁移](https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel)》两份指南。网上大量 AutoGen 教程（`autogen.ConversableAgent`、`GroupChatManager` 等写法）仍可运行，但已不代表微软推荐的当前路线。本文按 MAF 现状讲授。
-
 # Microsoft Agent Framework（AutoGen 的继任者）
 
 Microsoft Agent Framework（MAF）是一个开放的多语言框架，用于在 **.NET 与 Python** 中构建**生产级 AI 智能体与多智能体工作流**（Go SDK 见 [microsoft/agent-framework-go](https://github.com/microsoft/agent-framework-go/)）。
@@ -294,3 +289,11 @@ class MarketState(BaseModel):
 **表：主流多智能体框架选型对比。**
 
 学习建议：多智能体是"加速器"也是"成本放大器"——先确保单智能体 + 工具的链路可靠（第 1-8 篇），再引入多智能体协作；框架本身没有高下之分，选与你团队语言栈和生产约束匹配的那个。
+
+---
+
+> **来源**：本文主体翻译自 [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) 官方 README（作者 Microsoft Agent Framework 团队，许可 MIT），CrewAI 部分译自 [crewAIInc/crewAI](https://github.com/crewAIInc/crewAI) 官方 README（作者 CrewAIInc 贡献者，许可 MIT）。抓取于 2026-09-13。
+
+---
+
+> **重要版本现状（务必先读）**：**AutoGen 已并入 Microsoft Agent Framework（MAF）**。微软把 AutoGen（多智能体研究框架）与 Semantic Kernel（企业级 AI 编排框架）两条产品线合并，形成统一的 Microsoft Agent Framework。现在，AutoGen 官方仓库定位为研究/历史资料，**新的生产开发都发生在 `microsoft/agent-framework`**；微软官方提供了《[从 AutoGen 迁移](https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-autogen)》与《[从 Semantic Kernel 迁移](https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel)》两份指南。网上大量 AutoGen 教程（`autogen.ConversableAgent`、`GroupChatManager` 等写法）仍可运行，但已不代表微软推荐的当前路线。本文按 MAF 现状讲授。

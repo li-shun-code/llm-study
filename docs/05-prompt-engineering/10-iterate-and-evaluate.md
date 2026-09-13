@@ -8,11 +8,6 @@ translated: true
 order: 10
 versions: OpenAI Responses API；示例基于 GPT-5 系（2026-09 抓取时 Cookbook 现行版本）
 ---
-
-> **来源**：本文翻译自 [GPT-5 Prompt Migration and Improvement using the new prompt optimizer](https://cookbook.openai.com/examples/gpt-5/prompt-optimization-cookbook)（节选编译），作者 OpenAI（OpenAI Cookbook 团队），许可 MIT（OpenAI Cookbook）。抓取于 2026-09-13。
-
-> **编译说明**：原文是演示官方 Prompt Optimizer 工具的完整 notebook（含两个案例：代码分析类任务与 FailSafeQA 问答基准）。本文节选其方法论主线与代码分析案例，省略中间的过程性输出。文中"提示不是一刀切的体验……"等观点句为原文直译。
-
 写好提示词不是一锤子买卖，而是一个**可测量的迭代循环**：基线提示 → 批量生成 → 定量评估 → 优化提示 → 再评估 → 定性评审 → 汇总对比。这篇来自 OpenAI Cookbook 的指南完整演示了这一循环，并展示了提示优化带来的可量化改进。
 
 ## 优化器解决什么问题
@@ -192,3 +187,11 @@ judge_folder(
 7. **沉淀**：把提示词版本化（Prompt Object / git），记录每版的评估结果，形成可追溯的迭代历史。
 
 这套闭环与本模块第 07 篇的"经验学科"论断互为印证：**提示词工程的每一次改动，都应该由评估结果说话，而不是由感觉说话。**
+
+---
+
+> **来源**：本文翻译自 [GPT-5 Prompt Migration and Improvement using the new prompt optimizer](https://cookbook.openai.com/examples/gpt-5/prompt-optimization-cookbook)（节选编译），作者 OpenAI（OpenAI Cookbook 团队），许可 MIT（OpenAI Cookbook）。抓取于 2026-09-13。
+
+---
+
+> **编译说明**：原文是演示官方 Prompt Optimizer 工具的完整 notebook（含两个案例：代码分析类任务与 FailSafeQA 问答基准）。本文节选其方法论主线与代码分析案例，省略中间的过程性输出。文中"提示不是一刀切的体验……"等观点句为原文直译。

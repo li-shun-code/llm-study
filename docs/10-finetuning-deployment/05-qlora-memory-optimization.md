@@ -9,8 +9,6 @@ order: 5
 versions: PEFT ≥0.15 / transformers（BitsAndBytesConfig 现行 API）/ bitsandbytes（2026-09）
 ---
 
-> **来源**：本文翻译自 [Quantization（PEFT 官方文档 Quantization 指南）](https://huggingface.co/docs/peft/developer_guides/quantization)，作者 Hugging Face（PEFT 文档），许可 Apache 2.0。抓取于 2026-09-13。开头一节补充翻译自 [bitsandbytes README](https://github.com/bitsandbytes-foundation/bitsandbytes)（Apache 2.0），编者补充内容均已标注。
-
 QLoRA（Quantized LoRA）回答的是一个问题：**怎么在一张消费级 GPU 上微调一个几十亿参数的模型**。答案是"4-bit 量化底座 + LoRA 旁路"——本文译自 PEFT 官方文档，给出完整的可运行配置。
 
 ## bitsandbytes 提供了什么（背景）
@@ -168,3 +166,7 @@ PEFT 的量化指南还覆盖了以下方案（均可在量化模型上训练 Lo
 - 三行配置即可用上：`BitsAndBytesConfig` → `prepare_model_for_kbit_training` → `LoraConfig`。
 - 追求贴近 QLoRA 论文效果时用 `target_modules="all-linear"`，必要时加 LoftQ 初始化。
 - 训练侧量化（QLoRA）与部署侧量化（GPTQ/AWQ/GGUF/FP8）目标不同：前者省训练显存，后者省推理显存与带宽。
+
+---
+
+> **来源**：本文翻译自 [Quantization（PEFT 官方文档 Quantization 指南）](https://huggingface.co/docs/peft/developer_guides/quantization)，作者 Hugging Face（PEFT 文档），许可 Apache 2.0。抓取于 2026-09-13。开头一节补充翻译自 [bitsandbytes README](https://github.com/bitsandbytes-foundation/bitsandbytes)（Apache 2.0），编者补充内容均已标注。

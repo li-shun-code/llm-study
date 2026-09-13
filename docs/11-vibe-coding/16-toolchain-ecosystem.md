@@ -8,8 +8,6 @@ translated: true
 order: 16
 ---
 
-> **来源**：本文主篇翻译自 [Run Claude Code programmatically](https://code.claude.com/docs/en/headless)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；"生态两翼"一节分别译自 [Cline Overview](https://docs.cline.bot/cline-overview) 及其文档站的 CLI 样例（Cline Bot Inc.）与 [Cascade / Devin Desktop 文档](https://docs.windsurf.com/windsurf/cascade)（Cognition）。抓取于 2026-09-13。
-
 AI 编码工具链的"下半场"不在编辑器里，而在**没有人的地方**：CI 流水线、定时任务、issue 自动响应、PR 自动审查。本篇讲三件事：Claude Code 的 Headless/Agent SDK（`claude -p` 进脚本与 CI）、Cline 的 CLI/Kanban 生态、以及 Windsurf（并入 Devin Desktop）的现况。
 
 ## Headless：以编程方式运行 Claude Code
@@ -146,3 +144,7 @@ Cline 是活在编辑器和终端里的开源 AI 编码智能体：读写文件�
 | 开源自托管 | Cline（Apache-2.0）、Codex CLI（Apache-2.0） | BYOK + 本地/私有模型 | 数据自持、成本控制 |
 
 无论哪条路线，决定成败的都是同一组工程要素：**无人值守时的权限收敛**（allowlist/dontAsk/none）、**可验证的完成标准**（第 3、12 篇）、**产物走 PR 与审查**（第 7、11 篇）。工具会继续换名字——方法论不会。
+
+---
+
+> **来源**：本文主篇翻译自 [Run Claude Code programmatically](https://code.claude.com/docs/en/headless)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；"生态两翼"一节分别译自 [Cline Overview](https://docs.cline.bot/cline-overview) 及其文档站的 CLI 样例（Cline Bot Inc.）与 [Cascade / Devin Desktop 文档](https://docs.windsurf.com/windsurf/cascade)（Cognition）。抓取于 2026-09-13。

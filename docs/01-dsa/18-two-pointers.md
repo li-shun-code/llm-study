@@ -8,9 +8,6 @@ translated: false
 order: 18
 ---
 
-> **来源**：本文转载自 [双指针](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/misc/two-pointer.md)，作者 OI Wiki 项目，许可 CC BY-SA 4.0。抓取于 2026-09-13。
-> 原文面向算法竞赛、代码示例为 C++；其中“维护区间信息”一节即滑动窗口（同向双指针）技巧。
-
 本页面将简要介绍双指针．
 
 ## 引入
@@ -200,3 +197,8 @@ pair<bool, vector<int>> findCycle(
 ```
 
 时间复杂度 O(n)．
+
+---
+
+> **来源**：本文转载自 [双指针](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/misc/two-pointer.md)，作者 OI Wiki 项目，许可 CC BY-SA 4.0。抓取于 2026-09-13。
+> 原文面向算法竞赛、代码示例为 C++；其中“维护区间信息”一节即滑动窗口（同向双指针）技巧。

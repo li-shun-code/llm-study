@@ -8,9 +8,6 @@ translated: true
 order: 5
 ---
 
-> **来源**：本文翻译自 [Hugging Face Transformers 官方文档 · Generation strategies](https://huggingface.co/docs/transformers/generation_strategies)（Hugging Face，Apache 2.0），并参考 OpenAI 与 Anthropic 官方 API 文档对 `temperature` / `top_p` 参数语义的说明（文内已注明链接，仅为概念性引用）。抓取/翻译于 2026-09-13。
-> "API 中的采样参数"一节按 Responses API 时代写法改编，为本站补充；示例核实于 2026-09。
-
 ## 一、解码策略：模型如何选出下一个 token
 
 解码策略（decoding strategy）决定模型如何选择下一个生成的 token。解码策略有很多种，选择合适的策略对生成文本的质量有显著影响。基础解码方法有三种（译自 Transformers 官方文档）：
@@ -155,3 +152,8 @@ response = client.chat.completions.create(
 2. OpenAI API Reference, *Chat Completions / Responses: temperature, top_p*.（概念性引用）
 3. Anthropic Docs, *Control output variability*.（概念性引用）
 4. Microsoft Learn, *Azure OpenAI models*. CC BY 4.0.
+
+---
+
+> **来源**：本文翻译自 [Hugging Face Transformers 官方文档 · Generation strategies](https://huggingface.co/docs/transformers/generation_strategies)（Hugging Face，Apache 2.0），并参考 OpenAI 与 Anthropic 官方 API 文档对 `temperature` / `top_p` 参数语义的说明（文内已注明链接，仅为概念性引用）。抓取/翻译于 2026-09-13。
+> "API 中的采样参数"一节按 Responses API 时代写法改编，为本站补充；示例核实于 2026-09。

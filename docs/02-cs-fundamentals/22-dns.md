@@ -8,8 +8,6 @@ translated: true
 order: 22
 ---
 
-> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/domain-name-system-dns.html) 第 31 章 "Domain Name System (DNS)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。
-
 我们已经知道 IP 负责在互联网上路由流量，也知道它用 **IP 地址**干活——IPv4 常以点分数字格式示人，如 `10.1.2.3`。
 
 但作为人类，我们极少用 IP 地址。用浏览器时，你一般不会在地址栏里敲 IP。
@@ -206,3 +204,7 @@ DNS 记录类型还有[很多](https://en.wikipedia.org/wiki/List_of_DNS_record_
 - TTL 是干什么用的？
 
 > 译注：回到本模块的视角——你在代码里写 `api.openai.com`，`getaddrinfo()` 先问本地缓存、再问递归解析器、最后沿"根 → .com → 权威服务器"逐级问路拿到 IP，然后才轮到 TCP 三次握手、TLS 握手与 HTTP 请求。DNS 是每一次 API 调用静默的第一步；理解它，也就理解了为什么"解析慢/缓存失效"会让你的服务莫名变慢。
+
+---
+
+> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/domain-name-system-dns.html) 第 31 章 "Domain Name System (DNS)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。

@@ -8,11 +8,6 @@ translated: true
 order: 10
 versions: SQLAlchemy 2.0.52（当前稳定版；全文使用 2.0 风格 API，不涉及遗留 Query API）
 ---
-
-> **来源**：本文翻译自 [ORM Quick Start](https://docs.sqlalchemy.org/en/20/orm/quickstart.html)，作者 SQLAlchemy authors and contributors，许可 MIT。抓取于 2026-09-13。
-
-> **补充来源**：本文"Engine 与连接池"一节编译自统一教程首篇 [Establishing Connectivity - the Engine](https://docs.sqlalchemy.org/en/20/tutorial/engine.html)，许可同上；其中"连接池怎么配"小节为本站编者补充。示例代码与文档输出保持原样（`>>>` 为 REPL 提示符）。
-
 SQLAlchemy 是 Python 生态最主流的 ORM（Object-Relational Mapper，对象关系映射器）。本篇以 SQLAlchemy 2.0 的现代写法（类型注解 + `mapped_column()` + `select()`）走通 ORM 的完整流程：声明模型 → 建 Engine → 建表 → 增 → 查（含 JOIN） → 改 → 删。
 
 > 2.0 变更提示：ORM 快速上手已更新为支持 PEP 484 类型注解的新写法（`DeclarativeBase`、`Mapped`、`mapped_column()`）。网上大量教程仍用 1.x 的 `Query` 对象（`session.query(...)`）风格，学习时请认准 2.0 风格。
@@ -308,3 +303,11 @@ COMMIT
 （原文提示：`session.delete(patrick)` 时会先发出 SELECT——因为上次 `commit()` 后对象已过期（Expired），需要在新事务里重新加载；这种过期机制是可选的，不适用时通常会把它关掉。）
 
 > 站内提示：本站模块 6/8 的实战项目（FastAPI 服务、RAG 落库）都默认用 SQLAlchemy 2.0 风格访问 SQLite/PostgreSQL；把本篇的 `Session(engine)` 与 07 篇的事务概念对照着看，`commit()` 之前的每一步 flush 都是可回滚的。
+
+---
+
+> **来源**：本文翻译自 [ORM Quick Start](https://docs.sqlalchemy.org/en/20/orm/quickstart.html)，作者 SQLAlchemy authors and contributors，许可 MIT。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"Engine 与连接池"一节编译自统一教程首篇 [Establishing Connectivity - the Engine](https://docs.sqlalchemy.org/en/20/tutorial/engine.html)，许可同上；其中"连接池怎么配"小节为本站编者补充。示例代码与文档输出保持原样（`>>>` 为 REPL 提示符）。

@@ -8,8 +8,6 @@ translated: true
 order: 12
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 19 章 [Paging: Faster Translations (TLBs)](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 以**分页**（paging）作为支撑虚拟内存的核心机制，会带来高昂的性能开销：把地址空间切成小而固定大小的单元（页），意味着需要**大量**映射信息；而映射信息一般存在物理内存里，因此分页在逻辑上要求程序的**每个**虚拟地址生成时都多一次内存查找。每次取指令、每次显式加载/存储之前都要先访问内存取翻译信息——慢得令人发指。于是有了问题：
 
 > **问题的核心：如何加速地址翻译？**
@@ -175,3 +173,7 @@ MIPS TLB 通常有 32 或 64 个表项，多数供运行中的用户进程使用
 最后一个值得一提的问题：TLB 访问很容易成为 CPU 流水线的瓶颈，尤其是在所谓**物理索引缓存**（physically-indexed cache）中——必须先完成地址翻译才能访问缓存，拖慢速度。为此人们研究了各种用虚拟地址直接访问缓存的巧妙办法（虚拟索引缓存），在缓存命中时避开昂贵的翻译步骤；这类设计解决了一些性能问题，也带来了新的硬件设计难题。
 
 > 译注（衔接"空闲空间管理"）：TLB 解决的是"翻译快不快"；虚拟内存的另一块拼图是**空闲空间管理**（free-space management）——当用空闲链表等结构管理变长的空闲内存时，会遇到外部碎片、分割、合并与"最佳/最差/首次适配"等策略问题，详见 OSTEP 第 17 章（Free-Space Management）。两者合起来构成"页表之外"的内存管理全貌。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 19 章 [Paging: Faster Translations (TLBs)](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

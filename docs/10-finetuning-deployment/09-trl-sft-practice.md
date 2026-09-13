@@ -9,8 +9,6 @@ order: 9
 versions: TRL（2026-09 主分支文档，SFTTrainer/SFTConfig 现行 API）
 ---
 
-> **来源**：本文翻译自 [SFT Trainer（TRL 官方文档）](https://huggingface.co/docs/trl/sft_trainer)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。文首学习路径说明为编者补充。
-
 原理已在前面几篇铺垫完毕：SFT 学什么（[训练范式回顾](./02-training-paradigms-full-finetuning)）、数据什么格式（[数据准备](./06-training-data-preparation)）、超参怎么给（[超参与过拟合](./08-hyperparams-overfitting)）。这篇进入实战：用 TRL 的 `SFTTrainer`，十几行代码完成一次有监督微调。
 
 ## 概述
@@ -269,3 +267,7 @@ trainer.train()
 - 三个最常用的开关：`packing`（提效）、`assistant_only_loss` / `completion_only_loss`（loss 范围）、`peft_config`（LoRA + 高学习率 1e-4）。
 - 基座模型 → 指令模型：`chat_template_path` 换模板 + 对齐 EOS token。
 - 下一步：SFT 之后做偏好对齐，见 [DPO 与偏好优化](./10-dpo-preference-optimization)。
+
+---
+
+> **来源**：本文翻译自 [SFT Trainer（TRL 官方文档）](https://huggingface.co/docs/trl/sft_trainer)，作者 Hugging Face（TRL 文档），许可 Apache 2.0。抓取于 2026-09-13。文首学习路径说明为编者补充。

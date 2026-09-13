@@ -8,9 +8,6 @@ translated: true
 order: 8
 ---
 
-> **来源**：本文翻译改编自 [OpenAI Cookbook · Techniques to improve reliability](https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md)（OpenAI，MIT），并转载 [happy-llm 第四章 4.1.3 · 挥之不去的幻觉](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md)（DataWhale，CC BY-NC-SA 4.0）对幻觉的定义。抓取/翻译于 2026-09-13。
-> 原文写于 GPT-3 时代，其示例使用旧版补全 API；本站已将示例改写为 Responses API 时代写法并补充"成因分析"与"工程缓解清单"两节。另注：原计划的 Anthropic 官方"减少幻觉"文档页在本站抓取环境不可访问（区域限制），已用上述来源替代，详见 docs/.vitepress/sources-report/04-llm-basics.md。
-
 ## 一、什么是幻觉
 
 先看 happy-llm 的定义：
@@ -117,3 +114,8 @@ print(response.output_text)
 2. DataWhale happy-llm, 第四章 4.1.3. CC BY-NC-SA 4.0.
 3. Wei J., et al. (2022). *Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.* arXiv:2201.11903.
 4. Kojima T., et al. (2022). *Large Language Models are Zero-Shot Reasoners.*（"Let's think step by step"）arXiv:2205.11916.
+
+---
+
+> **来源**：本文翻译改编自 [OpenAI Cookbook · Techniques to improve reliability](https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md)（OpenAI，MIT），并转载 [happy-llm 第四章 4.1.3 · 挥之不去的幻觉](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md)（DataWhale，CC BY-NC-SA 4.0）对幻觉的定义。抓取/翻译于 2026-09-13。
+> 原文写于 GPT-3 时代，其示例使用旧版补全 API；本站已将示例改写为 Responses API 时代写法并补充"成因分析"与"工程缓解清单"两节。另注：原计划的 Anthropic 官方"减少幻觉"文档页在本站抓取环境不可访问（区域限制），已用上述来源替代，详见 docs/.vitepress/sources-report/04-llm-basics.md。

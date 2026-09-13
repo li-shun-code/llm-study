@@ -8,10 +8,6 @@ translated: false
 order: 11
 ---
 
-> **来源**：本文转载自 [堆](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_heap/heap.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[建堆操作](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_heap/build_heap.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 堆
 
 
@@ -203,3 +199,9 @@ heapq.heapify(min_heap)
 
 
 进一步，高度为 h 的完美二叉树的节点数量为 n = 2^(h+1) - 1 ，易得复杂度为 O(2^h) = O(n) 。以上推算表明，**输入列表并建堆的时间复杂度为 O(n) ，非常高效**。
+
+---
+
+> **来源**：本文转载自 [堆](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_heap/heap.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[建堆操作](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_heap/build_heap.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

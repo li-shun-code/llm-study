@@ -8,8 +8,6 @@ translated: true
 order: 7
 ---
 
-> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 1 章 [Introduction to Operating Systems](https://pages.cs.wisc.edu/~remzi/OSTEP/intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-
 程序运行时到底发生了什么？
 
 其实非常简单：运行中的程序就是在**执行指令**。处理器每秒取指令、解码（搞清楚这是条什么指令）、执行（做它该做的事，比如两数相加、访问内存、检查条件、跳转到函数……）数百万乃至数十亿次。一条指令做完，处理器接着处理下一条，如此往复，直到程序完成。这就是冯·诺依曼（Von Neumann）计算模型的基本图景。听起来简单，对吧？但就在程序运行的同时，还有大量"狂野"的事情在发生，它们的首要目标是**让系统易于使用**。
@@ -265,3 +263,7 @@ OS 实际怎么写到磁盘？文件系统要做不少事：先确定新数据�
 ## 小结
 
 今天的操作系统让计算机系统相当易用，你用过的几乎所有操作系统都深受上述发展的影响。OS 的核心内容——CPU 与内存的虚拟化基础、并发、经由设备与文件系统的持久化——也是本模块后续文章的主线：进程、线程、调度、内存管理、虚拟内存、文件系统与锁。路很长，但大部分内容相当酷；走完这条路，你会对计算机系统如何真正运转有全新的认识。
+
+---
+
+> **来源**：本文翻译自《Operating Systems: Three Easy Pieces》第 1 章 [Introduction to Operating Systems](https://pages.cs.wisc.edu/~remzi/OSTEP/intro.pdf)（OSTEP 官网免费章节），作者 Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

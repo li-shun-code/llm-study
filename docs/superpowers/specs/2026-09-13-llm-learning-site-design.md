@@ -47,7 +47,7 @@
 - **网页抓取**：其余用网页抓取（HTML→Markdown）。
 - **反爬替换**：知乎、微信公众号等抓不到的站点，替换为同主题可抓取文章，保证总数。
 - **技术时效性（硬性）**：内容以抓取时点（2026-09）最新稳定版为准：Python 3.13+、OpenAI Responses API 与 Chat Completions（Assistants API 已废弃不收）、LangChain ≥1.0、AutoGen 按 Microsoft Agent Framework 现状、vLLM V1、VitePress 最新稳定版；模型对比以抓取时最新模型为准。过时 API 仅可在"历史演进"语境中提及。每篇可选 `versions` frontmatter 记录版本。
-- **frontmatter 契约**：每篇 md 头部含 `title / source_url / author / license / fetched_at / translated(bool)`；页面顶部渲染来源署名卡片。
+- **frontmatter 契约**：每篇 md 头部含 `title / source_url / author / license / fetched_at / translated(bool)`；来源署名块渲染在文章**文末**（2026-09-13 调整：由顶部改为底部，用分隔线隔开）。
 - **失败记录**：抓取失败的 URL 记入 `sources-report.md` 并说明替代。
 
 ## 4. 技术实现

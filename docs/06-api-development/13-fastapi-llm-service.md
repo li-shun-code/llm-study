@@ -9,9 +9,6 @@ order: 13
 versions: FastAPI 当前稳定版（0.134.0+ 支持 stream-data；Python 3.10+）
 ---
 
-> **来源**：本文转载自 [FastAPI 官方文档中文版 · 第一步](https://fastapi.tiangolo.com/zh/tutorial/first-steps/)、[更大的应用](https://fastapi.tiangolo.com/zh/tutorial/bigger-applications/) 与 [流式数据](https://fastapi.tiangolo.com/zh/advanced/stream-data/)，作者 FastAPI（tiangolo）及文档贡献者，许可 MIT。抓取于 2026-09-13。
-> 本文为编排整理（编译）：原文分属多个页面，本站按"把 LLM API 封装成自己的服务"的主线重组；标注"本站补充"的内容为编辑所加。FastAPI 的完整教程（Pydantic 校验、依赖项、鉴权等）见模块 3。
-
 学完前 12 篇，你已经能在脚本里调通 LLM API。真正的应用要把它**封装成 HTTP 服务**：前端、小程序、别的后端都能来调用，而 API Key 永远留在服务端。FastAPI 是做这件事的标配——Python 3.10+、原生 async、基于标准（OpenAPI + JSON Schema）、自带交互式文档。
 
 ## 一、最小的 FastAPI 应用
@@ -205,3 +202,8 @@ router = APIRouter(
 - 封装 LLM：`.env` 管 Key（模块 0 方案），Pydantic 管入参，`AsyncOpenAI` 管调用；
 - 流式：`response_class=StreamingResponse` + `yield`，FastAPI 0.134.0+ 原生支持，LLM 输出是官方点名的用例；
 - 服务变大用 `APIRouter` 拆模块，用 `Depends` 挂鉴权依赖。
+
+---
+
+> **来源**：本文转载自 [FastAPI 官方文档中文版 · 第一步](https://fastapi.tiangolo.com/zh/tutorial/first-steps/)、[更大的应用](https://fastapi.tiangolo.com/zh/tutorial/bigger-applications/) 与 [流式数据](https://fastapi.tiangolo.com/zh/advanced/stream-data/)，作者 FastAPI（tiangolo）及文档贡献者，许可 MIT。抓取于 2026-09-13。
+> 本文为编排整理（编译）：原文分属多个页面，本站按"把 LLM API 封装成自己的服务"的主线重组；标注"本站补充"的内容为编辑所加。FastAPI 的完整教程（Pydantic 校验、依赖项、鉴权等）见模块 3。

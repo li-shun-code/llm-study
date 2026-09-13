@@ -8,10 +8,6 @@ translated: false
 order: 20
 ---
 
-> **来源**：本文转载自 [初探动态规划](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[动态规划问题特性](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.md)、[动态规划解题思路](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 初探动态规划
 
 
@@ -322,3 +318,9 @@ order: 20
 由于每个格子只与其左边和上边的格子有关，因此我们可以只用一个单行数组来实现 dp 表。
 
 请注意，因为数组 `dp` 只能表示一行的状态，所以我们无法提前初始化首列状态，而是在遍历每行时更新它：
+
+---
+
+> **来源**：本文转载自 [初探动态规划](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[动态规划问题特性](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.md)、[动态规划解题思路](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

@@ -8,11 +8,6 @@ translated: true
 order: 11
 versions: Redis 官方文档当前版（redis-doc 仓库，CC BY-SA 4.0）
 ---
-
-> **来源**：本文翻译自 [Redis data types（数据类型总览）](https://redis.io/docs/latest/develop/data-types/)，作者 Redis Ltd.（redis-doc 文档仓库），许可 CC BY-SA 4.0。抓取于 2026-09-13。
-
-> **补充来源**：本文各数据结构小节与"键与过期"一节分别编译自同一官方文档仓库的 [Strings](https://redis.io/docs/latest/develop/data-types/strings/)、[Lists](https://redis.io/docs/latest/develop/data-types/lists/)、[Sets](https://redis.io/docs/latest/develop/data-types/sets/)、[Hashes](https://redis.io/docs/latest/develop/data-types/hashes/)、[Sorted sets](https://redis.io/docs/latest/develop/data-types/sorted-sets/) 与 [Keyspace](https://redis.io/docs/latest/develop/use/keyspace/) 页（示例中的 clients-example 模板标记为原文档的客户端选择器（大括号模板语法已省略），此处统一采用 redis-cli 形式），许可同上；文末"缓存模式"小节为本站编者补充。
-
 ## Redis 是数据结构服务器
 
 Redis 的核心是一组原生数据类型（Data Types），帮助你解决从缓存（Caching）、队列（Queuing）到事件处理（Event Processing）的各类问题。理解这些数据结构，比把它当"纯 KV 缓存"更能发挥其价值。
@@ -235,3 +230,11 @@ OK
 - **TTL 的选择**：短 TTL 换取新鲜度，长 TTL 换取命中率；结合 `SET ... EX` 一次写入，避免"先 SET 再 EXPIRE"的竞态。
 - **计数与限流**：`INCR` + `EXPIRE` 实现固定窗口限流；有序集合成员存时间戳可实现滑动窗口限流。
 - **阻塞队列**：`LPUSH` + `BLPOP`（或 `LMOVE` 双列表）把异步任务（如批量 embedding、长文摘要）从 API 进程转交 worker。
+
+---
+
+> **来源**：本文翻译自 [Redis data types（数据类型总览）](https://redis.io/docs/latest/develop/data-types/)，作者 Redis Ltd.（redis-doc 文档仓库），许可 CC BY-SA 4.0。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文各数据结构小节与"键与过期"一节分别编译自同一官方文档仓库的 [Strings](https://redis.io/docs/latest/develop/data-types/strings/)、[Lists](https://redis.io/docs/latest/develop/data-types/lists/)、[Sets](https://redis.io/docs/latest/develop/data-types/sets/)、[Hashes](https://redis.io/docs/latest/develop/data-types/hashes/)、[Sorted sets](https://redis.io/docs/latest/develop/data-types/sorted-sets/) 与 [Keyspace](https://redis.io/docs/latest/develop/use/keyspace/) 页（示例中的 clients-example 模板标记为原文档的客户端选择器（大括号模板语法已省略），此处统一采用 redis-cli 形式），许可同上；文末"缓存模式"小节为本站编者补充。

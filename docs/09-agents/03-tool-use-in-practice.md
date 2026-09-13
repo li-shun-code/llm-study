@@ -8,8 +8,6 @@ translated: true
 order: 3
 ---
 
-> **来源**：本文翻译自 Hugging Face Agents Course 第一单元 [What are Tools?](https://huggingface.co/learn/agents-course/en/unit1/tools) 与 [Actions: Enabling the Agent to Engage with Its Environment](https://huggingface.co/learn/agents-course/en/unit1/actions) 两节，作者 Hugging Face Agents Course 团队，许可 Apache 2.0。抓取于 2026-09-13。
-
 # 什么是工具（Tool）？
 
 AI 智能体（Agent）的一个关键能力是执行**动作（Action）**——而这是通过**工具（Tool）**实现的。本节将学习什么是工具、如何有效设计工具，以及如何通过系统消息把它们集成到你的智能体中。
@@ -341,3 +339,7 @@ print(final_answer)
 ---
 
 动作通过执行清晰、结构化的任务，把智能体的内部推理与真实世界的交互连接起来——无论是 JSON、代码还是函数调用。代码智能体的完整展开见本模块第 14 篇。
+
+---
+
+> **来源**：本文翻译自 Hugging Face Agents Course 第一单元 [What are Tools?](https://huggingface.co/learn/agents-course/en/unit1/tools) 与 [Actions: Enabling the Agent to Engage with Its Environment](https://huggingface.co/learn/agents-course/en/unit1/actions) 两节，作者 Hugging Face Agents Course 团队，许可 Apache 2.0。抓取于 2026-09-13。

@@ -8,11 +8,6 @@ translated: true
 order: 12
 versions: MongoDB 文档手册当前版（含 5.0/6.1 起的行为说明）
 ---
-
-> **来源**：本文翻译自 [Documents](https://www.mongodb.com/docs/manual/core/document/)，作者 MongoDB Inc.（MongoDB 文档手册），许可 CC BY-NC-SA 3.0 US。抓取于 2026-09-13。
-
-> **补充来源**：本文"MongoDB 是什么"一节编译自同一手册的 [Introduction to MongoDB](https://www.mongodb.com/docs/manual/introduction/)，许可同上；文末"与关系模型的取舍"小节为本站编者补充。
-
 ## MongoDB 是什么
 
 MongoDB 是一个文档数据库（Document Database），帮助开发者更快构建现代应用：数据存放在灵活的、类 JSON 的文档中，让数据建模与应用代码使用数据的方式保持一致。灵活模式（Schema）意味着可以不停机演进数据模型、快速迭代、从容处理不均匀的数据。MongoDB 提供强大的查询引擎、横向扩展与内置高可用，从快速原型到大型关键负载都能支撑。
@@ -109,3 +104,11 @@ MongoDB 用点表示法访问数组元素与内嵌文档的字段。
 - **何时选文档模型**：数据的读写天然以"聚合根"为单位（如一条 LLM 会话连同其全部消息、一次评测连同其全部样本得分），内嵌文档一次读取即可整体返回，免去多次 JOIN；字段在不同记录间天然不齐（多模态消息、不同厂商的 trace 字段）时，动态模式比"满是可空列的宽表"干净得多。
 - **何时不选**：需要跨实体复杂 JOIN、强事务约束、多对多关系频繁变动的场景，关系模型（本模块 01-07 篇）仍是首选。MongoDB 自 4.0 起支持多文档 ACID 事务，但"文档模型 + 事务"通常应保留给真正需要原子更新多文档的场合，而不是替代规范化的关系设计。
 - **快速上手**：Community 版可用 Docker（`docker run -d -p 27017:27017 mongo`）启动，配合 `mongosh` 或 PyMongo/ Motor 练习本篇的文档读写。
+
+---
+
+> **来源**：本文翻译自 [Documents](https://www.mongodb.com/docs/manual/core/document/)，作者 MongoDB Inc.（MongoDB 文档手册），许可 CC BY-NC-SA 3.0 US。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"MongoDB 是什么"一节编译自同一手册的 [Introduction to MongoDB](https://www.mongodb.com/docs/manual/introduction/)，许可同上；文末"与关系模型的取舍"小节为本站编者补充。

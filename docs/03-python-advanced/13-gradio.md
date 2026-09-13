@@ -8,11 +8,6 @@ translated: true
 order: 13
 versions: Gradio 6（要求 Python 3.10+）
 ---
-
-> **来源**：本文翻译自 [Quickstart — Gradio Guides](https://www.gradio.app/guides/quickstart)，作者 Gradio 团队（Hugging Face），许可 Apache License 2.0。抓取于 2026-09-13。
-
-> 编者注：Gradio 是给机器学习模型 / API / 任意 Python 函数快速搭演示界面的标准工具，Hugging Face Spaces 免费托管的大多数 Demo 都基于它。做模型 Demo、给同事演示 prompt 效果、给 Agent 项目搭一个可视化前端，Gradio 都是首选。本篇为官方 Quickstart 的中文翻译，略有删节。
-
 ## 安装
 
 **前提**：Gradio 要求 [Python 3.10 或更高版本](https://www.python.org/downloads/)。
@@ -126,3 +121,11 @@ demo.launch()
 ## 接下来？
 
 按 Gradio Guides 顺序学习即可，每篇都有解释、示例代码和内嵌的交互式 Demo。下一站：[深入了解 Interface 类](https://www.gradio.app/guides/the-interface-class)。如果已经掌握基础、想查具体内容，可以搜索更技术性的 [API 文档](https://www.gradio.app/docs/)。
+
+---
+
+> **来源**：本文翻译自 [Quickstart — Gradio Guides](https://www.gradio.app/guides/quickstart)，作者 Gradio 团队（Hugging Face），许可 Apache License 2.0。抓取于 2026-09-13。
+
+---
+
+> 编者注：Gradio 是给机器学习模型 / API / 任意 Python 函数快速搭演示界面的标准工具，Hugging Face Spaces 免费托管的大多数 Demo 都基于它。做模型 Demo、给同事演示 prompt 效果、给 Agent 项目搭一个可视化前端，Gradio 都是首选。本篇为官方 Quickstart 的中文翻译，略有删节。

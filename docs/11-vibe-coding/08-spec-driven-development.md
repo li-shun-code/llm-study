@@ -8,8 +8,6 @@ translated: true
 order: 8
 ---
 
-> **来源**：本文主篇翻译自 [github/spec-kit](https://github.com/github/spec-kit) 项目 README（英文原版），作者 GitHub（Spec Kit 团队），许可 MIT；延伸实践一节摘译自 Geoffrey Huntley《[Ralph Wiggum as a "software engineer"](https://ghuntley.com/ralph/)》（2025-07-25），署名转载。抓取于 2026-09-13。Spec Kit 于 2026-08 发布 1.0.0，本文以该版本文档为准。
-
 ## 什么是 Spec 驱动开发（Spec-Driven Development）？
 
 Spec 驱动开发**颠覆了传统软件开发的剧本**。几十年来，代码是王——规格说明只是脚手架，一旦"真正的工作"（写码）开始就被丢掉。Spec 驱动开发改变了这一点：**规格说明成为可执行的（executable）**，直接生成能跑的实现，而不再只是"指导"实现。
@@ -178,3 +176,7 @@ while :; do cat PROMPT.md | npx claude-code ; done
 这个循环粗糙但有效：预算封顶、可随时打断、产物是 PR。它的精神内核——把"做什么"写清楚，把"怎么做"交给循环——正是 Spec Kit 把它工程化的起点。
 
 > 译注：Spec 驱动与本模块其他篇章的关系——Spec Kit 的 `/speckit-implement` 本质是第 3 篇"可验证的完成标准"的项目化；`/speckit-tasks` 对应第 15 篇 0→1 流程中的任务拆解；`/speckit-converge` 与第 11 篇代码审查共享同一个思想：**让另一个上下文对照规格检查实现**。
+
+---
+
+> **来源**：本文主篇翻译自 [github/spec-kit](https://github.com/github/spec-kit) 项目 README（英文原版），作者 GitHub（Spec Kit 团队），许可 MIT；延伸实践一节摘译自 Geoffrey Huntley《[Ralph Wiggum as a "software engineer"](https://ghuntley.com/ralph/)》（2025-07-25），署名转载。抓取于 2026-09-13。Spec Kit 于 2026-08 发布 1.0.0，本文以该版本文档为准。

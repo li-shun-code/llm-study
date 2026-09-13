@@ -8,10 +8,6 @@ translated: false
 order: 6
 ---
 
-> **来源**：本文转载自 [哈希表](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[哈希冲突](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_collision.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 哈希表
 
 
@@ -234,3 +230,9 @@ index = hash(key) % capacity
 - Python 采用开放寻址。字典 `dict` 使用伪随机数进行探测。
 - Java 采用链式地址。自 JDK 1.8 以来，当 `HashMap` 内数组长度达到 64 且链表长度达到 8 时，链表会转换为红黑树以提升查找性能。
 - Go 采用链式地址。Go 规定每个桶最多存储 8 个键值对，超出容量则连接一个溢出桶；当溢出桶过多时，会执行一次特殊的等量扩容操作，以确保性能。
+
+---
+
+> **来源**：本文转载自 [哈希表](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[哈希冲突](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_collision.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

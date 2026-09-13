@@ -8,11 +8,6 @@ translated: true
 order: 8
 versions: SQLite 文档当前版（whentouse 页 2025-05 更新；CLI 文档对照 3.52）
 ---
-
-> **来源**：本文翻译自 [Appropriate Uses For SQLite](https://www.sqlite.org/whentouse.html)，作者 SQLite Developers（sqlite.org），许可 Public Domain（公有领域）。抓取于 2026-09-13。
-
-> **补充来源**：本文"sqlite3 命令行速成"一节编译自同一官方文档的 [Command Line Shell For SQLite](https://www.sqlite.org/cli.html)，许可同上。
-
 SQLite 与 MySQL、Oracle、PostgreSQL、SQL Server 这类客户端/服务器 SQL 数据库引擎并不能直接比较，因为 SQLite 要解决的是另一个问题。
 
 客户端/服务器引擎致力于实现企业数据的共享仓库，强调可伸缩性、并发、集中化与管控；SQLite 致力于为单个应用和设备提供本地数据存储，强调经济、高效、可靠、独立与简单。
@@ -102,3 +97,11 @@ sqlite>
 点命令的语法规则：必须顶行首以 `.` 开始（前面不能有空白）；必须整条写在一行内；不能出现在普通 SQL 语句的续行中；没有注释语法。多数点命令可缩写，如 `.q` 是 `.quit` 的常用缩写。CLI 输入是 SQL 语句、点命令与注释的混合序列；SQL 自由换行，以行尾 `;` 结束。
 
 > 站内提示：Windows 用户双击 sqlite3.exe 启动时未指定文件，会连到临时内存库——启动后立即执行 `.open ex1.db`（或用完执行 `.save ex1.db`）即可持久化；路径建议用正斜杠写全路径（`c:/work/ex1.db`）。另外官方还提供浏览器内运行的 CLI 沙箱（sqlite.org/fiddle），可零安装练手。
+
+---
+
+> **来源**：本文翻译自 [Appropriate Uses For SQLite](https://www.sqlite.org/whentouse.html)，作者 SQLite Developers（sqlite.org），许可 Public Domain（公有领域）。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"sqlite3 命令行速成"一节编译自同一官方文档的 [Command Line Shell For SQLite](https://www.sqlite.org/cli.html)，许可同上。

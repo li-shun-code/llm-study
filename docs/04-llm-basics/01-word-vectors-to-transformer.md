@@ -8,9 +8,6 @@ translated: false
 order: 1
 ---
 
-> **来源**：本文转载自 [第一章 NLP 基础概念 · 文本表示的发展历程](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter1/%E7%AC%AC%E4%B8%80%E7%AB%A0%20NLP%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5.md) 与 [第二章 Transformer 架构](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合两章内容：第一章 1.4 节讲清"文本如何变成向量"，第二章讲清"Transformer 如何接棒词向量成为大模型的地基"。原文 LaTeX 公式已转写为 Unicode 文本，图片改为仓库原始链接；衔接性小节（标注"编者注"）为本站补充。
-
 ## 一、文本表示：让计算机读懂语言
 
 文本表示的目的是将人类语言的自然形式转化为计算机可以处理的形式，也就是将文本数据数字化，使计算机能够对文本进行有效的分析和处理。文本表示是 NLP 领域中的一项基础性和必要性工作，它直接影响甚至决定着 NLP 系统的质量和性能。
@@ -145,3 +142,8 @@ PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
 2. Matthew E. Peters, et al. (2018). *Deep contextualized word representations.* arXiv:1802.05365.
 3. Ashish Vaswani, et al. (2017). *Attention Is All You Need.* arXiv:1706.03762.
 4. Salton, G., Wong, A., Yang, C. S. (1975). *A vector space model for automatic indexing.* Communications of the ACM, 18(11), 613–620.
+
+---
+
+> **来源**：本文转载自 [第一章 NLP 基础概念 · 文本表示的发展历程](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter1/%E7%AC%AC%E4%B8%80%E7%AB%A0%20NLP%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5.md) 与 [第二章 Transformer 架构](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合两章内容：第一章 1.4 节讲清"文本如何变成向量"，第二章讲清"Transformer 如何接棒词向量成为大模型的地基"。原文 LaTeX 公式已转写为 Unicode 文本，图片改为仓库原始链接；衔接性小节（标注"编者注"）为本站补充。

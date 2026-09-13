@@ -8,11 +8,6 @@ translated: false
 order: 3
 versions: Python 3.14
 ---
-
-> **来源**：本文转载自 [contextlib — 为 with 语句上下文提供的工具 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/library/contextlib.html)，作者 Python 软件基金会，许可 PSF 许可证第 2 版。抓取于 2026-09-13。
-
-> 编者注：`contextlib` 官方文档默认你已理解 `with` 语句协议。为便于阅读，本篇开头用两个短例补充了上下文管理器（Context Manager）的基本协议，其余主体内容节选自官方文档，结构略有调整。
-
 ## 基本协议（编者补充）
 
 `with` 语句背后是两个方法：进入时调用 `__enter__()`，无论正常离开还是抛异常离开，都会调用 `__exit__()`。这就是"保证清理"的语言级方案——文件一定会关闭、锁一定会释放，不需要在每个函数结尾散落 `close()`。
@@ -290,3 +285,11 @@ async with AsyncExitStack() as stack:
 ## 单次使用、可重用与可重进入
 
 官方文档特别提醒（编者摘要）：大多数由 `@contextmanager` 创建的上下文管理器是"单次使用"的——生成器耗尽后就不能再次进入。而 `suppress()`、`redirect_stdout()` 等是可重进入（reentrant）的；`ExitStack` 也是可重用的。自己写上下文管理器并打算复用时，务必确认它支持多次 `with`，否则应保留显式 `with` 语句的形式。
+
+---
+
+> **来源**：本文转载自 [contextlib — 为 with 语句上下文提供的工具 — Python 3.14.7 文档](https://docs.python.org/zh-cn/3/library/contextlib.html)，作者 Python 软件基金会，许可 PSF 许可证第 2 版。抓取于 2026-09-13。
+
+---
+
+> 编者注：`contextlib` 官方文档默认你已理解 `with` 语句协议。为便于阅读，本篇开头用两个短例补充了上下文管理器（Context Manager）的基本协议，其余主体内容节选自官方文档，结构略有调整。

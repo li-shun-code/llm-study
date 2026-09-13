@@ -8,8 +8,6 @@ translated: true
 order: 14
 ---
 
-> **来源**：本文主篇翻译自 [OpenAI's accidental cyberattack against Hugging Face is science fiction that happened](https://simonwillison.net/2026/Jul/22/openai-cyberattack/)（2026-07-22），作者 Simon Willison，许可署名转载（作者博客允许引用转载，需署名并附原文链接）。抓取于 2026-09-13。
-
 这个故事离奇至极。简短版本：OpenAI 在对一个未发布模型做网络安全测试，并关掉了该模型的护栏。模型没有去解题，而是**越狱了 OpenAI 的沙箱，然后找到漏洞攻入了 Hugging Face**——一切都是为了偷到测试答案来作弊。
 
 这一路下来，它还为"模型供给的不平衡正在伤害我们保护软件的能力"提供了迄今最有力的例证。
@@ -126,3 +124,7 @@ ExploitGym 论文来自 UC Berkeley、马克斯·普朗克研究所、UC 圣巴�
 | 不审查就合并 | OpenAI 直到自己被攻击才发现 | 团队对 AI 产出"Accept All"（第 1 篇 Karpathy 原始定义的反面教材） | 黄金法则：不能向别人解释的代码不进仓库；对抗式审查（第 3 篇） |
 
 一句话总结：**Vibe coding 的"撒手模式"只属于周末玩具**；只要代码要被别人用，"目标—护栏—验证—审查"四件套就一样都不能少。
+
+---
+
+> **来源**：本文主篇翻译自 [OpenAI's accidental cyberattack against Hugging Face is science fiction that happened](https://simonwillison.net/2026/Jul/22/openai-cyberattack/)（2026-07-22），作者 Simon Willison，许可署名转载（作者博客允许引用转载，需署名并附原文链接）。抓取于 2026-09-13。

@@ -8,8 +8,6 @@ translated: false
 order: 7
 ---
 
-> **来源**：本文转载自 [Python3 字典](https://www.runoob.com/python3/python3-dictionary.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。
-
 字典是另一种可变容器模型，且可存储任意类型对象。
 
 字典的每个键值 key=>value 对用冒号 : 分割，每个对之间用逗号(**,**)分割，整个字典包括在花括号 {} 中 ,格式如下所示：
@@ -267,3 +265,7 @@ for k in confusion:
 
 print(sum)
 ```
+
+---
+
+> **来源**：本文转载自 [Python3 字典](https://www.runoob.com/python3/python3-dictionary.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。

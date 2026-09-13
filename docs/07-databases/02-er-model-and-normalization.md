@@ -8,11 +8,6 @@ translated: true
 order: 2
 versions: 概念性内容，适用于所有关系数据库
 ---
-
-> **来源**：本文翻译自 [1.8: The Entity Relationship Data Model](https://eng.libretexts.org/Bookshelves/Computer_Science/Databases_and_Data_Structures/Database_Design_2e_(Watt)/01%3A_Chapters/1.08%3A_The_Entity_Relationship_Data_Model)，作者 Adrienne Watt / Nelson Eng（Database Design - 2nd Edition），许可 CC BY 4.0。抓取于 2026-09-13。
-
-> **补充来源**：本文"范式"一节翻译自同一本开放教科书的 [1.12: Normalization](https://eng.libretexts.org/Bookshelves/Computer_Science/Databases_and_Data_Structures/Database_Design_2e_(Watt)/01%3A_Chapters/1.12%3A_Normalization)，许可同上；文末"站内实战"小节为本站编者补充。原文配图已删去，图示信息以文字或表格转写说明。
-
 ## E-R 数据模型
 
 实体关系（ER，Entity Relationship）数据模型已存在超过 35 年。它相当抽象、易于讨论和解释，又可以直接翻译成关系（表），因此非常适合数据库的数据建模。ER 模型（也称 ER 模式，ER Schema）用 ER 图（ERD，ER Diagram）表示。
@@ -220,3 +215,11 @@ CREATE TABLE messages (
 ```
 
 要不要为"查某用户的全部会话"再加一层 `users` 表并通过复合外键建立强联系，取决于你的业务规则——这正是原文反复强调的：范式之外，最终决定权在业务。
+
+---
+
+> **来源**：本文翻译自 [1.8: The Entity Relationship Data Model](https://eng.libretexts.org/Bookshelves/Computer_Science/Databases_and_Data_Structures/Database_Design_2e_(Watt)/01%3A_Chapters/1.08%3A_The_Entity_Relationship_Data_Model)，作者 Adrienne Watt / Nelson Eng（Database Design - 2nd Edition），许可 CC BY 4.0。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"范式"一节翻译自同一本开放教科书的 [1.12: Normalization](https://eng.libretexts.org/Bookshelves/Computer_Science/Databases_and_Data_Structures/Database_Design_2e_(Watt)/01%3A_Chapters/1.12%3A_Normalization)，许可同上；文末"站内实战"小节为本站编者补充。原文配图已删去，图示信息以文字或表格转写说明。

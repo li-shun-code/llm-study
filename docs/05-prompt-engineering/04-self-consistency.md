@@ -9,8 +9,6 @@ order: 4
 versions: 提示技术通用
 ---
 
-> **来源**：本文翻译自 [Self-Consistency](https://www.promptingguide.ai/techniques/consistency)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。
-
 **自洽**（self-consistency）可以说是提示词工程中较为进阶的技术之一，由 Wang et al. (2022) 提出，目标 是"替换思维链提示中朴素 的贪心解码"。其思想是：通过少样本 CoT **采样多条、多样化的推理路径**，再利用这些生成结果选出最一致的答案。这有助于提升 CoT 提示在算术与常识推理任务上的表现。
 
 ## 一个先失败的例子
@@ -108,3 +106,7 @@ When I was 6 my sister was half my age, so she was 3. Now I am 70, so she is 70/
 - 自洽性 = CoT + **多路采样**（multiple reasoning paths）+ **一致性聚合**（majority vote）；
 - 它利用了一个事实：错误答案往往各自错得五花八门，而正确答案倾向于殊途同归；
 - 采样多样性来自解码温度与不同的推理路径本身；示例中的三路采样里，两路给出 67、一路给出 35，多数投票救回了正确答案。
+
+---
+
+> **来源**：本文翻译自 [Self-Consistency](https://www.promptingguide.ai/techniques/consistency)，作者 DAIR.AI（Elvis Saravia），许可 MIT。抓取于 2026-09-13。

@@ -8,9 +8,6 @@ translated: false
 order: 6
 ---
 
-> **来源**：本文转载自 [第四章 大语言模型 · 4.2 如何训练一个 LLM](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md) 与 [第六章 6.4 通过强化学习进行偏好对齐](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/6.4%5BWIP%5D%20%E5%81%8F%E5%A5%BD%E5%AF%B9%E9%BD%90.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 原文 LaTeX 公式已转写为 Unicode 文本，图片改为仓库原始链接，Pretrain 一节有节选；文末"为后续模块铺路"一节为本站编写的交叉引用。
-
 训练一个 LLM 与训练传统模型有什么区别？一般而言，训练一个完整的 LLM 需要经过三个阶段——**Pretrain（预训练）→ SFT（有监督微调）→ RLHF（人类反馈强化学习）**。
 
 ![图：训练 LLM 的三个阶段](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/images/4-figures/2-0.jpg)
@@ -157,3 +154,8 @@ DPO 使用的数据与 RM 偏好数据同构（question/chosen/rejected 三元�
 3. Jordan Hoffmann, et al. (2022). *Training Compute-Optimal Large Language Models.* arXiv:2203.15556.
 4. Rafael Rafailov, et al. (2024). *Direct Preference Optimization: Your Language Model is Secretly a Reward Model.* arXiv:2305.18290.
 5. Wayne Xin Zhao, et al. (2025). *A Survey of Large Language Models.* arXiv:2303.18223.
+
+---
+
+> **来源**：本文转载自 [第四章 大语言模型 · 4.2 如何训练一个 LLM](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md) 与 [第六章 6.4 通过强化学习进行偏好对齐](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/6.4%5BWIP%5D%20%E5%81%8F%E5%A5%BD%E5%AF%B9%E9%BD%90.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 原文 LaTeX 公式已转写为 Unicode 文本，图片改为仓库原始链接，Pretrain 一节有节选；文末"为后续模块铺路"一节为本站编写的交叉引用。

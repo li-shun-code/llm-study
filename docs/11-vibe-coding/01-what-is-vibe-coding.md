@@ -8,8 +8,6 @@ translated: true
 order: 1
 ---
 
-> **来源**：本文主篇翻译自 [Not all AI-assisted programming is vibe coding (but vibe coding rocks)](https://simonwillison.net/2025/Mar/19/vibe-coding/)，作者 Simon Willison，许可署名转载（作者博客允许引用转载，需署名并附原文链接）。文末延伸阅读一节译自同作者 [Vibe engineering](https://simonwillison.net/2025/Oct/7/vibe-engineering/)（2025-10-07，含 2026-02-23 更新）。抓取于 2026-09-13。
-
 **Vibe coding**（氛围编程，一译"凭感觉编程"）正当红。这个词由 Andrej Karpathy 几周前（2025 年 2 月 6 日）在一条推文中创造，随后登上《纽约时报》、Ars Technica、《卫报》和无数网络讨论。
 
 我担心的是，这个定义已经悄悄偏离了它的本意。我看到有人把"vibe coding"套在所有借助 AI 写代码的行为上。我认为这既稀释了这个词，也给人造成错误印象——让人误以为负责任的 AI 辅助编程（AI-assisted programming）就只有这么点能耐。
@@ -133,3 +131,7 @@ Vibe coding 对有经验的开发者同样价值巨大。我之前谈过"用 LLM
 以上几乎都是资深软件工程师已经具备的特质！**AI 工具放大既有的专业能力**。你作为软件工程师的技能与经验越多，与 LLM 和编码智能体协作得到的成果就越快越好。
 
 > 译注：本文所在模块后续篇章——工具对比（第 2 篇）、Claude Code 最佳实践（第 3 篇）、Git in AI 工作流（第 7 篇）、代码审查（第 11 篇）、安全陷阱（第 14 篇）——正是"vibe engineering / agentic engineering"一侧的各项具体功夫；而第 15 篇《从 0 到 1 用 AI 做产品》会回到"低风险、快迭代"的 vibe coding 一侧，两者结合方为完整图景。
+
+---
+
+> **来源**：本文主篇翻译自 [Not all AI-assisted programming is vibe coding (but vibe coding rocks)](https://simonwillison.net/2025/Mar/19/vibe-coding/)，作者 Simon Willison，许可署名转载（作者博客允许引用转载，需署名并附原文链接）。文末延伸阅读一节译自同作者 [Vibe engineering](https://simonwillison.net/2025/Oct/7/vibe-engineering/)（2025-10-07，含 2026-02-23 更新）。抓取于 2026-09-13。

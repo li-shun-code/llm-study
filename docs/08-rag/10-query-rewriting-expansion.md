@@ -8,9 +8,6 @@ translated: true
 order: 10
 ---
 
-> **来源**：本文翻译自 [Query Transformations for Improved Retrieval in RAG Systems](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/query_transformations.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
-> 编者注（时效性校订）：原 notebook 的 `from langchain.prompts import PromptTemplate` 属旧 import 路径，已按当前稳定版改为 `langchain_core.prompts`；原文代码本身已是 LCEL 管道（`prompt | llm`），逻辑未改。
-
 ## 概述
 
 本篇实现三种查询变换（Query Transformation）技术来增强 RAG 系统的检索：
@@ -221,3 +218,8 @@ for i, sub_query in enumerate(sub_queries, 1):
 ## 小结
 
 查询变换为提升 RAG 检索能力提供了有力工具：改写、退后、分解，各有侧重，可以显著改善召回信息的相关性、上下文与全面性。在查询复杂或多面的领域——科学研究、法律分析、综合性事实调查——价值尤其突出。与第 13 篇的 Agentic RAG 呼应：查询改写正是 Agent"自主决定如何检索"的基本动作之一。
+
+---
+
+> **来源**：本文翻译自 [Query Transformations for Improved Retrieval in RAG Systems](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/query_transformations.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
+> 编者注（时效性校订）：原 notebook 的 `from langchain.prompts import PromptTemplate` 属旧 import 路径，已按当前稳定版改为 `langchain_core.prompts`；原文代码本身已是 LCEL 管道（`prompt | llm`），逻辑未改。

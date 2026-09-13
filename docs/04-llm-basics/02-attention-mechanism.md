@@ -8,9 +8,6 @@ translated: false
 order: 2
 ---
 
-> **来源**：本文转载自 [第二章 Transformer 架构 · 2.1 注意力机制](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 原文 LaTeX 公式已转写为 Unicode 文本；图片改为仓库原始链接。多头注意力的完整 `MultiHeadAttention` 代码保留，依赖的 `ModelArgs` 配置类见[原文](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md)。
-
 ## 一、为什么需要注意力机制
 
 随着 NLP 从统计机器学习向深度学习迈进，文本表示方法也从统计学习进入神经网络时代。从计算机视觉（Computer Vision，CV）起源发展起来的神经网络，其核心架构有三种：
@@ -291,3 +288,8 @@ class MultiHeadAttention(nn.Module):
 - **多头注意力**用多组投影并行捕捉多种相关关系，是大模型性能的关键来源。
 
 延伸阅读：Encoder/Decoder 的完整结构（前馈网络、层归一化、残差连接、交叉注意力）与可运行的完整 Transformer 实现，见 [happy-llm 第二章 2.2–2.3 节](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md)；三种架构分流（BERT/GPT/T5）见本模块下一篇《GPT 系列演进》。
+
+---
+
+> **来源**：本文转载自 [第二章 Transformer 架构 · 2.1 注意力机制](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 原文 LaTeX 公式已转写为 Unicode 文本；图片改为仓库原始链接。多头注意力的完整 `MultiHeadAttention` 代码保留，依赖的 `ModelArgs` 配置类见[原文](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter2/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20Transformer%E6%9E%B6%E6%9E%84.md)。

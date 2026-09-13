@@ -8,8 +8,6 @@ translated: true
 order: 2
 ---
 
-> **来源**：本文为编译稿，主体译自六家工具的官方文档（2026-09 当前版本）：[Claude Code Overview](https://code.claude.com/docs/en/overview)（Anthropic）、[Cursor Docs](https://cursor.com/docs)（Anysphere）、[What is GitHub Copilot?](https://docs.github.com/en/copilot/get-started/what-is-github-copilot)（GitHub）、[Cline Overview](https://docs.cline.bot/cline-overview)（Cline）、[Cascade / Devin Desktop](https://docs.windsurf.com/windsurf/cascade)（Cognition）、[Codex CLI](https://github.com/openai/codex)（OpenAI，Apache-2.0）。作者为各工具官方文档，许可署名编译（各官方文档版权归原厂所有，本文为教学用途的编译与翻译，逐节署名）。抓取于 2026-09-13。
-
 2025 年是"编码智能体（coding agent）"的爆发之年：2 月 Anthropic 发布 Claude Code，4 月 OpenAI 开源 Codex CLI，6 月 Google 发布 Gemini CLI（此时间线引自 Simon Willison）。到 2026 年 9 月，市场已从"编辑器内补全"演进为"多形态智能体"——终端 CLI、IDE 插件、独立 IDE、云端 PR 智能体并存。本文全部依据各家当前官方文档，对比六大主流工具的形态、能力与选型建议。
 
 ## 一、Claude Code（Anthropic）
@@ -117,3 +115,7 @@ Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完
 5. **团队规范统一**：优先采用 AGENTS.md 这类跨工具标准（第 5 篇），避免规范文件被单一工具锁定。
 
 > 无论选哪把锤子，本模块其余篇章的工作流方法论——可验证的完成标准（第 3 篇）、Git 存档与隔离（第 7 篇）、Spec 驱动（第 8 篇）、上下文工程（第 9 篇）——都是通用的。
+
+---
+
+> **来源**：本文为编译稿，主体译自六家工具的官方文档（2026-09 当前版本）：[Claude Code Overview](https://code.claude.com/docs/en/overview)（Anthropic）、[Cursor Docs](https://cursor.com/docs)（Anysphere）、[What is GitHub Copilot?](https://docs.github.com/en/copilot/get-started/what-is-github-copilot)（GitHub）、[Cline Overview](https://docs.cline.bot/cline-overview)（Cline）、[Cascade / Devin Desktop](https://docs.windsurf.com/windsurf/cascade)（Cognition）、[Codex CLI](https://github.com/openai/codex)（OpenAI，Apache-2.0）。作者为各工具官方文档，许可署名编译（各官方文档版权归原厂所有，本文为教学用途的编译与翻译，逐节署名）。抓取于 2026-09-13。

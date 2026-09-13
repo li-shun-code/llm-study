@@ -8,8 +8,6 @@ translated: true
 order: 15
 ---
 
-> **来源**：本文翻译（节译）自 [The future belongs to people who can just do things](https://ghuntley.com/dothings/)（2025-02-06 发布，2025-06-08 更新），作者 Geoffrey Huntley，许可署名转载（作者博客允许引用转载，需署名并附原文链接；原文后半部分为付费订阅内容，节译部分以公开可见内容为准）。抓取于 2026-09-13。
-
 ## 我把话放这儿
 
 我说出来了：**到 2026 年底，大多数软件工程师还在手工雕琢每一个提交（artisanal hand-crafted commits）这件事，我看不出有任何路径能维持下去。**如果你是软件工程师，好奇我为什么这么想，我的置顶文章《adjusting to the future of software development》是个好的起点。你还应该看看"the hat tweak heard around the world"来理解我们此刻处在采纳曲线的什么位置。
@@ -74,3 +72,7 @@ Huntley 在文中强调的一个技巧：**用 Mermaid 图表达计划**。当�
 | 8. 加固 | 类型收紧、补测试、压缩周期，为下一轮循环提速 | 更强的基础设施 | 15 本篇"技术加固点" |
 
 选型上的最低配置：任意一个第 2 篇对比过的智能体工具 + 一份 20 行的项目规范文件 + 一条"测试不过不合入"的规矩——就可以开始你的第一个从 0 到 1 了。
+
+---
+
+> **来源**：本文翻译（节译）自 [The future belongs to people who can just do things](https://ghuntley.com/dothings/)（2025-02-06 发布，2025-06-08 更新），作者 Geoffrey Huntley，许可署名转载（作者博客允许引用转载，需署名并附原文链接；原文后半部分为付费订阅内容，节译部分以公开可见内容为准）。抓取于 2026-09-13。

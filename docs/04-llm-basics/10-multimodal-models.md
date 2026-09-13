@@ -8,9 +8,6 @@ translated: true
 order: 10
 ---
 
-> **来源**：本文翻译自 [Hugging Face Blog · Vision Language Models (Better, faster, stronger)](https://huggingface.co/blog/vlms-2025)（2025 年 4 月），作者 Merve Nouribakhsh、Sergio Paniego、Aritra Roy Gosthipaty、Pedro Cuenca、Andrés Marafioti（Hugging Face）。抓取/翻译于 2026-09-13，为节选翻译（架构基础与"专精能力"部分有删节，全文见原文）。
-> 开头"什么是 VLM"与结尾"2026 现状速览"两节为本站补充，后者数据核实自各官方仓库（Qwen3-VL、GLM 等，2026-09-13）。
-
 ## 一、什么是视觉语言模型（VLM）（编者注）
 
 视觉语言模型（Vision Language Model，VLM）= 语言模型 + 视觉编码器。主流做法（LLaVA 一系）分三件套：
@@ -88,3 +85,8 @@ VLM 甚至在机器人领域留下印记，在那儿它们叫视觉-语言-动�
 - VLM 入门第一篇（LLaVA 详解、如何发现/评估/微调开源 VLM）：[Vision Language Models Explained](https://huggingface.co/blog/vlms)（2024-04）
 - MoE 机制详解：[Mixture of Experts Explained](https://huggingface.co/blog/moe)
 - 站内延伸：模块 8《多模态 RAG》、模块 9《Computer Use/浏览器操作 Agent》、模块 6《视觉理解 API》
+
+---
+
+> **来源**：本文翻译自 [Hugging Face Blog · Vision Language Models (Better, faster, stronger)](https://huggingface.co/blog/vlms-2025)（2025 年 4 月），作者 Merve Nouribakhsh、Sergio Paniego、Aritra Roy Gosthipaty、Pedro Cuenca、Andrés Marafioti（Hugging Face）。抓取/翻译于 2026-09-13，为节选翻译（架构基础与"专精能力"部分有删节，全文见原文）。
+> 开头"什么是 VLM"与结尾"2026 现状速览"两节为本站补充，后者数据核实自各官方仓库（Qwen3-VL、GLM 等，2026-09-13）。

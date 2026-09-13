@@ -8,11 +8,6 @@ translated: false
 order: 11
 versions: FastAPI 最新稳定版（Python 3.10+）
 ---
-
-> **来源**：本文转载自 [第一步 - FastAPI 中文文档](https://fastapi.tiangolo.com/zh/tutorial/first-steps/)，作者 Sebastián Ramírez 及 FastAPI 贡献者，许可 MIT License。抓取于 2026-09-13。
-
-> 编者注：本篇主体节选自 FastAPI 官方中文文档的《第一步》与《安全 - 第一步》（ https://fastapi.tiangolo.com/zh/tutorial/security/first-steps/ ，同许可）两页，"用 `APIKeyHeader` 做 API Key 鉴权"一节为编者基于官方 `fastapi.security` 工具的补充实战。FastAPI 是 LLM 应用服务端（封装模型 API、提供 SSE 流式接口）的事实标准框架。
-
 ## 最简单的 FastAPI 文件
 
 ```python
@@ -150,3 +145,11 @@ $ curl -H "X-API-Key: sk-demo" "http://127.0.0.1:8000/v1/chat?prompt=hi"
 - 官方教程《安全》系列后续章节（`get-current-user`、OAuth2 with JWT）与《高级安全》；
 - FastAPI 的 `lifespan` 机制：用 `@asynccontextmanager` 函数（见本模块第 3 篇）管理启动/关闭资源；
 - 官方文档《Bigger Applications》：用 `APIRouter` 把多个文件组织成项目结构。
+
+---
+
+> **来源**：本文转载自 [第一步 - FastAPI 中文文档](https://fastapi.tiangolo.com/zh/tutorial/first-steps/)，作者 Sebastián Ramírez 及 FastAPI 贡献者，许可 MIT License。抓取于 2026-09-13。
+
+---
+
+> 编者注：本篇主体节选自 FastAPI 官方中文文档的《第一步》与《安全 - 第一步》（ https://fastapi.tiangolo.com/zh/tutorial/security/first-steps/ ，同许可）两页，"用 `APIKeyHeader` 做 API Key 鉴权"一节为编者基于官方 `fastapi.security` 工具的补充实战。FastAPI 是 LLM 应用服务端（封装模型 API、提供 SSE 流式接口）的事实标准框架。

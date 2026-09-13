@@ -8,8 +8,6 @@ translated: false
 order: 9
 ---
 
-> **来源**：本文转载自 [条件判断 - Python教程](https://liaoxuefeng.com/books/python/basic/if/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。
-
 计算机之所以能做很多自动化的任务，因为它可以自己做条件判断。
 
 比如，输入用户年龄，根据年龄打印不同的内容，在Python程序中，用`if`语句实现：
@@ -155,3 +153,7 @@ if ???:
 ### 小结
 
 条件判断可以让计算机自己做选择，Python的if...elif...else很灵活。
+
+---
+
+> **来源**：本文转载自 [条件判断 - Python教程](https://liaoxuefeng.com/books/python/basic/if/index.html)，作者 廖雪峰，许可 © 廖雪峰（转载署名）。抓取于 2026-09-13。

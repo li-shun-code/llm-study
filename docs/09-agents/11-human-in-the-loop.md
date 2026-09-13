@@ -9,8 +9,6 @@ versions: LangGraph 1.x（docs.langchain.com 当前版，stream_events v3 API）
 order: 11
 ---
 
-> **来源**：本文翻译自 LangGraph 官方文档 [Interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。原文部分完整示例以折叠块形式重复内联代码，译文保留全部模式与关键代码、省略重复折叠示例；LangSmith 示例追踪链接见原文。
-
 # 中断（Interrupts）
 
 中断允许你在特定位置暂停图的执行，等待外部输入后再继续。这是实现 **Human-in-the-Loop（HITL，人在回路）** 模式的基础：当你需要外部输入才能往下走时，就用中断。中断被触发时，LangGraph 用它的[持久化](https://docs.langchain.com/oss/python/langgraph/persistence)层保存图状态，并无限期等待，直到你恢复执行。
@@ -493,3 +491,7 @@ graph.invoke(None, config=config)
 - **多中断恢复**：按中断 ID 配对恢复值，支持并行分支同时挂起。
 
 记住四条军规：别包裸 try/except、别打乱中断顺序、只传可序列化值、中断前副作用要幂等——这四条覆盖了中断在生产环境里绝大多数"灵异问题"。
+
+---
+
+> **来源**：本文翻译自 LangGraph 官方文档 [Interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。原文部分完整示例以折叠块形式重复内联代码，译文保留全部模式与关键代码、省略重复折叠示例；LangSmith 示例追踪链接见原文。

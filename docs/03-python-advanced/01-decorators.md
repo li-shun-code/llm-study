@@ -8,11 +8,6 @@ translated: true
 order: 1
 versions: Python 3.13+
 ---
-
-> **来源**：本文编译自 [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)，作者 Geir Arne Hjelle（Real Python），许可 © Real Python（版权所有，未开放转载，故本篇为中文编译摘要而非全文翻译，完整内容请阅读原文）。抓取于 2026-09-13。
-
-> 编者注：装饰器是 FastAPI、pytest、Dataclasses 等现代 Python 库的基础机制（`@app.get()`、`@pytest.fixture` 都是装饰器）。本篇为 Real Python 经典长文《Primer on Python Decorators》的中文编译摘要，按原文结构摘编其核心概念与示例，代码为编译者改写的等价简版。
-
 ## 函数是一等公民
 
 要理解装饰器，先要接受一个前提：在 Python 中**函数是对象**，可以像普通值一样被赋值、传递、存储。
@@ -210,3 +205,11 @@ def heavy():
 
 - 原文全文（英文）：[Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)
 - `functools` 官方中文文档（`wraps`/`lru_cache` 等内置装饰器）：[functools — 高阶函数和可调用对象上的操作](https://docs.python.org/zh-cn/3/library/functools.html)
+
+---
+
+> **来源**：本文编译自 [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)，作者 Geir Arne Hjelle（Real Python），许可 © Real Python（版权所有，未开放转载，故本篇为中文编译摘要而非全文翻译，完整内容请阅读原文）。抓取于 2026-09-13。
+
+---
+
+> 编者注：装饰器是 FastAPI、pytest、Dataclasses 等现代 Python 库的基础机制（`@app.get()`、`@pytest.fixture` 都是装饰器）。本篇为 Real Python 经典长文《Primer on Python Decorators》的中文编译摘要，按原文结构摘编其核心概念与示例，代码为编译者改写的等价简版。

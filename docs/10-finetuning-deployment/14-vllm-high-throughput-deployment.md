@@ -9,8 +9,6 @@ order: 14
 versions: vLLM（V1 引擎，2026-09 官方文档最新版）
 ---
 
-> **来源**：本文翻译自 [vLLM 官方文档 Quickstart](https://docs.vllm.ai/en/latest/getting_started/quickstart.html) 与 [Using Docker](https://docs.vllm.ai/en/latest/deployment/docker.html)，作者 vLLM 项目，许可 Apache 2.0。抓取于 2026-09-13。"选型与容量规划"一节为编者补充，已标注。
-
 上一篇讲了 vLLM 为什么快（[推理原理](./12-inference-principles)），这一篇把它跑起来：安装、离线批量推理、OpenAI 兼容在线服务，以及生产环境必备的 Docker 容器化。容器化基础（镜像/卷/端口映射）见模块 3 的 Docker 篇。
 
 ## 前提条件
@@ -268,3 +266,7 @@ docker run --rm --gpus all \
 - 离线推理用 `LLM` + `SamplingParams`；在线服务一条 `vllm serve` 起步，OpenAI SDK 直接可用。
 - 生产部署三件套：官方 Docker 镜像、HF 缓存卷、vllm 编译缓存卷；安全加固用非 root 用户。
 - 多卡场景按"单卡放不放得下权重"决定 TP/DP；昇腾等国产算力走 vLLM Ascend 插件。
+
+---
+
+> **来源**：本文翻译自 [vLLM 官方文档 Quickstart](https://docs.vllm.ai/en/latest/getting_started/quickstart.html) 与 [Using Docker](https://docs.vllm.ai/en/latest/deployment/docker.html)，作者 vLLM 项目，许可 Apache 2.0。抓取于 2026-09-13。"选型与容量规划"一节为编者补充，已标注。

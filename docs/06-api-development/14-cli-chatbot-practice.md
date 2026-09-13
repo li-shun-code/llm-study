@@ -9,9 +9,6 @@ order: 14
 versions: openai-python 2026-09 最新稳定版；Python 3.10+
 ---
 
-> **来源**：本文为实战篇，改编并翻译自 [How to stream completions](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb) 与 [responses_example.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)（OpenAI Cookbook，MIT）及 [openai-python README](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-> 代码组织与中文注释为本站编辑所加；所用原语（流式循环、分块拼接、`previous_response_id` 续接）均来自上述原文。
-
 这是模块 6 的收官实战：把前面学的**客户端初始化（01）、多轮会话（02）、流式输出（03）**组装成一个能跑起来的命令行聊天机器人（CLI chatbot）。目标体验：打字机效果逐字输出、支持多轮上下文、`/reset` 清空对话、`/quit` 退出。
 
 ## 一、准备
@@ -163,3 +160,8 @@ if __name__ == "__main__":
 - 版本一是"教科书式"无状态循环，版本二用 `previous_response_id` 把状态交给 API；
 - `/reset` 的本质是丢掉历史（或换一个新 response id）；
 - 从 CLI 到 Web 服务只差一个 FastAPI——模块 6 到此闭环，下一步进入模块 7 数据库（给聊天记录一个家）或模块 8 RAG（给机器人一个知识库）。
+
+---
+
+> **来源**：本文为实战篇，改编并翻译自 [How to stream completions](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb) 与 [responses_example.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)（OpenAI Cookbook，MIT）及 [openai-python README](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
+> 代码组织与中文注释为本站编辑所加；所用原语（流式循环、分块拼接、`previous_response_id` 续接）均来自上述原文。

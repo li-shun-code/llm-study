@@ -9,8 +9,6 @@ versions: LangSmith 当前版（docs.langchain.com）
 order: 16
 ---
 
-> **来源**：本文主体翻译自 LangSmith 官方文档 [Observability concepts](https://docs.langchain.com/langsmith/observability-concepts) 与 [Tracing quickstart](https://docs.langchain.com/langsmith/observability-quickstart) 两页，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。开头与结尾关于 Langfuse/OpenTelemetry 生态的段落为编者综述。
-
 # 为什么 Tracing 是 Agent 生产排障的第一工具
 
 本模块第 9 篇（Anthropic 多智能体系统）里有一段亲身经历：用户报告智能体"找不到明显的信息"，团队却看不出为什么——是搜索词太差、来源选得不好，还是工具调用失败？**加上完整的生产追踪（Tracing）之后，才能系统性地诊断失败并修复**。
@@ -165,3 +163,7 @@ print(assistant("How long are traces stored?"))
 - **自建**：任何能产生 OTel span 的代码（`opentelemetry-sdk` + GenAI 约定）都能接入任意兼容后端。
 
 选型建议：团队已重仓 LangChain 生态、要"评估-追踪-提示管理"一体化，选 LangSmith；要开源自托管、多云厂商中立，选 Langfuse（或纯 OTel + 自选后端）。无论哪条路线，落地的关键动作是相同的：**给每次运行带上 trace_id/thread_id、给每步记录输入输出与 token、把用户反馈挂回 run**——做到这三点，Agent 上线后的"玄学问题"就都有了可回放的现场。
+
+---
+
+> **来源**：本文主体翻译自 LangSmith 官方文档 [Observability concepts](https://docs.langchain.com/langsmith/observability-concepts) 与 [Tracing quickstart](https://docs.langchain.com/langsmith/observability-quickstart) 两页，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。开头与结尾关于 Langfuse/OpenTelemetry 生态的段落为编者综述。

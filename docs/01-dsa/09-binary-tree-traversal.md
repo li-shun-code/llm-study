@@ -8,9 +8,6 @@ translated: false
 order: 9
 ---
 
-> **来源**：本文转载自 [二叉树遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree_traversal.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 从物理结构的角度来看，树是一种基于链表的数据结构，因此其遍历方式是通过指针逐个访问节点。然而，树是一种非线性数据结构，这使得遍历树比遍历链表更加复杂，需要借助搜索算法来实现。
 
 二叉树常见的遍历方式包括层序遍历、前序遍历、中序遍历和后序遍历等。
@@ -58,3 +55,8 @@ order: 9
 
 - **时间复杂度为 O(n)** ：所有节点被访问一次，使用 O(n) 时间。
 - **空间复杂度为 O(n)** ：在最差情况下，即树退化为链表时，递归深度达到 n ，系统占用 O(n) 栈帧空间。
+
+---
+
+> **来源**：本文转载自 [二叉树遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree_traversal.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

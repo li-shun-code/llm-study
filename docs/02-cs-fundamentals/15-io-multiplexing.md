@@ -8,8 +8,6 @@ translated: true
 order: 15
 ---
 
-> **来源**：本文翻译自 [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/split/slightly-advanced-techniques.html) 第 7 章（7.1 Blocking、7.2 poll()、7.3 select() 三节），作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的节译，特此说明并致谢）。抓取于 2026-09-13。
-
 这些技巧并不真的"高级"，但已经超出了此前的基础内容。事实上，读到这里的你已经可以认为自己对 Unix 网络编程的基础相当有造诣了！恭喜！
 
 ## 7.1 阻塞（Blocking）
@@ -264,3 +262,7 @@ int main(void)
 
 > **译注：epoll 与现代方案**
 > 原指南写于 `poll()`/`select()` 时代，两者都要"每次调用把整个描述符集合从用户态拷进内核、返回后又逐个扫描"，连接数巨大时代价随之线性增长（文中两处"海量连接时慢得可怕"的警告正源于此）。Linux 上的 **epoll**（`epoll_create`/`epoll_ctl`/`epoll_wait`）把描述符登记在内核中、只返回就绪者，使监视成本与活跃连接数而非总连接数相关，是 Nginx、Redis 等高并发服务器的基石；macOS/BSD 对应 kqueue，Windows 对应 IOCP。工程实践中通常直接使用 libevent、libuv 这类事件库（文中亦两次推荐），由它们在底层选择系统支持的最快机制——而理解 `poll()`/`select()`，是理解这一切的起点。
+
+---
+
+> **来源**：本文翻译自 [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/split/slightly-advanced-techniques.html) 第 7 章（7.1 Blocking、7.2 poll()、7.3 select() 三节），作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的节译，特此说明并致谢）。抓取于 2026-09-13。

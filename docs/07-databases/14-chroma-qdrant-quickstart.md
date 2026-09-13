@@ -8,11 +8,6 @@ translated: true
 order: 14
 versions: Qdrant 与 Chroma 官方仓库当前版 README（均为 Apache-2.0 项目）
 ---
-
-> **来源**：本文翻译自 [Qdrant 官方仓库 README](https://github.com/qdrant/qdrant)，作者 Qdrant，许可 Apache-2.0。抓取于 2026-09-13。
-
-> **补充来源**：本文"Chroma：四函数上手"一节翻译自 [Chroma 官方仓库 README](https://github.com/chroma-core/chroma)，作者 Chroma，许可 Apache-2.0。说明：Chroma 与 Qdrant 的官方文档站（docs.trychroma.com / qdrant.tech/documentation）未在站点层面声明开放许可，本篇因此仅选用两个 Apache-2.0 代码仓库的官方 README 作为底本。
-
 这两个库是轻量级向量数据库的代表：Chroma 以"嵌入式、开箱即用"著称，适合本地原型与中小规模；Qdrant 以 Rust 编写、过滤能力突出，既能单机跑也能分布式部署。本篇把两库的官方上手路径放在一起对照。
 
 ## Qdrant：向量相似度搜索引擎
@@ -95,3 +90,11 @@ results = collection.query(
 - **想要更贴近生产的过滤、量化与横向扩展**：Qdrant 的载荷过滤体系与分布式特性更完整；单机 `docker run` 起步，后续平滑升级。
 - **两者都支持元数据过滤 + 向量检索的混合查询**，语义与"在哪个会话/哪个用户的数据里搜"这类业务过滤可以一次完成。
 - 下一篇的 Milvus（含 Milvus Lite）与 pgvector 则分别代表"大规模专用向量数据库"与"复用现有 PostgreSQL"两条路线。
+
+---
+
+> **来源**：本文翻译自 [Qdrant 官方仓库 README](https://github.com/qdrant/qdrant)，作者 Qdrant，许可 Apache-2.0。抓取于 2026-09-13。
+
+---
+
+> **补充来源**：本文"Chroma：四函数上手"一节翻译自 [Chroma 官方仓库 README](https://github.com/chroma-core/chroma)，作者 Chroma，许可 Apache-2.0。说明：Chroma 与 Qdrant 的官方文档站（docs.trychroma.com / qdrant.tech/documentation）未在站点层面声明开放许可，本篇因此仅选用两个 Apache-2.0 代码仓库的官方 README 作为底本。

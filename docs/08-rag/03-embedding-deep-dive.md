@@ -8,9 +8,6 @@ translated: true
 order: 3
 ---
 
-> **来源**：本文翻译自 [Getting Started With Embeddings](https://huggingface.co/blog/getting-started-with-embeddings)，作者 Omar Espejel（Hugging Face Blog），许可署名转载（博客仓库未附独立开源许可，仅作教学署名转载）。抓取于 2026-09-13。
-> 原文通过彼时的 Hugging Face Inference API 发请求生成嵌入，该端点已被 Inference Providers 取代；编者按当前稳定做法将示例改写为本地 `SentenceTransformers` 调用（语义不变），并在文中标注。
-
 ## 理解嵌入（Embedding）
 
 嵌入是一段信息的数值表示——例如文本、文档、图片、音频等。这种表示捕捉了被嵌入对象的语义（Semantic Meaning），因此能在大量工业场景中稳定发挥作用。
@@ -158,3 +155,8 @@ print([texts[hits[0][i]['corpus_id']] for i in range(len(hits[0]))])
 - [🪆 Introduction to Matryoshka Embedding Models](https://huggingface.co/blog/matryoshka)：可截断到更低维度而几乎不损失质量的"套娃"嵌入；
 - [Train 400x faster Static Embedding Models with Sentence Transformers](https://huggingface.co/blog/static-embeddings)：无注意力机制的 CPU 友好嵌入模型；
 - [Binary and Scalar Embedding Quantization](https://huggingface.co/blog/embedding-quantization)：训练后压缩嵌入，显著加快检索、降低存储成本。
+
+---
+
+> **来源**：本文翻译自 [Getting Started With Embeddings](https://huggingface.co/blog/getting-started-with-embeddings)，作者 Omar Espejel（Hugging Face Blog），许可署名转载（博客仓库未附独立开源许可，仅作教学署名转载）。抓取于 2026-09-13。
+> 原文通过彼时的 Hugging Face Inference API 发请求生成嵌入，该端点已被 Inference Providers 取代；编者按当前稳定做法将示例改写为本地 `SentenceTransformers` 调用（语义不变），并在文中标注。

@@ -8,11 +8,6 @@ translated: true
 order: 8
 versions: requests 2.34
 ---
-
-> **来源**：本文翻译自 [Quickstart — Requests 2.34.2 documentation](https://requests.readthedocs.io/en/latest/user/quickstart/)，作者 Kenneth Reitz 及 Requests 开发者，许可 Apache License 2.0。抓取于 2026-09-13。
-
-> 编者注：requests 是 Python 最流行的同步 HTTP 库，调用各类 LLM API（OpenAI 兼容端点等）的第一选择。本篇为官方 Quickstart 的中文翻译，略有删节；需要异步版本时请阅读下一篇 httpx。
-
 ## 发送请求
 
 使用 requests 非常简单。首先导入 requests 模块：
@@ -256,3 +251,11 @@ requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Req
 遇到网络问题（如 DNS 查询失败、拒绝连接等），Requests 会抛出一个 `ConnectionError` 异常。如果 HTTP 请求返回了失败的状态码，`Response.raise_for_status()` 会抛出一个 `HTTPError`。若请求超时，则抛出一个 `Timeout` 异常。若请求超过了配置的最大重定向次数，则会抛出一个 `TooManyRedirects` 异常。
 
 所有 Requests 显式抛出的异常都继承自 `requests.exceptions.RequestException`。配合模块 6 的"错误处理/重试/限流"实践，可以给 LLM API 调用加上指数退避重试。
+
+---
+
+> **来源**：本文翻译自 [Quickstart — Requests 2.34.2 documentation](https://requests.readthedocs.io/en/latest/user/quickstart/)，作者 Kenneth Reitz 及 Requests 开发者，许可 Apache License 2.0。抓取于 2026-09-13。
+
+---
+
+> 编者注：requests 是 Python 最流行的同步 HTTP 库，调用各类 LLM API（OpenAI 兼容端点等）的第一选择。本篇为官方 Quickstart 的中文翻译，略有删节；需要异步版本时请阅读下一篇 httpx。

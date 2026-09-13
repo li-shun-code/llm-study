@@ -8,9 +8,6 @@ translated: false
 order: 13
 ---
 
-> **来源**：本文转载自 [图的遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_traversal.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 树代表的是“一对多”的关系，而图则具有更高的自由度，可以表示任意的“多对多”关系。因此，我们可以把树看作图的一种特例。显然，**树的遍历操作也是图的遍历操作的一种特例**。
 
 图和树都需要应用搜索算法来实现遍历操作。图的遍历方式也可分为两种：<u>广度优先遍历</u>和<u>深度优先遍历</u>。
@@ -74,3 +71,8 @@ BFS 通常借助队列来实现，代码如下所示。队列具有“先入先�
 **时间复杂度**：所有顶点都会被访问 1 次，使用 O(|V|) 时间；所有边都会被访问 2 次，使用 O(2|E|) 时间；总体使用 O(|V| + |E|) 时间。
 
 **空间复杂度**：列表 `res` ，哈希集合 `visited` 顶点数量最多为 |V| ，递归深度最大为 |V| ，因此使用 O(|V|) 空间。
+
+---
+
+> **来源**：本文转载自 [图的遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_traversal.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

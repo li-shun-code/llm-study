@@ -9,8 +9,6 @@ versions: LangGraph 1.x（docs.langchain.com 当前版）
 order: 5
 ---
 
-> **来源**：本文翻译自 LangGraph 官方文档 [Memory](https://docs.langchain.com/oss/python/langgraph/add-memory)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。原文为多数据库对照教程（Postgres/MongoDB/Redis/Oracle 各附同步/异步示例），译文保留全部概念与关键代码，省略了与 Postgres 示例同构的其他数据库变体代码及超长输出转储；需要时请查阅原文。
-
 AI 应用需要**记忆（Memory）**来在多次交互之间共享上下文。在 LangGraph 中，你可以添加两种类型的记忆：
 
 - **短期记忆（Short-term Memory）**：作为智能体**状态（State）**的一部分，支持多轮对话。
@@ -278,3 +276,7 @@ checkpointer.delete_thread("1")
 **表：LangGraph 两种记忆机制对比。**
 
 工程实践中的组合拳是：短期记忆用检查点器维持对话连贯，长期记忆用 Store 沉淀"关于用户的一切"，并定期用 LLM 从对话中提炼记忆写入 Store（即"记忆固化"）；上下文窗口吃紧时，再把较旧的短期记忆摘要降级为长期记忆。
+
+---
+
+> **来源**：本文翻译自 LangGraph 官方文档 [Memory](https://docs.langchain.com/oss/python/langgraph/add-memory)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。原文为多数据库对照教程（Postgres/MongoDB/Redis/Oracle 各附同步/异步示例），译文保留全部概念与关键代码，省略了与 Postgres 示例同构的其他数据库变体代码及超长输出转储；需要时请查阅原文。

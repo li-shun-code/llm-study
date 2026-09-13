@@ -8,10 +8,6 @@ translated: false
 order: 17
 ---
 
-> **来源**：本文转载自 [二分查找](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[二分查找插入点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_insertion.md)、[二分查找边界](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_edge.md)。图片已改写为 GitHub raw 绝对链接。
-> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。
-
 ## 二分查找
 
 
@@ -179,3 +175,9 @@ order: 17
 
 - 给定数组不包含小数，这意味着我们无须关心如何处理相等的情况。
 - 因为该方法引入了小数，所以需要将函数中的变量 `target` 改为浮点数类型（Python 无须改动）。
+
+---
+
+> **来源**：本文转载自 [二分查找](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> 本文整合原书多个小节，其余章节：[二分查找插入点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_insertion.md)、[二分查找边界](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_edge.md)。图片已改写为 GitHub raw 绝对链接。
+> 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

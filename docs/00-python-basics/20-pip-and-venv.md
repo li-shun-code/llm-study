@@ -9,8 +9,6 @@ order: 20
 versions: Python 3.14 文档
 ---
 
-> **来源**：本文转载自 [12. 虚拟环境和包 - Python 3 官方教程（中文）](https://docs.python.org/zh-cn/3/tutorial/venv.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。
-
 ## 概述
 
 Python 应用程序通常会使用不在标准库内的软件包和模块。应用程序有时需要特定版本的库，因为应用程序可能需要已修复某个特定错误的库版本，或者应用程序可能是使用了某个库的旧版接口编写的。
@@ -170,3 +168,7 @@ Successfully installed novas-3.1.1.3 numpy==1.9.2 requests==2.7.0
 `pip` 有更多的选项。有关 `pip` 的完整文档请查阅[安装 Python 模块](https://docs.python.org/zh-cn/3/installing/index.html#installing-index)指南。当你编写了一个软件包并希望将其放在 Python Package Index 中时，请查阅 [Python packaging user guide](https://packaging.python.org/en/latest/tutorials/packaging-projects/)。
 
 > 编者注（时效性）：除内置的 `venv` 外，2024 年后社区也广泛使用更快的 Rust 实现工具 [uv](https://docs.astral.sh/uv/) 来同时管理 Python 版本、虚拟环境与依赖，其命令风格与 pip 兼容，可作为本模块所学工作流的现代化替代。
+
+---
+
+> **来源**：本文转载自 [12. 虚拟环境和包 - Python 3 官方教程（中文）](https://docs.python.org/zh-cn/3/tutorial/venv.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。
