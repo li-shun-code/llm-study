@@ -37,13 +37,13 @@ npm run build    # 构建静态站点
 - 来源登记：docs/.vitepress/manifest/<模块>.json；抓取失败与替代记录：docs/.vitepress/sources-report/<模块>.md。
 - 计划与设计文档：docs/superpowers/。
 
-## 语音朗读（edge-tts）
+## 语音朗读（edge-tts 实时合成）
 
-文章页右下角 🔊 按钮：播放全文朗读，支持切换声音与语速。
+文章标题上方的朗读条：点击 ▶ 即通过 edge-tts WebSocket（微软 Edge 朗读服务）实时合成并流式播放，无需预生成缓存。
 
-- 标注"已缓存"的声音为预生成音频（edge-tts，微软神经网络音色），存于 `docs/public/audio/`，打开即听；
-- 其余声音使用浏览器实时语音（Web Speech API）兜底；
-- 预生成命令：`node scripts/generate-tts.mjs --module 01-dsa --voice zh-CN-YunxiNeural`（支持 `--file` / `--module` / `--all` / `--force`，`--list-voices` 查看音色）。已生成的音频提交进仓库即为缓存，下次直接听。注意全量生成体积较大（GitHub Pages 上限 1GB），建议按需生成。
+- 句子级高亮跟随朗读位置，页面自动滚动；
+- 声音切换（晓晓/云希/云扬/东北话晓北）与 0.75-1.5x 语速；
+- WebSocket 直连微软服务需要 Edge 浏览器 UA（微软侧校验）；其他浏览器自动回退浏览器语音（Web Speech API，效果同样带高亮跟读）。
 
 ## AI 学习助手
 
