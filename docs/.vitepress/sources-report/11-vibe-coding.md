@@ -130,3 +130,28 @@
 | [anthropics/skills README](https://raw.githubusercontent.com/anthropics/skills/main/README.md)（raw 抓取） | 13 第二节（仓库介绍/免责声明/技能集/Claude Code 与 Claude.ai 与 API 使用/基础技能模板/伙伴技能，全节翻译） | 多数 Apache-2.0；文档技能源码可用 | 13 署名块列明 |
 | [anthropics/skills 19 个 SKILL.md](https://github.com/anthropics/skills/tree/main/skills)（raw 逐个抓取：docx、pdf、pptx、xlsx、algorithmic-art、canvas-design、brand-guidelines、theme-factory、frontend-design、slack-gif-creator、mcp-builder、skill-creator、webapp-testing、web-artifacts-builder、claude-api、internal-comms、doc-coauthoring、academy-guide、discernment-nudge；仓库结构经 GitHub API 核实，19 个技能目录均在 skills/ 下，无需 example 分支） | 13 第二节之 2.2（description 全译 + 核心内容翻译，按文档/创意/开发/企业四类分组，文档四件套各有独立小节；internal-comms、theme-factory、web-artifacts-builder、webapp-testing、brand-guidelines 基本全译，长文注明节选） | example-skills 类 Apache-2.0；docx/pdf/pptx/xlsx 为 Proprietary（source-available，LICENSE.txt 有完整条款） | 13 署名块逐族列明 |
 | 本站编者 | 13 开篇衔接与"如何选用"一节（节首标明"编者归纳，非原文翻译"） | 本站原创节 | 13 署名块标明 |
+
+
+## 第四轮新增 5 篇（2026-09-13 第四轮：模块尾部追加 31-35，扩至 35 篇，未重排既有文章）
+
+在 30 篇基础上，于模块尾部追加"进阶实战与经典文献"分组 5 篇（编号 31-35），既有 01-30 全部未动；`index.md` 知识点清单尾部新增分组，`manifest/11-vibe-coding.json`（35 条）同步更新。validator：PASS (35 articles)。
+
+| 来源 | 用途（编号） | 许可 | 署名方式 |
+| --- | --- | --- | --- |
+| [Harper Reed《My LLM codegen workflow atm》](https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/)（2025-02-16；curl 抓取 HTML 后本地提取全文） | 31 主来源（**全文翻译**：tl;dr、绿地三步法含全部提示词原文照录、repomix/mise 存量代码流程、提示词魔法三连、滑雪/孤独/时间/Haterade 各节） | 署名翻译转载（作者公开博客） | 31 frontmatter + 署名块 |
+| [Steve Yegge《Revenge of the junior developer》](https://yegge.ai/essays/revenge-of-the-junior-developer/)（2025-03-22，作者本人站点收录版，页面保留"Originally published at sourcegraph.com"声明；curl 抓取 HTML 后本地提取全文 3.15 万字符） | 32 主来源（**全文翻译**：六波浪潮、你在哪里、骆驼手册、算账、舰队、复仇六部分完整） | 署名翻译转载（作者公开站点/Sourcegraph 博客） | 32 frontmatter + 署名块 |
+| [Geoffrey Huntley《Ralph Wiggum as a "software engineer"》](https://ghuntley.com/ralph/)（2025-07-14；浏览器 UA curl 重试后抓取成功，85KB HTML 提取正文 3.25 万字符） | 33 主来源（**全文翻译**：Ralph 循环定义、基本原理、每循环一件事、子代理扩上下文、生成/背压两阶段、测试重要性、no cheating、todo 清单、回环、上大学、坏代码库、可维护性，及两份 CURSED 构建提示词附录原文照录） | 署名翻译转载（作者公开博客） | 33 frontmatter + 署名块 |
+| [tradecatlabs/vibe-coding-cn](https://github.com/tradecatlabs/vibe-coding-cn)（raw 抓取 develop 分支：README + docs/getting-started/vibe-coding-experience.md + docs/concepts/glue-coding.md） | 34 主来源（**中文原文直接转载**：六条核心命题全节 + 《Vibe Coding 经验》全文 + 《拼好码》全文；文末资源导航为编者整理已标明） | MIT（仓库 LICENSE） | 34 frontmatter + 署名块逐节列明 |
+| [liyupi/ai-guide](https://github.com/liyupi/ai-guide)（raw 抓取 main 分支：30 经验技巧/01 五大核心心法 + 10 编程工具/Claude Code/配置哲学两篇） | 35 主来源（**中文原文直接转载**：《Vibe Coding 五大核心心法》全文 + 《Claude Code 配置哲学：七种指令方式全解析》全文；文末章节导航为编者整理已标明） | CC BY-NC-SA 4.0（教程文档，署名-非商业-相同方式共享） | 35 frontmatter + 署名块逐节列明 |
+
+### 第四轮抓取失败与替代记录
+
+| 主题 | 原 URL | 失败原因 | 处理/替代方案 |
+| --- | --- | --- | --- |
+| Harper Reed codegen 工作流 | harper.blog/2025/08/18/my-llm-codegen-workflow-yet-again/（候选计划 URL） | 404（多组候选日期/路径均 404） | 经 harper.blog sitemap 全文检索定位实际 URL 为 2025/02/16/my-llm-codegen-workflow-atm/（同一名篇，实际标题"My LLM codegen workflow atm"），31 按此 URL 抓取并全文翻译 |
+| Steve Yegge《Revenge of the junior developer》 | sourcegraph.com/blog/revenge-of-the-junior-developer | curl 403（bot 防护），RSS 同样 403；web.archive.org 本网络不可达（curl 连接失败）；WebFetch 版权护栏拒绝逐字摘录长文 | 改用作者本人站点 yegge.ai/essays/revenge-of-the-junior-developer/（作者已将文章收录至个人站，页面文末保留 Sourcegraph 出处声明），curl 200，全文翻译；署名块注明原始出处 |
+| Geoffrey Huntley《Ralph Wiggum》 | ghuntley.com/ralph/ | curl 直连首次返回空响应（bot 防护）；MCP Web Reader 可抓但输出在本会话被截断；web.archive.org 本网络不可达 | 携带完整浏览器 UA 重试 curl 成功（85KB HTML），本地 python 提取正文 3.25 万字符，33 全文翻译；与第二、三轮"Web Reader 抓取"路径互为印证 |
+| tradecatlabs/vibe-coding-cn README | raw main 分支 README.md | 404（默认分支非 main） | 经 GitHub API 查询默认分支为 develop，改抓 develop 分支成功（README 59.7KB）；文档内部分署名与 LICENSE 版权行保留原始作者 tukuaiai/123olp，已在 34 署名块作来源注记 |
+| liyupi/ai-guide 子文档 | raw main 分支含中文/空格路径 | 直拼路径 404/超时；网络抖动（部分请求 000） | 路径经 percent-encoding 后抓取成功；失败请求自动重试（本环境网络间歇抖动，重试均成功） |
+| 两中文仓库正文配图 | pic.yupi.icu 等外链图片 | ——（非抓取失败） | 不搬运远程图片，34/35 原文配图位置以"编者注：原文此处有配图"标明图意，原图随原文链接可查 |
+| github repo 搜索镜像 | —— | ——（检索无果） | 曾尝试为 Yegge/Ralph 两篇检索 GitHub 全文镜像与 corsproxy/codetabs/allorigins/jina 代理，均无果或不可用；最终以原始站点直抓解决，未采用任何第三方转述版本 |

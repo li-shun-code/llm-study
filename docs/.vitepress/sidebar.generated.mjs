@@ -1088,6 +1088,26 @@ export default {
         {
           "text": "从 0 到 1 用 AI 做产品：未来属于能直接动手的人",
           "link": "/11-vibe-coding/30-zero-to-one-with-ai"
+        },
+        {
+          "text": "我的 LLM 代码生成工作流（Harper Reed 名篇全文翻译）",
+          "link": "/11-vibe-coding/31-harper-llm-codegen-workflow"
+        },
+        {
+          "text": "初级开发者的复仇（Steve Yegge 名篇全文翻译）",
+          "link": "/11-vibe-coding/32-yegge-revenge-of-the-junior-developer"
+        },
+        {
+          "text": "Ralph Wiggum 作为\"软件工程师\"（Geoffrey Huntley 名篇全文翻译）",
+          "link": "/11-vibe-coding/33-ralph-wiggum-software-engineer"
+        },
+        {
+          "text": "Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、经验心法与拼好码",
+          "link": "/11-vibe-coding/34-vibe-coding-cn-guide"
+        },
+        {
+          "text": "AI 编程开发指南精选：鱼皮 ai-guide 的核心心法与 Claude Code 配置哲学",
+          "link": "/11-vibe-coding/35-ai-guide-picks"
         }
       ]
     }

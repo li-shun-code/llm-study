@@ -180,6 +180,36 @@
       "url": "https://ghuntley.com/dothings/",
       "channel": "web",
       "file": "30-zero-to-one-with-ai.md"
+    },
+    {
+      "topic": "我的 LLM 代码生成工作流（Harper Reed 名篇全文翻译）",
+      "url": "https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/",
+      "channel": "web",
+      "file": "31-harper-llm-codegen-workflow.md"
+    },
+    {
+      "topic": "初级开发者的复仇（Steve Yegge 名篇全文翻译）",
+      "url": "https://yegge.ai/essays/revenge-of-the-junior-developer/",
+      "channel": "web",
+      "file": "32-yegge-revenge-of-the-junior-developer.md"
+    },
+    {
+      "topic": "Ralph Wiggum 作为\"软件工程师\"（Geoffrey Huntley 名篇全文翻译）",
+      "url": "https://ghuntley.com/ralph/",
+      "channel": "web",
+      "file": "33-ralph-wiggum-software-engineer.md"
+    },
+    {
+      "topic": "Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、经验心法与拼好码",
+      "url": "https://github.com/tradecatlabs/vibe-coding-cn",
+      "channel": "raw",
+      "file": "34-vibe-coding-cn-guide.md"
+    },
+    {
+      "topic": "AI 编程开发指南精选：鱼皮 ai-guide 的核心心法与 Claude Code 配置哲学",
+      "url": "https://github.com/liyupi/ai-guide",
+      "channel": "raw",
+      "file": "35-ai-guide-picks.md"
     }
   ]
 }
