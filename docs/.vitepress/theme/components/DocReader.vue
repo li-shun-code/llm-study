@@ -3,7 +3,7 @@
 // 句子高亮跟随（SentenceBoundary 元数据）+ 自动滚动；WS 不可用时回退浏览器语音。
 import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import { useRoute } from 'vitepress'
-import { synthesize } from '../utils/edgeTts.mjs'
+import { synthesize, getEndpoint, setEndpoint } from '../utils/edgeTts.mjs'
 
 // edge-tts 神经网络声音（实时合成，无需预生成）
 const EDGE_VOICES = [
@@ -25,6 +25,9 @@ const currentTime = ref(0)
 const knownDuration = ref(0) // 合成推进中已知的总时长（随句子边界增长）
 const error = ref('')
 const activeEl = ref(null) // 当前高亮块
+const showEndpointCfg = ref(false)
+const endpointInput = ref('')
+const hasEndpoint = computed(() => !!getEndpoint())
 
 let audio = null
 let mediaSource = null
@@ -236,12 +239,22 @@ async function togglePlay() {
       playing.value = true
       try { await audio.play() } catch { /* 首帧到位后可再点播放 */ }
 
+      // 兜底：30 秒内没有任何句子/音频到达视为通道不可用，自动降级浏览器语音
+      let fallbackTimer = setTimeout(() => {
+        if (!timeline || !timeline.units.length) {
+          synthController?.abort()
+          stopAll()
+          error.value = '实时合成连接失败——已切换浏览器语音朗读。'
+          playWithBrowser(text)
+        }
+      }, 30000)
       synthController = synthesize({
         text,
         voice: voice.value,
         rate: (rate.value === 1 ? '+0%' : (rate.value > 1 ? '+' : '') + Math.round((rate.value - 1) * 100) + '%'),
         onAudio: pushAudio,
         onSentence: (st) => {
+          clearTimeout(fallbackTimer)
           timeline = timeline || { units: [] }
           timeline.units.push(st)
           knownDuration.value = Math.max(knownDuration.value, st.e)
@@ -251,14 +264,15 @@ async function togglePlay() {
           }
         },
         onDone: () => {
+          clearTimeout(fallbackTimer)
           synthDone = true
           synthesizing.value = false
           pumpQueue()
         },
         onError: (e) => {
           stopAll()
-          error.value = (e.message.includes('无法连接') || e.message.includes('超时')
-            ? '实时合成需要 Edge 浏览器（微软校验 UA），当前浏览器已自动切换浏览器语音。'
+          error.value = (e.message.includes('无法连接') || e.message.includes('超时') || e.message.includes('被拒绝')
+            ? '实时合成被微软限制（需 Edge 浏览器）。点右侧 ⚙ 配置中转服务解锁全部浏览器；当前已用浏览器语音朗读。'
             : e.message + '——已切换浏览器语音。')
         }
       })
@@ -294,6 +308,12 @@ function onTimeUpdate() {
 
 let unitIdx = -1
 
+function saveEndpoint() {
+  setEndpoint(endpointInput.value.trim())
+  hasEndpoint.value = !!getEndpoint()
+  stopAll()
+}
+
 function stopReading() {
   stopAll()
 }
@@ -327,6 +347,7 @@ watch(() => route.path, onRouteChange)
 onMounted(() => {
   loadBrowserVoices()
   window.speechSynthesis?.addEventListener?.('voiceschanged', loadBrowserVoices)
+  endpointInput.value = getEndpoint()
 })
 
 onBeforeUnmount(() => {
@@ -396,6 +417,34 @@ const timeLabel = computed(() => {
     >
       <option v-for="r in RATES" :key="r" :value="r">{{ r }}x</option>
     </select>
+    <button
+      class="reader-cfg"
+      title="实时合成中转服务设置"
+      aria-label="实时合成中转服务设置"
+      @click="showEndpointCfg = !showEndpointCfg; endpointInput = getEndpoint()"
+    >
+      ⚙
+    </button>
+    <div v-if="showEndpointCfg" class="endpoint-cfg">
+      <p class="tiny">
+        实时合成走微软 edge-tts 服务，微软仅允许 Edge 浏览器 UA 直连。
+        部署中转服务（仓库 worker/edge-tts-worker.js → Cloudflare Workers，或本地
+        <code>npm run tts-proxy</code>）后，把地址填到这里即可在任意浏览器使用。
+        留空 = 直连；实时合成不可用时自动使用浏览器语音。
+      </p>
+      <div class="cfg-row">
+        <input
+          v-model="endpointInput"
+          type="text"
+          placeholder="wss://xxx.workers.dev 或 ws://localhost:3007"
+          spellcheck="false"
+        />
+        <button class="ghost" @click="saveEndpoint(); showEndpointCfg = false">保存</button>
+      </div>
+      <p class="tiny" :class="hasEndpoint ? 'ok' : ''">
+        当前：{{ hasEndpoint ? '使用中转服务 ' + getEndpoint() : '直连微软（仅 Edge 可用）' }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -479,6 +528,49 @@ const timeLabel = computed(() => {
   .reader-voice {
     max-width: 140px;
   }
+}
+.reader-cfg {
+  padding: 5px 8px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 7px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  font-size: 12px;
+}
+.doc-reader {
+  position: relative;
+}
+.endpoint-cfg {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+}
+.endpoint-cfg .cfg-row {
+  display: flex;
+  gap: 8px;
+}
+.endpoint-cfg input {
+  flex: 1;
+  padding: 7px 9px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 7px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+  font-size: 12px;
+}
+.endpoint-cfg .tiny {
+  margin: 0 0 8px;
+}
+.endpoint-cfg .ok {
+  color: var(--vp-c-brand-1);
 }
 </style>
 

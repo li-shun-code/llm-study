@@ -4,9 +4,21 @@
 // 已实测：微软不校验 Origin/UA 内容，浏览器（自动带页面 Origin 与 UA）可直连。
 
 const TRUSTED_CLIENT_TOKEN = '6A5AA1D4EAFF4E9FB37E23D68491D6F4'
-const WSS_URL = 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1'
+const DIRECT_URL = 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1'
 const GEC_VERSION = '1-143.0.3650.96'
 const CHARS_PER_REQ = 900 // 单次 SSML 请求的文本上限（约 6 分钟音频）
+const ENDPOINT_KEY = 'ttsEndpoint' // 中转服务地址（Cloudflare Worker / 本地代理）
+
+// 中转服务地址：空 = 直连微软（仅 Edge 浏览器 UA 可用）；配置后任意浏览器可用
+export function getEndpoint() {
+  try { return localStorage.getItem(ENDPOINT_KEY) || '' } catch { return '' }
+}
+export function setEndpoint(url) {
+  try {
+    if (url) localStorage.setItem(ENDPOINT_KEY, url.replace(/\/+$/, ''))
+    else localStorage.removeItem(ENDPOINT_KEY)
+  } catch { /* noop */ }
+}
 
 async function generateSecMsGec() {
   const ticks = Math.floor(Date.now() / 1000) + 11644473600
@@ -72,7 +84,9 @@ function synthesizePart(text, { voice, rate, onAudio, onSentence, offset, isLast
   return new Promise(async (resolve, reject) => {
     try {
       const gec = await generateSecMsGec()
-      const url = `${WSS_URL}?TrustedClientToken=${TRUSTED_CLIENT_TOKEN}&Sec-MS-GEC=${gec}&Sec-MS-GEC-Version=${GEC_VERSION}&ConnectionId=${crypto.randomUUID()}`
+      const query = `?TrustedClientToken=${TRUSTED_CLIENT_TOKEN}&Sec-MS-GEC=${gec}&Sec-MS-GEC-Version=${GEC_VERSION}&ConnectionId=${crypto.randomUUID()}`
+      const endpoint = getEndpoint()
+      const url = (endpoint || DIRECT_URL) + query
       const ws = new WebSocket(url)
       ws.binaryType = 'arraybuffer'
       let lastEnd = 0
