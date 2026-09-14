@@ -1,11 +1,11 @@
 ---
 title: Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体
 source_url: https://code.claude.com/docs/en/headless
-author: Anthropic（Claude Code Headless、Agent SDK、GitHub Actions 官方文档）；GitHub（Copilot cloud agent 官方文档）；Microsoft（Copilot Copyright Commitment 相关声明见第 26 篇）
+author: Anthropic（Claude Code Headless、Agent SDK、GitHub Actions 官方文档）；GitHub（Copilot cloud agent 官方文档）；Microsoft（Copilot Copyright Commitment 相关声明见第 27 篇）
 license: 署名翻译（Anthropic 与 GitHub 官方文档版权归原厂所有，教学用途编译翻译并署名）
 fetched_at: 2026-09-13
 translated: true
-order: 23
+order: 24
 ---
 
 **编者按**：上一篇结尾把工具收敛到了生态选型；本篇讲 AI 编码的"下半场"——**没有人的地方**。正文主体是四份官方文档的完整翻译：Claude Code《Run Claude Code programmatically》（Headless/CLI 形态）、《Agent SDK overview》（库形态）、《Claude Code GitHub Actions》（事件驱动形态），以及 GitHub《About Copilot cloud agent》（云端 PR 智能体形态）。四篇合起来正好是"把整个智能体循环嵌入流水线"的三种工业形态加一家的对照产品。编者内容仅限本按语与文末已标明的编者注。
@@ -656,7 +656,7 @@ cloud agent 消耗 GitHub Actions 分钟数与 **AI 额度（AI credits）**；A
 
 试一下官方 Skills 练习 "Expand your team with Copilot cloud agent"，获得实战经验。
 
-> 编者注（本站补充，已标明）：把本篇三节与上一节并排可以看出，"云端 PR 智能体"已是行业标准形态：触发（mention/事件/定时）→ 沙箱环境 → 分支改动 → PR → 评审。区别只在生态位——Anthropic 系开放 SDK 供你自建编排（CLI→SDK→Actions 三层可单独用也可组合），GitHub 系原生绑定平台流程。无论哪条路线，无人值守的成败都取决于同一组要素：**权限收敛**（第 8 篇的 allowlist/沙箱/dontAsk）、**可验证的完成标准**（`--max-turns`、超时、测试当裁判）、**产物一律走 PR 审查**（第 13、20 篇）、**成本可观测**（第 27 篇）。
+> 编者注（本站补充，已标明）：把本篇三节与上一节并排可以看出，"云端 PR 智能体"已是行业标准形态：触发（mention/事件/定时）→ 沙箱环境 → 分支改动 → PR → 评审。区别只在生态位——Anthropic 系开放 SDK 供你自建编排（CLI→SDK→Actions 三层可单独用也可组合），GitHub 系原生绑定平台流程。无论哪条路线，无人值守的成败都取决于同一组要素：**权限收敛**（第 8 篇的 allowlist/沙箱/dontAsk）、**可验证的完成标准**（`--max-turns`、超时、测试当裁判）、**产物一律走 PR 审查**（第 14、21 篇）、**成本可观测**（第 28 篇）。
 
 ---
 

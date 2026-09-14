@@ -5,7 +5,7 @@ author: Anthropic（Claude Code 官方文档）
 license: 署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）
 fetched_at: 2026-09-13
 translated: true
-order: 20
+order: 21
 ---
 
 ## AI 结对：让"第二双眼睛"成为默认配置

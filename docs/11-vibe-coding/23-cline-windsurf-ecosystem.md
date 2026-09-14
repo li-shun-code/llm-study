@@ -5,10 +5,10 @@ author: Cline Bot Inc.（Cline 官方文档）；Cognition（Devin Desktop/Casca
 license: 署名翻译（Cline/Cognition/Microsoft 官方文档与仓库资料版权归原厂所有，教学用途编译翻译并署名；对比表与收束为本站编者内容并已标明）
 fetched_at: 2026-09-13
 translated: true
-order: 22
+order: 23
 ---
 
-**编者按**：Headless 与 CI 的话题已全部移至下一篇（第 23 篇），本篇收敛为**开源工具生态的选型对比**：两家非 Anthropic/OpenAI 系的代表——开源的 Cline 与并入 Cognition/Devin Desktop 的 Windsurf。正文主体译自两家的官方文档，另译 VS Code 官方仓库的"Code-OSS 与 Visual Studio Code"说明作背景（为什么编辑器分叉生态会长成今天这样）。对比表与收束一节为本站编者内容，已标明。
+**编者按**：Headless 与 CI 的话题已全部移至下一篇（第 24 篇），本篇收敛为**开源工具生态的选型对比**：两家非 Anthropic/OpenAI 系的代表——开源的 Cline 与并入 Cognition/Devin Desktop 的 Windsurf。正文主体译自两家的官方文档，另译 VS Code 官方仓库的"Code-OSS 与 Visual Studio Code"说明作背景（为什么编辑器分叉生态会长成今天这样）。对比表与收束一节为本站编者内容，已标明。
 
 ## 一、背景：编辑器生态的 fork 结构（译自 VS Code 官方仓库）
 

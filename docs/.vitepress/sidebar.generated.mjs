@@ -1018,72 +1018,76 @@ export default {
           "link": "/11-vibe-coding/12-claude-skills"
         },
         {
+          "text": "开源编码 Skills 精选：Superpowers 与 Anthropic 官方技能族深度指南",
+          "link": "/11-vibe-coding/13-open-source-coding-skills"
+        },
+        {
           "text": "Git in AI 工作流：commit 即存档、worktree 隔离与审查流",
-          "link": "/11-vibe-coding/13-git-in-ai-workflow"
+          "link": "/11-vibe-coding/14-git-in-ai-workflow"
         },
         {
           "text": "Spec 驱动开发（Spec-Driven Development）",
-          "link": "/11-vibe-coding/14-spec-driven-development"
+          "link": "/11-vibe-coding/15-spec-driven-development"
         },
         {
           "text": "上下文工程（Context Engineering）",
-          "link": "/11-vibe-coding/15-context-engineering"
+          "link": "/11-vibe-coding/16-context-engineering"
         },
         {
           "text": "调试 with AI：让 AI 定位 Bug 的工作流",
-          "link": "/11-vibe-coding/16-debugging-with-ai"
+          "link": "/11-vibe-coding/17-debugging-with-ai"
         },
         {
           "text": "重构 with AI：从日常重构到百万行迁移的上下文策略",
-          "link": "/11-vibe-coding/17-refactoring-with-ai"
+          "link": "/11-vibe-coding/18-refactoring-with-ai"
         },
         {
           "text": "TDD with AI：Kent Beck 的增强编程实践",
-          "link": "/11-vibe-coding/18-tdd-with-ai"
+          "link": "/11-vibe-coding/19-tdd-with-ai"
         },
         {
           "text": "MCP 在编码中的应用",
-          "link": "/11-vibe-coding/19-mcp-for-coding"
+          "link": "/11-vibe-coding/20-mcp-for-coding"
         },
         {
           "text": "AI 结对与代码审查",
-          "link": "/11-vibe-coding/20-ai-pairing-code-review"
+          "link": "/11-vibe-coding/21-ai-pairing-code-review"
         },
         {
           "text": "多智能体协作编码",
-          "link": "/11-vibe-coding/21-multi-agent-collaboration"
+          "link": "/11-vibe-coding/22-multi-agent-collaboration"
         },
         {
           "text": "开源工具生态：Cline 与 Windsurf",
-          "link": "/11-vibe-coding/22-cline-windsurf-ecosystem"
+          "link": "/11-vibe-coding/23-cline-windsurf-ecosystem"
         },
         {
           "text": "Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体",
-          "link": "/11-vibe-coding/23-headless-ci-coding"
+          "link": "/11-vibe-coding/24-headless-ci-coding"
         },
         {
           "text": "AI 代码的安全与质量陷阱",
-          "link": "/11-vibe-coding/24-ai-code-security-pitfalls"
+          "link": "/11-vibe-coding/25-ai-code-security-pitfalls"
         },
         {
           "text": "AI 编码供应链安全：幻觉包、Slopsquatting 与沙箱防线",
-          "link": "/11-vibe-coding/25-ai-supply-chain-security"
+          "link": "/11-vibe-coding/26-ai-supply-chain-security"
         },
         {
           "text": "AI 生成代码的 IP 与合规：版权承诺、责任边界与可版权性",
-          "link": "/11-vibe-coding/26-ai-code-ip-compliance"
+          "link": "/11-vibe-coding/27-ai-code-ip-compliance"
         },
         {
           "text": "成本管理：Token 消耗、订阅选择与用量优化",
-          "link": "/11-vibe-coding/27-cost-management"
+          "link": "/11-vibe-coding/28-cost-management"
         },
         {
           "text": "团队落地：AI 编码规范的团队推广与度量",
-          "link": "/11-vibe-coding/28-team-adoption"
+          "link": "/11-vibe-coding/29-team-adoption"
         },
         {
           "text": "从 0 到 1 用 AI 做产品：未来属于能直接动手的人",
-          "link": "/11-vibe-coding/29-zero-to-one-with-ai"
+          "link": "/11-vibe-coding/30-zero-to-one-with-ai"
         }
       ]
     }

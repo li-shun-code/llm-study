@@ -117,3 +117,16 @@
 - 旧资料中"Windsurf 独立产品""Spec Kit 0.x 命令""Cursor Chat 独立模式"等表述均按当前版改写或以"时效注记"标明。
 - 第二轮重做的三篇（05/23/29）均已从"节译/编者总结为主"升级为"官方原文/原文全文翻译为主体"，编者内容仅存于各篇明确标明的编者小节与过渡句。
 - 21→22 收敛后，全模块对 Headless/CI 的叙述统一指向 23；"第 N 篇"交叉引用已按新编号全局替换。
+
+
+## 第三轮新增 1 篇（2026-09-13 第三轮：插入第 13 位，全模块重排为 01-30）
+
+在 29 篇基础上，于 12《Claude Skills：可复用技能包》之后插入《开源编码 Skills 精选：Superpowers 与 Anthropic 官方技能族深度指南》为新 13；原 13-29 两段式重命名顺延为 14-30，frontmatter `order` 与全模块"第 N 篇"交叉引用（含"第 6/20 篇""第 12、19 篇"等复合形式）已同步改号；`index.md` 知识点清单与 `manifest/11-vibe-coding.json`（30 条）同步更新。validator：PASS (30 articles)。
+
+| 来源 | 用途（现编号） | 许可 | 署名方式 |
+| --- | --- | --- | --- |
+| [obra/superpowers README](https://raw.githubusercontent.com/obra/superpowers/main/README.md)（raw 抓取） | 13 第一节（项目介绍/工作原理/14 平台安装/基本工作流/技能库总览/设计理念/社区/贡献/更新/许可/遥测说明，全节翻译） | MIT | 13 frontmatter + 署名块 |
+| [obra/superpowers 14 个 SKILL.md](https://github.com/obra/superpowers/tree/main/skills)（raw 逐个抓取：using-superpowers、brainstorming、writing-plans、executing-plans、subagent-driven-development、dispatching-parallel-agents、requesting-code-review、receiving-code-review、systematic-debugging、test-driven-development、using-git-worktrees、verification-before-completion、finishing-a-development-branch、writing-skills） | 13 第一节之 1.5（description 全译 + 正文全译或核心流程翻译；executing-plans、requesting-code-review、verification-before-completion 全文翻译，长文注明节选） | MIT | 13 署名块逐族列明 |
+| [anthropics/skills README](https://raw.githubusercontent.com/anthropics/skills/main/README.md)（raw 抓取） | 13 第二节（仓库介绍/免责声明/技能集/Claude Code 与 Claude.ai 与 API 使用/基础技能模板/伙伴技能，全节翻译） | 多数 Apache-2.0；文档技能源码可用 | 13 署名块列明 |
+| [anthropics/skills 19 个 SKILL.md](https://github.com/anthropics/skills/tree/main/skills)（raw 逐个抓取：docx、pdf、pptx、xlsx、algorithmic-art、canvas-design、brand-guidelines、theme-factory、frontend-design、slack-gif-creator、mcp-builder、skill-creator、webapp-testing、web-artifacts-builder、claude-api、internal-comms、doc-coauthoring、academy-guide、discernment-nudge；仓库结构经 GitHub API 核实，19 个技能目录均在 skills/ 下，无需 example 分支） | 13 第二节之 2.2（description 全译 + 核心内容翻译，按文档/创意/开发/企业四类分组，文档四件套各有独立小节；internal-comms、theme-factory、web-artifacts-builder、webapp-testing、brand-guidelines 基本全译，长文注明节选） | example-skills 类 Apache-2.0；docx/pdf/pptx/xlsx 为 Proprietary（source-available，LICENSE.txt 有完整条款） | 13 署名块逐族列明 |
+| 本站编者 | 13 开篇衔接与"如何选用"一节（节首标明"编者归纳，非原文翻译"） | 本站原创节 | 13 署名块标明 |

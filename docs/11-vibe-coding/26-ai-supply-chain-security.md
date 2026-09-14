@@ -5,7 +5,7 @@ author: Simon Willison（两篇博客与一篇引文）；Lasso Security、Sprac
 license: 署名转载/署名翻译（Willison 部分为作者博客署名翻译转载；官方文档 Copyright Anthropic PBC 教学用途翻译；每节均署名）
 fetched_at: 2026-09-13
 translated: true
-order: 25
+order: 26
 ---
 
 **编者按**：上一篇讲的是 AI 代码自身行为的安全陷阱；本篇讲**供应链**——当编码智能体建议你 `pip install` 一个不存在的包，攻击者抢先注册这个包名会发生什么。正文分三段，逐节署名：Simon Willison 关于幻觉包与 slopsquatting 的三篇短文（全文翻译）；相关公开研究的转述（经 Willison 与 Lasso Security 原文）；以及 Claude Code 官方 Security 与 Sandboxing 文档的防线章节（全文/核心章节翻译）。文末"编者注：五条防线清单"为本站补充，已标明。

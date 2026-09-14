@@ -30,6 +30,7 @@ AI 时代的编程工作方式：从第一次 AI 结对到团队落地，Claude 
 
 - AGENTS.md/CLAUDE.md 项目规范文件
 - Claude Skills 可复用技能包
+- 开源编码 Skills 精选：Superpowers 与 Anthropic 官方技能族
 - Git in AI 工作流
 
 **方法论**

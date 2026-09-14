@@ -716,7 +716,7 @@ use a subagent to investigate how our auth system handles token refresh
 git log --oneline -20 | claude -p "summarize these recent commits"
 ```
 
-输出格式、权限旗标与扇出模式见[非交互模式](https://code.claude.com/docs/en/headless)（即本模块第 23 篇的主题）。
+输出格式、权限旗标与扇出模式见[非交互模式](https://code.claude.com/docs/en/headless)（即本模块第 24 篇的主题）。
 
 ## 三、从零实战对照：把官方流程走成一个命令行小工具（本站编者补充）
 
@@ -733,7 +733,7 @@ mkdir wcount && cd wcount && git init && claude
 | 3 | "用 python -m wcount 对样例跑 --top 5，把输出贴给我。" | Quickstart 第 7 步（Claude 自己跑测试/命令验证） |
 | 4 | "commit my changes with a descriptive message" | Quickstart 第 6 步（对话式 Git） |
 
-三个提醒，全部来自上面的官方译文：结果不对时**继续对话纠正**而不是重开会话（会话本身就是迭代的地方）；复杂任务**拆成编号步骤**；改代码前先让它**探索**。第一次结对的最小循环就是：**目标 → 生成 → 验证 → 提交**。走熟这四拍，后面的权限（第 8 篇）、规范文件（第 11 篇）、Spec 驱动（第 14 篇）都是在这个循环上做加固。
+三个提醒，全部来自上面的官方译文：结果不对时**继续对话纠正**而不是重开会话（会话本身就是迭代的地方）；复杂任务**拆成编号步骤**；改代码前先让它**探索**。第一次结对的最小循环就是：**目标 → 生成 → 验证 → 提交**。走熟这四拍，后面的权限（第 8 篇）、规范文件（第 11 篇）、Spec 驱动（第 15 篇）都是在这个循环上做加固。
 
 ---
 

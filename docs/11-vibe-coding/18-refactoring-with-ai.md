@@ -5,7 +5,7 @@ author: Anthropic（官方博客主篇）；Aman Agrawal（实践观察）；Ant
 license: 署名翻译（官方博客与文档 Copyright Anthropic PBC；Aman Agrawal 部分为作者公开博客教学署名翻译；均署名）
 fetched_at: 2026-09-13
 translated: true
-order: 17
+order: 18
 ---
 
 上一篇调试的结论是"让智能体找根因"。本篇把尺度拉大：当代码改动从"一个函数"变成"一整个代码库"，瓶颈不再是定位问题，而是**上下文策略**——没有任何一个窗口能装下百万行代码，那么改动靠什么保持一致？本篇主篇翻译 Anthropic 官方博客《How Anthropic runs large-scale code migrations with Claude Code》（2026-07，含 Bun 百万行 Zig→Rust 移植案例），再译工程师 Aman Agrawal 的日常重构观察做对照，最后用官方工作流与 Rakuten 案例收束。
@@ -78,7 +78,7 @@ Jarred 的 Bun 迁移已上生产。代价也有：约 4% 的 Rust 代码在 uns
 - **人必须掌握工作流**：每次智能体改动之后小步走"测试 + 提交或回滚"（即 Kent Beck 的 TCR：test-commit-revert）**不可协商**。一个可行姿势是先让 AI 给出全部重构建议、再由人凭借领域经验挑选"真正有设计价值"的那些精确实施。要顶住"更快产出更多代码"的诱惑——初级工程师尤其容易中招，资深工程师时间久了也会
 - **琐碎重构别麻烦智能体**：有专用工具或足够机械的重构（如删未使用的命名空间），手动几秒钟的事，让 AI 做反而几分钟+一串误伤还没做完
 
-> 译注：把 Aman 的三条与主篇的六步放在一起读，会看到同一条规律的两个尺度——**人负责规则与方向，机器负责扇出与队列**。第 18 篇 Kent Beck 的 TDD/TCR 实践正是这条规律的另一处现身。
+> 译注：把 Aman 的三条与主篇的六步放在一起读，会看到同一条规律的两个尺度——**人负责规则与方向，机器负责扇出与队列**。第 19 篇 Kent Beck 的 TDD/TCR 实践正是这条规律的另一处现身。
 
 ## 三、官方工作流与产业案例（收束）
 
@@ -88,6 +88,6 @@ Jarred 的 Bun 迁移已上生产。代价也有：约 4% 的 Rust 代码在 uns
 
 ---
 
-> 下一篇预告：重构要求"行为不变"，TDD 干脆让测试先行。第 18 篇迎来本模块方法论篇的重磅作者——TDD 概念奠基人 Kent Beck，讲他与 Claude 结对的"增强编程"。
+> 下一篇预告：重构要求"行为不变"，TDD 干脆让测试先行。第 19 篇迎来本模块方法论篇的重磅作者——TDD 概念奠基人 Kent Beck，讲他与 Claude 结对的"增强编程"。
 
 > **来源**：本文第一、三部分译自 [How Anthropic runs large-scale code migrations with Claude Code](https://claude.com/blog/ai-code-migration)（2026-07-16）与 [Common workflows](https://code.claude.com/docs/en/common-workflows)（Claude Code 官方文档），及 [Rakuten 客户案例](https://www.anthropic.com/customers/rakuten)，作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；第二部分摘译自 Aman Agrawal《Some Observations on AI/Agentic Refactoring》（amanagrawal.blog，2025-05-06），署名翻译（作者公开博客，原文页未附开源许可）。"译注"为本站编者补充并已标明。抓取于 2026-09-13。

@@ -74,106 +74,112 @@
       "file": "12-claude-skills.md"
     },
     {
+      "topic": "开源编码 Skills 精选：Superpowers 与 Anthropic 官方技能族深度指南",
+      "url": "https://github.com/obra/superpowers",
+      "channel": "raw",
+      "file": "13-open-source-coding-skills.md"
+    },
+    {
       "topic": "Git in AI 工作流",
       "url": "https://code.claude.com/docs/en/worktrees",
       "channel": "web",
-      "file": "13-git-in-ai-workflow.md"
+      "file": "14-git-in-ai-workflow.md"
     },
     {
       "topic": "Spec 驱动开发",
       "url": "https://github.com/github/spec-kit",
       "channel": "raw",
-      "file": "14-spec-driven-development.md"
+      "file": "15-spec-driven-development.md"
     },
     {
       "topic": "上下文工程（Context Engineering）",
       "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
       "channel": "web",
-      "file": "15-context-engineering.md"
+      "file": "16-context-engineering.md"
     },
     {
       "topic": "调试 with AI：让 AI 定位 Bug 的工作流",
       "url": "https://words.filippo.io/claude-debugging/",
       "channel": "web",
-      "file": "16-debugging-with-ai.md"
+      "file": "17-debugging-with-ai.md"
     },
     {
       "topic": "重构 with AI：从日常重构到百万行迁移的上下文策略",
       "url": "https://claude.com/blog/ai-code-migration",
       "channel": "web",
-      "file": "17-refactoring-with-ai.md"
+      "file": "18-refactoring-with-ai.md"
     },
     {
       "topic": "TDD with AI",
       "url": "https://tidyfirst.substack.com/p/augmented-coding-beyond-the-vibes",
       "channel": "web",
-      "file": "18-tdd-with-ai.md"
+      "file": "19-tdd-with-ai.md"
     },
     {
       "topic": "MCP 在编码中的应用",
       "url": "https://code.claude.com/docs/en/mcp",
       "channel": "web",
-      "file": "19-mcp-for-coding.md"
+      "file": "20-mcp-for-coding.md"
     },
     {
       "topic": "AI 结对与代码审查",
       "url": "https://code.claude.com/docs/en/code-review",
       "channel": "web",
-      "file": "20-ai-pairing-code-review.md"
+      "file": "21-ai-pairing-code-review.md"
     },
     {
       "topic": "多智能体协作编码",
       "url": "https://code.claude.com/docs/en/agent-teams",
       "channel": "web",
-      "file": "21-multi-agent-collaboration.md"
+      "file": "22-multi-agent-collaboration.md"
     },
     {
       "topic": "开源工具生态：Cline 与 Windsurf",
       "url": "https://docs.cline.bot/cline-overview",
       "channel": "web",
-      "file": "22-cline-windsurf-ecosystem.md"
+      "file": "23-cline-windsurf-ecosystem.md"
     },
     {
       "topic": "Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体",
       "url": "https://code.claude.com/docs/en/headless",
       "channel": "web",
-      "file": "23-headless-ci-coding.md"
+      "file": "24-headless-ci-coding.md"
     },
     {
       "topic": "AI 代码的安全与质量陷阱",
       "url": "https://simonwillison.net/2026/Jul/22/openai-cyberattack/",
       "channel": "web",
-      "file": "24-ai-code-security-pitfalls.md"
+      "file": "25-ai-code-security-pitfalls.md"
     },
     {
       "topic": "AI 编码供应链安全：幻觉包、Slopsquatting 与沙箱防线",
       "url": "https://simonwillison.net/2024/Apr/1/diving-deeper-into-ai-package-hallucinations/",
       "channel": "web",
-      "file": "25-ai-supply-chain-security.md"
+      "file": "26-ai-supply-chain-security.md"
     },
     {
       "topic": "AI 生成代码的 IP 与合规：版权承诺、责任边界与可版权性",
       "url": "https://blogs.microsoft.com/on-the-issues/2023/09/07/copilot-copyright-commitment-ai-legal-concerns/",
       "channel": "web",
-      "file": "26-ai-code-ip-compliance.md"
+      "file": "27-ai-code-ip-compliance.md"
     },
     {
       "topic": "成本管理：Token 消耗、订阅选择与用量优化",
       "url": "https://code.claude.com/docs/en/costs",
       "channel": "web",
-      "file": "27-cost-management.md"
+      "file": "28-cost-management.md"
     },
     {
       "topic": "团队落地：AI 编码规范的团队推广与度量",
       "url": "https://code.claude.com/docs/en/admin-setup",
       "channel": "web",
-      "file": "28-team-adoption.md"
+      "file": "29-team-adoption.md"
     },
     {
       "topic": "从 0 到 1 用 AI 做产品：未来属于能直接动手的人",
       "url": "https://ghuntley.com/dothings/",
       "channel": "web",
-      "file": "29-zero-to-one-with-ai.md"
+      "file": "30-zero-to-one-with-ai.md"
     }
   ]
 }

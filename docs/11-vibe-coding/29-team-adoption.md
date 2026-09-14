@@ -5,7 +5,7 @@ author: Anthropic（Claude Code 官方文档 Set up Claude Code for your organiz
 license: 署名翻译（官方文档 Copyright Anthropic PBC，教学用途编译翻译并署名）
 fetched_at: 2026-09-13
 translated: true
-order: 28
+order: 29
 ---
 
 上一篇把成本从个人账单升到了组织账单；本篇走完组织的最后两步：**推广**（怎么把工具和规范安全地铺给全体开发者）与**度量**（怎么用数据回答"值不值"）。本篇编译两份官方文档：《Set up Claude Code for your organization》（管理员的部署决策地图）与《Track team usage with analytics》（采纳与贡献度量）。你会发现前面各篇的"个人手艺"——权限规则、CLAUDE.md、技能、hooks——在组织层全部有一个"管理版"。
@@ -63,13 +63,13 @@ Claude Code 的分析面板（Teams/Enterprise 在 claude.ai/analytics/claude-co
 
 **度量 ROI（Measure ROI）**：用你自己代码库的数据回答"这工具值不值"：随采纳增长追踪人均 PR 变化；对比"有/无 Claude Code 协助"的 PR 与交付行数；并与 **DORA 指标、sprint velocity 或其他工程 KPI 并排**解读。
 
-> 译注：官方建议里最有分量的是最后半句——AI 编码的度量必须挂在既有工程度量体系上，而不是发明一套"AI KPI"。这与第 24 篇的结论互为表里：AI 放大的是你已有的工程实践——好的更好，坏的更坏。度量同理：它放大的是你已有的度量纪律。
+> 译注：官方建议里最有分量的是最后半句——AI 编码的度量必须挂在既有工程度量体系上，而不是发明一套"AI KPI"。这与第 25 篇的结论互为表里：AI 放大的是你已有的工程实践——好的更好，坏的更坏。度量同理：它放大的是你已有的度量纪律。
 
 ## 三、一份可执行的团队落地清单（本站编者补充）
 
 综合两份官方文档与本模块各篇，把"推广 AI 编码"收敛为一个五步循环：
 
-1. **试点建立基线**（第 27 篇）：5-10 人小团队跑一个月，用 `/usage`、`/insights` 与 OpenTelemetry 记下人均成本与用法定型
+1. **试点建立基线**（第 28 篇）：5-10 人小团队跑一个月，用 `/usage`、`/insights` 与 OpenTelemetry 记下人均成本与用法定型
 2. **把经验固化成配置**：试点中发现的高频错误写成托管 CLAUDE.md 条目；重复流程做成技能（第 12 篇）；高危命令进 deny 规则（第 8 篇）——**规范从实践中来，而不是从管理层脑子里来**
 3. **分层强制**：个人喜好留在用户级，安全与合规进托管设置（表中的锁定项），项目差异进各仓库的 AGENTS.md（第 11 篇）
 4. **双轨度量**：采纳指标（日活、接受率、用量凹陷）周报；效果指标（PRs with CC、人均 PR、DORA）月报——**先看"有没有用起来"，再看"用出效果没有"**
@@ -77,6 +77,6 @@ Claude Code 的分析面板（Teams/Enterprise 在 claude.ai/analytics/claude-co
 
 ---
 
-> 下一篇预告：方法论与组织都讲完了，最后一篇回到个人视角收束全模块——第 29 篇《从 0 到 1 用 AI 做产品》：Geoffrey Huntley 为什么要说"未来属于能直接动手的人"。
+> 下一篇预告：方法论与组织都讲完了，最后一篇回到个人视角收束全模块——第 30 篇《从 0 到 1 用 AI 做产品》：Geoffrey Huntley 为什么要说"未来属于能直接动手的人"。
 
 > **来源**：本文第一、二节分别译自 [Set up Claude Code for your organization](https://code.claude.com/docs/en/admin-setup) 与 [Track team usage with analytics](https://code.claude.com/docs/en/analytics)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）。第三节为本站编者补充并已标明。抓取于 2026-09-13。

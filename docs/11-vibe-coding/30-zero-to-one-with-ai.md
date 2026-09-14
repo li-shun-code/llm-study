@@ -5,7 +5,7 @@ author: Geoffrey Huntley
 license: 署名转载（作者公开博客，翻译转载需署名并附原文链接；本篇为原文全文翻译，编者内容仅限文末已标明的编者注）
 fetched_at: 2026-09-13
 translated: true
-order: 29
+order: 30
 ---
 
 **编者按**：本篇是模块收尾篇，主体为 Geoffrey Huntley《The future belongs to people who can just do things》（2025-02-06 发布，2025-06-08 更新）的**全文翻译**——从"到 2026 年底手工提交难以为继"的论断，到 Gumroad 重建案例、采纳六阶段、公司行动清单、技术加固点与开发者须知。编者内容仅限本按语与文末已标明的"编者注"小节。
@@ -126,7 +126,7 @@ order: 29
 
 ## 编者注：把这套流程落成你自己的 0→1 清单（本站编者补充，非原文内容）
 
-> 依本站编者按惯例，以下清单为本站编者补充，已与原文明确区隔。综合 Huntley 的流程与本模块已译内容（第 7 篇 Claude Code 最佳实践的"探索→计划→实现→提交"、第 14 篇 Spec Kit 的 constitution→specify→plan→tasks→implement 流水线），一个可执行的从 0 到 1 清单：
+> 依本站编者按惯例，以下清单为本站编者补充，已与原文明确区隔。综合 Huntley 的流程与本模块已译内容（第 7 篇 Claude Code 最佳实践的"探索→计划→实现→提交"、第 15 篇 Spec Kit 的 constitution→specify→plan→tasks→implement 流水线），一个可执行的从 0 到 1 清单：
 
 **表：从 0 到 1 用 AI 做产品的实战清单**
 

@@ -106,7 +106,7 @@ auto 模式（2026 年起为 Pro/Max/Team 计划交互会话的默认起始模�
 用一句话串起本篇：**规则管"问不问"，模式管"默认怎么问"，沙箱管"问了也做不到"**。对照第 7 篇最佳实践的用法：
 
 - 交互开发：`acceptEdits`（或 auto）+ 少量 allow 规则（`npm test`、`git status`）+ deny 掉 `.env` 读取
-- 无人值守脚本：`dontAsk` + 显式 allowlist + 沙箱 + 严格域名白名单——第 23 篇 Headless/CI 会原样复用这个配方
+- 无人值守脚本：`dontAsk` + 显式 allowlist + 沙箱 + 严格域名白名单——第 24 篇 Headless/CI 会原样复用这个配方
 - 永远保留：对保护路径与关键路径的 deny——它们是唯一连 `bypassPermissions` 都拦得住（前者）或最难误开（后者）的闸门
 
 ---
