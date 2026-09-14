@@ -1,8 +1,8 @@
-// 自定义主题入口：扩展默认主题，挂载全站 AI 学习助手与语音朗读
+// 自定义主题入口：扩展默认主题，挂载 AI 学习助手与文章朗读条
 import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import AiAssistant from './components/AiAssistant.vue'
-import TtsPlayer from './components/TtsPlayer.vue'
+import DocReader from './components/DocReader.vue'
 import '@fontsource/noto-sans-sc/300.css'
 import '@fontsource/noto-sans-sc/400.css'
 import '@fontsource/noto-sans-sc/500.css'
@@ -19,7 +19,8 @@ export default {
   },
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'layout-bottom': () => h('div', { class: 'floating-widgets' }, [h(AiAssistant), h(TtsPlayer)])
+      'doc-before': () => h(DocReader),
+      'layout-bottom': () => h(AiAssistant)
     })
   }
 }

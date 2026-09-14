@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted, onBeforeUnmount, ref, nextTick, computed } from 'vue'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
+import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
+import { useRoute } from 'vitepress'
 import {
   getOrCreateKey,
   loadConfig,
@@ -14,7 +13,7 @@ const SYSTEM_PROMPT =
   '你是本站（LLM 应用开发完全学习路线）的学习助手，用中文简洁回答，' +
   '优先结合站内模块体系（Python 基础 → 数据结构与算法 → 计算机基础 → Python 进阶 → ' +
   'LLM 基础 → Prompt 工程 → API 开发 → 数据库 → RAG → Agent → 微调与部署 → Vibe Coding）' +
-  '给出学习路径建议。回答支持 Markdown。'
+  '给出学习路径建议。'
 
 const open = ref(false)
 const view = ref('loading') // loading | chat | settings
@@ -104,12 +103,6 @@ function clearConfig() {
   apiKey.value = ''
   messages.value = []
   view.value = 'settings'
-}
-
-function clearConversation() {
-  if (streaming.value) stopStream()
-  messages.value = []
-  error.value = ''
 }
 
 function onListScroll() {
