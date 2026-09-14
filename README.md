@@ -37,6 +37,14 @@ npm run build    # 构建静态站点
 - 来源登记：docs/.vitepress/manifest/<模块>.json；抓取失败与替代记录：docs/.vitepress/sources-report/<模块>.md。
 - 计划与设计文档：docs/superpowers/。
 
+## 语音朗读（edge-tts）
+
+文章页右下角 🔊 按钮：播放全文朗读，支持切换声音与语速。
+
+- 标注"已缓存"的声音为预生成音频（edge-tts，微软神经网络音色），存于 `docs/public/audio/`，打开即听；
+- 其余声音使用浏览器实时语音（Web Speech API）兜底；
+- 预生成命令：`node scripts/generate-tts.mjs --module 01-dsa --voice zh-CN-YunxiNeural`（支持 `--file` / `--module` / `--all` / `--force`，`--list-voices` 查看音色）。已生成的音频提交进仓库即为缓存，下次直接听。注意全量生成体积较大（GitHub Pages 上限 1GB），建议按需生成。
+
 ## AI 学习助手
 
 全站右下角悬浮助手：使用你自己配置的 OpenAI 兼容端点（Base URL/模型/API Key），浏览器直连，API Key 以 AES-GCM 加密存于本机 localStorage（加密密钥存 IndexedDB，不可导出），不上传任何服务器。
