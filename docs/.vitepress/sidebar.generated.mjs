@@ -1111,5 +1111,59 @@ export default {
         }
       ]
     }
+  ],
+  "/12-project-analysis/": [
+    {
+      "text": "模块 12 · 优质项目源码分析",
+      "link": "/12-project-analysis/",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Dify 工作流引擎源码解析——节点编排、变量系统与沙箱执行",
+          "link": "/12-project-analysis/01-dify-workflow-engine"
+        },
+        {
+          "text": "n8n 执行引擎源码解析——任务运行器与节点式自动化",
+          "link": "/12-project-analysis/02-n8n-execution-engine"
+        },
+        {
+          "text": "RAGFlow 源码解析：深度文档理解与企业级 RAG 管线",
+          "link": "/12-project-analysis/03-ragflow-rag-pipeline"
+        },
+        {
+          "text": "browser-use 源码解析：浏览器 Agent 的控制循环与 DOM 提取",
+          "link": "/12-project-analysis/04-browser-use-agent-loop"
+        }
+      ]
+    }
+  ],
+  "/13-design-patterns-java/": [
+    {
+      "text": "模块 13 · Java 设计模式教学专栏",
+      "link": "/13-design-patterns-java/",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "专栏导读：iluwatar/java-design-patterns 与设计模式总览",
+          "link": "/13-design-patterns-java/01-column-overview"
+        },
+        {
+          "text": "创建型模式：单例、工厂与对象的受控诞生",
+          "link": "/13-design-patterns-java/02-creational-patterns"
+        },
+        {
+          "text": "结构型模式：组合优于继承的工程实践",
+          "link": "/13-design-patterns-java/03-structural-patterns"
+        },
+        {
+          "text": "行为型模式：对象间的职责分配与协作",
+          "link": "/13-design-patterns-java/04-behavioral-patterns"
+        },
+        {
+          "text": "企业级架构模式：从 Ambassador 到 Anti-Corruption Layer",
+          "link": "/13-design-patterns-java/05-enterprise-patterns"
+        }
+      ]
+    }
   ]
 }

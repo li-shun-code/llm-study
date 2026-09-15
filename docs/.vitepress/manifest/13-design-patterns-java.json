@@ -1,0 +1,35 @@
+{
+  "module": "13-design-patterns-java",
+  "articles": [
+    {
+      "topic": "专栏导读：iluwatar/java-design-patterns 与设计模式总览",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "channel": "raw",
+      "file": "01-column-overview.md"
+    },
+    {
+      "topic": "创建型模式：单例、工厂与对象的受控诞生",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "channel": "raw",
+      "file": "02-creational-patterns.md"
+    },
+    {
+      "topic": "结构型模式：组合优于继承的工程实践",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "channel": "raw",
+      "file": "03-structural-patterns.md"
+    },
+    {
+      "topic": "行为型模式：对象间的职责分配与协作",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "channel": "raw",
+      "file": "04-behavioral-patterns.md"
+    },
+    {
+      "topic": "企业级架构模式：从 Ambassador 到 Anti-Corruption Layer",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "channel": "raw",
+      "file": "05-enterprise-patterns.md"
+    }
+  ]
+}

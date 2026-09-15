@@ -1,4 +1,4 @@
-// 扫描 docs/ 下 12 个固定模块目录，按 frontmatter 生成分区侧边栏，
+// 扫描 docs/ 下 14 个固定模块目录，按 frontmatter 生成分区侧边栏，
 // 写入 docs/.vitepress/sidebar.generated.mjs（config.mts 引用）。
 // 侧边栏为「路径前缀 → 该模块目录」的对象形式：浏览某个模块时只显示该模块的文章列表。
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
@@ -17,7 +17,9 @@ export const MODULE_DIRS = [
   '08-rag',
   '09-agents',
   '10-finetuning-deployment',
-  '11-vibe-coding'
+  '11-vibe-coding',
+  '12-project-analysis',
+  '13-design-patterns-java'
 ]
 
 export function buildSidebar(docsDir) {

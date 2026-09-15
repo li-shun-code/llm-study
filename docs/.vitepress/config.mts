@@ -35,7 +35,26 @@ export default defineConfig({
           { text: '🛠️ 微调与部署', link: '/10-finetuning-deployment/' }
         ]
       },
-      { text: '✨ Vibe Coding', link: '/11-vibe-coding/' }
+      { text: '✨ Vibe Coding', link: '/11-vibe-coding/' },
+      {
+        text: '☕ Java 设计模式',
+        items: [
+          { text: '专栏导读与模式总览', link: '/13-design-patterns-java/' },
+          { text: '创建型模式', link: '/13-design-patterns-java/creational' },
+          { text: '结构型模式', link: '/13-design-patterns-java/structural' },
+          { text: '行为型模式', link: '/13-design-patterns-java/behavioral' },
+          { text: '企业级架构模式', link: '/13-design-patterns-java/enterprise' }
+        ]
+      },
+      {
+        text: '🔍 项目源码分析',
+        items: [
+          { text: '🏗️ Dify 工作流引擎', link: '/12-project-analysis/' },
+          { text: '⚙️ n8n 执行引擎', link: '/12-project-analysis/n8n' },
+          { text: '📚 RAGFlow 检索管线', link: '/12-project-analysis/ragflow' },
+          { text: '🌐 browser-use Agent 循环', link: '/12-project-analysis/browser-use' }
+        ]
+      }
     ],
     outline: { level: [2, 3], label: '本页目录' },
     docFooter: { prev: '上一篇', next: '下一篇' },
