@@ -6,6 +6,7 @@ license: CC BY-NC-ND 3.0（含官方翻译例外条款）
 fetched_at: 2026-09-13
 translated: true
 order: 21
+group: 计算机网络
 ---
 
 我们已经知道 IP 负责在互联网上路由流量，也知道它用 **IP 地址**干活——IPv4 常以点分数字格式示人，如 `10.1.2.3`。

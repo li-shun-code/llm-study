@@ -6,6 +6,7 @@ license: CC BY 4.0
 fetched_at: 2026-09-13
 translated: true
 order: 8
+group: Linux 与开发工具
 ---
 
 前面的 Git 分支与协作流程解决的是"代码怎么合"，这一篇讲"合进去之前怎么自动验证、之后怎么自动部署"——也就是持续集成/持续交付（CI/CD）。本文翻译 GitHub Actions 官方文档的核心内容：先讲概念，再讲工作流 YAML 的必备语法。

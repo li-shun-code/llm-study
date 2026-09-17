@@ -6,6 +6,7 @@ license: GPL-2.0-or-later（man-pages）
 fetched_at: 2026-09-13
 translated: true
 order: 19
+group: 操作系统
 ---
 
 上一篇 I/O 多路复用讲了 `select()` 与 `poll()`：一条线程盯住一堆文件描述符，谁就绪就处理谁。但 select/poll 每次调用都要把整个描述符集合从用户空间拷进内核、内核再线性扫描一遍——连接数一多就吃不消。这一篇讲 Linux 对这个问题的正解：epoll。本文完整翻译 man-pages 的 epoll(7)、epoll_ctl(2)、epoll_wait(2)、epoll_create(2) 文档核心内容。
@@ -237,9 +238,9 @@ for (;;) {
 
 其他系统提供类似机制：例如 FreeBSD 有 kqueue，Solaris 有 /dev/poll。epoll 是 Linux 专属（STANDARDS：Linux），出现于 Linux 2.5.44、glibc 2.3.2。经 epoll 文件描述符监视的文件描述符集合，可以在进程的 /proc/pid/fdinfo 目录中该 epoll 文件描述符的条目里查看（详见 proc(5)）。kcmp(2) 的 KCMP_EPOLL_TFD 操作可用于测试某个文件描述符是否存在于某个 epoll 实例中。
 
-## 为什么 asyncio 需要它（编者按，桥接下一模块）
+## 编者补充：为什么 asyncio 需要它（桥接下一模块）
 
-> 本节为站点编者补充说明，用于衔接下一模块（Python 异步编程），非 man-pages 原文翻译。
+> 本节为站点编者补充说明，用于衔接上一篇与下一模块（Python 异步编程），非 man-pages 原文翻译。
 
 现在把上面这张拼图对到 Python 上。asyncio 的核心承诺是"单线程并发处理成千上万个连接"，它依赖三个前提，每一项都能在前文找到出处：
 
@@ -247,7 +248,7 @@ for (;;) {
 2. **事件通知**：epoll 就绪列表就是事件源。asyncio 的事件循环（`SelectorEventLoop` 默认基于 `selectors` 模块，Linux 上正是 epoll；Windows 上则是 IOCP）在 `epoll_wait()` 阻塞等待，事件到来后逐个回调。
 3. **回调 → 协程**：上例的 `do_use_fd()` 在收到 EAGAIN 时"记录当前状态、下次从停下的地方继续"——man 页写的这句话就是状态机。asyncio 用协程把这种手工状态机变成语言特性：`await` 挂起时保存栈帧，等 I/O 就绪由事件循环恢复执行。EAGAIN 处的手动 goto，变成了 `await`。
 
-所以说：理解了 epoll 的兴趣列表/就绪列表、电平/边沿触发、以及"只在 EAGAIN 之后才等事件"的纪律，asyncio 事件循环就不再是黑魔法，而是一段你已读懂其系统调用底座的调度器代码。
+放到 LLM 场景里：推理网关的每条 SSE 流是一个文件描述符（上一篇《I/O 多路复用》的痛点），epoll 让单线程事件循环以 O(活跃连接) 而非 O(总连接) 的成本盯住它们；而 `await` 挂起的协程恰好在等待下一个 token 的间隙让出控制权——并发请求因此不需要每请求一个线程（也就绕开了《线程》一篇里那把需要小心伺候的锁）。所以说：理解了 epoll 的兴趣列表/就绪列表、电平/边沿触发、以及"只在 EAGAIN 之后才等事件"的纪律，asyncio 事件循环就不再是黑魔法，而是一段你已读懂其系统调用底座的调度器代码。
 
 ---
 

@@ -6,6 +6,7 @@ license: 版权所有 © William E. Shotts（允许保留版权声明的逐字�
 fetched_at: 2026-09-13
 translated: true
 order: 3
+group: Linux 与开发工具
 ---
 
 Linux 这类类 Unix 操作系统与其他计算系统的一大区别：它们不仅是**多任务**（multitasking）的，还是**多用户**（multi-user）的。

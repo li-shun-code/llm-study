@@ -6,6 +6,7 @@ license: CC BY-NC-ND 3.0（含官方翻译例外条款）
 fetched_at: 2026-09-13
 translated: true
 order: 20
+group: 计算机网络
 ---
 开始之前，先认识几个术语：
 

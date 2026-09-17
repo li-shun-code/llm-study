@@ -6,6 +6,7 @@ license: CC BY-SA 4.0
 fetched_at: 2026-09-13
 translated: true
 order: 4
+group: Linux 与开发工具
 ---
 程序员日常工作里用远程服务器已经越来越普遍：无论部署后端软件，还是需要更强算力的机器（训练/调用模型也常常如此），你都离不开安全外壳协议（SSH，Secure Shell）。和本课程涉及的大多数工具一样，SSH 的可配置性极强，非常值得系统学习。
 

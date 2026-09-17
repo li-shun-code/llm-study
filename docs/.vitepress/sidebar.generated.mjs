@@ -225,112 +225,130 @@ export default {
       "collapsed": false,
       "items": [
         {
-          "text": "Linux 常用命令：从 Shell 开始",
-          "link": "/02-cs-fundamentals/01-linux-common-commands"
+          "text": "Linux 与开发工具",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Linux 常用命令：从 Shell 开始",
+              "link": "/02-cs-fundamentals/01-linux-common-commands"
+            },
+            {
+              "text": "Shell 脚本入门",
+              "link": "/02-cs-fundamentals/02-shell-scripting"
+            },
+            {
+              "text": "文件权限",
+              "link": "/02-cs-fundamentals/03-file-permissions"
+            },
+            {
+              "text": "SSH：远程开发基础",
+              "link": "/02-cs-fundamentals/04-ssh"
+            },
+            {
+              "text": "Git 基础：获取仓库、暂存、提交与回退",
+              "link": "/02-cs-fundamentals/05-git-basics"
+            },
+            {
+              "text": "Git 分支、合并与远程协作",
+              "link": "/02-cs-fundamentals/06-git-branching"
+            },
+            {
+              "text": "Git 进阶：rebase、cherry-pick 与冲突解决",
+              "link": "/02-cs-fundamentals/07-git-advanced"
+            },
+            {
+              "text": "GitHub Actions 与 CI 基础",
+              "link": "/02-cs-fundamentals/08-github-actions-ci"
+            }
+          ]
         },
         {
-          "text": "Shell 脚本入门",
-          "link": "/02-cs-fundamentals/02-shell-scripting"
+          "text": "操作系统",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "操作系统概述：虚拟化、并发与持久化",
+              "link": "/02-cs-fundamentals/09-os-overview"
+            },
+            {
+              "text": "进程：运行中的程序",
+              "link": "/02-cs-fundamentals/10-processes"
+            },
+            {
+              "text": "线程：并发导论",
+              "link": "/02-cs-fundamentals/11-threads"
+            },
+            {
+              "text": "并发与锁",
+              "link": "/02-cs-fundamentals/12-concurrency-and-locks"
+            },
+            {
+              "text": "信号与进程间通信 IPC",
+              "link": "/02-cs-fundamentals/13-signals-ipc"
+            },
+            {
+              "text": "CPU 调度：FIFO、SJF、STCF 与轮转",
+              "link": "/02-cs-fundamentals/14-cpu-scheduling"
+            },
+            {
+              "text": "内存管理：地址空间抽象",
+              "link": "/02-cs-fundamentals/15-memory-management"
+            },
+            {
+              "text": "虚拟内存：TLB 与地址翻译加速",
+              "link": "/02-cs-fundamentals/16-virtual-memory"
+            },
+            {
+              "text": "文件系统：文件与目录",
+              "link": "/02-cs-fundamentals/17-file-systems"
+            },
+            {
+              "text": "I/O 多路复用：阻塞、poll() 与 select()",
+              "link": "/02-cs-fundamentals/18-io-multiplexing"
+            },
+            {
+              "text": "epoll 与事件循环",
+              "link": "/02-cs-fundamentals/19-epoll-event-loop"
+            }
+          ]
         },
         {
-          "text": "文件权限",
-          "link": "/02-cs-fundamentals/03-file-permissions"
-        },
-        {
-          "text": "SSH：远程开发基础",
-          "link": "/02-cs-fundamentals/04-ssh"
-        },
-        {
-          "text": "Git 基础：获取仓库、暂存、提交与回退",
-          "link": "/02-cs-fundamentals/05-git-basics"
-        },
-        {
-          "text": "Git 分支、合并与远程协作",
-          "link": "/02-cs-fundamentals/06-git-branching"
-        },
-        {
-          "text": "Git 进阶：rebase、cherry-pick 与冲突解决",
-          "link": "/02-cs-fundamentals/07-git-advanced"
-        },
-        {
-          "text": "GitHub Actions 与 CI 基础",
-          "link": "/02-cs-fundamentals/08-github-actions-ci"
-        },
-        {
-          "text": "操作系统概述：虚拟化、并发与持久化",
-          "link": "/02-cs-fundamentals/09-os-overview"
-        },
-        {
-          "text": "进程：运行中的程序",
-          "link": "/02-cs-fundamentals/10-processes"
-        },
-        {
-          "text": "线程：并发导论",
-          "link": "/02-cs-fundamentals/11-threads"
-        },
-        {
-          "text": "并发与锁",
-          "link": "/02-cs-fundamentals/12-concurrency-and-locks"
-        },
-        {
-          "text": "信号与进程间通信 IPC",
-          "link": "/02-cs-fundamentals/13-signals-ipc"
-        },
-        {
-          "text": "CPU 调度：FIFO、SJF、STCF 与轮转",
-          "link": "/02-cs-fundamentals/14-cpu-scheduling"
-        },
-        {
-          "text": "内存管理：地址空间抽象",
-          "link": "/02-cs-fundamentals/15-memory-management"
-        },
-        {
-          "text": "虚拟内存：TLB 与地址翻译加速",
-          "link": "/02-cs-fundamentals/16-virtual-memory"
-        },
-        {
-          "text": "文件系统：文件与目录",
-          "link": "/02-cs-fundamentals/17-file-systems"
-        },
-        {
-          "text": "I/O 多路复用：阻塞、poll() 与 select()",
-          "link": "/02-cs-fundamentals/18-io-multiplexing"
-        },
-        {
-          "text": "epoll 与事件循环",
-          "link": "/02-cs-fundamentals/19-epoll-event-loop"
-        },
-        {
-          "text": "网络分层模型：从 HTTP 请求到 OSI",
-          "link": "/02-cs-fundamentals/20-network-layering"
-        },
-        {
-          "text": "DNS：域名系统",
-          "link": "/02-cs-fundamentals/21-dns"
-        },
-        {
-          "text": "TCP：传输控制协议",
-          "link": "/02-cs-fundamentals/22-tcp"
-        },
-        {
-          "text": "UDP：用户数据报协议",
-          "link": "/02-cs-fundamentals/23-udp"
-        },
-        {
-          "text": "HTTP 概述",
-          "link": "/02-cs-fundamentals/24-http"
-        },
-        {
-          "text": "HTTPS 与 TLS",
-          "link": "/02-cs-fundamentals/25-https"
-        },
-        {
-          "text": "SSE 与 WebSocket：流式输出的网络基础",
-          "link": "/02-cs-fundamentals/26-sse-websocket"
-        },
-        {
-          "text": "REST 风格",
-          "link": "/02-cs-fundamentals/27-rest"
+          "text": "计算机网络",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "网络分层模型：从 HTTP 请求到 OSI",
+              "link": "/02-cs-fundamentals/20-network-layering"
+            },
+            {
+              "text": "DNS：域名系统",
+              "link": "/02-cs-fundamentals/21-dns"
+            },
+            {
+              "text": "TCP：传输控制协议",
+              "link": "/02-cs-fundamentals/22-tcp"
+            },
+            {
+              "text": "UDP：用户数据报协议",
+              "link": "/02-cs-fundamentals/23-udp"
+            },
+            {
+              "text": "HTTP 概述",
+              "link": "/02-cs-fundamentals/24-http"
+            },
+            {
+              "text": "HTTPS 与 TLS",
+              "link": "/02-cs-fundamentals/25-https"
+            },
+            {
+              "text": "SSE 与 WebSocket：流式输出的网络基础",
+              "link": "/02-cs-fundamentals/26-sse-websocket"
+            },
+            {
+              "text": "REST：表述性状态转移（Fielding 论文第 5 章）",
+              "link": "/02-cs-fundamentals/27-rest"
+            }
+          ]
         }
       ]
     }

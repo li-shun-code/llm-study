@@ -1,6 +1,8 @@
 // 扫描 docs/ 下 14 个固定模块目录，按 frontmatter 生成分区侧边栏，
 // 写入 docs/.vitepress/sidebar.generated.mjs（config.mts 引用）。
 // 侧边栏为「路径前缀 → 该模块目录」的对象形式：浏览某个模块时只显示该模块的文章列表。
+// 文章 frontmatter 可选 group 字段（如"操作系统"）：同模块内按 group 聚合为子分组，
+// 无 group 的文章平铺在模块条目下（排在所有子分组之前）。
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { parseFrontmatter } from './frontmatter.mjs'
@@ -45,13 +47,33 @@ export function buildSidebar(docsDir) {
       articles.push({
         text: data.title || file,
         link: `/${dir}/${file.replace(/\.md$/, '')}`,
-        order: typeof data.order === 'number' ? data.order : 999
+        order: typeof data.order === 'number' ? data.order : 999,
+        group: typeof data.group === 'string' ? data.group : ''
       })
     }
     articles.sort((a, b) => a.order - b.order)
-    for (const a of articles) delete a.order
+
+    // 有 group 的文章聚合为子分组（按组内最小 order 排序组），无 group 的平铺在前
+    const flat = []
+    const groups = new Map()
+    for (const a of articles) {
+      delete a.order
+      if (a.group) {
+        if (!groups.has(a.group)) groups.set(a.group, [])
+        groups.get(a.group).push(a)
+      } else {
+        flat.push(a)
+      }
+    }
+    for (const a of articles) delete a.group
+
+    const items = [...flat]
+    for (const [g, list] of groups) {
+      items.push({ text: g, collapsed: false, items: list })
+    }
+
     sidebar[`/${dir}/`] = [
-      { text: rootTitle, link: `/${dir}/`, collapsed: false, items: articles }
+      { text: rootTitle, link: `/${dir}/`, collapsed: false, items }
     ]
   }
   return sidebar

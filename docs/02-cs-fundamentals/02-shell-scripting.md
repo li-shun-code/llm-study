@@ -6,6 +6,7 @@ license: CC BY-SA 4.0
 fetched_at: 2026-09-13
 translated: true
 order: 2
+group: Linux 与开发工具
 ---
 
 本讲介绍把 bash 当作脚本语言使用的基础知识，以及一批覆盖命令行日常高频任务的 Shell 工具。
