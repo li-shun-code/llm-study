@@ -154,6 +154,14 @@ body,
   border: 1px solid var(--vp-c-divider);
   margin: 22px 0;
 }
+/* 暗色下代码块用深色背景，配合 one-dark-pro 着色 */
+.dark .vp-doc div[class*='language-'],
+.dark .vp-doc div[class*='language-'] pre {
+  background-color: #1e1e1e;
+}
+.dark .vp-doc div[class*='language-'] code {
+  color: #d4d4d4;
+}
 .vp-doc div[class*='language-'] pre {
   padding: 16px 20px;
 }

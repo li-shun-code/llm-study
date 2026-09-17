@@ -10,6 +10,11 @@ export default defineConfig({
   head: [['meta', { name: 'theme-color', content: '#0e9f6e' }]],
   // 教程正文中的 localhost 示例链接（如 Gradio/FastAPI demo）不是站点死链
   ignoreDeadLinks: [/^https?:\/\/localhost/],
+  markdown: {
+    // 语法高亮主题：亮色 github-light，暗色 one-dark-pro
+    theme: { light: 'github-light', dark: 'one-dark-pro' },
+    lineNumbers: true
+  },
   themeConfig: {
     siteTitle: 'LLM 学习路线',
     nav: [
