@@ -11,8 +11,8 @@ export default defineConfig({
   // 教程正文中的 localhost 示例链接（如 Gradio/FastAPI demo）不是站点死链
   ignoreDeadLinks: [/^https?:\/\/localhost/],
   markdown: {
-    // 语法高亮主题：亮色 github-light，暗色 one-dark-pro
-    theme: { light: 'github-light', dark: 'one-dark-pro' },
+    // 语法高亮主题：亮色 one-light，暗色 one-dark-pro（Atom One 系配色，鲜艳统一）
+    theme: { light: 'one-light', dark: 'one-dark-pro' },
     lineNumbers: true
   },
   themeConfig: {
