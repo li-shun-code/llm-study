@@ -221,3 +221,34 @@ body,
     scroll-behavior: smooth;
   }
 }
+
+/* ============ 移动端适配 ============ */
+@media (max-width: 640px) {
+  /* 朗读条：控件换行排列，不再横向溢出 */
+  .doc-reader {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .reader-voice {
+    max-width: 100%;
+    flex: 1 1 auto;
+    margin-left: 0;
+  }
+  .reader-cfg {
+    margin-left: auto;
+  }
+  .endpoint-cfg {
+    position: static;
+    margin-top: 8px;
+  }
+  /* 长行内代码允许断行，防止横向溢出 */
+  .vp-doc :not(pre) > code {
+    word-break: break-all;
+  }
+}
+
+/* 全局兜底：杜绝意外横向滚动 */
+html,
+body {
+  overflow-x: clip;
+}
