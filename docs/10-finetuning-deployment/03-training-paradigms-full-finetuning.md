@@ -5,7 +5,7 @@ author: DataWhale happy-llm 项目组
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: false
-versions: transformers Trainer / DeepSpeed ZeRO-2（2026-09 现行版本）
+versions: transformers Trainer（`processing_class` / `eval_strategy` 现行 API）+ DeepSpeed ZeRO-2（2026-09 核实）
 order: 3
 group: 训练
 ---
@@ -31,26 +31,30 @@ Transformers 是由 Hugging Face 开发的 NLP 框架，通过模块化设计实
 
 我们可以使用 transformers 的 AutoModel 类来直接初始化已经实现好的模型。对于任意预训练模型，其参数中都包含有模型的配置信息。如果想从头训练一个 LLM，可以使用一个已有的模型架构来直接初始化。这里以 [Qwen-2.5-1.5B](https://huggingface.co/Qwen/Qwen2.5-1.5B) 的模型架构为例：模型仓库中的 `config.json` 文件即是模型的配置信息，包括模型的架构、隐藏层大小、模型层数等。
 
-我们可以沿用该模型的配置信息，初始化一个 Qwen-2.5-1.5B 模型来进行训练，也可以在该配置信息的基础上进行更改，如修改隐藏层大小、注意力头数等，来定制一个模型结构。HuggingFace 提供了 Python 工具来便捷下载想使用的模型参数：
+我们可以沿用该模型的配置信息，初始化一个 Qwen2.5-1.5B 模型来进行训练，也可以在该配置信息的基础上进行更改，如修改隐藏层大小、注意力头数等，来定制一个模型结构。HuggingFace 提供了 Python 工具来便捷下载想使用的模型参数：
 
 ```python
 import os
 # 设置环境变量，此处使用 HuggingFace 镜像网站
 os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
-# 下载模型
-os.system('huggingface-cli download --resume-download Qwen/Qwen2.5-1.5B --local-dir your_local_dir')
+# 下载模型到本地目录 qwen-1.5b
+os.system('hf download Qwen/Qwen2.5-1.5B --local-dir qwen-1.5b')
 ```
 
-下载完成后，可以使用 AutoConfig 类直接加载下载好的配置文件：
+::: note 命令名以现行版本为准
+下载命令现在是 `hf download`（`huggingface_hub` 内置的统一 CLI，见官方 CLI 指南）。原书使用的 `huggingface-cli download --resume-download ...` 是旧写法：`huggingface-cli` 这一入口已被 `hf` 取代，且 `--resume-download` 不再需要——`hf download` 默认走缓存系统、支持断点续传，配合 `--local-dir` 时会在目标目录下建 `.cache/huggingface/` 元数据，跳过已下载且未变动的文件。旧命令在较新版本的 `huggingface_hub` 上仍可能可用，但会打弃用提示。
+:::
+
+下载完成后，可以使用 AutoConfig 类直接加载下载好的配置文件。**下文统一用 `model_path` 这一个变量表示本地模型目录**（原书此处定义的是 `model_path`、调用时却写成了未定义的 `model_name_or_path`，属笔误，已修正）：
 
 ```python
-# 加载定义好的模型参数-此处以 Qwen-2.5-1.5B 为例
+# 加载定义好的模型参数-此处以 Qwen2.5-1.5B 为例
 # 使用 transformers 的 Config 类进行加载
 from transformers import AutoConfig
 
 # 下载参数的本地路径
 model_path = "qwen-1.5b"
-config = AutoConfig.from_pretrained(model_name_or_path)
+config = AutoConfig.from_pretrained(model_path)
 ```
 
 也可以对配置文件进行自定义，然后以同样的方式加载即可。可以使用 AutoModel 类基于加载好的配置对象生成对应的模型：
@@ -64,12 +68,12 @@ model = AutoModelForCausalLM.from_config(config, trust_remote_code=True)
 
 由于 LLM 一般都是 CausalLM（因果语言模型）架构，此处使用了 AutoModelForCausalLM 类进行加载。如果是用于分类任务训练，可使用 AutoModelForSequenceClassification 类来加载。
 
-该 model 就是一个从零初始化的 Qwen-2.5-1.5B 模型了。一般情况下，我们很少从零初始化 LLM 进行预训练，较多的做法是加载一个预训练好的 LLM 权重，在自己的语料上进行后训练（Post-Training）：
+该 model 就是一个从零初始化的 Qwen2.5-1.5B 模型了。一般情况下，我们很少从零初始化 LLM 进行预训练，较多的做法是加载一个预训练好的 LLM 权重，在自己的语料上进行后训练（Post-Training）：
 
 ```python
 from transformers import AutoModelForCausalLM
 
-model = AutoModelForCausalLM.from_pretrained(model_name_or_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True)
 ```
 
 我们还需要初始化一个 tokenizer（分词器）：
@@ -78,7 +82,7 @@ model = AutoModelForCausalLM.from_pretrained(model_name_or_path, trust_remote_co
 # 加载一个预训练好的 tokenizer
 from transformers import AutoTokenizer
 
-tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+tokenizer = AutoTokenizer.from_pretrained(model_path)
 ```
 
 ### 6.1.3 预训练数据处理
@@ -97,7 +101,7 @@ ds = load_dataset('json', data_files='/mobvoi_seq_monkey_general_open_corpus.jso
 ```python
 # 查看特征
 column_names = list(ds["train"].features)
-# columnes_name:["text"]
+# column_names: ["text"]
 ```
 
 接着使用加载好的 tokenizer 对数据集进行处理，此处使用 map 函数来进行批量处理：
@@ -188,19 +192,24 @@ training_args = TrainingArguments(
 
 ```python
 from transformers import Trainer, default_data_collator
-from torchdata.datapipes.iter import IterableWrapper
 
 # 训练器
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset= IterableWrapper(train_dataset),
-    eval_dataset= None,
-    tokenizer=tokenizer,
-    # 默认为 MLM 的 collator，使用 CLM 的 collator
-    data_collator=default_data_collator
+    train_dataset=train_dataset,
+    eval_dataset=None,
+    processing_class=tokenizer,
+    # 不传 data_collator 时：给了 processing_class 且它是 tokenizer/feature extractor
+    # 则默认用 DataCollatorWithPadding，否则才用 default_data_collator
+    data_collator=default_data_collator,
 )
 ```
+
+::: warning 两处 API 名称已变更
+1. **`Trainer` 不再接受 `tokenizer=` 参数**。transformers 已用 `processing_class` 取代它（可传 tokenizer、image processor 或 processor），现行 `Trainer.__init__` 的签名里已经没有 `tokenizer` 这一形参，照抄旧写法会直接 `TypeError`。
+2. 原书把数据集包成了 `torchdata` 的 `IterableWrapper(train_dataset)`。没必要，而且带毒：`datasets.Dataset` 本身就能配 `default_data_collator`；一旦真的传进可迭代数据集，Trainer 无法从数据集长度推出总步数，`TrainingArguments` 里必须给 `max_steps`（否则 `num_train_epochs` 不生效）。用普通 map-style 数据集最省事。
+:::
 
 再使用 train 方法，即会按照配置好的训练超参进行训练和保存：
 
@@ -238,7 +247,7 @@ deepspeed pretrain.py \
     --gradient_accumulation_steps 4 \
     --do_train \
     --output_dir autodl-tmp/output/pretrain \
-    --evaluation_strategy  no \
+    --eval_strategy no \
     --learning_rate 1e-4 \
     --num_train_epochs 1 \
     --warmup_steps 200 \
@@ -257,7 +266,13 @@ deepspeed pretrain.py \
     --report_to swanlab
 ```
 
-在安装了 DeepSpeed 第三方库后，可以直接通过 DeepSpeed 命令来启动多卡训练。上述脚本命令主要是定义了各种超参数的值。此处加载了 `ds_config_zero2.json` 作为 DeepSpeed 的配置参数（ZeRO-2 阶段）：
+在安装了 DeepSpeed 第三方库后，可以直接通过 DeepSpeed 命令来启动多卡训练。上述脚本命令主要是定义了各种超参数的值。
+
+::: note 原书脚本里的 `--evaluation_strategy` 已改名为 `--eval_strategy`
+`TrainingArguments` 现在只有 `eval_strategy` 这一个字段（`evaluation_strategy` 已从参数表里移除），传旧名会报未知参数。同理，`logging_strategy`/`save_strategy` 仍是现行名字，无需改动。
+:::
+
+此处加载了 `ds_config_zero2.json` 作为 DeepSpeed 的配置参数（ZeRO-2 阶段）：
 
 ```json
 {
@@ -442,7 +457,7 @@ class SupervisedDataset(Dataset):
 该类继承自 Torch 的 Dataset 类，可以直接在 Trainer 中使用。完成数据处理后，基于上一节脚本修改数据处理逻辑即可，后续模型训练等几乎完全一致（加载 BelleGroup 等开源指令数据集 → 构造 SupervisedDataset → 初始化 Trainer → `trainer.train()`）。
 
 ::: tip 编者注：三行代码的现代替代
-上文的 Chat Template 拼接与"仅对 assistant 回复计算 loss"正是 TRL `SFTTrainer` 内置能力（`assistant_only_loss=True`、自动应用 chat template）要解决的问题。工程实践中，先用本文理解原理，再用本模块第 9 篇的 TRL 实战提升效率，两者对照学习效果最佳。
+上文的 Chat Template 拼接与"仅对 assistant 回复计算 loss"正是 TRL `SFTTrainer` 内置能力（`assistant_only_loss=True`、自动应用 chat template）要解决的问题。工程实践中，先用本文理解原理，再用《PEFT/TRL 实战：SFTTrainer 做有监督微调》提升效率，两者对照学习效果最佳。
 :::
 
 ## 小结
@@ -458,7 +473,7 @@ class SupervisedDataset(Dataset):
 
 ---
 
-> **来源**：本文转载自 [第六章 大模型训练流程实践（happy-llm）](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md)，作者 DataWhale happy-llm 项目组，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
+> **来源**：本文转载自 [第六章 大模型训练流程实践（happy-llm）](https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md)，作者 DataWhale happy-llm 项目组，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13，2026-09-19 对照现行 transformers / huggingface_hub API 复核并修正示例：① 原书 `AutoConfig.from_pretrained(model_name_or_path)` 用了未定义的变量名（前文定义的是 `model_path`），已统一为 `model_path`；② `Trainer(tokenizer=...)` 改为 `processing_class=...`；③ `--evaluation_strategy` 改为 `--eval_strategy`；④ `huggingface-cli download --resume-download` 改为 `hf download`；⑤ 去掉 `torchdata` 的 `IterableWrapper` 包装；⑥ `# columnes_name` 拼写更正。各处以"编者注/warning"标明，不属原文。
 
 ---
 

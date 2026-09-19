@@ -40,7 +40,7 @@ SYSTEM = "你是一个简洁、友好的中文学习助手。"
 def stream_reply(messages: list[dict]) -> str:
     """流式请求并逐字打印，返回拼接后的完整回复。"""
     response = client.chat.completions.create(
-        model="gpt-5.5",
+        model="gpt-5.4",
         messages=messages,
         stream=True,
     )
@@ -114,7 +114,7 @@ def main() -> None:
             break
 
         with client.responses.stream(
-            model="gpt-5.5",
+            model="gpt-5.4",
             instructions=INSTRUCTIONS,
             input=user_input,
             previous_response_id=previous_response_id,  # 首轮为 None，之后续接

@@ -18,7 +18,7 @@ isRoot: true
 
 **中文社区实践**
 
-- Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、实操要点与拼好码
+- Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、机器门禁与拼好码
 
 **官方最佳实践**
 

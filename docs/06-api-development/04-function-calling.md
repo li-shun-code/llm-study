@@ -5,7 +5,7 @@ author: OpenAI Cookbook（How to call functions with chat models、responses_api
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版；示例模型统一为 gpt-5.5
+versions: openai-python 2026-09 最新稳定版；示例模型统一为 gpt-5.4
 order: 4
 group: 工具与输出契约
 ---
@@ -114,7 +114,7 @@ chat_response = chat_completion_request(
 )
 ```
 
-**并行函数调用（Parallel Function Calling）**：gpt-5.4 及以上的各系列模型（gpt-5.4 / gpt-5.5 / gpt-5.6 系列）默认支持在一轮里同时调用多个函数。问"旧金山和格拉斯哥未来 4 天的天气"，一次返回两个工具调用：
+**并行函数调用（Parallel Function Calling）**：gpt-5.4 起的各系列（gpt-5.4 / gpt-5.6 系列 / gpt-6-astra）默认支持在一轮里同时调用多个函数。问"旧金山和格拉斯哥未来 4 天的天气"，一次返回两个工具调用：
 
 ```text
 [ChatCompletionMessageFunctionToolCall(id='call_KlZ3Fqt3SviC6o66dVMYSa2Q', function=Function(arguments='{"location": "San Francisco, CA", "format": "fahrenheit", "num_days": 4}', name='get_n_day_weather_forecast'), type='function'),
@@ -256,7 +256,7 @@ tools = [
 
 # Responses API：允许并行工具调用
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input=[
         {"role": "system", "content": "When prompted with a question, select the right tool to use based on the question."},
         {"role": "user", "content": item["query"]}
@@ -285,7 +285,7 @@ if response.output:
 
         # 再请求一次，生成融合工具结果的最终回答
         final_response = client.responses.create(
-            model="gpt-5.5",
+            model="gpt-5.4",
             input=input_messages,
             tools=tools,
             parallel_tool_calls=True

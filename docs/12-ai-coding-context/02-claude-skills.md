@@ -200,7 +200,7 @@ my-skill/
 
 把三者放进一张图：**CLAUDE.md/AGENTS.md 放"每次会话都要在"的事实与规则**（常驻、最小化）；**Rules/paths 放"处理特定文件才需要"的规则**（按路径挂载）；**Skills 放"多步骤流程与大段参考资料"**（按需加载、可带脚本与支持文件、可 fork 到子智能体）。三者都是"写给智能体的项目知识"，差别只在加载时机与成本模型——选型的判据永远是上下文经济学。
 
-> 译注：Agent Skills 开放标准（agentskills.io）意味着 SKILL.md 格式不限于 Claude Code——Cursor 也已提供 Skills 支持（见第 9 篇文档结构），生态正在收敛。
+> 译注：Agent Skills 开放标准（agentskills.io）意味着 SKILL.md 格式不限于 Claude Code——Cursor 也已提供 Skills 支持（见《Cursor 入门与 Rules 规则系统》的 Customize 能力清单与官方 Agent Skills 一页），生态正在收敛。
 
 ---
 

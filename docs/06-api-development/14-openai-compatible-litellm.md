@@ -99,15 +99,16 @@ response = completion(
 )
 ```
 
-Azure 一条要注意时效：微软自 2025-08 起推 **v1 端点**（`https://<资源名>.openai.azure.com/openai/v1/`），**v1 GA 不再要求传带日期的 `api-version`**——`AZURE_API_VERSION="2024-02-01"` 这类写法属于旧的按日期版本化路线，新代码不要照抄（详见《模型版本与弃用管理》的 Azure 一节）。两种写法：
+Azure 一条要注意时效：微软自 2025-08 起推 **v1 端点**（`https://<资源名>.openai.azure.com/openai/v1/`），此前按**月度节奏**发布带日期的 `api-version`、还得用 Azure 专属客户端。官方 API 生命周期文档现在的口径是：**数据面（inference/authoring）最新的 GA 与 preview 版本就是 `v1` 与 `v1 preview`**，不再要求传带日期的 `api-version`；`AZURE_API_VERSION="2024-02-01"` 这类写法属于旧的日期化路线，新代码不要照抄（详见《模型版本与弃用管理》的 Azure 一节）。要分清两条平面：**控制面**（建资源、部署模型）仍用带日期的版本，当前 GA `2025-06-01`、最新 preview `2025-07-01-preview`；**图像与音频**那批操作在 v1 之后仍有一份日期化的数据面规范（GA `2024-10-21`）承接，读旧示例时看到 `api-version=2024-10-21` 不一定是过时写法。两种写法：
 
 ```text
 # .env —— 推荐：v1 端点，不填 api-version
 AZURE_API_KEY="..."
 AZURE_API_BASE="https://your-resource.openai.azure.com/openai/v1/"
 
-# 只有仍需走旧的日期化 API 时才配这一行，且要用当前 GA/preview 版本
-# AZURE_API_VERSION="2025-04-01-preview"
+# 只有仍需走旧的日期化数据面 API（或走控制面）时才配这一行
+# 推理侧日期化 GA 为 2024-10-21，控制侧 GA 为 2025-06-01
+# AZURE_API_VERSION="2024-10-21"
 ```
 
 ```python
@@ -223,7 +224,7 @@ router = Router(
     model_list=[
         {
             "model_name": "chat-default",          # 对外的逻辑名，业务代码只认它
-            "litellm_params": {"model": "openai/gpt-5.5", "api_key": None},  # None → 读环境变量
+            "litellm_params": {"model": "openai/gpt-5.4", "api_key": None},  # None → 读环境变量
             "model_info": {"rpm": 400, "tpm": 160_000},                       # 该部署的限额
         },
         {
@@ -272,4 +273,4 @@ print("实际用的模型：", response.model)   # 与请求名不同 = 发生�
 
 ---
 
-> **来源**：本文翻译自 [LiteLLM Getting Started](https://docs.litellm.ai/docs/)、[Completion Input Params](https://docs.litellm.ai/docs/completion/input) 与 [Streaming Responses](https://docs.litellm.ai/docs/completion/stream)（LiteLLM 官方文档），作者 BerriAI，许可 MIT（enterprise 目录除外）。抓取于 2026-09-13。
+> **来源**：本文翻译自 [LiteLLM Getting Started](https://docs.litellm.ai/docs/)、[Completion Input Params](https://docs.litellm.ai/docs/completion/input) 与 [Streaming Responses](https://docs.litellm.ai/docs/completion/stream)（LiteLLM 官方文档），作者 BerriAI，许可 MIT（enterprise 目录除外）。抓取于 2026-09-13。Azure 端点与 API 版本一段另行核对自 Microsoft Learn 的 [Azure OpenAI REST API reference](https://learn.microsoft.com/en-us/azure/foundry/openai/reference) 与 [API 生命周期指南](https://learn.microsoft.com/en-us/azure/foundry/openai/api-version-lifecycle)（© Microsoft，署名学习翻译），核实于 2026-09-19，为本站编者补充。

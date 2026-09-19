@@ -77,7 +77,7 @@ class ChatRequest(BaseModel):   # 请求体用 Pydantic 声明，FastAPI 自动�
 async def chat(req: ChatRequest) -> dict:
     """一次性返回完整回复（非流式）。"""
     response = client.responses.create(
-        model="gpt-5.5",
+        model="gpt-5.4",
         instructions=req.system,
         input=req.message,
     )
@@ -142,7 +142,7 @@ class ChatRequest(BaseModel):
 async def chat_stream(req: ChatRequest) -> AsyncIterable[str]:
     """把模型的流式输出转发给客户端（text/event-stream 或纯文本流均可）。"""
     stream = await client.responses.create(
-        model="gpt-5.5",
+        model="gpt-5.4",
         input=req.message,
         stream=True,
     )

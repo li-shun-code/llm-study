@@ -5,7 +5,7 @@ author: OpenAI（openai-python SDK 类型定义）；Model Context Protocol 项�
 license: Apache 2.0 / MIT
 fetched_at: 2026-09-19
 translated: true
-versions: openai-python 2026-09 最新稳定版；MCP Python SDK 2.x（支持 2026-07-28 规范及更早修订）；示例模型 gpt-5.5
+versions: openai-python 2026-09 最新稳定版；MCP Python SDK 2.x（支持 2026-07-28 规范及更早修订）；示例模型 gpt-5.4
 order: 19
 group: 工具与输出契约
 ---
@@ -24,7 +24,7 @@ from openai import OpenAI
 client = OpenAI()  # Key 从 .env / 环境变量读取（全站约定）
 
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="帮我查一下工单系统里分配给我的未关闭工单，并总结最紧急的一条。",
     tools=[
         {
@@ -102,7 +102,7 @@ async def main() -> None:
 
         # 2) 让模型决定调哪个
         resp = client.responses.create(
-            model="gpt-5.5",
+            model="gpt-5.4",
             input="上海中心大厦附近 3 公里内有哪些我们在服务的机房？",
             tools=tools,
         )
@@ -123,7 +123,7 @@ async def main() -> None:
             })
 
         final = client.responses.create(
-            model="gpt-5.5",
+            model="gpt-5.4",
             previous_response_id=resp.id,   # 会话状态续接，见《Responses API 会话与后台任务》
             input=inputs,
         )

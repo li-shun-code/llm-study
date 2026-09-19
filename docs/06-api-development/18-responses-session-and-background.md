@@ -5,7 +5,7 @@ author: OpenAI（openai-python SDK 源码与文档字符串、Cookbook responses
 license: Apache 2.0 / MIT
 fetched_at: 2026-09-19
 translated: true
-versions: openai-python 2026-09 最新稳定版；示例模型 gpt-5.5；store 默认 true、保留至少 30 天；background/starting_after/conversations/compact 均为现行能力
+versions: openai-python 2026-09 最新稳定版；示例模型 gpt-5.4；store 默认 true、保留至少 30 天；background/starting_after/conversations/compact 均为现行能力
 order: 18
 group: 调用基础
 ---
@@ -22,7 +22,7 @@ from openai import OpenAI
 
 client = OpenAI()  # Key 从 .env / 环境变量读取（全站约定）
 
-MODEL = "gpt-5.5"
+MODEL = "gpt-5.4"
 
 r1 = client.responses.create(model=MODEL, input="我在做一个 VitePress 学习站，先记下。")
 r2 = client.responses.create(model=MODEL, input="它需要侧边栏自动生成，还记得我说的是什么站吗？",

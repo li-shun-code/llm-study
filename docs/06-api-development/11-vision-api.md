@@ -5,13 +5,13 @@ author: OpenAI Cookbook（Getting the Most out of GPT-5.4 for Vision and Documen
 license: MIT / Apache 2.0
 fetched_at: 2026-09-19
 translated: true
-versions: openai-python 2026-09 最新稳定版；示例模型 gpt-5.4 / gpt-5.5；input_image detail 取 auto|original，input_file detail 取 auto|low|high；图像生成模型 gpt-image-1
+versions: openai-python 2026-09 最新稳定版；示例模型 gpt-5.4（批量档 gpt-5.4-mini）；input_image detail 取 auto|original，input_file detail 取 auto|low|high；图像生成模型 gpt-image-1
 order: 11
 group: 多模态与向量能力
 ---
-多模态模型可以直接"看图"：给消息里加一个图片内容块，模型就能回答图里有什么、给商品打标签、读图表、把手写表单抽成 JSON。上一篇《Embedding API 与文本相似度》解决的是"文本怎么变成向量"，本篇解决"**图像与文档怎么变成模型能推理的输入**"，并顺带收下半篇图像生成（`gpt-image`）——读图与画图是同一套内容块协议的两端。
+多模态模型可以直接"看图"：给消息里加一个图片内容块，模型就能回答图里有什么、给商品打标签、读图表、把手写表单抽成 JSON。《Embedding API 与文本相似度》解决的是"文本怎么变成向量"，本篇解决"**图像与文档怎么变成模型能推理的输入**"，并顺带收下半篇图像生成（`gpt-image`）——读图与画图是同一套内容块协议的两端。
 
-站内《多模态提示》一篇（提示工程方向）与本篇同源，讲的是提示词侧的写法；本篇承接它的调用与调参实操，把 `detail`、`verbosity`、`reasoning.effort`、工具使用四个杠杆落到可运行代码上。
+提示词侧的通用机制（角色与任务描述、分隔符、少样本示例）见《提示词的基本要素与格式》《分隔符、结构化标签与注入边界》；视觉与文档任务在它之上还多一层"图文关系"的写法要求，本篇第二节末了把这些要点收全，不留悬空引用。
 
 ## 一、三种把图像/文档送进模型的方式
 
@@ -26,7 +26,7 @@ prompt = "What is in this image?"
 img_url = "https://api.nga.gov/iiif/a2e6da57-3cd1-4235-b20e-95dcaefed6c8/full/!800,800/0/default.jpg"
 
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input=[
         {
             "role": "user",
@@ -65,7 +65,7 @@ with open("invoice.pdf", "rb") as f:
     uploaded = client.files.create(file=f, purpose="user_data")
 
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input=[
         {
             "role": "user",
@@ -97,7 +97,17 @@ response = client.responses.create(
 
 注意 `detail` 的取值分两类：`input_image` 现行文档示例用 `auto`（默认）与 `original`（保留原始分辨率）；`input_file`（PDF 等）的 `detail` 是 `auto`/`low`/`high`，且 **GPT-5.6 及以后模型下 `auto` 会走高质量渲染，直接抬高输入 token**——这是"质量/成本"权衡最直观的一处。
 
-## 三、四个可运行示例
+### 图文任务的提示词写法
+
+参数调完，剩下的差异就落在提示词上了。视觉/文档任务比纯文本多三条约束，缺一条就会明显掉质量：
+
+1. **先说"看图干什么"，再问问题**。模型默认会做通用描述；如果你要的是"只抽金额和开票日期"，就把任务边界写在图片块之后、问题之前，否则它会花预算去描述你不需要的那部分。多图时这句话要覆盖"哪张图负责什么"，否则模型会按块顺序猜归属。
+2. **明确"看不到就说什么"**。视觉抽取的主要失败模式不是抽错，而是**编**：模糊的手写数字、被水印盖住的字段、图里根本没有的栏位。给出显式的缺失约定（如 `value` 填 `null` 并在 `notes` 里说明原因），比"请不要胡编"有效得多；要更硬的保证就用结构化输出把字段收紧（《JSON Mode 与结构化输出（Structured Outputs）》）。
+3. **让模型先定位再作答**。需要读密集表格、长截图时，先让它列出"你识别出哪些区块/行列"，再要求逐块抽取；把中间清单也放进 schema 字段里，等于强制它走完这一步。这一条和 `reasoning.effort` 是互补的：前者规定思考的**路径**，后者给思考的**预算**。
+
+多轮看图有个容易忽略的点：Responses API 的 `input` 里每轮重发图片会重新计一次输入 token。同一个会话反复追问同一张图，用 `previous_response_id` 复用上一轮（完整写法见《Responses API 会话与后台任务》），比手工重传整段内容块省得多。
+
+## 三、五个可运行示例
 
 ### 1. 手写表单 → 结构化 JSON
 
@@ -382,7 +392,7 @@ image.save("glorptak.jpg", format="JPEG", quality=80, optimize=True)
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="给我画一张 16:9 的封面图：一只穿西装的柴犬在会议室白板前讲解",
     tools=[{"type": "image_generation", "size": "1536x1024", "quality": "medium"}],
 )
@@ -408,4 +418,4 @@ response = client.responses.create(
 
 ---
 
-> **来源**：抓取于 2026-09-19。本文整合翻译自 OpenAI Cookbook（MIT）四篇：[Getting the Most out of GPT-5.4 for Vision and Document Understanding](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/multimodal/document_and_multimodal_understanding_tips.ipynb)（调参四杠杆、手写表单抽取、转录 verbosity、图表/户型图推理、bbox 定位与 crop-and-rerun）、[Tag and caption images with GPT-4o mini](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Tag_caption_images_with_GPT4V.ipynb)（商品图打标）、[Generate and edit images with GPT Image](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Generate_Images_With_GPT_Image.ipynb)（图像生成、输出定制、多图与 mask 编辑）、[responses_example.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)（图片 + 托管检索组合），作者 OpenAI，许可 MIT；传图基础写法取自 [openai-python README · Vision](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），`input_file` 的 `detail` 取值与语义按 SDK 类型定义 [responses/response_input_file_param.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/response_input_file_param.py) 校订。原文示例模型 gpt-4o-mini 已统一为 `gpt-5.5` / `gpt-5.4-mini`（批量档），`max_tokens` 改为 `max_completion_tokens`（Chat Completions）或 `max_output_tokens`（Responses），打标示例改写为 Responses API 形式，均为本站编者改动。站内《多模态提示》一篇与本篇同源互补：那篇讲提示词写法，本篇讲调用与调参。
+> **来源**：抓取于 2026-09-19。本文整合翻译自 OpenAI Cookbook（MIT）四篇：[Getting the Most out of GPT-5.4 for Vision and Document Understanding](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/multimodal/document_and_multimodal_understanding_tips.ipynb)（调参四杠杆、手写表单抽取、转录 verbosity、图表/户型图推理、bbox 定位与 crop-and-rerun）、[Tag and caption images with GPT-4o mini](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Tag_caption_images_with_GPT4V.ipynb)（商品图打标）、[Generate and edit images with GPT Image](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Generate_Images_With_GPT_Image.ipynb)（图像生成、输出定制、多图与 mask 编辑）、[responses_example.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb)（图片 + 托管检索组合），作者 OpenAI，许可 MIT；传图基础写法取自 [openai-python README · Vision](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），`input_file` 的 `detail` 取值与语义按 SDK 类型定义 [responses/response_input_file_param.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/response_input_file_param.py) 校订。原文示例模型 gpt-4o-mini 已统一为 `gpt-5.4` / `gpt-5.4-mini`（批量档），`max_tokens` 改为 `max_completion_tokens`（Chat Completions）或 `max_output_tokens`（Responses），打标示例改写为 Responses API 形式，均为本站编者改动。讲多模态提示写法的提示工程篇已合入本篇：其图片与文档理解的提示要点（任务边界前置、缺失值显式约定、先定位再作答、跨轮复用图片）落在第二节末「图文任务的提示词写法」，为本站编者整理内容，不对应单一原文。

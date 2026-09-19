@@ -5,7 +5,7 @@ author: OpenAI Cookbook（How to handle rate limits）、OpenAI（openai-python 
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版（示例模型 gpt-5.5 / gpt-5.4-mini；参数用 max_completion_tokens；默认重试 2 次、默认超时 10 分钟）
+versions: openai-python 2026-09 最新稳定版（示例模型 gpt-5.4 / gpt-5.4-mini；参数用 max_completion_tokens；默认重试 2 次、默认超时 10 分钟）
 order: 7
 group: 可靠性、安全与成本
 ---
@@ -32,7 +32,7 @@ requests per min. Limit: 20.000000 / min. Current: 24.000000 / min. ...
 # 在循环里密集请求
 for _ in range(100):
     client.chat.completions.create(
-        model="gpt-5.5",
+        model="gpt-5.4",
         messages=[{"role": "user", "content": "Hello"}],
         max_completion_tokens=10,
     )
@@ -109,7 +109,7 @@ client.with_options(max_retries=5).chat.completions.create(
             "content": "How can I get the name of the current day in JavaScript?",
         }
     ],
-    model="gpt-5.5",
+    model="gpt-5.4",
 )
 ```
 
@@ -146,7 +146,7 @@ def completion_with_backoff(**kwargs):
     return client.chat.completions.create(**kwargs)
 
 
-completion_with_backoff(model="gpt-4o-mini", messages=[{"role": "user", "content": "Once upon a time,"}])
+completion_with_backoff(model="gpt-5.4-mini", messages=[{"role": "user", "content": "Once upon a time,"}])
 ```
 
 **方案 2：backoff 库**
@@ -223,7 +223,7 @@ def completions_with_fallback(fallback_model, **kwargs):
         return client.chat.completions.create(**kwargs)
 
 
-completions_with_fallback(model="gpt-5.5", fallback_model="gpt-5.4-mini", messages=[{"role": "user", "content": "Once upon a time,"}])
+completions_with_fallback(model="gpt-5.4", fallback_model="gpt-5.4-mini", messages=[{"role": "user", "content": "Once upon a time,"}])
 ```
 
 **2. `max_completion_tokens` 贴近预期输出长度**：限流用量按"输出上限与输入估算 token 的较大者"预扣，设得过高会提前撞限。注意参数名：`max_tokens` 已被官方标记为**弃用**（openai-python 的类型定义原文："This value is now deprecated in favor of `max_completion_tokens`"），推理类模型更是只认 `max_completion_tokens`；Responses API 一侧的对应参数叫 `max_output_tokens`。
@@ -244,7 +244,7 @@ delay = 60.0 / rate_limit_per_minute
 
 delayed_completion(
     delay_in_seconds=delay,
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=[{"role": "user", "content": "Once upon a time,"}]
 )
 ```
@@ -278,7 +278,7 @@ messages = [
 
 # 一次请求生成全部故事，并用结构化输出约束格式
 response = client.chat.completions.parse(
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=messages,
     response_format=StoryResponse,
 )

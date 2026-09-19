@@ -118,7 +118,7 @@ Cascade 是 Devin Desktop 中的**两个本地智能体之一**；另一个是 D
 
 **把问题发给 Cascade**：编辑器下方 Problems 面板出现问题时，点 Send to Cascade 按钮即可把问题交给它处理。
 
-> 时效注记（编者，已标明）：2024 年及以前的"Windsurf 独立产品"类对比文章已过时——引用任何工具对比前，先确认该工具 2025-2026 的归属与形态变迁（本模块第 2 篇按 2026-09 现状对比六家工具）。
+> 时效注记（编者，已标明）：2024 年及以前的"Windsurf 独立产品"类对比文章已过时——引用任何工具对比前，先确认该工具 2025-2026 的归属与形态变迁（《AI 编程工具全景对比（2026-09 版）》按 2026-09 现状对比了六家工具）。
 
 ## 四、横向对比与选型（本站编者内容）
 
@@ -137,7 +137,7 @@ Cascade 是 Devin Desktop 中的**两个本地智能体之一**；另一个是 D
 | 安全边界 | CLINE_COMMAND_PERMISSIONS allow/deny、人工批准 | 工作区受限模式、检查点/回滚 |
 | 适合谁 | 预算敏感、要求数据自持、想用国产/开源模型、多编辑器混用 | 想要"编辑器即智能体"一体体验、偏好图形化规划与检查点 |
 
-收束两句话：**分叉（Windsurf/Devin Desktop）换取深度整合，扩展（Cline）换取普适与开放**——两条路线没有绝对优劣，绑定成本与可迁移性才是决策变量。工具会继续换名字（本模块开篇两年内就发生了 Windsurf→Cognition 一例），方法论不会：无论选谁，"批准模型 + 可验证完成标准 + Git 存档"这套骨架——见《Claude Code 工作流与最佳实践》《Claude Code 权限系统与安全机制》《第一次 AI 结对：从零做一个命令行小工具》与《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》——原样适用。Headless 与 CI 形态见《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》。
+收束两句话：**分叉（Windsurf/Devin Desktop）换取深度整合，扩展（Cline）换取普适与开放**——两条路线没有绝对优劣，绑定成本与可迁移性才是决策变量。工具会继续换名字（《Vibe Coding 是什么：概念源起与工程争议》写下之后这两年就发生了 Windsurf→Cognition 一例），方法论不会：无论选谁，"批准模型 + 可验证完成标准 + Git 存档"这套骨架——见《Claude Code 工作流与最佳实践》《Claude Code 权限系统与安全机制》《第一次 AI 结对：从零做一个命令行小工具》与《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》——原样适用。Headless 与 CI 形态见《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》。
 
 ---
 

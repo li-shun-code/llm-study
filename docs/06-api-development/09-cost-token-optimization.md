@@ -54,7 +54,7 @@ messages = [
 
 def completion_run(messages, tools):
     completion = client.chat.completions.create(
-        model="gpt-5.5",
+        model="gpt-5.4",
         tools=tools,
         messages=messages,
         tool_choice="required"
@@ -83,7 +83,7 @@ run2 = completion_run(messages, tools)
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     instructions=SYSTEM_PROMPT,          # 静态：所有用户共用
     input=[
         {
@@ -106,7 +106,7 @@ response = client.responses.create(
 
 - **`prompt_cache_key`**：给同一批请求打同一个键，OpenAI 用它来优化命中。**它是"路由提示"，不是权限边界**——不同租户的私有内容不要指望它隔离，该拆项目/前缀就拆。SDK 文档明确它取代了旧的 `user` 字段。
 - **`prompt_cache_options` + `prompt_cache_breakpoint`**：默认由 OpenAI 自动选一个**隐式断点**；置 `mode="explicit"` 后隐式断点关闭，完全由你标。匹配时会考虑会话里最近 80 个断点、没有内容块回看上限。适合"多段可复用前缀"的场景（系统提示词 + 工具定义 + 检索到的长文档）。
-- **`prompt_cache_retention`** 已标注 **Deprecated**（改用 `prompt_cache_options.ttl`）。旧值 `in_memory` / `24h` 表达的是**最长**保留、与 `ttl`（最短存活）互不影响；`gpt-5.5`/`gpt-5.5-pro` 及之后的模型只支持 `24h`；开了 ZDR（零数据保留）的组织在未指定时默认 `in_memory`。读到旧教程里 `prompt_cache_retention="24h"` 的写法，先确认你的组织策略再照抄。
+- **`prompt_cache_retention`** 已标注 **Deprecated**（改用 `prompt_cache_options.ttl`）。旧值 `in_memory` / `24h` 表达的是**最长**保留、与 `ttl`（最短存活）互不影响；`gpt-5.4`/`gpt-5.4-pro` 及之后的模型只支持 `24h`；开了 ZDR（零数据保留）的组织在未指定时默认 `in_memory`。读到旧教程里 `prompt_cache_retention="24h"` 的写法，先确认你的组织策略再照抄。
 - **提示词版本化到调用侧**：`prompt=` 参数可以引用平台上保存的**提示模板**及其变量（"版本 prompts in code"），配合观测字段 `gen_ai.prompt.name` / `gen_ai.prompt.version`，就能把"这版提示词命中率/单价/质量"直接聚合出来——提示词管理从"文件里改字符串"变成"有版本、可回滚的对象"。写法与埋点见《生产可观测性：OpenTelemetry GenAI 语义约定与调用侧埋点》。
 
 ## 三、分层路由与输出裁剪：另外两个省钱开关
@@ -121,7 +121,7 @@ response = client.responses.create(
 
 ```python
 PRICING = {  # 示例结构，数值请从官方定价页取你自己的快照
-    "gpt-5.5":     {"in": 0.0, "out": 0.0, "cached_in": 0.0},
+    "gpt-5.4":     {"in": 0.0, "out": 0.0, "cached_in": 0.0},
     "gpt-5.4-mini": {"in": 0.0, "out": 0.0, "cached_in": 0.0},
 }
 

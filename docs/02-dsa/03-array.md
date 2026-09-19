@@ -57,7 +57,7 @@ def random_access(nums: list[int]) -> int:
 
 ![数组插入元素示例](assets/carray_and_linkedlist__array__array_insert_element.png)
 
-值得注意的是，由于数组的长度是固定的，因此插入一个元素必定会导致数组尾部元素“丢失”。我们把解决方案留到《数组》一文末尾的“动态数组”一节讨论。
+值得注意的是，由于数组的长度是固定的，因此插入一个元素必定会导致数组尾部元素“丢失”。我们把解决方案留到本篇末尾的“动态数组与均摊分析”一节讨论。
 
 ```python
 def insert(nums: list[int], num: int, index: int):
@@ -148,6 +148,66 @@ def extend(nums: list[int], enlarge: int) -> list[int]:
     return res
 ```
 
+
+#### 动态数组与均摊分析
+
+数组长度不可变带来的直接后果是“每次扩容都要 O(n) 复制”。解决办法是**多申请一些备用空间**：容量不足时一次性翻倍，这样 append 的**均摊**代价就回到 O(1) 。下面这份实现与 `list.append` 的行为同构：
+
+```python
+class DynamicArray:
+    """动态数组：容量不足时按 2 倍扩容，append 均摊 O(1)"""
+
+    def __init__(self, capacity: int = 1):
+        self._n = 0                              # 当前元素数量
+        self._capacity = capacity
+        self._a: list[int] = [0] * capacity       # 实际占用的数组
+
+    @property
+    def size(self) -> int:
+        return self._n
+
+    @property
+    def capacity(self) -> int:
+        return self._capacity
+
+    def get(self, i: int) -> int:
+        if not 0 <= i < self._n:
+            raise IndexError("索引越界")
+        return self._a[i]
+
+    def append(self, num: int) -> None:
+        if self._n == self._capacity:            # 长度已满 -> 先扩容
+            self._extend_capacity()
+        self._a[self._n] = num
+        self._n += 1
+
+    def insert(self, num: int, i: int) -> None:
+        if not 0 <= i <= self._n:
+            raise IndexError("索引越界")
+        if self._n == self._capacity:
+            self._extend_capacity()
+        for j in range(self._n - 1, i - 1, -1):  # 从后往前整体后移一位
+            self._a[j + 1] = self._a[j]
+        self._a[i] = num
+        self._n += 1
+
+    def _extend_capacity(self) -> None:
+        new_a = [0] * (self._capacity * 2)       # 容量翻倍
+        for i in range(self._capacity):
+            new_a[i] = self._a[i]
+        self._a = new_a
+        self._capacity *= 2
+
+
+arr = DynamicArray()
+for i in range(10):
+    arr.append(i)
+print(f"长度 = {arr.size} ，容量 = {arr.capacity}")   # 长度 = 10 ，容量 = 16
+```
+
+**为什么翻倍就能做到均摊 O(1)**：连续 n 次 append 触发扩容的次数是 log n 次，复制的元素总数是 1 + 2 + 4 + … + n < 2n ，因此每次 append 的分摊代价小于 2 个单位操作。反面教材是“每次只加 1 的扩容”，那会让 n 次 append 退化为 O(n²) 。
+
+> **【提示】** CPython 的 `list` 用的不是严格的 2 倍，而是 `new_allocated += new_allocated >> 3 + (6 if new_allocated >= 9 else 3)` 这种约 12.5% 的增量增长（见 `listobject.c`）。增量小意味着省内存、扩容次数多；均摊结论不变。**代价是列表会长期保留一部分空槽**，这就是“删掉大量元素后 `list` 不立刻把内存还给系统”的原因，需要释放时构造一个新列表（`xs = xs[:]` 或 `list(xs)`）即可。
 
 ### 数组的优点与局限性
 

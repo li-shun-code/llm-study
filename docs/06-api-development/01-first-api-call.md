@@ -5,7 +5,7 @@ author: OpenAI（openai-python README）、OpenAI Cookbook（responses_example.i
 license: Apache 2.0 / MIT
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版（HTTPX2 传输层）；示例模型统一为 gpt-5.5
+versions: openai-python 2026-09 最新稳定版（HTTPX2 传输层）；示例模型统一为 gpt-5.4
 order: 1
 group: 调用基础
 ---
@@ -55,7 +55,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     instructions="You are a coding assistant that talks like a pirate.",
     input="How do I check if a Python object is an instance of a class?",
 )
@@ -72,7 +72,7 @@ Cookbook 的示例则演示了最裸的形态——只给 `input`：
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="tell me a joke",
 )
 print(response.output[0].content[0].text)
@@ -97,7 +97,7 @@ from openai import OpenAI
 client = OpenAI()
 
 completion = client.chat.completions.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=[
         {"role": "developer", "content": "Talk like a pirate."},
         {
@@ -138,7 +138,7 @@ client = AsyncOpenAI(
 
 async def main() -> None:
     response = await client.responses.create(
-        model="gpt-5.5", input="Explain disestablishmentarianism to a smart five year old."
+        model="gpt-5.4", input="Explain disestablishmentarianism to a smart five year old."
     )
     print(response.output_text)
 
@@ -158,7 +158,7 @@ Cookbook 的这篇示例解释了为什么 OpenAI 要推 Responses API——它�
 ```python
 # 一行声明即生效；参数与输出项解析见《Responses API 托管工具总览与 web_search》
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="What's the latest news about AI?",
     tools=[{"type": "web_search"}],
 )

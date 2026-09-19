@@ -5,7 +5,7 @@ author: OpenAI（openai-python SDK 类型定义、Cookbook responses_example.ipy
 license: Apache 2.0 / MIT
 fetched_at: 2026-09-19
 translated: true
-versions: openai-python 2026-09 最新稳定版；示例模型 gpt-5.5；web_search 工具类型 web_search / web_search_2025_08_26
+versions: openai-python 2026-09 最新稳定版；示例模型 gpt-5.4；web_search 工具类型 web_search / web_search_2025_08_26
 order: 5
 group: 工具与输出契约
 ---
@@ -49,7 +49,7 @@ from openai import OpenAI
 client = OpenAI()  # API Key 从环境变量 OPENAI_API_KEY 读取（全站约定：Key 只放 .env / 环境变量）
 
 response = client.responses.create(
-    model="gpt-5.5",  # 或其他支持该工具的模型
+    model="gpt-5.4",  # 或其他支持该工具的模型
     input="What's the latest news about AI?",
     tools=[{"type": "web_search"}],
 )
@@ -94,7 +94,7 @@ response = client.responses.create(
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="近一个月关于固态电池量产的进展，只给我可核实的新闻",
     tools=[
         {
@@ -135,7 +135,7 @@ print(response.output_text)
 
 ```python
 response_multimodal = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input=[
         {
             "role": "user",
@@ -200,4 +200,4 @@ for ann in message.content[0].annotations:
 
 ---
 
-> **来源**：抓取于 2026-09-19。本文整合翻译自 OpenAI Cookbook（MIT）[What is the Responses API?（responses_example.ipynb）](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb) 与 openai-python SDK（Apache 2.0）中由 OpenAPI 规范生成的类型定义与文档字符串：[responses/tool.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/tool.py)、[responses/web_search_tool.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/web_search_tool.py)、[responses/response_create_params.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/response_create_params.py)。作者 OpenAI，许可 MIT / Apache 2.0。原文示例模型为 gpt-4o / gpt-4o-mini，本站代码统一改用现行模型 `gpt-5.5`；`output` 下标取值改为按类型过滤，为本站编者改动。
+> **来源**：抓取于 2026-09-19。本文整合翻译自 OpenAI Cookbook（MIT）[What is the Responses API?（responses_example.ipynb）](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb) 与 openai-python SDK（Apache 2.0）中由 OpenAPI 规范生成的类型定义与文档字符串：[responses/tool.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/tool.py)、[responses/web_search_tool.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/web_search_tool.py)、[responses/response_create_params.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/response_create_params.py)。作者 OpenAI，许可 MIT / Apache 2.0。原文示例模型为 gpt-4o / gpt-4o-mini，本站代码统一改用现行模型 `gpt-5.4`；`output` 下标取值改为按类型过滤，为本站编者改动。

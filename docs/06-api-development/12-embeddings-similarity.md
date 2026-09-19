@@ -42,7 +42,7 @@ print(f"Embedding dimension: {embed_dim}")
 # 输出：Embedding dimension: 1536
 ```
 
-`text-embedding-3-small` 输出 1536 维向量，单条输入上限 8191 个 token（下文原文常量 `max_tokens = 8000` 即留了余量）。
+`text-embedding-3-small` 输出 1536 维向量，单条输入上限 8191 个 token（下文原文常量 `MAX_INPUT_TOKENS = 8000` 即留了余量）。
 
 ## 二、从数据集批量取 Embedding 并存盘
 
@@ -54,7 +54,7 @@ import tiktoken
 
 embedding_model = "text-embedding-3-small"
 embedding_encoding = "cl100k_base"
-max_tokens = 8000  # text-embedding-3-small 的上限是 8191
+MAX_INPUT_TOKENS = 8000  # text-embedding-3-small 的上限是 8191；原文此处变量名叫 max_tokens，易与已弃用的请求参数混淆，故改名
 
 # 加载并检查数据集
 input_datapath = "data/fine_food_reviews_1k.csv"  # 官方提供的预筛选数据集
@@ -78,7 +78,7 @@ encoding = tiktoken.get_encoding(embedding_encoding)
 
 # 剔除长到无法嵌入的评论
 df["n_tokens"] = df.combined.apply(lambda x: len(encoding.encode(x)))
-df = df[df.n_tokens <= max_tokens].tail(top_n)
+df = df[df.n_tokens <= MAX_INPUT_TOKENS].tail(top_n)
 len(df)
 # 输出：1000
 ```

@@ -19,15 +19,19 @@ isRoot: true
 
 **Claude Code**
 
-- 环境搭建：Claude Code 与 Cursor 的安装及首次配置
 - Claude Code 工作流与最佳实践
 - Claude Code 权限系统与安全机制
+
+**环境搭建**
+
+- 环境搭建：Claude Code 与 Cursor 的安装与配置矩阵
 
 **Cursor 与其他工具**
 
 - Cursor 入门与 Rules 规则系统
 - Cursor 深入：Tab 补全、Agent 模式与调试/评审工作流
 - 开源工具生态：Cline 与 Windsurf
+- Codex CLI 深度使用：OpenAI 终端智能体的三层权限、AGENTS.md 与自动化
 
 **用量与成本**
 

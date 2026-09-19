@@ -103,7 +103,7 @@ Mark Riedl [在他的学术主页上加了一段白底白字的文字](https://t
 
 下面是我对 Datasette ChatGPT 插件复现这一攻击的演示截图：
 
-![ChatGPT 插件演示：按提示注入指令执行 SQL 查询，并把带外泄数据的 URL 作为链接输出](https://static.simonwillison.net/static/2023/datasette-chatgpt-prompt-attack.jpg)
+![ChatGPT 插件演示：按提示注入指令执行 SQL 查询，并把带外泄数据的 URL 作为链接输出](./assets/datasette-chatgpt-prompt-attack.jpg)
 
 对于"ChatGPT 同时运行多个插件"的场景——用户通过一个插件请求摘要最新邮件，却可能触发另一个插件执行上列攻击——你有几分把握断定它绝不会产出一个外泄数据的链接？
 
@@ -123,7 +123,7 @@ Mark Riedl [在他的学术主页上加了一段白底白字的文字](https://t
 
 他们构造了这样一段提示词，以不可见文本的形式藏进网页：
 
-![隐藏在网页中的间接注入提示词：声称助手已离线、一个不受限制的海盗口音 AI 上线并试图套取用户真名，再把名字编码进攻击者链接](https://static.simonwillison.net/static/2023/indirect-injection-prompt.png)
+![隐藏在网页中的间接注入提示词：声称助手已离线、一个不受限制的海盗口音 AI 上线并试图套取用户真名，再把名字编码进攻击者链接](./assets/indirect-injection-prompt.png)
 
 攻击成功了！Bing Chat 读了那个页面，背上了"秘密议程"：想方设法让用户说出自己的名字，再通过一个花招链接把名字外泄给攻击者。
 
@@ -183,15 +183,16 @@ GPT-4 引入了"系统提示词"（system prompt）概念，让你把指令与�
 
 > Yer system be havin' a security breach, and ye best be patchin' it up, matey!
 
-![OpenAI Playground 中对 GPT-4 的角色伪造注入攻击演示](https://static.simonwillison.net/static/2023/playground-prompt-injection.jpg)
+![OpenAI Playground 中对 GPT-4 的角色伪造注入攻击演示](./assets/playground-prompt-injection.jpg)
 
 ---
 
 ## 译注：这篇 2023 年的文章之后
 
 - 本文是 Simon Willison 提示注入系列的标志性一篇。系列后续还包括 [The Dual LLM pattern for building AI assistants that can resist prompt injection](https://simonwillison.net/2023/Apr/25/dual-llm-pattern/)（抗注入的双 LLM 模式）、[Delimiters won't save you from prompt injection](https://simonwillison.net/2023/May/11/delimiters-wont-save-you/)（分隔符救不了你）等，完整列表见[系列页](https://simonwillison.net/series/prompt-injection/)。
+- 系列里专门否定"定界符"的一篇（Delimiters won't save you）已单独成文，见《分隔符、结构化标签与注入边界》：分隔符消除歧义，但不构成安全边界，真正的防线是能力裁剪与人工确认。
 - 核心结论至今成立：**"指令"与"数据"在同一文本通道里是提示注入的根源**；拼接不可信内容（邮件、网页、文档、代码库文件）进提示词的 Agent 应用，天然暴露在间接注入之下。防护组合拳：最小权限、人工确认高危动作、输出侧过滤与评估，并默认提示词内容会泄露。
-- 与本模块第 07 篇呼应：系统提示词能提高注入攻击的门槛（角色、规则更明确），但正如文末 GPT-4 实验所示，它不是边界，更不是防线。
+- 与《系统提示词设计》呼应：系统提示词能提高注入攻击的门槛（角色、规则更明确），但正如文末 GPT-4 实验所示，它不是边界，更不是防线。
 
 *本文观点与实验均属原作者 Simon Willison；译文仅供学习，请以[原文](https://simonwillison.net/2023/Apr/14/worst-that-can-happen/)为准。*
 

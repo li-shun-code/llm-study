@@ -5,7 +5,7 @@ author: OpenAI Cookbook（Introduction to Structured Outputs）、OpenAI（opena
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版；Structured Outputs 自 gpt-4o-2024-08-06 起支持，现行模型均可用
+versions: openai-python 2026-09 最新稳定版；Structured Outputs 于 2024-08 随 gpt-4o-2024-08-06 首次引入（历史节点），现行 gpt-5.4 / gpt-5.6 / gpt-6-astra 各档均可用
 order: 6
 group: 工具与输出契约
 ---
@@ -32,7 +32,7 @@ from textwrap import dedent
 from openai import OpenAI
 client = OpenAI()
 
-MODEL = "gpt-5.5"  # 自 gpt-4o-2024-08-06 起支持，现行模型均可
+MODEL = "gpt-5.4"  # 该能力于 2024-08 随 gpt-4o-2024-08-06 首次引入（历史），现行模型全线支持
 
 math_tutor_prompt = '''
     You are a helpful math tutor. You will be provided with a math problem,
@@ -143,7 +143,7 @@ SDK 文档说明的 `parse` 两个额外限制：
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input=[{"role": "user", "content": "How much ?"}],
     text={"format": {"type": "json_object"}},
 )
@@ -153,7 +153,7 @@ response = client.responses.create(
 
 ```python
 response = client.responses.parse(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input=[{"role": "user", "content": "Give me a recipe for a chocolate pie."}],
     text_format=Recipe,          # 与 Chat Completions 的 response_format 对应
 )

@@ -9,11 +9,12 @@ versions: Python 3.12（标准库，无第三方依赖）
 order: 9
 group: 哈希与字符串结构
 ---
+## 为什么需要 Trie
+
 > **难度**：★★☆。数据结构本身很简单，难点在“什么时候不该用它”。
 > **适合**：需要做前缀检索、自动补全、词表分词、工具名/敏感词匹配的读者。
 > **前置**：《哈希表》。阅读本文前建议先看《堆》与《Top-K 与堆：召回重排里的取前 N 个》，三者常常配套出现。
 
-## 为什么需要 Trie
 
 《哈希表》告诉我们：给定一个完整的键，`dict` 能在 O(1) 时间内取出值。但哈希函数会把键“搅散”，因此它只能回答“**存不存在**”，无法回答“**以这个开头的所有键是什么**”。
 
@@ -41,6 +42,8 @@ Trie 是一种多叉树，其节点不存储值，**值由节点的位置隐式�
 ![Trie 结构示意](assets/oi_string__trie1.png)
 
 用集合论的语言说：Trie 是对键集合的一种“逐字符哈希”，而 `dict` 是一种“整体哈希”。这个视角能解释它的一切优缺点。
+
+还有一个把 Trie 和哈希表真正区分开的性质：**Trie 上的“查找”是一步一步走的，中途的每一个位置都停在某个节点上**。这意味着任何一步都能被截断、被计数、被限制——`dict` 只能告诉你“在或不在”，而 Trie 能告诉你“走到这里还剩哪些可能”。自动补全、词表分词、受限解码（限制模型只能输出词表里存在的内容）全都依赖这一点，而不是依赖它的查找速度。
 
 ## Python 实现
 
@@ -205,6 +208,117 @@ self.next: list[TrieNode | None] = [None] * 26
 - **查找 / 前缀判断**：O(L) 时间，与词库里有多少词无关。这是 Trie 最大的优势——查询代价只取决于查询串本身。
 - **列出某前缀下所有词**：O(L + K) ，K 为返回的字符总量，本质是一次子树遍历。
 
+节点数上界这条性质值得单独推一遍：插入第一个词时最多新建 |w| 个节点，插入第 k 个词时，它与已有 Trie 的公共前缀部分不再新建节点，所以**新建节点数 ≤ 该词长度**。累加起来，节点总数 ≤ 所有键的字符总数 M ；公共前缀越多，实际节点数越小于这个上界。反过来，如果词表内部几乎没有公共前缀（例如随机 ID、UUID），Trie 就退化成一堆“只有一个子节点的链”，既拿不到共享前缀的好处，又要为每个字符付一个节点的钱——这种数据不该用 Trie。
+
+### 内存这笔账必须自己算
+
+上面的上界只是纸面数字，真实的 Python 对象开销要靠测量。把一份约 23.6 万个英文单词的词表（合计约 226 万个字符）插进 `__slots__` 版 Trie，本机实测得到 **76 万个节点、峰值内存约 168 MB**（CPython + `tracemalloc`，换 Python 小版本会在 150~170 MB 之间浮动）。也就是说平均每个节点要 200 字节上下，而它承载的有效信息只有几个字符。复现方式：
+
+```python
+import tracemalloc
+
+
+def build(words):
+    root = TrieNode()
+    for w in words:
+        node = root
+        for ch in w:
+            node = node.children.setdefault(ch, TrieNode())
+        node.is_word = True
+    return root
+
+
+tracemalloc.start()
+build([line.strip().lower() for line in open("/usr/share/dict/words") if line.strip().isalpha()])
+_, peak = tracemalloc.get_traced_memory()
+print(f"峰值 {peak / 1e6:.0f} MB")   # 本机约 168 MB
+```
+
+三个能立刻把内存砍掉一个量级的手段，按性价比排序：
+
+1. **压缩前缀树（Radix Tree）**：把只有一个子节点的链合并成一条带字符串标签的边，节点数从“字符数”降到“分支数”。下一节给实现。
+2. **`__slots__`**：省掉每节点的 `__dict__`，节点体积能小三成以上。
+3. **换表征**：如果查询模式允许，用「排序后的键数组 + `bisect`」，内存只剩键本身。
+
+## 压缩前缀树：把公共前缀压进边里
+
+Radix Tree（基数树 / 压缩 Trie）的做法是：**边上存一整段字符串，节点只留在“有分支”或“有值”的位置**。路由表就是它的经典战场——`/v1/chat/completions` 和 `/v1/chat/` 共享前缀，普通 Trie 要为每个字符建一个节点，Radix Tree 只需在分支点开一次。
+
+```python
+class RadixNode:
+    """压缩前缀树节点：边上存整段字符串，而不是单个字符"""
+
+    __slots__ = ("label", "children", "value")
+
+    def __init__(self, label: str = ""):
+        self.label = label                            # 指向本节点的边上的字符串
+        self.children: dict[str, RadixNode] = {}      # 用首字符做索引
+        self.value = None                             # 非 None 表示这里注册了一个处理器
+
+
+def common_prefix(a: str, b: str) -> str:
+    i = 0
+    while i < len(a) and i < len(b) and a[i] == b[i]:
+        i += 1
+    return a[:i]
+
+
+class RadixTrie:
+    """注册 key -> handler，查询「最长已注册前缀」"""
+
+    def __init__(self):
+        self.root = RadixNode()
+
+    def insert(self, key: str, handler) -> None:
+        node, rest = self.root, key
+        while rest:
+            head = rest[0]
+            child = node.children.get(head)
+            if child is None:                         # 没有公共前缀，整段挂成新节点
+                node.children[head] = RadixNode(rest)
+                node.children[head].value = handler
+                return
+            cp = common_prefix(child.label, rest)
+            if cp == child.label:                     # 整条边都被吃掉，继续往下走
+                node, rest = child, rest[len(cp):]
+                continue
+            # 部分重叠：把这条边劈开，公共部分升为中间节点
+            mid = RadixNode(cp)
+            child.label = child.label[len(cp):]
+            mid.children[child.label[0]] = child
+            node.children[head] = mid
+            node, rest = mid, rest[len(cp):]
+        node.value = handler
+
+    def longest_match(self, key: str) -> tuple[str | None, object]:
+        """返回 (命中的最长前缀, 处理器)。请求路径带 query string 时也能匹配到注册项"""
+        node, rest = self.root, key
+        matched, best = "", (None, None)
+        while rest:
+            child = node.children.get(rest[0])
+            if child is None or not rest.startswith(child.label):
+                break
+            rest = rest[len(child.label):]
+            matched = key[: len(key) - len(rest)]
+            node = child
+            if node.value is not None:
+                best = (matched, node.value)
+        return best
+
+
+routes = RadixTrie()
+for path, handler in [("/v1/", "api-root"), ("/v1/chat/", "chat-index"),
+                      ("/v1/chat/completions", "chat"), ("/v1/embeddings", "embeddings")]:
+    routes.insert(path, handler)
+
+print(routes.longest_match("/v1/chat/completions"))   # ('/v1/chat/completions', 'chat')
+print(routes.longest_match("/v1/embeddings?x=1"))      # ('/v1/embeddings', 'embeddings')
+print(routes.longest_match("/v1/chat/9f3a"))            # ('/v1/chat/', 'chat-index')
+print(routes.longest_match("/healthz"))                 # (None, None)
+```
+
+代价换来的是实现复杂度：**插入时要处理“边被劈开”的情况**，上面 `insert` 里那段 `mid` 分支就是全部难点，写错会出现“注册了却查不到”的幽灵 bug 。另外压缩后 `words_with_prefix` 这类遍历要跨边拼接字符串，补全功能得重写一遍。所以取舍很直白：只做精确最长前缀匹配（路由、白名单）就用 Radix Tree；要频繁枚举子树（补全、联想）就留普通 Trie。
+
 ## 选型对照：什么时候真的需要 Trie
 
 把常见的字符串检索手段放在一起比较，N 为键数量、L 为平均键长、Q 为查询串长度：
@@ -304,26 +418,106 @@ print(forward_max_match("自然语言处理模型", vocab))
 
 现代 LLM 的 BPE 分词器做法不同——先切成字节级 token 再按合并规则迭代归并——但“用树/前缀结构加速候选匹配”的思想是一致的。理解 Trie 之后再去读 `tiktoken` 或 HuggingFace `tokenizers` 的匹配逻辑，会顺利得多。
 
-## 工程应用三：白名单与敏感词匹配
+## 工程应用三：工具名白名单、自动补全与受限解码
 
-工具名白名单、URL 前缀路由、权限前缀匹配，都可以落在 Trie 上。若还需要“任意位置命中”，Trie 就不够了——那是 Aho-Corasick 自动机（多模式串匹配，本质是 Trie + 失败指针）的主场，一次扫描即可完成成千上万个模式的匹配，Python 侧可用 `pyahocorasick`。
+工具调用（Function Calling）里最尴尬的一刻，是模型返回了一个“差一个字母”的函数名。直接把这类字符串交给 `dict[key]` 只会抛 `KeyError` ；交给 `difflib` 全表扫描又太慢。合理做法是三级降级：**精确命中 → 前缀唯一即补全 → 相似度纠正**，其中前两级正好落在 Trie 上。
+
+```python
+import difflib
+
+END = "\0"
+
+
+class ToolRegistry:
+    """工具名注册表：用 Trie 支撑“校验 + 补全 + 纠错”三件事"""
+
+    def __init__(self, names: list[str]):
+        self.trie: dict = {}
+        for name in names:
+            self.insert(name)
+
+    def insert(self, word: str) -> None:
+        node = self.trie
+        for ch in word:
+            node = node.setdefault(ch, {})
+        node[END] = True
+
+    def _walk(self, prefix: str) -> dict | None:
+        node = self.trie
+        for ch in prefix:
+            if ch not in node:
+                return None
+            node = node[ch]
+        return node
+
+    def completions(self, prefix: str = "") -> list[str]:
+        """prefix 为空串时返回全部工具名（子树遍历）"""
+        node = self._walk(prefix)
+        if node is None:
+            return []
+        res, stack = [], [(node, list(prefix))]
+        while stack:
+            cur, path = stack.pop()
+            if END in cur:
+                res.append("".join(path))
+            for ch, nxt in cur.items():
+                if ch != END:
+                    stack.append((nxt, path + [ch]))
+        return sorted(res)
+
+    def resolve(self, name: str, cutoff: float = 0.6) -> tuple[str | None, str]:
+        """返回 (规范工具名, 命中方式)；无法判定时返回 (None, 原因)"""
+        node = self._walk(name)
+        if node and END in node:
+            return name, "精确命中"
+        hits = self.completions(name)
+        if len(hits) == 1:                 # 前缀已经能唯一定位，直接补全
+            return hits[0], "前缀补全"
+        if len(hits) > 1:                  # 有歧义就交给用户/模型再确认，别猜
+            return None, f"前缀有歧义：{hits[:5]}"
+        near = difflib.get_close_matches(name, self.completions(), n=1, cutoff=cutoff)
+        if near:
+            return near[0], "拼写纠正"
+        return None, "未知工具"
+
+
+reg = ToolRegistry(["search_docs", "search_web", "render_chart", "run_sql"])
+for probe in ["search_docs", "render", "search_", "run_sqll", "delete_all"]:
+    print(f"{probe:12} -> {reg.resolve(probe)}")
+# search_docs  -> ('search_docs', '精确命中')
+# render       -> ('render_chart', '前缀补全')
+# search_      -> (None, "前缀有歧义：['search_docs', 'search_web']")
+# run_sqll     -> ('run_sql', '拼写纠正')
+# delete_all   -> (None, '未知工具')
+```
+
+这里有个容易忽略的差别：**纠错这一跳退化成 O(N) 了**，因为 `get_close_matches` 要遍历全部工具名。工具数在几十到几百量级时无所谓；真到了几万级别，就该把“编辑距离 1 的变体”预先展开成一张 `dict`（SymSpell 思路），用哈希表把纠错也拉回常数时间——详见《哈希表》。
+
+同一棵树还能往前再走一步：如果要约束模型**只能**输出注册过的内容（严格 JSON、枚举值、命令白名单），常见的做法是「受限解码 / 语法约束采样」——每生成一个 token ，就用前缀树算出“当前前缀下还有哪些合法后继”，把不在集合里的 token 概率置零再采样。它的核心操作就是本文的 `_walk` + 子节点枚举，只不过是把「字符」换成「词表里的 token id」，并且每一步都要问一次。理解了 Trie ，再看各类 structured output / grammar-constrained decoding 的实现就不会觉得神秘；相关的预算与截断问题见《Token 与上下文窗口》。
+
+## 工程应用四：敏感词与多模式串匹配
+
+工具名白名单、URL 前缀路由、权限前缀匹配，都可以直接落在 Trie 上（上面的 `RadixTrie` 就是路由表形态）。若还需要“在任意位置命中”，Trie 就不够了——那是 Aho-Corasick 自动机（多模式串匹配，本质是 Trie + 失败指针）的主场，一次扫描即可完成成千上万个模式的匹配，Python 侧可直接用 `pyahocorasick`。日志关键字告警、评论风控词表都属于这一类。
 
 ## 常见坑
 
-1. **内存远比想象中大**。一个空 `dict` 约 64 字节，一个只有 `{"a": ..., "b": ...}` 的节点轻易超过 200 字节，而英文词表每词平均 8~10 个节点。百万级词表轻松吃掉数百 MB。动手前先用 `sys.getsizeof` 和 `tracemalloc` 量一遍，再决定要不要上 Trie；`__slots__`、双数组 Trie、压缩 Trie（Radix Tree）都是有效的省内存手段。
+1. **内存远比想象中大**。一个空 `dict` 约 64 字节，一个只有 `{"a": ..., "b": ...}` 的节点轻易超过 200 字节，而英文词表每词平均 8~10 个节点——前文实测 23.6 万词就吃掉约 168 MB。动手前先量一遍（`tracemalloc`），再决定要不要上 Trie；`__slots__`、Radix Tree、双数组 Trie 都是有效的省内存手段。
 2. **别用 Trie 做“无序”检索**。如果查询条件是“包含某子串”而不是“以某前缀开头”，Trie 完全没有优势，应该用倒排索引或后缀数组。
 3. **排序数组 + `bisect` 常常更实用**。把所有键排序后，以 `prefix` 开头的键必然连续出现，用 `bisect_left(prefix)` 找到左边界、`bisect_left(prefix + "\uffff")` 找到右边界，即可 O(L log N) 完成前缀范围查询，内存开销只有键本身。数据不常改动时，这是工程上更省事的方案，详见《Python 算法工具箱：heapq、bisect、graphlib 与 collections》。
-4. **删除容易破坏结构**。删除一个单词后，要沿路径回收不再被其它单词使用的节点，否则 Trie 只增不减。上面的 `_delete` 用返回值自底向上告知父节点“我可以被删掉”，这是标准写法。
+4. **删除容易破坏结构**。删除一个单词后，要沿路径回收不再被其它单词使用的节点，否则 Trie 只增不减。上面的 `_delete` 用返回值自底向上告知父节点“我可以被删掉”，这是标准写法。Radix Tree 更麻烦：删掉一个键之后，若父节点只剩一个子节点，理论上应该把两条边再拼回去（合并），否则树会随删除逐渐“松掉”，退化回普通 Trie。
 5. **计数语义要想清楚**。“以该节点为前缀的单词数”和“该单词出现的次数”是两个不同的字段，混在一个 `count` 上会导致统计错误。
-6. **Unicode 与大小写**。`"Ü"`、`"ü"`、组合字符 `"u\u0308"` 在 Python 里是不同字符串，入库前要做 `casefold()` 和 `unicodedata.normalize("NFC", s)` ，否则查询必然漏。
+6. **Unicode 与大小写**。`"Ü"`、`"ü"`、组合字符 `"u\u0308"` 在 Python 里是不同字符串，入库前要做 `casefold()` 和 `unicodedata.normalize("NFC", s)` ，否则查询必然漏。中文场景还要额外决定“按字符建树还是按字节建树”：按 UTF-8 字节建树能让 Trie 与 `tiktoken` 那类字节级词表对齐，代价是节点数增加约 1.5~3 倍。
+7. **并发写入要小心**。`setdefault` 单步是原子的，但“逐层下探 + 建节点”整体不是；多线程共享一棵树时，要么加锁，要么把建树放在启动阶段完成后只读。
 
 ## 延伸阅读
 
-- TheAlgorithms/Python 的 `data_structures/trie/trie.py`（MIT 许可），一份带插入、查询、按前缀搜索的简洁实现。
-- OI Wiki《Trie（字典树）》，包含 01-Trie（按二进制位建树做异或最值）等竞赛向变体；位 Trie 在“两数最大异或”这类题里很好用，工程场景少见。
-- 《哈希表》：理解“整体哈希 vs 逐字符哈希”的对照。
+- TheAlgorithms/Python 的 `data_structures/trie/trie.py`（MIT 许可），一份带插入、查询、按前缀搜索的简洁实现，可与本文两份实现对照阅读。
+- 《哈希表》：理解“整体哈希 vs 逐字符哈希”的对照，以及为什么编辑距离纠错更适合用哈希表加速。
+- 《Top-K 与堆：召回重排里的取前 N 个》：补全接口“前缀 + 热度 Top-N”的标准配套写法。
 - 《Python 算法工具箱：heapq、bisect、graphlib 与 collections》：`bisect` 做前缀范围查询的替代方案。
+- 《Token 与上下文窗口》：BPE 词表、token id 与字节级切分，是理解“为什么词表天然是稀疏字符集”的背景。
+- 《PostgreSQL 全文检索（含中文分词）》：数据库侧的分词与倒排方案，和 Trie 是互补而非替代关系。
 
 ---
 
-> **来源**：抓取于 2026-09-19。本文在 OI Wiki《Trie（字典树）》（https://oi-wiki.org/string/trie/ ，OI Wiki 项目，CC BY-SA 4.0）的定义与配图基础上重写：原文的 C++ 指针数组实现、01-Trie 位树与洛谷习题已移除，改为 Python 主线实现与工程应用（自动补全、词表分词、前缀路由）。实现参考 TheAlgorithms/Python 的 `data_structures/trie/trie.py`（MIT 许可），其余代码与全部中文说明为本站编写，已在 Python 3.12 下运行验证。文中 Trie 结构示意图沿用 OI Wiki 原图（CC BY-SA 4.0），已下载至本模块 `assets/` 目录。
+> **来源**：抓取于 2026-09-19。概念定义与结构示意图沿用 [OI Wiki《Trie（字典树）》](https://oi-wiki.org/string/trie/)（OI Wiki 项目，CC BY-SA 4.0，原图已下载至本模块 `assets/` 目录）；原文的 C++ 指针数组实现、按二进制位建树的 01-Trie 变体与竞赛习题未收录。节点式实现参考 TheAlgorithms/Python 的 `data_structures/trie/trie.py`（MIT 许可），压缩前缀树、工具名注册表、内存实测代码与全部中文说明为本站编写，已在 CPython 3.12/3.14 下运行验证；`difflib`、`tracemalloc`、`heapq` 均为标准库。

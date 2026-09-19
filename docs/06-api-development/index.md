@@ -15,12 +15,15 @@ isRoot: true
 - 第一个 API 调用：Responses API 与 Chat Completions
 - 消息角色与多轮会话管理
 - 流式输出（SSE）
+- Responses API 会话与后台任务：conversation、store 与断流续传
 
 **工具与输出契约**
 
 - Function Calling / Tool Use：让模型调用你的函数
-- Responses API 托管工具：web_search、file_search、code_interpreter 与图像生成
+- Responses API 托管工具总览与 web_search
+- 文件检索与代码解释器：file_search 与 code_interpreter
 - JSON Mode 与结构化输出（Structured Outputs）
+- MCP 客户端接入：把外部工具生态接到你的模型调用里
 
 **可靠性、安全与成本**
 
@@ -28,10 +31,12 @@ isRoot: true
 - Moderation API 与内容过滤
 - 成本与 Token 优化：Prompt Caching 与 Batch API
 - 模型版本与弃用管理
+- 生产可观测性：OpenTelemetry GenAI 语义约定与调用侧埋点
+- 并发请求限流：信号量、令牌桶与超时预算
 
 **多模态与向量能力**
 
-- 视觉理解 API：把图片喂给多模态模型
+- 视觉理解与图像生成：把图片喂给多模态模型，也让它画图
 - Embedding API 与文本相似度
 - 语音 API：转写、合成与实时会话（选学）
 - OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型

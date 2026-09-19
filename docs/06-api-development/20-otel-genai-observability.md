@@ -5,7 +5,7 @@ author: OpenTelemetry（semantic-conventions-genai 仓库，Apache 2.0）
 license: Apache 2.0
 fetched_at: 2026-09-19
 translated: true
-versions: OpenTelemetry GenAI semantic conventions（独立仓库 semantic-conventions-genai，字段状态为 Development）；示例模型 gpt-5.5；opentelemetry-sdk 2026-09 稳定版
+versions: OpenTelemetry GenAI semantic conventions（独立仓库 semantic-conventions-genai，字段状态为 Development）；示例模型 gpt-5.4；opentelemetry-sdk 2026-09 稳定版
 order: 20
 group: 可靠性、安全与成本
 ---
@@ -13,9 +13,9 @@ group: 可靠性、安全与成本
 
 ## 一、为什么需要"语义约定"
 
-裸埋点的结果是每家字段都不一样：OpenAI 叫 `usage.prompt_tokens`、另一家叫 `input_token_count`；同一次调用的 span 名可能是 `openai.chat`、`chat gpt-5.5`、`invoke_model`。语义约定（semantic conventions）就是把这些命名定死：
+裸埋点的结果是每家字段都不一样：OpenAI 叫 `usage.prompt_tokens`、另一家叫 `input_token_count`；同一次调用的 span 名可能是 `openai.chat`、`chat gpt-5.4`、`invoke_model`。语义约定（semantic conventions）就是把这些命名定死：
 
-- **span 名**：`{gen_ai.operation.name} {gen_ai.request.model}`，例如 `chat gpt-5.5`、`embeddings text-embedding-3-small`；
+- **span 名**：`{gen_ai.operation.name} {gen_ai.request.model}`，例如 `chat gpt-5.4`、`embeddings text-embedding-3-small`；
 - **`gen_ai.operation.name` 取值**：`chat`、`embeddings`、`text_completion`、`generate_content`、`execute_tool`、`invoke_agent`、`create_agent`、`fetch_response`、`create_memory` 等（有预定义值就必须用预定义值）；
 - **`gen_ai.provider.name`**（Required）：`openai`、`anthropic`、`aws.bedrock`、`gcp.gen_ai` 等，作为多供应商仪表盘里的判别字段。
 
@@ -152,7 +152,7 @@ def traced_chat(model: str, **kwargs):
 用法与裸 SDK 一致，只是多了观测：
 
 ```python
-resp = traced_chat("gpt-5.5", input="用三句话解释向量数据库", max_output_tokens=200)
+resp = traced_chat("gpt-5.4", input="用三句话解释向量数据库", max_output_tokens=200)
 print(resp.output_text)
 ```
 

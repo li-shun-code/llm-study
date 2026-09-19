@@ -9,11 +9,12 @@ versions: Python 3.12（Timsort 实现位于 CPython `Objects/listsort.txt`）
 order: 30
 group: 查找、排序与数组技巧
 ---
+## sorted 与 list.sort ：先选对入口
+
 > **难度**：★★☆（清单类）。看起来谁都会写 `sorted` ，但排序结果的“次序细节”经常决定线上行为。
 > **定位**：《排序算法》讲“排序怎么实现”，本篇讲“在 Python 里怎么把排序写对、写快”。
 > **前置**：《排序算法》。知道冒泡/归并/快排的复杂度之后，本篇只谈 `sorted` 的用法与语义。
 
-## sorted 与 list.sort ：先选对入口
 
 | | `sorted(iterable, **kw)` | `lst.sort(**kw)` |
 | - | ------------------------ | ---------------- |

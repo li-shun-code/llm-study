@@ -77,7 +77,7 @@ LLM 生态呈"少数闭源旗舰 + 多家开源权重"的双轨格局。本文�
 
 依据 [zai-org/GLM-5](https://github.com/zai-org/GLM-5) 仓库与 Z.ai 官方博客（2026-09 核实）：
 
-- **GLM-5.3 / GLM-5.3-Flash**：最新版本。GLM-5.3 与 GLM-5.2 共用基座、增益全部来自后训练——编码能力较 5.2 提升 50%（Z.ai Code Bench），并在 CyberGym 漏洞发现上达到 SOTA；GLM-5.3-Flash 则换了新基座，首次在 GLM 系列引入**稀疏+线性注意力混合架构**，显著降低长上下文推理成本。
+- **GLM-5.3 / GLM-5.3-Flash**：最新版本。GLM-5.3 与 GLM-5.2 共用基座、增益全部来自后训练——编码能力较 5.2 提升 50%（Z.ai Code Bench），并在 CyberGym 漏洞发现上达到 SOTA；GLM-5.3-Flash 则换了新基座，首次在 GLM 系列引入**稀疏+线性注意力混合架构**（这类架构的名词与成本账见《MoE 与稀疏注意力：读现代模型卡的先修知识》），显著降低长上下文推理成本。
 - **GLM-5.2**：上一代长程任务旗舰，"solid 1M-token context"；Terminal-Bench 2.1 得分 81.0、SWE-bench Pro 62.1（自报，开源模型中最强，距 Claude Opus 4.8 的 85.0 仅数分）。
 - GLM-5 系列全部开放权重，可通过 Z.ai API 或私有化部署使用；从 ChatGLM-6B 一路演进而来，是国内开源路线的代表。
 
@@ -96,9 +96,9 @@ LLM 生态呈"少数闭源旗舰 + 多家开源权重"的双轨格局。本文�
 
 三条贯穿性的观察：
 
-1. **闭源旗舰与开源第一梯队的差距已收敛到个位数基准分**（如 Terminal-Bench 2.1：Claude Opus 4.8 = 85.0 vs GLM-5.2 = 81.0），选型时"够用 + 便宜 + 可控"往往胜过"最强 + 昂贵"；
-2. **"混合推理"成为标配**：几乎每个家族都提供"快答/深思"两种模式（DeepSeek 的 `thinking`、Gemini Deep Think、OpenAI 的 `reasoning_effort`、Qwen3 的 Thinking 版本）——本质是把推理时计算量变成可调参数（见《推理模型》与《采样参数》）；
-3. **上下文军备竞赛进入百万级**，但"窗口大小 ≠ 有效利用"，请配合「RAG」的 RAG 与「Prompt 工程」的上下文工程技术使用。
+1. **闭源旗舰与开源第一梯队的差距已收敛到个位数基准分**（如 Terminal-Bench 2.1：Claude Opus 4.8 = 85.0 vs GLM-5.2 = 81.0），选型时"够用 + 便宜 + 可控"往往胜过"最强 + 昂贵"。注意这些分数的可比性——同一个基准的不同版本、不同 split 会让结论翻转，读法见《模型评测与基准素养：MMLU-Pro、SWE-bench 与 Agent 基准怎么读》；
+2. **"混合推理"成为标配**：几乎每个家族都提供"快答/深思"两种模式（DeepSeek 的 `thinking`、Gemini Deep Think、OpenAI 的 `reasoning_effort`、Qwen3 的 Thinking 版本）——本质是把推理时计算量变成可调参数（见《推理模型（o1/R1 类）》与《采样参数：temperature 与 top_p》）；
+3. **上下文军备竞赛进入百万级**，但"窗口大小 ≠ 有效利用"：窗口决定装得下多少，位置偏置决定真正被用上多少（见《长上下文的有效利用：Lost in the Middle 与位置偏置》），成本与截断规则见《Token 与上下文窗口》。
 
 ## 参考链接（全部于 2026-09-13 访问核实）
 

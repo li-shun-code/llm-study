@@ -1,742 +1,682 @@
 ---
 title: 第一次 AI 结对：从零做一个命令行小工具
-source_url: https://code.claude.com/docs/en/quickstart
-author: Anthropic（Claude Code 官方文档 Quickstart、Common workflows）
-license: 署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名；编者过渡与本站实操小节已明确标注）
-fetched_at: 2026-09-13
-translated: true
+source_url: https://code.claude.com/docs/en/common-workflows
+author: 本站编者（循环骨架依据 Anthropic Claude Code 官方文档 Best practices 与 Common workflows）
+license: 原创整理（所引官方文档 Copyright Anthropic PBC，教学用途署名；文中代码、命令与输出为编者实测记录）
+fetched_at: 2026-09-19
+translated: false
+versions: 实测环境 Python 3.14.6 / pytest 9.0.3 / ruff（uvx 临时安装）/ macOS；代码要求 Python 3.12+
 order: 1
 group: 日常开发流
 ---
-**编者按**：前一篇装好了工具，本篇带你走完第一次完整的 AI 结对。正文主体是 Claude Code 官方《Quickstart》与《Common workflows》两页的完整翻译——前者是官方设计的"第一次会话"全流程，后者是官方的日常配方库。为保留"从零做一个命令行小工具"的实操主线，编者只在各部分之间加了最少量的过渡（均以"编者"字样标明），并在文末附一节把官方流程映射到该小工具的实操对照（编者补充，已标明）。除该节与过渡句外，以下内容均为官方原文翻译。
 
-## 一、Quickstart：五分钟上手 Claude Code（官方文档全文翻译）
+## 为什么要完整走一遍
 
-*译自 [Claude Code 官方文档 Quickstart](https://code.claude.com/docs/en/quickstart)（2026-09 当前版）。*
+工具类文章回答"某个能力怎么用"，环境类文章回答"怎么把它装上"。但第一次真正坐下来和 AI 结对时，卡住人的通常不是这两件事，而是另外三件：
 
-欢迎使用 Claude Code！
+1. **第一句话不知道怎么说**——说太粗，它替你脑补需求；说太细，你其实在自己写代码。
+2. **不知道它到底做完没有**——它说"已完成，测试通过"，你不确定该不该信。
+3. **出错之后不知道怎么办**——重开会话丢掉上下文，继续对话又越描越黑。
 
-本快速入门指南将让你在几分钟内用上 AI 编码助手。读完本页，你将掌握如何用 Claude Code 完成常见开发任务。
+这三件事没有一门"技术"要学，只有**一套可重复的节拍**。本篇就带你把这个节拍走一遍：从零做一个真的能用的命令行待办工具 `todo`，全程四拍——**需求 → 生成 → 验收 → 存档**，并且在"验收失败"和"补测试"两处各走一个来回。文中的提示词全部原文照录，可以直接粘进你的会话；命令与输出全部是编者在真实环境里跑出来的记录，不是设想出来的示意图。
 
-### 开始之前
+先把节拍钉死，后面所有进阶玩法都是在这四拍上做加固：
 
-请确认你已具备：
+```text
+需求（写成能验证的条目）
+   ↓
+生成（一次只让它做一件事）
+   ↓
+验收（按判据逐条跑命令，不听汇报）  ← 失败就把真实输出贴回去，回到"生成"
+   ↓
+存档（commit 即存档点，可回滚）
+```
 
-* 打开了一个终端或命令提示符
-  * 如果你从未用过终端，请参阅[终端指南](https://code.claude.com/docs/en/terminal-guide)
-* 一个可以工作的代码项目
-* 一个 [Claude 订阅](https://claude.com/pricing)（Pro、Max、Team 或 Enterprise）、[Claude Console](https://platform.claude.com/) 账号，或通过[受支持的云提供商](https://code.claude.com/docs/en/third-party-integrations)获得的访问权限
+## 第 0 步：准备——选题、目录，以及不在本篇里的事
 
-> 注：本指南介绍终端 CLI。Claude Code 也可在[网页端](https://claude.ai/code)、[桌面应用](https://code.claude.com/docs/en/desktop)、[VS Code](https://code.claude.com/docs/en/vs-code)与 [JetBrains IDE](https://code.claude.com/docs/en/jetbrains) 插件、[Slack](https://code.claude.com/docs/en/slack)，以及通过 [GitHub Actions](https://code.claude.com/docs/en/github-actions) 和 [GitLab](https://code.claude.com/docs/en/gitlab-ci-cd) 的 CI/CD 中使用。
+**安装、登录、订阅与模型选择不在本篇重复**：见《环境搭建：Claude Code 与 Cursor 的安装与配置矩阵》；权限模式与沙箱的取舍见《Claude Code 权限系统与安全机制》。本篇假设你在任意目录已经能起一个会话。
 
-### 第 1 步：安装 Claude Code
+选题的三条判据（第一次结对，这三条比工具选择更重要）：
 
-安装 Claude Code 可用以下任一方式。
+| 判据 | 为什么 | 本次选题怎么满足 |
+| --- | --- | --- |
+| 一次会话内能做完 | 超过上下文容量，就得引入跨会话状态管理，那是后话 | 单文件 Python 脚本 + 一个 JSON 存储 |
+| 输出可机器判定 | "看起来对"不是判据，`exit code` 与断言才是 | 每条命令都有确定的 stdout 与退出码 |
+| 你自己真想用 | 有真实需求，你才会去验收而不是放行 | 待办清单是每天都用得上的小工具 |
 
-**原生安装（推荐）**
+**反面选题**：要注册外部账号、要装数据库、带 UI、或者"帮我做个小程序"——它们的共同点是**验证成本高于实现成本**，第一次结对做这个，你只会得到一堆没法判定的代码。
 
-macOS、Linux、WSL：
+工作目录先建成 git 仓库，理由见《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》：每个 commit 都是一个可回滚的存档点，AI 改坏了你能一步退回。
 
 ```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
-Windows PowerShell：
-
-```powershell
-irm https://claude.ai/install.ps1 | iex
-```
-
-Windows CMD：
-
-```batch
-curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
-```
-
-如果看到 `The token '&&' is not a valid statement separator`，说明你在 PowerShell 而不是 CMD；如果看到 `'irm' is not recognized as an internal or external command`，说明你在 CMD 而不是 PowerShell。PowerShell 的提示符显示 `PS C:\`，CMD 显示不带 `PS` 的 `C:\`。
-
-如果安装命令报 `syntax error near unexpected token '<'`、`403` 或其他 curl 错误，请参阅[安装排障](https://code.claude.com/docs/en/troubleshoot-install#find-your-error)将错误对应到解决办法，并了解替代安装方式。
-
-原生 Windows 上推荐安装 [Git for Windows](https://git-scm.com/downloads/win)，这样 Claude Code 才能使用 Bash 工具；未安装时，Claude Code 会改用 PowerShell 作为 shell 工具。WSL 环境不需要 Git for Windows。
-
-> 信息：原生安装会在后台自动更新，让你始终使用最新版本。
-
-**Homebrew**
-
-```bash
-brew install --cask claude-code
-```
-
-Homebrew 提供两个 cask：`claude-code` 跟踪稳定发布通道（通常约落后一周，并跳过有重大回归的版本）；`claude-code@latest` 跟踪最新通道，新版本一发布即更新。
-
-> 信息：Homebrew 安装不会自动更新。请根据所装 cask 运行 `brew upgrade claude-code` 或 `brew upgrade claude-code@latest` 获取最新功能与安全修复。
-
-**WinGet**
-
-```powershell
-winget install Anthropic.ClaudeCode
-```
-
-> 信息：WinGet 安装不会自动更新。请定期运行 `winget upgrade Anthropic.ClaudeCode` 获取最新功能与安全修复。
-
-在 Debian、Fedora、RHEL 和 Alpine 上还可以用 [apt、dnf 或 apk](https://code.claude.com/docs/en/setup#install-with-linux-package-managers) 安装。
-
-确认安装是否成功，运行：
-
-```bash
-claude --version
-```
-
-命令会打印一个版本号，后跟 `(Claude Code)`。
-
-### 第 2 步：登录账号
-
-Claude Code 需要账号才能使用。用 `claude` 命令启动交互式会话，首次使用时会提示你登录：
-
-```bash
+mkdir -p ~/tmp/todo-cli && cd ~/tmp/todo-cli
+git init -b main
 claude
 ```
 
-对 Claude 订阅或 Console 账号，按提示在浏览器中完成认证。如果你已设置 `ANTHROPIC_API_KEY` 环境变量，Claude Code 会跳过登录提示并请你确认使用该密钥。之后若要切换账号或重新认证，在会话中输入 `/login`。
+## 第 1 步：需求拆解——首轮提示词只做一件事：不许它动手
 
-可以使用以下任意一种账号类型登录：
+第一次结对最常见的错误，是第一句话就说"帮我写个 TODO 工具"。它一定会动手，而且会替你把十条没说的需求全补上。所以前两条提示词的目的是**把脑补变成提问**：
 
-* [Claude Pro、Max、Team 或 Enterprise](https://claude.com/pricing)（推荐）
-* [Claude Console](https://platform.claude.com/)（API 访问，预付费额度。首次登录时 Console 会自动创建一个 "Claude Code" 工作区，便于集中跟踪成本）
-* [Amazon Bedrock、Google Cloud's Agent Platform 或 Microsoft Foundry](https://code.claude.com/docs/en/third-party-integrations)（企业云提供商）
-* 自托管的 Claude 应用网关（如果你的组织有部署）：管理员预先配置网关 URL，`/login` 会直接打开**云网关**界面，用企业 SSO 登录
+```text
+我想做一个命令行待办清单工具，名字叫 todo：能新增、列出、标记完成、删除。
+先不要写任何代码。请你一次只问我一个问题，问 6~8 个问题后停下来，
+把结论整理成一份"可验证的需求清单"。
+要求：
+- 每条需求都要能写成一条命令 + 一个期望输出来判定真假；
+- 不要替我假设我没说的事情；如果某个问题我回答"随便"，你就把它写进"非目标"里；
+- 顺便给我一份"明确不做"的清单（非目标），我会删掉不想要的条目。
+```
 
-登录后凭据会被保存，无需再次登录。详见[凭据管理](https://code.claude.com/docs/en/authentication#credential-management)。
+"一次只问一个问题"这个约束非常值钱：一次问十个，模型会挑好答的答；一次问一个，你才有机会在第 3 个问题就改主意。同一招在《Claude Code 工作流与最佳实践》里叫"让 Claude 采访你"。
 
-### 第 3 步：启动第一个会话
+回答完它给的 7 个问题之后，再补一条把结论落成文件——**这一步决定了后面验收和测试有没有依据**：
 
-在任意项目目录打开终端并启动 Claude Code：
+```text
+把上面确认过的需求写成 REQUIREMENTS.md，用表格：编号｜需求（只写做什么/不做什么）｜
+当前行为｜验证方式（一条命令）。
+不要写实现方案，不要引入任何第三方依赖，不要新增除这个文件以外的东西。
+```
+
+编者整理出的成品就是这样八条（会话里它写的措辞略有差异，判据一致）：
+
+| # | 需求 | 验证方式 | 通过标准 |
+| --- | --- | --- | --- |
+| 1 | 新增一条待办并分配稳定 ID | `python3 todo.py add "写周报"` | `已添加 #N：写周报`，N 单调递增、删除后不复用 |
+| 2 | 列出未完成项，按截止日升序，无截止日排最后 | `python3 todo.py list` | 顺序确定、不含已完成 |
+| 3 | 含已完成项需显式开关 | `python3 todo.py list --all` | 已完成显示为 `[x]` |
+| 4 | 未知 ID 必须报错 | `python3 todo.py done 999; echo $?` | stderr 有人话提示，退出码 `2` |
+| 5 | 存储路径可切换 | `python3 todo.py --file /tmp/a.json list` | 读写指定文件，不碰 `~` |
+| 6 | 截止日只接受 `YYYY-MM-DD` | `python3 todo.py add x --due 1/5` | 拒绝、退出码 `2`、不落盘 |
+| 7 | 输出能被脚本消费 | `python3 todo.py list --json` 接 `python3 -m json.tool` | 可解析，字段固定 |
+| 8 | 空清单不是错误 | 全新存储下 `python3 todo.py list` | 提示"没有待办"，退出码 `0` |
+
+**非目标**同样要写下来，否则它会顺手加：不做多用户、不做云同步、不做并发锁、不做 TUI、不接日历 API。
+
+## 第 2 步：首轮实现提示词（含四条纪律）
+
+```text
+按 REQUIREMENTS.md 实现 todo.py：Python 3.12+ 标准库、单文件、argparse 子命令 add/list/done/rm、
+存储为 JSON（默认 ~/.todo/items.json，可用环境变量 TODO_FILE 覆盖）。
+纪律：
+1. 不要写测试——测试我们下一轮单独做，测试判据只来自 REQUIREMENTS.md。
+2. 不要引入任何第三方依赖，不要新增文件；不要顺手做架构调整。
+3. 写完自己跑 `python3 todo.py add "示例"` 和 `python3 todo.py list`，把真实输出贴给我。
+4. 交付时明确列出两件事：你做了哪些假设；八条需求里哪几条你没实现或打了折扣。
+```
+
+第 1 条纪律"不许写测试"是故意的：**让实现者同时出题又自己判卷，是 AI 结对里最早出现的失效模式**（同一结论见《TDD with AI：Kent Beck 的增强编程实践》与《AI 结对与代码审查》）。第 4 条把"自报缺口"变成固定动作，成本几乎为零，但它报的仍然只是汇报——见下一步。
+
+首轮产出是一个约 100 行的 `todo.py`，它按纪律 3 跑了那两条命令，输出确实是对的：
+
+```text
+已添加 #1：重写模块 13 的首页导读
+#1  [ ] 重写模块 13 的首页导读
+```
+
+（会话里助手的自述文字每轮措辞都不同，本篇只记录可复现的部分：命令与它的实际输出。）
+
+问题全在它没跑的那几条命令里。首轮产出中编者后来标出问题的关键三行：
+
+```python
+def cmd_add(args):
+    data = load()
+    item = {
+        "id": len(data["items"]) + 1,   # 需求 1：删除末位之后 ID 会被复用
+        "text": args.text,
+        "done": False,
+        "due": args.due,                # 需求 6：格式完全不校验，收什么存什么
+    }
+
+def cmd_list(args):
+    ...
+    items.sort(key=lambda i: (i["due"] is not None, i["due"]))  # 需求 2：日期按字符串比大小
+```
+
+## 第 3 步：验收——逐条跑命令，不接受汇报
+
+下面是编者按需求表逐条跑出来的真实输出（存储指向临时文件，方便复现）。
+
+**需求 6（日期校验）——垃圾输入被静默收下，还排到了正确日期的前面：**
+
+```console
+$ python3 todo.py add "发版说明" --due 2026-12-31
+已添加 #3：发版说明
+
+$ python3 todo.py add "跨年值班表" --due 1/5
+已添加 #4：跨年值班表          ← 它没有拒绝
+
+$ python3 todo.py list
+#1  [ ] 重写模块 13 的首页导读
+#2  [ ] 给 CI 加 ruff 闸门
+#4  [ ] 跨年值班表  截止 1/5   ← 1/5 排在 2026-12-31 之前：字符串比较 "1" < "2"
+#3  [ ] 发版说明  截止 2026-12-31
+```
+
+**需求 1（ID 稳定性）——删一条之后，新条目和已存在的条目撞号：**
+
+```console
+$ python3 todo.py rm 2
+已删除 #2
+
+$ python3 todo.py add "退掉闲置的机械键盘"
+已添加 #4：退掉闲置的机械键盘   ← len(items)+1 又数回 4
+
+$ python3 todo.py list
+#1  [ ] 重写模块 13 的首页导读
+#4  [ ] 退掉闲置的机械键盘
+#4  [ ] 跨年值班表  截止 1/5    ← 两个 #4
+#3  [ ] 发版说明  截止 2026-12-31
+```
+
+**撞号的后果不是"难看"，而是数据被改错（需求 3、4 一起崩）：**
+
+```console
+$ python3 todo.py done 4
+已完成 #4
+
+$ python3 todo.py list --all
+#1  [ ] 重写模块 13 的首页导读
+#4  [ ] 退掉闲置的机械键盘      ← 你想勾的是这条
+#4  [x] 跨年值班表  截止 1/5    ← 被勾的是那条
+#3  [ ] 发版说明  截止 2026-12-31
+```
+
+**需求 4（未知 ID）这轮侥幸是对的**，值得单独确认一次，因为它后面会被改坏：
+
+```console
+$ python3 todo.py done 999
+未找到待办 #999
+$ echo $?
+2
+```
+
+逐条对照的结果：**八条判据里首轮真正满足五条**。这五条大概率也是它自报的"已完成"范围，剩下三条（1、2、6）全是它没跑过的路径——这就是为什么验收要人来跑：`len()+1` 分配 ID 在没有任何删除时看起来完全正常，"看起来正常"正是这类代码能活过汇报的原因（机制层面见《AI 代码的安全与质量陷阱：六大陷阱与检测清单》）。
+
+## 第 4 步：失败迭代——把真实输出原样贴回去
+
+第二轮提示词的要点是：**贴事实，不贴情绪**（"你怎么又写错了"只会换来一段道歉和同样错误的补丁），并且**圈定改动范围**。
+
+```text
+第一轮实现有三处真实问题，输出是我跑出来的，原样贴在下面。
+要求：只改 todo.py，只修这三处，不要顺手重构别的；改完把这三组命令重跑一遍，
+输出贴给我；最后明确回答——还有哪些"ID 分配 / 输入格式"同类的边界你没处理？
+
+1) --due 1/5 被静默接受，且 list 里它排在 2026-12-31 之前（期望：拒绝，退出码 2，不落盘）
+2) rm 掉 #2 之后再 add，新条目 ID 与已存在的 #4 撞号（期望：ID 永不复用）
+3) done 4 勾中了另一条 #4（期望：ID 唯一，勾错不可能发生）
+
+<在这里粘贴上面三段真实输出>
+```
+
+复跑结果（第二轮，同一段命令）：
+
+```console
+$ python3 todo.py add "跨年值班表" --due 1/5
+--due 需要 ISO 日期（YYYY-MM-DD），收到：'1/5'
+$ echo $?
+2
+
+$ python3 todo.py add "发版说明" --due 2026-12-31
+已添加 #3：发版说明  截止 2026-12-31
+$ python3 todo.py rm 2
+已删除 #2
+$ python3 todo.py add "退掉闲置的机械键盘"
+已添加 #5：退掉闲置的机械键盘    ← 计数器只增不回收
+
+$ python3 todo.py list
+#4  [ ] 跨年值班表  截止 2026-01-05
+#3  [ ] 发版说明  截止 2026-12-31
+#1  [ ] 重写模块 13 的首页导读
+#5  [ ] 退掉闲置的机械键盘
+```
+
+修好了，但**逐条对照需求表时又暴露一条漏项**：需求 5 要求 `--file` 与环境变量都能覆盖存储路径，它只实现了环境变量。这次是命令直接报错，一点不含糊：
+
+```console
+$ python3 todo.py --file /tmp/todocli-work/aa.json list
+usage: todo [-h] {add,list,done,rm} ...
+todo: error: argument command: invalid choice: '/tmp/todocli-work/aa.json' (choose from 'add', 'list', 'done', 'rm')
+```
+
+这类"漏实现"是最容易被放行的缺陷：命令都在，功能都在，只是某条路径不存在。补一句短提示词就够：
+
+```text
+需求第 5 条要求 --file 与 TODO_FILE 都能覆盖存储路径，现在只有环境变量生效。
+加一个全局 --file 选项，优先级高于环境变量，只改必要部分，别动其他逻辑。
+```
+
+```console
+$ python3 todo.py --file /tmp/todocli-work/sbb.json add "第二条清单里的条目"
+已添加 #1：第二条清单里的条目
+$ python3 todo.py --file /tmp/todocli-work/sbb.json list
+#1  [ ] 第二条清单里的条目
+```
+
+还有一处编者主动加的第三轮，因为它属于第一次结对最典型的"错误处理真空"：存储文件被写坏时，用户看到的应该是什么？（下面的路径是编者当时的临时目录，你跑出来会是自己的路径。）
+
+```console
+$ python3 todo.py list
+Traceback (most recent call last):
+  File "/private/tmp/todocli-work/todo.py", line 132, in <module>
+    sys.exit(main())
+  ...
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 5 column 1 (char 60)
+```
+
+提示词里必须同时禁止"反向修法"，否则很可能换来一个 `except Exception: pass`：
+
+```text
+清单 JSON 解析失败时不要抛堆栈给用户，也不要吞掉异常。
+要求：stderr 打印三行——哪份文件坏了、原始错误、下一步该做什么（修复它，或换路径），
+然后按用法错误退出；文件内容保持原样，不要自动覆盖用户数据。
+```
+
+```console
+$ python3 todo.py list
+清单文件已损坏：/tmp/todocli-work/broken.json
+  Expecting property name enclosed in double quotes: line 5 column 1 (char 60)
+  修复它，或用 --file/TODO_FILE 指向新文件。
+$ echo $?
+2
+```
+
+## 第 5 步：补测试——目标是让它先红一次
+
+```text
+现在给 todo.py 补 pytest 测试，放在 test_todo.py。规则：
+1. 判据只来自 REQUIREMENTS.md，不来自实现——先按需求写断言，即使实现不满足也不许改需求。
+2. 每条测试对应一个真实出过问题的点：ID 不回收、--due 校验、未知 ID 的退出码、
+   list 默认过滤、空清单、按截止日排序、--json 可解析、损坏文件的可读报错、--file 覆盖路径。
+3. 用 tmp_path + monkeypatch 把 TODO_FILE 指到临时文件；禁止任何测试读写 ~/.todo/items.json。
+4. 写完跑 `python3 -m pytest test_todo.py -v`，把完整输出贴给我。失败的那条不许通过改断言变绿。
+```
+
+第一次跑就红了，而且红得很有价值（真实输出）：
+
+```console
+$ python3 -m pytest test_todo.py -v
+test_todo.py::test_add_分配的ID不被回收 PASSED
+test_todo.py::test_无效的due必须被拒绝 PASSED
+test_todo.py::test_done_不存在的ID返回退出码2 FAILED
+...
+    def test_done_不存在的ID返回退出码2(capsys):
+>       assert todo.main(["done", "999"]) == 2
+E       AssertionError: assert 3 == 2
+----------------------------- Captured stderr call -----------------------------
+未找到待办 #999
+========================= 1 failed, 6 passed in 0.12s ==========================
+```
+
+需求第 4 条写的是退出码 `2`，实现返回 `3`。**这就是只有测试能抓到的那一类偏差**：命令行手工跑的时候你只看 stderr，永远注意不到数字。两种修法必须显式选一种：
+
+- 实现不符合需求 → 改实现（本次选这条）；
+- 需求本身就写错了 → 改 `REQUIREMENTS.md`，并在 commit 信息里写下为什么改判据。
+
+**不允许的是绕过判据改断言**——那是《AI 代码的安全与质量陷阱：六大陷阱与检测清单》里"只测通过路径"那条陷阱的生成器。
+
+接着又红了一次，这次是测试自己的写法错了（也是真实输出）：
+
+```console
+>       assert todo.main(["list"]) == 2
+E       SystemExit: 2
+========================= 1 failed, 7 passed in 0.67s ==========================
+```
+
+实现走 `raise SystemExit(2)`，`main()` 根本不返回值。判据（退出码 2）是对的，**错的是捕获方式**——于是把断言包进 `pytest.raises`，值一个字不改：
+
+```python
+def test_清单文件损坏时给出可读错误(db, capsys):
+    db.write_text('{"next_id": 3, "items": [', "utf-8")
+    with pytest.raises(SystemExit) as exc:      # 退出走 SystemExit，不是 return
+        todo.main(["list"])
+    assert exc.value.code == 2
+    err = capsys.readouterr().err
+    assert "已损坏" in err and "Traceback" not in err
+```
+
+最后九条全绿，静态检查也过（都是实跑）：
+
+```console
+$ python3 -m pytest test_todo.py -q
+.........                                     [100%]
+9 passed in 0.47s
+
+$ uvx ruff check --select F,E9,BLE,S110 todo.py test_todo.py
+All checks passed!
+```
+
+`F`（未定义名字）、`E9`（语法错误）、`BLE`（盲捕异常）、`S110`（`try/except/pass`）这四类正是 AI 首轮代码的高发区，把这条命令放进 pre-commit 或 CI，比在评审里口头叮嘱"注意错误处理"有效得多（见《AI 编码供应链安全：幻觉包、Slopsquatting 与沙箱防线》）。
+
+## 第 6 步：git 存档——每个阶段一个存档点
 
 ```bash
-cd /path/to/your/project
-claude
+# 存档点 1：首轮骨架 + 需求文件
+git add REQUIREMENTS.md todo.py
+git commit -m "feat(todo): 命令行待办清单骨架（add/list/done/rm + JSON 存储）"
+
+# 存档点 2：第二轮修复
+git commit -am "fix(todo): 稳定 ID 计数器、校验 --due 格式、损坏文件给出可读错误"
+
+# 存档点 3：测试与文档
+git add test_todo.py README.md .gitignore
+git commit -m "test(todo): 按 REQUIREMENTS.md 落 9 条回归测试；docs: 用法与非目标"
 ```
 
-把 `/path/to/your/project` 换成你要处理的项目的路径。
+`.gitignore` 至少三行：`__pycache__/`、`.pytest_cache/`、`*.tmp`（原子写会留下 `.json.tmp`）。README 里写清用法、存储位置、退出码约定和"非目标"——这四段是三个月后的你（以及那时接手的智能体）最需要的上下文（见《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》）。
 
-你会看到 Claude Code 提示符，上方显示版本号、当前模型与工作目录。输入 `/help` 查看可用命令，输入 `/resume` 继续上一次对话。
-
-> 编者过渡：官方 Quickstart 的第 4-8 步在"既有项目"里演示第一次会话。想直接体会"从零做一个命令行小工具"的读者，可以现在就新建一个空目录再启动 `claude`——官方每一步的提示词原样可用；本节先按官方原文翻译，实战对照见文末编者小节。
-
-### 第 4 步：问第一个问题
-
-从理解你的代码库开始。试试这些命令：
-
-```text
-what does this project do?
-```
-
-Claude 会分析你的文件并给出摘要。你也可以问更具体的问题：
-
-```text
-what technologies does this project use?
-```
-
-```text
-where is the main entry point?
-```
-
-```text
-explain the folder structure
-```
-
-还可以问 Claude 关于它自身能力的问题：
-
-```text
-what can Claude Code do?
-```
-
-```text
-how do I create custom skills in Claude Code?
-```
-
-```text
-can Claude Code work with Docker?
-```
-
-> 注：Claude Code 按需读取你的项目文件，你不需要手动添加上下文。
-
-### 第 5 步：做第一处代码修改
-
-现在让 Claude Code 真正写代码。给它一个简单任务：
-
-```text
-add a hello world function to the main file
-```
-
-Claude Code 会找到合适的文件并把改动展示给你。如果它在修改前询问，选择 **Yes** 批准即可。
-
-auto 模式是 Pro、Max、Team 计划交互式终端会话的[内置起始权限模式](https://code.claude.com/docs/en/permission-modes#eliminate-prompts-with-auto-mode)：由一个分类器代你审查动作，Claude 无需询问即可编辑大多数文件、运行大多数命令。在其他计划上，Manual（手动）模式是内置的起始权限模式。安装后紧接着的第一次会话详见[安装或升级后的第一次会话](https://code.claude.com/docs/en/env-vars#first-session-after-an-install-or-upgrade)。
-
-> 注：你的设置或所在组织可以设置不同的起始权限模式，详见[会话以哪种模式启动](https://code.claude.com/docs/en/permission-modes#which-mode-a-session-starts-in)。随时按 `Shift+Tab` 可切换当前会话的权限模式。
-
-### 第 6 步：配合 Git 使用
-
-Claude Code 让 Git 操作变得对话化：
-
-```text
-what files have I changed?
-```
-
-```text
-commit my changes with a descriptive message
-```
-
-也可以提示它做更复杂的 Git 操作：
-
-```text
-create a new branch called feature/quickstart
-```
-
-```text
-show me the last 5 commits
-```
-
-```text
-help me resolve merge conflicts
-```
-
-### 第 7 步：修 Bug 或加功能
-
-Claude 擅长调试与功能实现。
-
-用自然语言描述你想要的东西：
-
-```text
-add input validation to the user registration form
-```
-
-或修复现有问题：
-
-```text
-there's a bug where users can submit empty forms - fix it
-```
-
-Claude Code 会：
-
-* 定位相关代码
-* 理解上下文
-* 实现解决方案
-* （若有测试）运行测试
-
-### 第 8 步：试用其他常见工作流
-
-与 Claude 协作的方式有很多：
-
-**重构代码**
-
-```text
-refactor the authentication module to use async/await instead of callbacks
-```
-
-**写测试**
-
-```text
-write unit tests for the calculator functions
-```
-
-**更新文档**
-
-```text
-update the README with installation instructions
-```
-
-**代码审查**
-
-```text
-review my changes and suggest improvements
-```
-
-> 技巧：像对待一位乐于助人的同事那样跟 Claude 说话。描述你想达成什么，它会帮你到达那里。
-
-### 常用命令
-
-以下是日常使用中最重要的命令。Shell 命令在终端里运行，用于启动或恢复 Claude Code；会话命令在 Claude Code 启动后的会话内使用。
-
-**Shell 命令**
-
-| 命令 | 作用 | 示例 |
-| --- | --- | --- |
-| `claude` | 启动交互模式 | `claude` |
-| `claude "task"` | 带初始提示启动交互模式 | `claude "fix the build error"` |
-| `claude -p "query"` | 运行单次查询后退出 | `claude -p "explain this function"` |
-| `claude -c` | 继续当前目录最近一次对话 | `claude -c` |
-| `claude -r` | 恢复某次历史对话 | `claude -r` |
-
-**会话命令**
-
-| 命令 | 作用 | 示例 |
-| --- | --- | --- |
-| `/clear` | 清空对话历史 | `/clear` |
-| `/help` | 显示可用命令 | `/help` |
-| `/exit` 或连按两次 Ctrl+D | 退出 Claude Code | `/exit` |
-
-完整 Shell 命令列表见 [CLI 参考](https://code.claude.com/docs/en/cli-reference)，完整会话命令列表见[命令参考](https://code.claude.com/docs/en/commands)。
-
-### 新手技巧
-
-更多内容见[最佳实践](https://code.claude.com/docs/en/best-practices)与[常见工作流](https://code.claude.com/docs/en/common-workflows)。
-
-**请求要具体。** 与其说"fix the bug"，不如试："fix the login bug where users see a blank screen after entering wrong credentials"。
-
-**用分步指令。** 把复杂任务拆成步骤：
-
-```text
-1. create a new database table for user profiles
-2. create an API endpoint to get and update user profiles
-3. build a webpage that allows users to see and edit their information
-```
-
-**先让 Claude 探索。** 改代码之前，先让它理解你的代码：
-
-```text
-analyze the database schema
-```
-
-```text
-build a dashboard showing products that are most frequently returned by our UK customers
-```
-
-**用快捷键省时间。**
-
-* 输入 `/` 查看可用命令与技能
-* 用 Tab 补全命令
-* 按 ↑ 翻阅命令历史
-* 按 `Shift+Tab` 循环切换权限模式
-
-### 下一步
-
-学完基础后，可以探索更多进阶功能：了解 Claude Code 的工作原理（智能体循环、内置工具、与项目的交互）、最佳实践（高效提示与项目配置）、常见工作流（常见任务的分步指南），以及扩展 Claude Code（CLAUDE.md、skills、hooks、MCP 等）。
-
-### 获取帮助
-
-* **在 Claude Code 内**：输入 `/help` 或直接问 "how do I..."
-* **文档**：就在本站，浏览其他指南即可
-* **社区**：加入 [Discord](https://www.anthropic.com/discord) 获取技巧与支持
-
-## 二、Common workflows：日常配方库（官方文档全文翻译）
-
-*译自 [Claude Code 官方文档 Common workflows](https://code.claude.com/docs/en/common-workflows)（2026-09 当前版）。*
-
-本页收录日常开发的短配方。关于提示词与上下文管理的高阶指引，参见[最佳实践](https://code.claude.com/docs/en/best-practices)。
-
-本页覆盖：探索代码、修 Bug、重构、测试、PR、文档的提示词配方；恢复历史对话让任务跨多次进行；用 worktree 跑并行会话；编辑前先计划；把研究外包给子智能体；把 Claude 接入脚本用于 CI 与批处理。
-
-### 提示词配方
-
-这些是日常任务的提示词模式：探索陌生代码、调试、重构、写测试、创建 PR 等。每个配方在任何 Claude Code 界面都可用，措辞请按你的项目调整。
-
-#### 理解新代码库
-
-monorepo 或大型代码库的 Claude Code 配置见[Monorepo 与大型仓库](https://code.claude.com/docs/en/large-codebases)。
-
-**快速获得代码库概览**
-
-假设你刚加入一个新项目，需要快速理解它的结构。
-
-1. 进入项目根目录：
+每次提交前先看一眼 diff 的大小，这是本篇唯一要求你养成的习惯：
 
 ```bash
-cd /path/to/project
+git diff --stat            #  staged 之外，改了什么、改了多少
+git status --short
 ```
 
-2. 启动 Claude Code：
+一轮改动超过十几个文件或几百行，就要求它拆开、分轮提交（阈值与理由见《AI 代码的安全与质量陷阱：六大陷阱与检测清单》陷阱五）。后悔时优先 `git revert <hash>`——它新增一个反向提交，历史还在；`git reset --hard` 会抹掉工作里唯一能证明"当时到底改了什么"的东西。
+
+## 最终代码（可直接跑）
+
+`todo.py`（141 行，只用标准库）：
+
+```python
+"""todo —— 一个不依赖第三方库的命令行待办清单。
+
+存储：默认 ~/.todo/items.json，可用环境变量 TODO_FILE 或 --file 覆盖（便于测试与多清单）。
+退出码：0 成功 / 1 未预期异常 / 2 用法错误与未找到。
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from datetime import date
+from pathlib import Path
+
+# 退出码约定（与需求第 4 条一致）：0 成功 / 2 用法错误与未找到
+EXIT_OK, EXIT_USAGE, EXIT_NOT_FOUND = 0, 2, 2
+
+
+def store() -> Path:
+    return Path(os.environ.get("TODO_FILE", Path.home() / ".todo" / "items.json"))
+
+
+def load() -> dict:
+    p = store()
+    if not p.exists():
+        return {"next_id": 1, "items": []}
+    try:
+        data = json.loads(p.read_text("utf-8"))
+    except json.JSONDecodeError as exc:
+        # 第三轮：损坏文件要给出"下一步做什么"，而不是抛堆栈
+        print(f"清单文件已损坏：{p}\n  {exc}\n  修复它，或用 --file/TODO_FILE 指向新文件。",
+              file=sys.stderr)
+        raise SystemExit(EXIT_USAGE)
+    data.setdefault("next_id", 1)
+    data.setdefault("items", [])
+    return data
+
+
+def save(data: dict) -> None:
+    p = store()
+    p.parent.mkdir(parents=True, exist_ok=True)
+    tmp = p.with_suffix(p.suffix + ".tmp")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", "utf-8")
+    tmp.replace(p)          # 原子写：中途崩溃不会留下半截 JSON
+
+
+def parse_due(raw: str) -> str:
+    try:
+        return date.fromisoformat(raw).isoformat()
+    except ValueError:
+        print(f"--due 需要 ISO 日期（YYYY-MM-DD），收到：{raw!r}", file=sys.stderr)
+        raise SystemExit(EXIT_USAGE)
+
+
+def find(items: list[dict], target: int) -> list[dict]:
+    return [i for i in items if i["id"] == target]
+
+
+def cmd_add(args) -> int:
+    data = load()
+    item = {"id": data["next_id"], "text": args.text, "done": False,
+            "due": parse_due(args.due) if args.due else None}
+    data["next_id"] += 1            # 计数器只增不回收
+    data["items"].append(item)
+    save(data)
+    due = f"  截止 {item['due']}" if item["due"] else ""
+    print(f"已添加 #{item['id']}：{item['text']}{due}")
+    return EXIT_OK
+
+
+def cmd_list(args) -> int:
+    data = load()
+    items = data["items"] if args.all else [i for i in data["items"] if not i["done"]]
+    items = sorted(items, key=lambda i: (i["due"] is None, i["due"] or "", i["id"]))
+    if args.json:
+        print(json.dumps(items, ensure_ascii=False))
+        return EXIT_OK
+    if not items:
+        print("（没有待办）")
+        return EXIT_OK
+    for i in items:
+        mark = "x" if i["done"] else " "
+        due = f"  截止 {i['due']}" if i["due"] else ""
+        print(f"#{i['id']:<3}[{mark}] {i['text']}{due}")
+    return EXIT_OK
+
+
+def cmd_done(args) -> int:
+    data = load()
+    hits = find(data["items"], args.id)
+    if not hits:
+        print(f"未找到待办 #{args.id}", file=sys.stderr)
+        return EXIT_NOT_FOUND
+    for i in hits:
+        i["done"] = True
+    save(data)
+    print(f"已完成 #{args.id}")
+    return EXIT_OK
+
+
+def cmd_rm(args) -> int:
+    data = load()
+    if not find(data["items"], args.id):
+        print(f"未找到待办 #{args.id}", file=sys.stderr)
+        return EXIT_NOT_FOUND
+    data["items"] = [i for i in data["items"] if i["id"] != args.id]
+    save(data)
+    print(f"已删除 #{args.id}")
+    return EXIT_OK
+
+
+def build_parser() -> argparse.ArgumentParser:
+    ap = argparse.ArgumentParser(prog="todo", description="命令行待办清单")
+    ap.add_argument("--file", help="清单文件路径（覆盖 TODO_FILE 环境变量）")
+    sub = ap.add_subparsers(dest="command", required=True)
+    p_add = sub.add_parser("add", help="新增一条")
+    p_add.add_argument("text")
+    p_add.add_argument("--due", help="ISO 日期 YYYY-MM-DD")
+    p_add.set_defaults(func=cmd_add)
+    p_list = sub.add_parser("list", help="列出未完成（默认）")
+    p_list.add_argument("--all", action="store_true", help="含已完成")
+    p_list.add_argument("--json", action="store_true", help="输出 JSON 供脚本消费")
+    p_list.set_defaults(func=cmd_list)
+    p_done = sub.add_parser("done", help="标记完成")
+    p_done.add_argument("id", type=int)
+    p_done.set_defaults(func=cmd_done)
+    p_rm = sub.add_parser("rm", help="删除")
+    p_rm.add_argument("id", type=int)
+    p_rm.set_defaults(func=cmd_rm)
+    return ap
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    if args.file:                      # --file 优先于环境变量
+        os.environ["TODO_FILE"] = args.file
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+`test_todo.py`（97 行，9 条）：
+
+```python
+"""todo 的回归测试：每条都对应首轮验收里真实出过问题的地方"""
+from __future__ import annotations
+
+import json
+
+import pytest
+
+import todo
+
+
+@pytest.fixture(autouse=True)
+def db(tmp_path, monkeypatch):
+    """把存储指到临时文件，避免测试污染 ~/.todo/items.json"""
+    path = tmp_path / "items.json"
+    monkeypatch.setenv("TODO_FILE", str(path))
+    return path
+
+
+def stored(db):
+    return json.loads(db.read_text("utf-8"))
+
+
+def test_add_分配的ID不被回收(db):
+    todo.main(["add", "a"])
+    todo.main(["add", "b"])
+    todo.main(["rm", "2"])
+    todo.main(["add", "c"])
+    assert [i["id"] for i in stored(db)["items"]] == [1, 3]
+    assert stored(db)["next_id"] == 4
+
+
+def test_无效的due必须被拒绝(db):
+    with pytest.raises(SystemExit) as exc:
+        todo.main(["add", "x", "--due", "1/5"])
+    assert exc.value.code == 2
+    assert not db.exists()
+
+
+def test_done_不存在的ID返回退出码2(capsys):
+    assert todo.main(["done", "999"]) == 2
+    assert "未找到" in capsys.readouterr().err
+
+
+def test_list_默认只显示未完成(db, capsys):
+    todo.main(["add", "a"])
+    todo.main(["add", "b"])
+    capsys.readouterr()
+    todo.main(["done", "1"])
+    capsys.readouterr()
+    todo.main(["list"])
+    out = capsys.readouterr().out
+    assert "#2" in out and "#1" not in out
+    todo.main(["list", "--all"])
+    assert "#1" in capsys.readouterr().out
+
+
+def test_空清单不是错误(capsys):
+    capsys.readouterr()
+    assert todo.main(["list"]) == 0
+    assert "没有待办" in capsys.readouterr().out
+
+
+def test_按截止日升序且无截止日排在最后(capsys):
+    todo.main(["add", "晚", "--due", "2026-12-31"])
+    todo.main(["add", "无截止"])
+    todo.main(["add", "早", "--due", "2026-01-05"])
+    capsys.readouterr()
+    todo.main(["list"])
+    lines = capsys.readouterr().out.splitlines()
+    assert ["早", "晚", "无截止"] == [line.split("]")[1].strip().split("  ")[0] for line in lines]
+
+
+def test_json输出可被下游脚本解析(db, capsys):
+    todo.main(["add", "a", "--due", "2026-01-05"])
+    capsys.readouterr()
+    todo.main(["list", "--json"])
+    rows = json.loads(capsys.readouterr().out)
+    assert rows == [{"id": 1, "text": "a", "done": False, "due": "2026-01-05"}]
+
+
+def test_清单文件损坏时给出可读错误(db, capsys):
+    db.write_text('{"next_id": 3, "items": [', "utf-8")
+    with pytest.raises(SystemExit) as exc:      # 退出走 SystemExit，不是 return
+        todo.main(["list"])
+    assert exc.value.code == 2
+    err = capsys.readouterr().err
+    assert "已损坏" in err and "Traceback" not in err
+
+
+def test_file选项切换清单文件(tmp_path, capsys):
+    a, b = tmp_path / "a.json", tmp_path / "b.json"
+    todo.main(["--file", str(a), "add", "只在 A"])
+    todo.main(["--file", str(b), "add", "只在 B"])
+    capsys.readouterr()
+    todo.main(["--file", str(a), "list"])
+    out = capsys.readouterr().out
+    assert "只在 A" in out and "只在 B" not in out
+```
+
+跑法与最终一次完整验收（真实输出）：
 
 ```bash
-claude
+python3 -m pip install pytest        # 本机已装则跳过（macOS Homebrew Python 需 --user 或虚拟环境）
+export TODO_FILE=~/tmp/todo-cli/demo.json
+python3 todo.py add "重写模块 13 的首页导读"
+python3 todo.py add "给 CI 加 ruff 闸门" --due 2026-09-26
+python3 todo.py add "写周报" --due 2026-09-21
+python3 todo.py list
+python3 todo.py done 3
+python3 todo.py list --all --json | python3 -m json.tool
+python3 -m pytest test_todo.py -q
 ```
 
-3. 请求高层概览：
-
-```text
-give me an overview of this codebase
+```console
+已添加 #1：重写模块 13 的首页导读
+已添加 #2：给 CI 加 ruff 闸门  截止 2026-09-26
+已添加 #3：写周报  截止 2026-09-21
+#3  [ ] 写周报  截止 2026-09-21
+#2  [ ] 给 CI 加 ruff 闸门  截止 2026-09-26
+#1  [ ] 重写模块 13 的首页导读
+已完成 #3
+#2  [ ] 给 CI 加 ruff 闸门  截止 2026-09-26
+#1  [ ] 重写模块 13 的首页导读
 ```
 
-4. 深入具体组件：
-
-```text
-explain the main architecture patterns used here
-```
-
-```text
-what are the key data models?
-```
-
-```text
-how is authentication handled?
-```
-
-> 技巧：先问宽泛问题，再收窄到具体区域；询问项目使用的编码约定与模式；索要项目专属术语的词汇表。
-
-**查找相关代码**
-
-假设你需要定位与某个特性或功能相关的代码。
-
-1. 让 Claude 找相关文件：
-
-```text
-find the files that handle user authentication
-```
-
-2. 了解组件间如何协作：
-
-```text
-how do these authentication files work together?
-```
-
-3. 理解执行流：
-
-```text
-trace the login process from front-end to database
-```
-
-> 技巧：具体说明你在找什么；使用项目中的领域语言；为你的语言安装[代码智能插件](https://code.claude.com/docs/en/discover-plugins#code-intelligence)，给 Claude 精确的"跳转定义"与"查找引用"导航。
-
-#### 高效修 Bug
-
-假设你遇到一条报错信息，需要找到并修复根源。
-
-1. 把错误分享给 Claude：
-
-```text
-I'm seeing an error when I run npm test
-```
-
-2. 请它给出修复建议：
-
-```text
-suggest a few ways to fix the @ts-ignore in user.ts
-```
-
-3. 应用修复：
-
-```text
-update user.ts to add the null check you suggested
-```
-
-> 技巧：告诉 Claude 复现命令以获得堆栈跟踪；提及复现错误的步骤；说明错误是偶发还是必现。
-
-#### 重构代码
-
-假设你需要让旧代码用上现代模式与实践。（把整个代码库移植到新语言，参见博客[Anthropic 如何用 Claude Code 跑大规模代码迁移](https://claude.com/blog/ai-code-migration)。）
-
-1. 找出要重构的遗留代码：
-
-```text
-find deprecated API usage in our codebase
-```
-
-2. 获取重构建议：
-
-```text
-suggest how to refactor utils.js to use modern JavaScript features
-```
-
-3. 安全地应用改动：
-
-```text
-refactor utils.js to use ES2024 features while maintaining the same behavior
-```
-
-4. 验证重构：
-
-```text
-run tests for the refactored code
-```
-
-> 技巧：让 Claude 解释现代方案的好处；需要时要求改动保持向后兼容；用小的、可测试的增量做重构。
-
-#### 与测试协作
-
-假设你需要给未被覆盖的代码补测试。
-
-1. 找出未被测试的代码：
-
-```text
-find functions in NotificationsService.swift that are not covered by tests
-```
-
-2. 生成测试脚手架：
-
-```text
-add tests for the notification service
-```
-
-3. 补充有意义的测试用例：
-
-```text
-add test cases for edge conditions in the notification service
-```
-
-4. 运行并验证测试：
-
-```text
-run the new tests and fix any failures
-```
-
-Claude 能按照你项目既有的模式与约定生成测试。请求写测试时，具体说明你要验证什么行为。Claude 会检查你现有的测试文件，匹配已在使用的风格、框架与断言模式。
-
-要获得全面覆盖，请 Claude 找出你可能遗漏的边界情况。Claude 能分析代码路径，为错误条件、边界值和容易被忽视的意外输入建议测试。
-
-#### 创建拉取请求
-
-你可以直接让 Claude 创建 PR（"create a pr for my changes"），也可以一步步引导它：
-
-1. 总结你的改动：
-
-```text
-summarize the changes I've made to the authentication module
-```
-
-2. 生成拉取请求：
-
-```text
-create a pr
-```
-
-3. 审查与打磨：
-
-```text
-enhance the PR description with more context about the security improvements
-```
-
-之后要找回该会话，用你自己的 PR 号运行 `claude --from-pr 1234`，它会打开按该 PR 过滤的会话选择器；或把 PR URL 粘贴进 [`/resume` 选择器](https://code.claude.com/docs/en/sessions#use-the-session-picker)搜索框。当 Claude 用 `gh pr create` 或 `glab mr create` 创建 PR、或[处理既有 PR](https://code.claude.com/docs/en/agent-view#pull-request-status) 时，会话会自动关联到该 PR。
-
-> 技巧：提交前审查 Claude 生成的 PR，并让 Claude 标出潜在风险或注意事项。
-
-#### 处理文档
-
-假设你需要为代码添加或更新文档。
-
-1. 找出无文档的代码：
-
-```text
-find functions without proper JSDoc comments in the auth module
-```
-
-2. 生成文档：
-
-```text
-add JSDoc comments to the undocumented functions in auth.js
-```
-
-3. 审查与增强：
-
-```text
-improve the generated documentation with more context and examples
-```
-
-4. 验证文档：
-
-```text
-check if the documentation follows our project standards
-```
-
-> 技巧：指定你想要的文档风格（JSDoc、docstring 等）；要求文档附示例；为公开 API、接口与复杂逻辑请求文档。
-
-#### 在笔记与非代码目录中工作
-
-Claude Code 可在任何目录中工作。把它跑在笔记库、文档目录或任何 markdown 文件集合里，即可像处理代码一样搜索、编辑与重组内容。
-
-`.claude/` 目录与 `CLAUDE.md` 与其他工具的配置目录并排存放、互不冲突。Claude 每次工具调用都重新读取文件，所以你在其他应用里做的编辑，它下一次读取时就能看到。
-
-#### 处理图片
-
-假设你需要处理代码库中的图片，并希望 Claude 帮你分析图像内容。
-
-**把图片加入对话**，可用以下任一方式：
-
-1. 把图片拖拽进 Claude Code 窗口
-2. 复制图片后粘贴进 CLI（`Ctrl+V`；Windows 与 WSL 用 [`Alt+V`](https://code.claude.com/docs/en/interactive-mode#general-controls)）
-3. 给 Claude 一个图片路径，例如 "Analyze this image: /path/to/your/image.png"
-
-**让 Claude 分析图片**：
-
-```text
-What does this image show?
-```
-
-```text
-Describe the UI elements in this screenshot
-```
-
-```text
-Are there any problematic elements in this diagram?
-```
-
-**用图片提供上下文**：
-
-```text
-Here's a screenshot of the error. What's causing it?
-```
-
-```text
-This is our current database schema. How should we modify it for the new feature?
-```
-
-**从视觉内容获得代码建议**：
-
-```text
-Generate CSS to match this design mockup
-```
-
-```text
-What HTML structure would recreate this component?
-```
-
-> 技巧：当文字描述不清晰或繁琐时用图片；附上错误、UI 设计或图表的截图以提供更好上下文；一个对话里可以处理多张图片；图像分析支持图表、截图、设计稿等；当 Claude 引用图片（例如 `[Image #1]`）时，Mac 上 `Cmd+Click`、Windows/Linux 上 `Ctrl+Click` 该链接即可用默认看图器打开。
-
-#### 引用文件与目录
-
-用 `@` 快速把文件或目录纳入上下文，无需等 Claude 去读。
-
-**引用单个文件**：
-
-```text
-Explain the logic in @src/utils/auth.js
-```
-
-这会把文件的完整内容纳入对话。
-
-**引用目录**：
-
-```text
-What's the structure of @src/components?
-```
-
-**引用 MCP 资源**：
-
-```text
-Show me the data from @github:repos/owner/repo/issues
-```
-
-这会按 `@server:resource` 格式从已连接的 MCP 服务器取数据，详见 [MCP 资源](https://code.claude.com/docs/en/mcp#use-mcp-resources)。
-
-> 技巧：路径可用相对或绝对路径；输入 `@` 打开路径建议菜单，按 Enter 或 Tab 接受高亮路径，再按 Enter 发送消息；`@` 文件引用会把该文件所在目录及父目录的 `CLAUDE.md` 一并加入上下文；目录引用显示文件列表而非内容；一条消息可引用多个文件（例如 "@file1.js and @file2.js"）。
-
-#### 让 Claude 定时运行
-
-假设你想让 Claude 按计划自动处理任务：每天早上评审 open 的 PR、每周审计依赖、夜里检查 CI 失败。
-
-按任务运行的位置选择调度方式：
-
-| 方式 | 运行位置 | 适用 |
-| --- | --- | --- |
-| [Routines](https://code.claude.com/docs/en/routines) | 云端（默认 Anthropic 托管） | 关机也要跑的任务。除按计划外，还可由 API 调用或 GitHub 事件触发。在 [claude.ai/code/routines](https://claude.ai/code/routines) 配置。 |
-| [桌面计划任务](https://code.claude.com/docs/en/desktop-scheduled-tasks) | 你的机器（经桌面应用） | 需要直接访问本地文件、工具或未提交改动的任务。 |
-| [GitHub Actions](https://code.claude.com/docs/en/github-actions) | 你的 CI 流水线 | 与仓库事件（如新开 PR）绑定、或希望与 workflow 配置放在一起的定时任务。 |
-| [`/loop`](https://code.claude.com/docs/en/scheduled-tasks) | 当前 CLI 会话 | 会话打开期间的快速轮询。新开对话即停止；`--resume` 与 `--continue` 可恢复未过期任务。 |
-
-> 技巧：给计划任务写提示词时，明确"成功长什么样"以及"结果如何处置"。任务自主运行，无法追问澄清问题。例如："Review open PRs labeled `needs-review`, leave inline comments on any issues, and post a summary in the `#eng-reviews` Slack channel."
-
-#### 询问 Claude 自身的能力
-
-Claude 内置了自身文档，可以回答关于其功能与限制的问题。
-
-示例问题：
-
-```text
-can Claude Code create pull requests?
-```
-
-```text
-how does Claude Code handle permissions?
-```
-
-```text
-what skills are available?
-```
-
-```text
-how do I use MCP with Claude Code?
-```
-
-```text
-how do I configure Claude Code for Amazon Bedrock?
-```
-
-```text
-what are the limitations of Claude Code?
-```
-
-> 注：Claude 会基于文档回答这些问题。想看上手演示，可运行 `/powerup` 获取带动画演示的交互课程，或参考上文各工作流小节。
-
-> 技巧：无论你用哪个版本，Claude 总能访问最新的 Claude Code 文档；问具体的问题以获得详细的答案；Claude 能解释 MCP 集成、企业配置与高级工作流等复杂特性。
-
-### 恢复历史对话
-
-任务跨多次进行时，直接接着上次继续，而不用重新解释上下文。Claude Code 会在本地保存每一次对话。
-
-```bash
-claude --continue
-```
-
-这会恢复当前目录最近的会话；若没有，会打印 `No conversation found to continue` 并退出。用 `claude --resume` 从列表选择，或在运行中的会话里用 `/resume`。命名、分支与完整选择器参考见[管理会话](https://code.claude.com/docs/en/sessions)。
-
-### 用 worktree 跑并行会话
-
-在一个终端里做功能开发，同时让 Claude 在另一个终端修 Bug，两边改动互不冲突。每个 [git worktree](https://git-scm.com/docs/git-worktree) 都是一个独立检出、各自在一条分支上，从既有提交创建——所以仓库需要先有至少一次提交。
-
-```bash
-claude --worktree feature-auth
-```
-
-在第二个终端用不同名字运行同一条命令，即可开始一个隔离的并行会话。在没有提交的仓库里，该命令会报错 `Failed to resolve base branch "HEAD": git rev-parse failed`。清理方式、`.worktreeinclude` 与非 git VCS 支持见 [Worktrees](https://code.claude.com/docs/en/worktrees)。想在一块屏幕上监督多个并行会话而非多个终端，见[后台智能体](https://code.claude.com/docs/en/agent-view)。
-
-### 编辑前先计划
-
-对希望"落盘之前先审查"的改动，切换到 plan 模式：Claude 读文件、提出计划，但在你批准前不做任何修改。plan 模式激活时状态栏显示 `⏸ plan mode on`。
-
-```bash
-claude --permission-mode plan
-```
-
-也可以在会话中按 `Shift+Tab` 直到状态栏出现 `⏸ plan mode on`。批准流程与在文本编辑器中编辑计划见 [Plan mode](https://code.claude.com/docs/en/permission-modes#analyze-before-you-edit-with-plan-mode)。
-
-### 把研究外包给子智能体
-
-探索大型代码库会用文件读取填满你的上下文。把探索外包出去，只让结论回来。
-
-```text
-use a subagent to investigate how our auth system handles token refresh
-```
-
-子智能体在它自己的上下文窗口里读文件，只汇报摘要。用各自的工具与提示词定义自定义智能体见[子智能体](https://code.claude.com/docs/en/sub-agents)。
-
-### 把 Claude 接进脚本
-
-以非交互方式运行 Claude，用于 CI、pre-commit 钩子或批处理。stdin 与 stdout 的用法与任何 Unix 工具一样。
-
-```bash
-git log --oneline -20 | claude -p "summarize these recent commits"
-```
-
-输出格式、权限旗标与扇出模式见[非交互模式](https://code.claude.com/docs/en/headless)（即本模块前述的主题）。
-
-## 三、从零实战对照：把官方流程走成一个命令行小工具（本站编者补充）
-
-> 本节为本站编者补充（已在编者按标明）。它不做新的事情——只是把上面两份官方翻译里的提示词原样映射到"从零做一个 Python 命令行词频统计工具 `wcount`"上，方便你第一次结对就有一个可对照的脚本。
-
-```bash
-mkdir wcount && cd wcount && git init && claude
-```
-
-| 轮次 | 你对 Claude 说什么 | 用的是官方哪一条 |
-| --- | --- | --- |
-| 1 | "我想做一个叫 wcount 的 Python 命令行工具：输入文本文件路径，输出频率最高的前 N 个单词，N 用 --top 指定（默认 10）。先用标准库实现。" | Quickstart 第 5 步（描述目标，让它动手）+ 新手技巧"请求要具体" |
-| 2 | "给它配 pytest：构造样例文本，断言大小写不敏感、按次数降序、同次数按字母序。先写测试跑给我看，再实现。" | Common workflows"与测试协作"（先测试后实现，用测试定义"完成"） |
-| 3 | "用 python -m wcount 对样例跑 --top 5，把输出贴给我。" | Quickstart 第 7 步（Claude 自己跑测试/命令验证） |
-| 4 | "commit my changes with a descriptive message" | Quickstart 第 6 步（对话式 Git） |
-
-三个提醒，全部来自上面的官方译文：结果不对时**继续对话纠正**而不是重开会话（会话本身就是迭代的地方）；复杂任务**拆成编号步骤**；改代码前先让它**探索**。第一次结对的最小循环就是：**目标 → 生成 → 验证 → 提交**。走熟这四拍，后面的权限（《Claude Code 权限系统与安全机制》）、规范文件（《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》）、Spec 驱动（《Spec 驱动开发（Spec-Driven Development）》）都是在这个循环上做加固。
+## 常见坑：本次实操真实踩到的八条
+
+1. **让 AI"自己验证"不等于你验收。** 首轮它跑通的是 `add`/`list` 两条最顺的路径，三个缺陷全在没跑过的路径上。判据是命令 + 期望输出，不是它的自述。
+2. **`len(items)+1` 分配 ID**：没有删除操作时永远正确，删一条就撞号。让 ID 来自一个只增的计数器。
+3. **格式不校验**：`--due 1/5` 被静默收下，比报错危险得多，因为它会长期留在数据里。
+4. **日期按字符串排序**：`1/5` 排在 `2026-12-31` 前面。要么规范化成 ISO，要么显式 `date` 对象。
+5. **退出码与异常混用**：需求写 2、实现给 3；`raise SystemExit` 和 `return` 两种风格混在一起会让测试写法也要跟着变。约定写进文件头注释，并让测试断言它。
+6. **错误处理两个方向都会错**：抛堆栈给用户是错，`except Exception: pass` 把故障咽下去也是错（后者更隐蔽）。
+7. **漏实现最难发现**：`--file` 整条需求没做，代码看起来仍然完整。逐条对照需求表是唯一对策。
+8. **参数不加引号**：`todo.py add 买 牛奶 鸡蛋` 会被 argparse 拒掉——`todo: error: unrecognized arguments: 牛奶 鸡蛋`。写 README 时记得给带空格的例子加引号。
+
+## 循环跑通之后，四拍分别往哪里加固
+
+- **需求**：`REQUIREMENTS.md` 升级成规格与计划文件，走 `spec → plan → tasks → implement`（《Spec 驱动开发（Spec-Driven Development）》；完整工作流原文见《我的 LLM 代码生成工作流（Harper Reed 名篇全文翻译）》）。
+- **生成**：落盘前先审查改动，用计划模式；重复出现的流程沉淀成技能（《Claude Code 工作流与最佳实践》《Claude Skills：可复用技能包》《驾驭 Claude Code：CLAUDE.md、rules、skills、hooks 与子智能体的使用时机（Anthropic 官方博客全文翻译）》）。
+- **验收**：把本篇手工跑的判据变成钩子与自动评审（《AI 结对与代码审查》《TDD with AI：Kent Beck 的增强编程实践》《调试 with AI：让 AI 定位 Bug 的工作流》《重构 with AI：从日常重构到百万行迁移的上下文策略》）。
+- **存档**：多任务并行时用 worktree 隔离，提交纪律与回滚策略（《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》）；进一步无人值守见《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》。
+
+## 延伸阅读
+
+- 《环境搭建：Claude Code 与 Cursor 的安装与配置矩阵》——安装、登录、凭据与配置文件分层
+- 《Claude Code 权限系统与安全机制》——本篇没展开的权限模式、沙箱与钩子拦截
+- 《AI 代码的安全与质量陷阱：六大陷阱与检测清单》——本篇八条坑的系统化版本与检测命令
+- 《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》——存档点、并行会话与回滚
+- 《TDD with AI：Kent Beck 的增强编程实践》——测试先行时如何防止智能体改测试
+- 《从 0 到 1 用 AI 做产品：未来属于能直接动手的人》——把这条四拍循环用在一个真产品上
 
 ---
 
-> 下一篇预告：工具用起来了，但"AI 到底是怎么'看'你的代码的"——上下文窗口、分词与智能体循环的底层心智模型，值得在读工作流进阶之前先建立。
-
-> **来源**：本文第一、二部分完整翻译自 Claude Code 官方文档 [Quickstart](https://code.claude.com/docs/en/quickstart) 与 [Common workflows](https://code.claude.com/docs/en/common-workflows)（2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）。开头编者按、两处"编者过渡"与第三部分"从零实战对照"为本站编者补充，均已在文中标明；其余正文均为官方原文翻译。抓取于 2026-09-13。
+> **来源**：抓取于 2026-09-19。本篇为本站编者依据一手实操记录整理的教程，非译文：循环骨架与若干提示词模式参考 Claude Code 官方文档 [Common workflows](https://code.claude.com/docs/en/common-workflows) 与 [Best practices](https://code.claude.com/docs/en/best-practices)（作者 Anthropic，Copyright Anthropic PBC，教学用途署名引用，本文未整段翻译官方页面）。文中 `todo.py`、`test_todo.py` 全部代码，以及所有 `console` 块中的命令与输出，均由编者在 macOS（Python 3.14.6、pytest 9.0.3、ruff 经 uvx 临时安装）实测记录，未虚构；会话中助手的自然语言回复每轮措辞不同，故本文只收录可复现的命令与输出。需求表中的判据与"非目标"为编者设定。文中阈值与纪律为本站编者建议，使用前请在自有仓库验证。

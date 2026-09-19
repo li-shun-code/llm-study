@@ -9,11 +9,12 @@ versions: Python 3.12（标准库，无第三方依赖）
 order: 22
 group: 查找、排序与数组技巧
 ---
+## 为什么需要双指针
+
 > **难度**：★★☆。双指针不是算法，而是“把 O(n²) 嵌套循环压成 O(n) 单遍”的一种书写方式。
 > **适合**：想把数组/字符串遍历类题目写成模板，而不是一道一背的读者。
 > **前置**：《数组》《二分查找》。贪心角度的正确性论证见《贪心算法（面试选学）》的“最大容量问题”。
 
-## 为什么需要双指针
 
 处理有序或线性数据时，最常见的低效写法是两层循环：枚举所有 (i, j) 组合，O(n²) 。双指针的洞察是：
 
@@ -259,4 +260,4 @@ def find_anagrams(s: str, p: str) -> list[int]:
 
 ---
 
-> **来源**：抓取于 2026-09-19。LeetCode 11 题面转引自 [doocs/leetcode · 11. 盛最多水的容器](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0011.Container%20With%20Most%20Water/README.md)（doocs/leetcode 项目，CC BY-SA 4.0），26 / 76 / 167 / 438 题面为本站按其官方描述转述。原 OI Wiki《双指针》页面（CC BY-SA 4.0）中的 C++ 实现、序列链式前向星与竞赛习题未收录；本文的三类模板、全部 Python 代码与工程应用为本站编写，已在 Python 3.12 下运行验证。
+> **来源**：抓取于 2026-09-19。LeetCode 11 题面转引自 [doocs/leetcode · 11. 盛最多水的容器](https://github.com/doocs/leetcode/blob/main/solution/0000-0099/0011.Container%20With%20Most%20Water/README.md)（doocs/leetcode 项目，CC BY-SA 4.0），26 / 76 / 167 / 438 题面为本站按其官方描述转述。原 OI Wiki《双指针》页面（CC BY-SA 4.0）中的 C++ 实现、分治双指针竞赛例题与习题未收录；本文的三类模板、全部 Python 代码与工程应用为本站编写，已在 Python 3.12 下运行验证。

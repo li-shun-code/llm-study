@@ -5,7 +5,7 @@ author: OpenAI Cookbook（How to format inputs to ChatGPT models、responses_exa
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版；示例模型统一为 gpt-5.5，角色名统一为官方现行值
+versions: openai-python 2026-09 最新稳定版；示例模型统一为 gpt-5.4，角色名统一为官方现行值
 order: 2
 group: 调用基础
 ---
@@ -32,7 +32,7 @@ Chat Completions 的每条消息对象必填两个字段：
 ```python
 # OpenAI Python 库请求示例
 response = client.chat.completions.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=[
         {"role": "developer", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Knock knock."},
@@ -69,7 +69,7 @@ response.choices[0].message.content
 ```python
 # 引导模型深入讲解的系统消息
 response = client.chat.completions.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=[
         {"role": "developer", "content": "You are a friendly and helpful teaching assistant. You explain concepts in great depth using simple terms, and you give examples to help people learn. At the end of each explanation, you ask a question to check for understanding"},
         {"role": "user", "content": "Can you explain how fractions work?"},
@@ -83,7 +83,7 @@ print(response.choices[0].message.content)
 ```python
 # 引导模型只给简短回答的系统消息
 response = client.chat.completions.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=[
         {"role": "developer", "content": "You are a laconic assistant. You reply with brief, to-the-point answers with no elaboration."},
         {"role": "user", "content": "Can you explain how fractions work?"},
@@ -103,7 +103,7 @@ print(response.choices[0].message.content)
 ```python
 # 用伪造的少样本对话，引导模型把商业黑话翻译成大白话
 response = client.chat.completions.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=[
         {"role": "developer", "content": "You are a helpful, pattern-following assistant."},
         {"role": "user", "content": "Help me translate the following corporate jargon into plain English."},
@@ -124,7 +124,7 @@ print(response.choices[0].message.content)
 
 ```python
 response = client.chat.completions.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     messages=[
         {"role": "developer", "content": "You are a helpful, pattern-following assistant that translates corporate jargon into plain English."},
         {"role": "system", "name": "example_user", "content": "New synergies will help drive top-line growth."},
@@ -148,7 +148,7 @@ messages = [
 while True:
     user_input = input("你：")
     messages.append({"role": "user", "content": user_input})
-    response = client.chat.completions.create(model="gpt-5.5", messages=messages)
+    response = client.chat.completions.create(model="gpt-5.4", messages=messages)
     reply = response.choices[0].message.content
     messages.append({"role": "assistant", "content": reply})  # 回答回填历史
     print("AI：", reply)
@@ -165,14 +165,14 @@ print(fetched_response.output[0].content[0].text)
 
 # 2) 用 previous_response_id 续接，无需重发历史
 response_two = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="tell me another",
     previous_response_id=response.id
 )
 
 # 3) 从任意节点"分叉"出新对话分支
 response_two_forked = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="I didn't like that joke, tell me another",
     previous_response_id=response.id  # 以第一个响应为父节点
 )
@@ -194,7 +194,7 @@ response_two_forked = client.responses.create(
 ```python
 import tiktoken
 
-def num_tokens_from_messages(messages, model="gpt-5.5"):
+def num_tokens_from_messages(messages, model="gpt-5.4"):
     """估算一批消息将消耗的 token 数（粗估，非精确值）。"""
     encoding = tiktoken.get_encoding("o200k_base")
     # 不同模型的每条消息固定开销不同，需按模型实测校准

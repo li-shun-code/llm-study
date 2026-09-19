@@ -5,7 +5,7 @@ author: OpenAI Cookbook（File_Search_Responses、introduction_to_deep_research_
 license: MIT
 fetched_at: 2026-09-19
 translated: true
-versions: OpenAI Responses API（2026-09）；示例模型 gpt-5.5 / gpt-5.4-mini；文件上传 purpose 用 user_data；file_search 参数按 SDK 类型定义核实
+versions: OpenAI Responses API（2026-09）；示例模型 gpt-5.4 / gpt-5.4-mini；文件上传 purpose 用 user_data；file_search 参数按 SDK 类型定义核实
 order: 17
 group: 工具与输出契约
 ---
@@ -19,7 +19,7 @@ RAG 的传统路径相当繁琐：解析 PDF、设计分块策略、把文本块
 
 ### 1. 上传文件并建向量存储
 
-一个容易踩的时效坑：`client.files.create()` 的 `purpose` 参数。**`purpose="assistants"` 已随 Assistants API 一并废弃**——Cookbook 的旧 notebook 里还能看到它；现行取值是 `assistants` / `batch` / `fine-tune` / `vision` / `user_data` / `evals`，其中 **`user_data` 是"给 file_search 等场景用的通用类型"**（SDK 的 `FilePurpose` 类型定义与 `files.create` 文档字符串为准）。上传限额也记一下：单文件 512 MB，每项目总计 2.5 TB；`purpose="batch"` 的文件默认 30 天后过期，其余存到显式删除为止。
+一个容易踩的时效坑：`client.files.create()` 的 `purpose` 参数。**`purpose="assistants"` 已随 Assistants API 一并废弃**——Cookbook 的旧 notebook 里还能看到它。现行取值以 SDK 的 `FilePurpose` 类型定义为准：`batch` / `fine-tune` / `vision` / `user_data` / `evals`，其中 **`user_data` 是"给 file_search 等场景用的通用类型"**。注意 SDK 的字面量联合类型里为了向后兼容仍留着 `"assistants"` 这一项，能被类型检查通过，但**新代码不要传它**——它服务的那个 API 已经下线了。上传限额也记一下：单文件 512 MB，每项目总计 2.5 TB；`purpose="batch"` 的文件默认 30 天后过期，其余存到显式删除为止。
 
 ```python
 from openai import OpenAI
@@ -87,7 +87,7 @@ for result in search_results.data:
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input=query,
     tools=[
         {
@@ -143,7 +143,7 @@ def extract_text_from_pdf(pdf_path):
 
 def generate_question(pdf_path):
     resp = client.responses.create(
-        model="gpt-5.5",
+        model="gpt-5.4",
         input=f"Can you generate a question that can only be answered from this document?:\n{extract_text_from_pdf(pdf_path)}\n\n",
     )
     return resp.output_text
@@ -209,7 +209,7 @@ with open("sales_2026_q1.csv", "rb") as f:
     uploaded = client.files.create(file=f, purpose="user_data")
 
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="这份销售 CSV 里哪个区域环比增长最快？给出计算过程与一张折线图。",
     tools=[
         {
@@ -231,7 +231,7 @@ print(response.output_text)
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",  # 原文用 o3-deep-research，属专用研究模型
+    model="gpt-5.4",  # 原文用 o3-deep-research，属专用研究模型
     input=[
         {"role": "developer", "content": "你是严谨的研究助理。"},
         {"role": "user", "content": "调研 2026 年主流向量数据库的部署形态与成本结构，输出带引用的报告"},
@@ -290,4 +290,4 @@ print(code_step.code if code_step else "本次没有代码执行步骤")
 
 ---
 
-> **来源**：抓取于 2026-09-19。本文整合翻译自 OpenAI Cookbook（MIT）两篇 notebook：[File_Search_Responses.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/File_Search_Responses.ipynb)（file_search 上传、独立检索、挂进 Responses、检索指标评估）与 [introduction_to_deep_research_api.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/deep_research_api/introduction_to_deep_research_api.ipynb)（托管工具组合与中间步骤解析），作者 OpenAI，许可 MIT。工具参数、`purpose` 取值与文件限额按 openai-python SDK（Apache 2.0）生成的类型定义与文档字符串校订：[responses/file_search_tool.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/file_search_tool.py)、[types/file_purpose.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/file_purpose.py)、[resources/files.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/resources/files.py)。原文示例模型 gpt-4o / gpt-4o-mini 已改为 `gpt-5.5` / `gpt-5.4-mini`，原文的 `purpose="assistants"` 已改为现行的 `user_data`，PDF 读取由 `PyPDF2` 改为仍维护中的 `pypdf`；`output` 下标取值改为按 `item.type` 过滤，为本站编者改动。
+> **来源**：抓取于 2026-09-19。本文整合翻译自 OpenAI Cookbook（MIT）两篇 notebook：[File_Search_Responses.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/File_Search_Responses.ipynb)（file_search 上传、独立检索、挂进 Responses、检索指标评估）与 [introduction_to_deep_research_api.ipynb](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/deep_research_api/introduction_to_deep_research_api.ipynb)（托管工具组合与中间步骤解析），作者 OpenAI，许可 MIT。工具参数、`purpose` 取值与文件限额按 openai-python SDK（Apache 2.0）生成的类型定义与文档字符串校订：[responses/file_search_tool.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/file_search_tool.py)、[types/file_purpose.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/file_purpose.py)、[resources/files.py](https://raw.githubusercontent.com/openai/openai-python/main/src/openai/resources/files.py)。原文示例模型 gpt-4o / gpt-4o-mini 已改为 `gpt-5.4` / `gpt-5.4-mini`，原文的 `purpose="assistants"` 已改为现行的 `user_data`，PDF 读取由 `PyPDF2` 改为仍维护中的 `pypdf`；`output` 下标取值改为按 `item.type` 过滤，为本站编者改动。

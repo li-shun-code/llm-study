@@ -25,7 +25,7 @@ group: 系统提示与上下文工程
 
 一个在循环中运行的 Agent 会不断产生"可能与下一轮推理相关"的数据，这些信息必须被循环地精炼。上下文工程，就是从这片持续演化的可能信息宇宙中，挑选出什么将进入有限上下文窗口的[艺术与科学](https://x.com/karpathy/status/1937902205765607626?lang=en)。
 
-![提示工程 vs 上下文工程](https://www-cdn.anthropic.com/images/4zrzovbb/website/faa261102e46c7f090a2402a49000ffae18c5dd6-2292x1290.png)
+![提示工程 vs 上下文工程](./assets/anthropic-pe-vs-ce.png)
 
 *与"写一条提示"这种离散任务不同，上下文工程是迭代的——每当我们决定向模型传入什么时，都会经历一轮策划。*
 
@@ -49,7 +49,7 @@ group: 系统提示与上下文工程
 
 **系统提示词**应当极其清晰，用简单、直接的语言，在**合适的高度**（right altitude）上向 Agent 呈现思想。所谓合适的高度，是两种常见失败模式之间的"刚刚好"区间。一个极端是：工程师在提示词里硬编码复杂、脆弱的逻辑，以诱发精确的 Agent 行为——这会制造脆弱性，并随时间推高维护复杂度。另一个极端是：工程师给出含糊的高层指导，既没有给 LLM 提供期望输出的具体信号，又错误地假设了共享上下文。最优高度介于两者之间：**足够具体以有效引导行为，又足够灵活以给模型留下强启发式规则的空间**。
 
-![在上下文工程中校准系统提示词](https://www-cdn.anthropic.com/images/4zrzovbb/website/0442fe138158e84ffce92bed1624dd09f37ac46f-2292x1288.png)
+![在上下文工程中校准系统提示词](./assets/anthropic-system-prompt-altitude.png)
 
 *光谱的一端是脆弱的 if-else 式硬编码提示；另一端是过度笼统、错误假设共享上下文的提示。*
 
@@ -83,7 +83,7 @@ group: 系统提示与上下文工程
 
 当然这里有权衡：运行时探索比取回预计算数据更慢。不仅如此，还需要有态度、有思考的工程，确保 LLM 拥有恰当的工具与启发式来有效导航它的信息版图——缺乏引导的 Agent 会滥用工具、钻牛角尖、或识别不出关键信息，从而浪费上下文。
 
-在某些场景下，最有效的 Agent 会采用**混合策略**：预先检索一部分数据求快，再按需自主探索。自主程度的"正确"边界取决于任务。Claude Code 就是一个采用混合模型的 Agent：[CLAUDE.md](http://claude.md) 文件被直接预先放入上下文，而 glob、grep 等原语让它能导航环境、按需检索文件， effectively 绕开了索引过期与复杂语法树的问题。
+在某些场景下，最有效的 Agent 会采用**混合策略**：预先检索一部分数据求快，再按需自主探索。自主程度的"正确"边界取决于任务。Claude Code 就是一个采用混合模型的 Agent：`CLAUDE.md` 文件被直接预先放入上下文，而 glob、grep 等原语让它能导航环境、按需检索文件，从而绕开了索引过期与复杂语法树的问题。
 
 混合策略或许更适合内容动态性较低的领域，如法律或金融工作。随着模型能力提升，Agent 设计将趋向"让聪明的模型自己聪明地行动"，人的策划成分逐步减少。鉴于这个领域的演进速度，"用能用的最简单方案"（do the simplest thing that works）很可能仍是我们给 Agent 构建者的最佳建议。
 
@@ -113,7 +113,7 @@ group: 系统提示与上下文工程
 
 在上下文重置之后，Agent 读取自己的笔记，继续多小时的训练序列或地牢探索。这种跨摘要步骤的连贯性，使长时程策略成为可能——只靠 LLM 上下文窗口本身是做不到的。
 
-作为 [Sonnet 4.5 发布](https://www.anthropic.com/effective-context-engineering-for-ai-agents)的一部分，我们在 Claude 开发者平台公开测试版中发布了[记忆工具](http://anthropic.com/news/context-management)，通过基于文件的系统更轻松地在上下文窗口之外存储与查阅信息。这让 Agent 能随时间积累知识库、跨会话维护项目状态、并引用此前的工作——而不必把一切都塞进上下文。
+作为 [Claude Sonnet 4.5 发布](https://www.anthropic.com/news/claude-sonnet-4-5)的一部分，我们在 Claude 开发者平台公开测试版中发布了[记忆工具](https://www.anthropic.com/news/context-management)，通过基于文件的系统更轻松地在上下文窗口之外存储与查阅信息。这让 Agent 能随时间积累知识库、跨会话维护项目状态、并引用此前的工作——而不必把一切都塞进上下文。
 
 **子 Agent 架构（Sub-agent architectures）**
 
@@ -137,6 +137,16 @@ group: 系统提示与上下文工程
 
 欢迎今天就在 Claude 开发者平台开始实践上下文工程，并通过我们的[记忆与上下文管理](https://platform.claude.com/cookbook/tool-use-memory-cookbook) cookbook 获取实用技巧与最佳实践。
 
+## 本站的分工：这篇讲原理，实现去看这几篇
+
+本文是这篇 Anthropic 文章在全站的**唯一全文译本**，负责"为什么"与通用原则（注意力预算、最小高信号 token 集合、压缩/笔记/子 Agent 三种技术的概念）。具体到某个框架或某个产品怎么落地，本站按下面的分工展开，遇到交叉处都以内联《标题》引用，不重复维护同一份论述：
+
+- **Agent 运行时**：三种长时程技术在框架里的真实接口与参数——压缩策略、摘要中间件与自动压缩窗口见《长时运行 Agent 的上下文管理：压缩（Compaction）》；短期/长期记忆的存取与召回见《Agent 记忆机制：LangGraph 的短期记忆与长期记忆》，更完整的记忆系统对照见《长期记忆系统进阶：Mem0、Letta 与 Zep》；子 Agent 的编排与"探索外包"见《多智能体模式：Anthropic 如何构建多智能体研究系统》与《Subagents 与并行会话：把探索外包出去》；工具契约如何设计才省 token，见《Tool Use 实战：工具的定义、注入与调用》；权限与成本护栏见《Agent 安全与权限、生产化部署与成本管理》。
+- **AI 编程工作流**：把"项目规范预先入上下文 + 按需检索"这套模式落到仓库里，见《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》；"什么时候该写进规范、什么时候写成可复用技能"见《Claude Skills：可复用技能包》与《Spec 驱动开发（Spec-Driven Development）》。
+- **提示层**：本文提到但未展开的"系统提示写多细"，归《系统提示词设计》与《提示词的基本要素与格式》；"上下文里塞示例与检索片段带来的注入面"，归《分隔符、结构化标签与注入边界》与《提示注入：最坏会发生什么？》。
+
+一句话概括三者的边界：**本文管"注意力预算怎么花"，Agent 侧管"运行时怎么实现"，AI 编程侧管"规范文件怎么组织"**。同一件事在三个地方出现时，以这套分工为准。
+
 ## 致谢
 
 本文由 Anthropic 应用 AI 团队撰写：Prithvi Rajasekaran、Ethan Dixon、Carly Ryan 与 Jeremy Hadfield，Rafi Ayub、Hannah Moran、Cal Rueb 与 Connor Jennings 提供了贡献。特别感谢 Molly Vorwerck、Stuart Ritchie 与 Maggie Vo 的支持。
@@ -147,4 +157,4 @@ group: 系统提示与上下文工程
 
 ---
 
-> **编译说明**：原文两张插图保留 Anthropic CDN 原始外链；正文中 "effectively bypassing" 一处按原文保留。文中的产品名（Claude Code、CLAUDE.md、记忆工具等）为 Anthropic 生态术语，概念对应关系不受限于此——压缩、笔记、子 Agent 三种技术在任何 Agent 框架中都有同构实现（延伸阅读见「Agent」）。
+> **编译说明**：原文两张插图已下载到本模块 `assets/` 目录，正文改用相对路径引用；原文一处英文残留（"effectively bypassing"）已译通，自指链接与 `CLAUDE.md` 的错误链接已修正为正文代码块与对应发布说明。文中的产品名（Claude Code、CLAUDE.md、记忆工具等）为 Anthropic 生态术语，概念对应关系不受限于此——压缩、笔记、子 Agent 三种技术在任何 Agent 框架中都有同构实现，具体分工见文末《本站的分工：这篇讲原理，实现去看这几篇》一节。

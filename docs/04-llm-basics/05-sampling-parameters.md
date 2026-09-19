@@ -112,10 +112,12 @@ response = client.chat.completions.create(
 )
 ```
 
-**重要注意点（2026-09 核实）**：**推理模型不支持自定义 `temperature` / `top_p`**。从 o 系列到 GPT-5/5.6/6 Astra，OpenAI 将生成行为交由 `reasoning_effort`（思考深度：`minimal`/`low`/`medium`/`high`）和 `verbosity`（回答详尽度）控制——[Microsoft Learn 的模型文档](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)对 GPT-6 Astra 明确标注 "doesn't support custom temperature or top_p values"。如果你调用推理模型时传了这两个参数，新 SDK 会直接报错。规则很简单：
+**重要注意点**：**推理模型不接受自定义 `temperature` / `top_p`**。从 o 系列到 GPT-5/5.6/6 Astra，OpenAI 把生成行为交由 `reasoning_effort`（思考深度）与 `verbosity`（回答详尽度）控制——[Microsoft Learn 的模型文档](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)对 GPT-6 Astra 明确标注 "doesn't support custom temperature or top_p values"。如果你调用推理模型时传了这两个参数，新 SDK 会直接报错。规则很简单：
 
 - **通用模型**（GPT-5.4-mini 等）：`temperature` / `top_p` 可调；
-- **推理模型**（GPT-5.6、GPT-6 Astra 等）：用 `reasoning_effort` 控制行为，见本模块《推理模型》。
+- **推理模型**（GPT-5.6、GPT-6 Astra 等）：改用 `reasoning_effort` 控制行为，见本模块《推理模型（o1/R1 类）》。
+
+哪些模型属于哪一档、各档支持哪些取值，以《主流模型生态对比（2026-09）》为准（全站唯一的模型版本表）；本篇只讲参数语义——它不随版本更迭而失效。
 
 第三方 OpenAI 兼容端点（DeepSeek、GLM、Qwen 等）同样暴露这两个参数，语义一致。例如 DeepSeek 的 `deepseek-flash`：
 
@@ -142,9 +144,11 @@ response = client.chat.completions.create(
 
 最后三个提醒：
 
-1. **采样参数不是"质量旋钮"**——它们控制分布形状，不提升模型能力。答案错误时先改 prompt 和上下文，再考虑参数；
+1. **采样参数不是"质量旋钮"**——它们控制分布形状，不提升模型能力。答案错误时先改 prompt 和上下文，再考虑参数；尤其别指望"把 temperature 调到 0 就不幻觉"：低温度只压掉随机性这一项成因，知识边界与目标错配引发的编造照旧，成因全景见本模块《幻觉：成因与缓解》第二节；
 2. **流式 + 高 temperature** 的组合会放大"边想边说"的漂移，长文生成建议中等温度并在 prompt 中锚定结构；
-3. 调参时固定其他变量、一次只动一个参数，并保存每组参数的输出样本做对比——这正是《提示迭代评估方法》的前置技能。
+3. 调参时固定其他变量、一次只动一个参数，并保存每组参数的输出样本做对比——这正是《提示词的迭代与评估方法》的前置技能。
+
+一条建议的阅读顺序：本篇的**旋钮**（为什么随机性会带来错误）→《幻觉：成因与缓解》的**成因与缓解清单**（哪些错误不是随机性造成的）→《推理模型（o1/R1 类）》的**新旋钮**（当"想得久一点"本身变成可调参数）。三篇合起来回答的是同一个问题：输出不对时，你手里到底有哪些杠杆。
 
 ## 参考文献
 

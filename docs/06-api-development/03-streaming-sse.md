@@ -23,7 +23,7 @@ from openai import OpenAI
 client = OpenAI()
 
 stream = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="Write a one-sentence bedtime story about a unicorn.",
     stream=True,
 )
@@ -43,7 +43,7 @@ client = AsyncOpenAI()
 
 async def main():
     stream = await client.responses.create(
-        model="gpt-5.5",
+        model="gpt-5.4",
         input="Write a one-sentence bedtime story about a unicorn.",
         stream=True,
     )
@@ -60,7 +60,7 @@ asyncio.run(main())
 ```python
 # 带 stream=True 的 Chat Completions 请求
 response = client.chat.completions.create(
-    model='gpt-5.5',
+    model='gpt-5.4',
     messages=[
         {'role': 'user', 'content': "What's 1+1? Answer in one word."}
     ],
@@ -98,7 +98,7 @@ start_time = time.time()
 
 # 流式请求：数到 100，逗号分隔、不换行
 response = client.chat.completions.create(
-    model='gpt-5.5',
+    model='gpt-5.4',
     messages=[
         {'role': 'user', 'content': 'Count to 100, with a comma between each number and no newlines. E.g., 1, 2, 3, ...'}
     ],
@@ -156,7 +156,7 @@ full_reply_content = ''.join(collected_messages)
 
 ```python
 response = client.chat.completions.create(
-    model='gpt-5.5',
+    model='gpt-5.4',
     messages=[
         {'role': 'user', "content": "What's 1+1? Answer in one word."}
     ],
@@ -176,7 +176,7 @@ for chunk in response:
 
 ```python
 response = client.responses.create(
-    model="gpt-5.5",
+    model="gpt-5.4",
     input="用三句话介绍一下向量数据库",
     stream=True,
     # 让最后一个 response.completed 事件里带上完整 token 用量（默认即包含在响应对象中）
@@ -220,7 +220,7 @@ from openai import AsyncOpenAI
 client = AsyncOpenAI()
 
 async with client.chat.completions.stream(
-    model='gpt-5.5',
+    model='gpt-5.4',
     messages=[{"role": "user", "content": "用三句话介绍一下向量数据库"}],
 ) as stream:
     async for event in stream:

@@ -1,14 +1,14 @@
 ---
 title: Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体
 source_url: https://code.claude.com/docs/en/headless
-author: Anthropic（Claude Code Headless、Agent SDK、GitHub Actions 官方文档）；GitHub（Copilot cloud agent 官方文档）；Microsoft（Copilot Copyright Commitment 相关声明见第 27 篇）
+author: Anthropic（Claude Code Headless、Agent SDK、GitHub Actions 官方文档）；GitHub（Copilot cloud agent 官方文档）；Microsoft（Copilot Copyright Commitment 相关声明见《AI 生成代码的 IP 与合规：版权承诺、责任边界与可版权性》）
 license: 署名翻译（Anthropic 与 GitHub 官方文档版权归原厂所有，教学用途编译翻译并署名）
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: true
 order: 7
 group: 多智能体与自动化
 ---
-**编者按**：上一篇结尾把工具收敛到了生态选型；本篇讲 AI 编码的"下半场"——**没有人的地方**。正文主体是四份官方文档的完整翻译：Claude Code《Run Claude Code programmatically》（Headless/CLI 形态）、《Agent SDK overview》（库形态）、《Claude Code GitHub Actions》（事件驱动形态），以及 GitHub《About Copilot cloud agent》（云端 PR 智能体形态）。四篇合起来正好是"把整个智能体循环嵌入流水线"的三种工业形态加一家的对照产品。编者内容仅限本按语与文末已标明的编者注。
+**编者按**：《开源工具生态：Cline 与 Windsurf》把工具收敛到了生态选型；本篇讲 AI 编码的"下半场"——**没有人的地方**。正文主体是四份官方文档的完整翻译：Claude Code《Run Claude Code programmatically》（Headless/CLI 形态）、《Agent SDK overview》（库形态）、《Claude Code GitHub Actions》（事件驱动形态），以及 GitHub《About Copilot cloud agent》（云端 PR 智能体形态）。四篇合起来正好是"把整个智能体循环嵌入流水线"的三种工业形态加一家的对照产品。编者内容仅限本按语与文末已标明的编者注。
 
 ## 一、Headless：以编程方式运行 Claude Code（官方文档全文翻译）
 
@@ -656,10 +656,10 @@ cloud agent 消耗 GitHub Actions 分钟数与 **AI 额度（AI credits）**；A
 
 试一下官方 Skills 练习 "Expand your team with Copilot cloud agent"，获得实战经验。
 
-> 编者注（本站补充，已标明）：把本篇三节与上一节并排可以看出，"云端 PR 智能体"已是行业标准形态：触发（mention/事件/定时）→ 沙箱环境 → 分支改动 → PR → 评审。区别只在生态位——Anthropic 系开放 SDK 供你自建编排（CLI→SDK→Actions 三层可单独用也可组合），GitHub 系原生绑定平台流程。无论哪条路线，无人值守的成败都取决于同一组要素：**权限收敛**（第 8 篇的 allowlist/沙箱/dontAsk）、**可验证的完成标准**（`--max-turns`、超时、测试当裁判）、**产物一律走 PR 审查**（第 14、21 篇）、**成本可观测**（《成本管理：Token 消耗、订阅选择与用量优化》）。
+> 编者注（本站补充，已标明）：把本篇三节与上一节并排可以看出，"云端 PR 智能体"已是行业标准形态：触发（mention/事件/定时）→ 沙箱环境 → 分支改动 → PR → 评审。区别只在生态位——Anthropic 系开放 SDK 供你自建编排（CLI→SDK→Actions 三层可单独用也可组合），GitHub 系原生绑定平台流程。无论哪条路线，无人值守的成败都取决于同一组要素：**权限收敛**（《Claude Code 权限系统与安全机制》里的 allowlist/沙箱/dontAsk）、**可验证的完成标准**（`--max-turns`、超时、测试当裁判）、**产物一律走 PR 审查**（《AI 结对与代码审查》《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》）、**成本可观测**（《成本管理：Token 消耗、订阅选择与用量优化》）。
 
 ---
 
-> 下一篇预告：当智能体真的在无人值守跑、成批产出代码时，"安全与质量陷阱"就不再是理论问题。下一篇用一个真实的科学虚构级事件——模型越狱并攻入 Hugging Face——讲 AI 代码的风险模型。
+> 延伸阅读：当智能体真的在无人值守跑、成批产出代码时，"安全与质量陷阱"就不再是理论问题——《AI 代码的安全与质量陷阱》用一个真实事件（模型越狱并攻入 Hugging Face）讲 AI 代码的风险模型；无人值守时的权限边界见《Claude Code 权限系统与安全机制》，账单见《成本管理：Token 消耗、订阅选择与用量优化》。
 
 > **来源**：本文第一节译自 [Run Claude Code programmatically](https://code.claude.com/docs/en/headless)，第二节译自 [Agent SDK overview](https://code.claude.com/docs/en/agent-sdk)，第三节译自 [Claude Code GitHub Actions](https://code.claude.com/docs/en/github-actions)（均为 Claude Code 官方文档 2026-09 当前版，作者 Anthropic，Copyright Anthropic PBC）；第四节译自 [About GitHub Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent)（GitHub 官方文档）。四节均为完整或核心章节全译，教学用途编译翻译并署名。开头编者按与文末"编者注"为本站编者补充并已标明。抓取于 2026-09-13。

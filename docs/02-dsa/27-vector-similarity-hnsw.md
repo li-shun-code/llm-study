@@ -9,11 +9,12 @@ versions: Python 3.12，numpy 2.x，hnswlib 0.8
 order: 27
 group: 图
 ---
+## 为什么需要近似最近邻
+
 > **难度**：★★★。RAG 检索质量的天花板由这一篇决定；概念比代码更重要。
 > **定位**：《图》讲一般的图与遍历，《Top-K 与堆》讲怎么从候选里挑最好的 k 个；本篇把两者合成一件工具——**在几十万条向量里毫秒级取回最相近的 100 条** 。
 > **前置**：《图的遍历（DFS/BFS）》《堆》。嵌入模型本身的选型不在此篇范围。
 
-## 为什么需要近似最近邻
 
 一条文本嵌入成 1536 维单位向量后，“语义相近”就是“向量距离近”。检索于是变成几何问题：**给定查询向量 q ，在库中 n 条向量里找出与 q 最近的 k 条**（k-NN）。
 
@@ -133,8 +134,10 @@ if __name__ == "__main__":
     # 一条 6 个点的路径图：0-1-2-3-4-5 ，坐标即下标
     graph = {i: [j for j in (i - 1, i + 1) if 0 <= j < 6] for i in range(6)}
     dist = lambda q, x: abs(q - x)
-    print([(d, n) for d, n in greedy_search(0, graph, 4.5, dist, ef=3)])
-    # 从 0 出发也能走到 4、5 ：[(-0.5, 5), (-0.5, 4), (-1.5, 3)] 取负后即真实距离
+    found = [(d, node) for d, node in greedy_search(0, graph, 4.5, dist, ef=3)]
+    # 返回的是 (-距离, 节点) ，取负还原：从 0 出发也能一路导航到 4、5
+    print([(-d, node) for d, node in found])   # [(0.5, 5), (0.5, 4), (1.5, 3)]
+```
 
 一个可跑的“迷你多层图”演示，把上面两个堆和分层联系起来（**教学用，不追求工业级召回**；生产请用下文 hnswlib 或向量库）：
 
@@ -170,31 +173,32 @@ class MiniHNSW:
         self.graph[i].append(self.rng.randrange(len(self.vectors) - 1))
 
     def search(self, q: list[float], k: int = 10, ef: int = 40) -> list[tuple[float, int]]:
-        def dist(a, b):                               # 平方欧氏距离
-            return sum((x - y) ** 2 for x, y in zip(a, b))
+        def node_dist(node: int) -> float:         # 查询到某个节点的距离（平方欧氏）
+            v = self.vectors[node]
+            return sum((x - y) ** 2 for x, y in zip(q, v))
 
         entry = self.rng.randrange(len(self.vectors))  # 真实 HNSW 从顶层入口下降
-            return self._best_first(entry, q, dist, max(ef, k))[:k]
+        return self._best_first(entry, node_dist, max(ef, k))[:k]
 
-    def _best_first(self, entry, q, dist, ef):
+    def _best_first(self, entry: int, node_dist, ef: int) -> list[tuple[float, int]]:
         """best-first 图搜索（与上一小节同一算法，此处内联以便独立运行）"""
-        candidates = [(dist(q, entry), entry)]        # 小顶堆：待扩展
-        results = [(-dist(q, entry), entry)]          # 大顶堆：最近 ef 个
+        candidates = [(node_dist(entry), entry)]   # 小顶堆：待扩展的候选
+        results = [(-node_dist(entry), entry)]     # 大顶堆：当前最近的 ef 个
         visited = {entry}
         while candidates:
             d, node = heapq.heappop(candidates)
-            if d > -results[0][0]:
+            if d > -results[0][0]:                 # 没有更优候选可扩，停止
                 break
             for nb in self.graph.get(node, []):
                 if nb in visited:
                     continue
                 visited.add(nb)
-                dn = dist(q, nb)
+                dn = node_dist(nb)
                 if len(results) < ef or dn < -results[0][0]:
                     heapq.heappush(candidates, (dn, nb))
                     heapq.heappush(results, (-dn, nb))
                     if len(results) > ef:
-                        heapq.heappop(results)
+                        heapq.heappop(results)     # 挤掉最远的那个
         return [(-nd, i) for nd, i in sorted(results, reverse=True)]
 
 
@@ -225,7 +229,7 @@ data /= np.linalg.norm(data, axis=1, keepdims=True)
 index = hnswlib.Index(space="cosine", dim=dim)
 index.init_index(max_elements=n * 2, ef_construction=200, M=16)
 index.add_items(data, ids=np.arange(n))
-index.set_ef(80)                    # 查询期可调，ef >= k
+index.set_ef(80)                    # 查询期可调，要求 ef > k
 
 labels, distances = index.knn_query(data[:3], k=5)
 print(labels[0][:3], distances[0][:3])
