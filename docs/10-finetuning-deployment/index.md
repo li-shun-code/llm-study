@@ -4,7 +4,7 @@ order: 10
 isRoot: true
 ---
 
-# 模块 10 · 微调与部署
+# 「微调与部署」· 微调与部署
 
 微调自己的模型并跑起来：GPU 环境、CPT/SFT/DPO/GRPO、量化与 vLLM/Ollama 生产部署。
 

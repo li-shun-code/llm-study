@@ -10,7 +10,7 @@ order: 2
 
 # 创建型模式：单例、工厂与对象的受控诞生
 
-创建型模式关注"对象如何被造出来"：把实例化的职责从调用方剥离，交给受控的构造逻辑。仓库在创建型（Creational）分类下共收录 14 个模式：abstract-factory、builder、dependency-injection、factory、factory-kit、factory-method、monostate、multiton、object-pool、prototype、registry、singleton、step-builder、type-object（monostate 见第 05 篇）。本篇完整讲解其中 8 个最具代表性的模式（另含仓库归入性能优化类的 lazy-loading），每个模式均译自该模式目录 README 的原文，代码引自仓库真实实现。
+创建型模式关注"对象如何被造出来"：把实例化的职责从调用方剥离，交给受控的构造逻辑。仓库在创建型（Creational）分类下共收录 14 个模式：abstract-factory、builder、dependency-injection、factory、factory-kit、factory-method、monostate、multiton、object-pool、prototype、registry、singleton、step-builder、type-object（monostate 见《企业级架构模式：从 Ambassador 到 Anti-Corruption Layer》）。本篇完整讲解其中 8 个最具代表性的模式（另含仓库归入性能优化类的 lazy-loading），每个模式均译自该模式目录 README 的原文，代码引自仓库真实实现。
 
 ## 一、单例（singleton）
 

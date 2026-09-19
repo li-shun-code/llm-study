@@ -467,7 +467,7 @@ result_edit = client.images.edit(
 
 ## 表：自定义 function 工具 vs 托管工具
 
-| 维度 | 自定义 function（第 04 篇） | 托管工具（本篇） |
+| 维度 | 自定义 function（《Function Calling / Tool Use：让模型调用你的函数》） | 托管工具（本篇） |
 | --- | --- | --- |
 | 声明方式 | `{"type":"function","name":...,"parameters":...}` | `{"type":"web_search"}` 等，按工具名声明 |
 | 执行者 | 你（执行函数、回传结果） | 服务端自动执行 |

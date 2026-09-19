@@ -55,7 +55,7 @@ def toxicity_classifier(inputs: dict) -> dict:
     return {"class": result.choices[0].message.content}
 ```
 
-我们顺带开启了追踪（Tracing），以捕获管线中每一步的输入输出——评测与可观测性（第 16 篇）共享同一套插桩。
+我们顺带开启了追踪（Tracing），以捕获管线中每一步的输入输出——评测与可观测性（《OpenAI Agents SDK：轻量多智能体框架入门》）共享同一套插桩。
 
 ## 第 2 步：创建或选择数据集
 
@@ -116,7 +116,7 @@ def correct(inputs: dict, outputs: dict, reference_outputs: dict) -> bool:
 - **在代码中本地定义**（如上）；也可以使用 LangChain 开源的预置评估器包 [openevals](https://github.com/langchain-ai/openevals)（含事实性、RAG、工具调用等常用评估器）；
 - **在 LangSmith UI 中定义**：在 Evaluators 标签页创建（含 LLM-as-Judge 评估器），绑定的评估器会在每次新实验时自动触发。
 
-对没有唯一正确答案的开放性输出（如研究报告），评估器就可以换成 LLM-as-Judge：让一个 LLM 按量规逐项打分（0.0-1.0 + 通过/不通过）。第 9 篇 Anthropic 的实践是：单次 LLM 调用、单一提示、输出分数与等级，最稳定且最贴近人类判断。
+对没有唯一正确答案的开放性输出（如研究报告），评估器就可以换成 LLM-as-Judge：让一个 LLM 按量规逐项打分（0.0-1.0 + 通过/不通过）。《Agent 记忆机制：LangGraph 的短期记忆与长期记忆》 Anthropic 的实践是：单次 LLM 调用、单一提示、输出分数与等级，最稳定且最贴近人类判断。
 
 ## 第 4 步：运行评估
 
@@ -173,11 +173,11 @@ results = ls_client.evaluate(
 - **工具选择质量**：该用的工具用了没有？不该用的用了没有？调用次数是否合理？
 - **轨迹（Trajectory）评估**：对比智能体实际走过的节点/工具序列与预期轨迹；
 - **单步评估**：对中间步骤（每次工具调用的输出）单独打分，定位链条中最早出错的一环；
-- **终态评估**（第 9 篇）：多轮改状态的智能体，只验最终状态是否正确；
+- **终态评估**（《Agent 记忆机制：LangGraph 的短期记忆与长期记忆》）：多轮改状态的智能体，只验最终状态是否正确；
 - **成本与延迟**：token 用量与耗时也是实验表格的一等公民——两个准确率相同的智能体，成本差 10 倍即是胜负。
 
 把评测挂进 CI：每次改提示、换模型、动工具描述后自动跑一遍数据集，分数回归即报警——这是把 Agent 从"玄学调参"带入工程的正道。
 
 ---
 
-> **来源**：本文主体翻译自 LangSmith 官方文档 [How to evaluate agents](https://docs.langchain.com/langsmith/evaluate-llm-application)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。选取 Python 路线全文翻译（原文另含 JS/TS 代码）；开头方法论一节综合了本文与 Anthropic《多智能体研究系统》（本模块第 9 篇）中的评估经验。
+> **来源**：本文主体翻译自 LangSmith 官方文档 [How to evaluate agents](https://docs.langchain.com/langsmith/evaluate-llm-application)，作者 LangChain 团队，许可 MIT。抓取于 2026-09-13。选取 Python 路线全文翻译（原文另含 JS/TS 代码）；开头方法论一节综合了本文与 Anthropic《多智能体研究系统》（《Agent 记忆机制：LangGraph 的短期记忆与长期记忆》）中的评估经验。

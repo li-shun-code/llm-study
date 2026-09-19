@@ -4,7 +4,7 @@ order: 2
 isRoot: true
 ---
 
-# 模块 2 · 计算机基础
+# 「计算机基础」· 计算机基础
 
 Linux 与 Git 先行，再补操作系统与计算机网络；本模块内容优先译自英文一手资料（OSTEP、Beej's Guide、MDN、MIT Missing Semester、Pro Git、GitHub Docs、IETF RFC、Fielding 论文等）。
 

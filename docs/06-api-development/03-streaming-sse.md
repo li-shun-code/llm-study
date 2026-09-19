@@ -197,7 +197,7 @@ async with client.chat.completions.stream(
 原文的两点提醒值得记牢：
 
 1. **内容审核更困难**：`stream=True` 下内容是一段段到达的，部分内容难以在展示前整体评估，生产应用需要自己在流上叠加审核/过滤逻辑；
-2. **流不可自动重试**：openai-python 文档明确——消费 `Stream`/`AsyncStream` 时的读超时抛 `APITimeoutError`、其他请求失败抛 `APIConnectionError`，且**流式消费不会被 SDK 自动重试**，因为重放请求可能把已经输出给用户的内容再输出一遍（错误处理详见第 07 篇）。
+2. **流不可自动重试**：openai-python 文档明确——消费 `Stream`/`AsyncStream` 时的读超时抛 `APITimeoutError`、其他请求失败抛 `APIConnectionError`，且**流式消费不会被 SDK 自动重试**，因为重放请求可能把已经输出给用户的内容再输出一遍（错误处理详见《错误处理、重试与限流》）。
 
 ## 七、本篇小结
 
@@ -209,4 +209,4 @@ async with client.chat.completions.stream(
 ---
 
 > **来源**：本文翻译自 [How to stream completions](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb)（OpenAI Cookbook，MIT）与 [openai-python README · Streaming responses](https://raw.githubusercontent.com/openai/openai-python/main/README.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-> 编者注：原文基于 Chat Completions 演示，流式机制对 Responses API 完全一致（`stream=True`）；本篇按"Responses 为主、Chat Completions 对照"组织，SSE 的网络层原理另见模块 2《SSE 与 WebSocket》。
+> 编者注：原文基于 Chat Completions 演示，流式机制对 Responses API 完全一致（`stream=True`）；本篇按"Responses 为主、Chat Completions 对照"组织，SSE 的网络层原理另见《SSE 与 WebSocket》。

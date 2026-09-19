@@ -69,7 +69,7 @@ LLM 生态呈"少数闭源旗舰 + 多家开源权重"的双轨格局。本文�
 
 - **商业 API**：`qwen3.8-max`（旗舰）、`qwen3.7-plus`（均衡）、`qwen3.8-flash`（快速）；全模态 `qwen3.5-omni-plus`（含 realtime 版）；检索配套 `qwen3.7-text-embedding` / `-rerank`。
 - **开源权重**：Qwen3 系列（[Qwen3](https://github.com/QwenLM/Qwen3) 仓库：235B-A22B（MoE）/30B-A3B/4B 的 Instruct 与 Thinking 双版本，2507 版支持 100 万 token 上下文）；[Qwen3-VL](https://github.com/QwenLM/Qwen3-VL)（视觉）、[Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder)（代码）、Qwen3-Embedding（检索）、Qwen3-TTS（语音）。
-- Qwen 的差异化在于**尺寸阶梯完整**（从 0.6B 到 235B+），本地部署、微调实验（模块 10）几乎总有一档合适。
+- Qwen 的差异化在于**尺寸阶梯完整**（从 0.6B 到 235B+），本地部署、微调实验（「微调与部署」）几乎总有一档合适。
 
 ## 七、智谱 GLM：开源 Agent 旗舰
 
@@ -96,7 +96,7 @@ LLM 生态呈"少数闭源旗舰 + 多家开源权重"的双轨格局。本文�
 
 1. **闭源旗舰与开源第一梯队的差距已收敛到个位数基准分**（如 Terminal-Bench 2.1：Claude Opus 4.8 = 85.0 vs GLM-5.2 = 81.0），选型时"够用 + 便宜 + 可控"往往胜过"最强 + 昂贵"；
 2. **"混合推理"成为标配**：几乎每个家族都提供"快答/深思"两种模式（DeepSeek 的 `thinking`、Gemini Deep Think、OpenAI 的 `reasoning_effort`、Qwen3 的 Thinking 版本）——本质是把推理时计算量变成可调参数（见《推理模型》与《采样参数》）；
-3. **上下文军备竞赛进入百万级**，但"窗口大小 ≠ 有效利用"，请配合模块 8 的 RAG 与模块 5 的上下文工程技术使用。
+3. **上下文军备竞赛进入百万级**，但"窗口大小 ≠ 有效利用"，请配合「RAG」的 RAG 与「Prompt 工程」的上下文工程技术使用。
 
 ## 参考链接（全部于 2026-09-13 访问核实）
 

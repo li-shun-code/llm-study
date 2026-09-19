@@ -258,7 +258,7 @@ loaded_kg = KnowledgeGraph.load("knowledge_graph.json")
 ]
 ```
 
-即 50% 单跳具体问题、25% 多跳抽象问题、25% 多跳具体问题——多跳（Multi-hop）查询需要综合多个文档，恰好考验第 17 篇 Agentic RAG 强调的多步检索能力。
+即 50% 单跳具体问题、25% 多跳抽象问题、25% 多跳具体问题——多跳（Multi-hop）查询需要综合多个文档，恰好考验《Agentic RAG：从固定管线到会思考的检索》 Agentic RAG 强调的多步检索能力。
 
 ```python
 from ragas.testset.synthesizers import default_query_distribution

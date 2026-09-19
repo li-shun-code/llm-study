@@ -266,7 +266,7 @@ PSK 带外提供时，PSK 标识与配合该 PSK 使用的 KDF 哈希算法也�
 - 推荐 TLS 配置：[Mozilla 推荐配置](https://ssl-config.mozilla.org/)、[Cipherlist.eu](https://cipherlist.eu/)
 - 协议全文：[RFC 8446（TLS 1.3）](https://www.rfc-editor.org/rfc/rfc8446)、[MDN：Transport Layer Security](https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security)
 
-> 译注：把本篇与《HTTP》《TCP》连起来看：HTTPS = HTTP over TLS over TCP——TLS 夹在 HTTP（应用层）与 TCP（传输层）之间加密并认证流量（RFC 8446 也明言"TLS 对底层传输的唯一要求是可靠、按序的数据流"——正是第 22 篇《TCP》提供的东西）。对 LLM 应用开发者，这是一条硬性实践：**所有 API 流量（包括 SSE 流式响应）都必须走 HTTPS**，否则你的 API Key 与对话内容在链路上是明文；调用第三方 API 时也请确认 base URL 是 `https://` 开头。
+> 译注：把本篇与《HTTP》《TCP》连起来看：HTTPS = HTTP over TLS over TCP——TLS 夹在 HTTP（应用层）与 TCP（传输层）之间加密并认证流量（RFC 8446 也明言"TLS 对底层传输的唯一要求是可靠、按序的数据流"——正是《TCP》提供的东西）。对 LLM 应用开发者，这是一条硬性实践：**所有 API 流量（包括 SSE 流式响应）都必须走 HTTPS**，否则你的 API Key 与对话内容在链路上是明文；调用第三方 API 时也请确认 base URL 是 `https://` 开头。
 
 ---
 

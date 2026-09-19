@@ -206,7 +206,7 @@ async with MCPServerStreamableHttp(
     ...
 ```
 
-完整的暂停/恢复流程参见官方 human-in-the-loop 文档与本模块第 11 篇。
+完整的暂停/恢复流程参见官方 human-in-the-loop 文档与《长时运行 Agent 的上下文管理：压缩（Compaction）》。
 
 **MCP 工具输出的多模态内容**：文本按文本转发；图片内容映射为图片型工具输出；音频、资源块等其他类型以 JSON 序列化文本转发；含多个内容块的响应以列表转发。若 `use_structured_content=True` 且存在非空非错误的 `structuredContent`，以结构化载荷优先。
 
@@ -254,10 +254,10 @@ async with MCPServerStdio(
 
 1. **工具只服务你一个应用**（如"查自家订单库"）→ 直接写 Function Calling 函数工具，最简单、无额外依赖；
 2. **工具要跨应用/跨框架复用，或想接入现成生态**（文件系统、GitHub、浏览器……）→ 把工具包成 MCP server，用 stdio（本地）或 Streamable HTTP（远程）接入；
-3. **敏感操作无论哪种方式都要加审批**：`require_approval`（MCP）或工具内 `interrupt`（LangGraph，见第 11 篇），并把高危工具从"自动允许"清单里剔除。
+3. **敏感操作无论哪种方式都要加审批**：`require_approval`（MCP）或工具内 `interrupt`（LangGraph，见《长时运行 Agent 的上下文管理：压缩（Compaction）》），并把高危工具从"自动允许"清单里剔除。
 
 Function Calling 是"模型怎么调工具"的机制，MCP 是"工具从哪来、如何被发现和复用"的协议——理解了这层关系，就不会再把它们当成二选一。
 
 ---
 
-> **来源**：本文主体翻译自 OpenAI Agents SDK 官方文档 [Model context protocol (MCP)](https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md)，作者 OpenAI，许可 MIT。抓取于 2026-09-13。"概念对比"一节为编者综述，依据的是同一份文档与 MCP 官方文档（本模块第 5 篇）两份一手资料。
+> **来源**：本文主体翻译自 OpenAI Agents SDK 官方文档 [Model context protocol (MCP)](https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md)，作者 OpenAI，许可 MIT。抓取于 2026-09-13。"概念对比"一节为编者综述，依据的是同一份文档与 MCP 官方文档（《MCP 协议详解：架构、分层与核心原语（2026-07-28 版规范）》）两份一手资料。

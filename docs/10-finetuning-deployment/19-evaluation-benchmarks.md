@@ -9,7 +9,7 @@ versions: lm-eval 主分支（2026-09 当前版，含 Plugins 与 CLI 子命令�
 order: 19
 ---
 
-本篇为重做版：正文主体完整翻译 lm-evaluation-harness 官方 README（替换原先的编者总结内容）。lm-eval 是开源 LLM 评测的事实标准——Hugging Face Open LLM Leaderboard 的后端、数百篇论文的评测工具。
+本篇正文完整译自 lm-evaluation-harness 官方 README。lm-eval 是开源 LLM 评测的事实标准——Hugging Face Open LLM Leaderboard 的后端、数百篇论文的评测工具。
 
 # Language Model Evaluation Harness（译自官方 README）
 
@@ -526,4 +526,4 @@ BibTeX：`The Language Model Evaluation Harness`（Gao, Leo 等 24 位作者，2
 
 ---
 
-> **来源**：抓取于 2026-09-13。本篇为编者总结版的重做：正文主体替换为 [EleutherAI/lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) 官方 README 的完整翻译（作者 Gao, Leo 等，EleutherAI，许可 MIT，经仓库 LICENSE.md 核实）。Latest News/公告/Overview/Install/Basic Usage（HF 后端、GGUF 两种评测、accelerate 多 GPU、原生张量并行、steered/nemo/Megatron-LM/OpenVINO/vLLM/SGLang/ONNX 双后端/Windows ML/API 服务器总表/其他框架/附加特性）/高级用法/保存与缓存/可视化（Zeno、W&B）/贡献与新任务优先级/支持/可选 Extras 三表/引用各节均为完整翻译。仅以下内容未逐一保留并注明：DOI 与徽章图片、指向仓库内部文件的长链接改为文字表述、nemo/steered 小节中与正文重复的完整配置代码块（已要点转述并注明见原文）、Zeno 小节中与正文重复的示例命令、引用部分的完整 BibTeX（24 位作者名单过长，条目信息如实转述）、原文个别链接笔误保持原义未改。头部导语一句为本篇编者注。
+> **来源**：抓取于 2026-09-13。正文为 [EleutherAI/lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) 官方 README 的完整翻译（作者 Gao, Leo 等，EleutherAI，许可 MIT，经仓库 LICENSE.md 核实）。Latest News/公告/Overview/Install/Basic Usage（HF 后端、GGUF 两种评测、accelerate 多 GPU、原生张量并行、steered/nemo/Megatron-LM/OpenVINO/vLLM/SGLang/ONNX 双后端/Windows ML/API 服务器总表/其他框架/附加特性）/高级用法/保存与缓存/可视化（Zeno、W&B）/贡献与新任务优先级/支持/可选 Extras 三表/引用各节均为完整翻译。仅以下内容未逐一保留并注明：DOI 与徽章图片、指向仓库内部文件的长链接改为文字表述、nemo/steered 小节中与正文重复的完整配置代码块（已要点转述并注明见原文）、Zeno 小节中与正文重复的示例命令、引用部分的完整 BibTeX（24 位作者名单过长，条目信息如实转述）、原文个别链接笔误保持原义未改。头部导语一句为本篇编者注。

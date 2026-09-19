@@ -67,7 +67,7 @@ $ dropdb mydb
 
 > 以下为本站编者补充的最小实践路径，便于在本地跟上本模块后续文章。
 
-最省事的方式是 Docker（详见模块 3 的容器化章节）：
+最省事的方式是 Docker（详见「Python 进阶与框架」的容器化章节）：
 
 ```bash
 docker run --name pg-learn -e POSTGRES_PASSWORD=dev -p 5432:5432 -d postgres:18
@@ -79,7 +79,7 @@ docker run --name pg-learn -e POSTGRES_PASSWORD=dev -p 5432:5432 -d postgres:18
 psql -h localhost -U postgres
 ```
 
-`psql` 是随发行版发布的交互式终端客户端：提示符下输入 SQL（分号结尾）回车即执行，`\l` 列出数据库、`\dt` 列出表、`\q` 退出。配合本模块 03-07 篇的 SQL 示例，即可完整练手。
+`psql` 是随发行版发布的交互式终端客户端：提示符下输入 SQL（分号结尾）回车即执行，`\l` 列出数据库、`\dt` 列出表、`\q` 退出。配合本「Python 进阶与框架」-07 篇的 SQL 示例，即可完整练手。
 
 ---
 

@@ -93,7 +93,7 @@ except openai.APIStatusError as e:
 - 可重试的错误：连接错误、408 请求超时、409 冲突、429 限流、≥500 服务端错误；
 - 默认超时 **10 分钟**，可整体或分阶段（读/写/连接）配置；
 - 超时的请求默认也会重试两次；
-- 流式响应（`Stream`/`AsyncStream`）**不会自动重试**——重放可能重复输出内容（见第 03 篇）。
+- 流式响应（`Stream`/`AsyncStream`）**不会自动重试**——重放可能重复输出内容（见《流式输出（SSE）》）。
 
 ```python
 from openai import OpenAI
@@ -226,7 +226,7 @@ def completions_with_fallback(fallback_model, **kwargs):
 completions_with_fallback(fallback_model="gpt-4o", model="gpt-4o-mini", messages=[{"role": "user", "content": "Once upon a time,"}])
 ```
 
-**2. `max_tokens` 贴近预期输出长度**：限流用量按"max_tokens 与输入估算 token 的较大者"计算——设得过高会提前撞限（`max_tokens` 的对应概念在 Responses API 中为 `max_output_tokens`，见第 01 篇的参数对照）。
+**2. `max_tokens` 贴近预期输出长度**：限流用量按"max_tokens 与输入估算 token 的较大者"计算——设得过高会提前撞限（`max_tokens` 的对应概念在 Responses API 中为 `max_output_tokens`，见前述的参数对照）。
 
 **3. 批处理场景：按限额倒数主动加延迟**。与其"撞限→退避→再撞限"，不如算好节奏（每分钟 20 个请求就每次隔 3–6 秒），贴近限额上限又不浪费重试：
 
@@ -249,7 +249,7 @@ delayed_completion(
 )
 ```
 
-**4. RPM 紧张但 TPM 有余量时：合并多个任务进一个请求**。RPM（requests per minute）与 TPM（tokens per minute）分开计量。把 10 个"讲故事"任务合成一条请求、再用 Structured Outputs 拿回结构化数组（第 06 篇的原语）：
+**4. RPM 紧张但 TPM 有余量时：合并多个任务进一个请求**。RPM（requests per minute）与 TPM（tokens per minute）分开计量。把 10 个"讲故事"任务合成一条请求、再用 Structured Outputs 拿回结构化数组（前述的原语）：
 
 ```python
 from pydantic import BaseModel

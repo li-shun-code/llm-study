@@ -45,12 +45,12 @@ $ uv run fastapi dev
 
 ## 二、封装一个 LLM 服务
 
-**本站补充**：把第 01 篇的调用装进 FastAPI 的骨架里。
+**本站补充**：把前述的调用装进 FastAPI 的骨架里。
 
 ```text
-# .env —— 模块 0 的方案：Key 只放环境文件，绝不写进代码
+# .env —— 「Python 基础」的方案：Key 只放环境文件，绝不写进代码
 OPENAI_API_KEY=sk-...
-OPENAI_BASE_URL=https://api.openai.com/v1   # 换兼容端点时只改这里（见第 10 篇）
+OPENAI_BASE_URL=https://api.openai.com/v1   # 换兼容端点时只改这里（见《OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型》）
 ```
 
 ```python
@@ -192,18 +192,18 @@ router = APIRouter(
 
 ## 五、下一步
 
-- 参数校验、`HTTPException`、统一错误处理：见模块 3 的 FastAPI 篇与第 07 篇错误处理的组合；
+- 参数校验、`HTTPException`、统一错误处理：见「Python 进阶与框架」的 FastAPI 篇与第 07 篇错误处理的组合；
 - 把本篇的 `/chat` 接口做成第 17 篇命令行聊天机器人的后端；
-- 生产部署（容器化）在模块 10 展开。
+- 生产部署（容器化）在「微调与部署」展开。
 
 ## 六、本篇小结
 
 - `FastAPI()` 实例 + 路径操作装饰器 + 返回 dict = 最小服务，`/docs` 白送交互文档；
-- 封装 LLM：`.env` 管 Key（模块 0 方案），Pydantic 管入参，`AsyncOpenAI` 管调用；
+- 封装 LLM：`.env` 管 Key（「Python 基础」方案），Pydantic 管入参，`AsyncOpenAI` 管调用；
 - 流式：`response_class=StreamingResponse` + `yield`，FastAPI 0.134.0+ 原生支持，LLM 输出是官方点名的用例；
 - 服务变大用 `APIRouter` 拆模块，用 `Depends` 挂鉴权依赖。
 
 ---
 
 > **来源**：本文转载自 [FastAPI 官方文档中文版 · 第一步](https://fastapi.tiangolo.com/zh/tutorial/first-steps/)、[更大的应用](https://fastapi.tiangolo.com/zh/tutorial/bigger-applications/) 与 [流式数据](https://fastapi.tiangolo.com/zh/advanced/stream-data/)，作者 FastAPI（tiangolo）及文档贡献者，许可 MIT。抓取于 2026-09-13。
-> 本文为编排整理（编译）：原文分属多个页面，本站按"把 LLM API 封装成自己的服务"的主线重组；标注"本站补充"的内容为编辑所加。FastAPI 的完整教程（Pydantic 校验、依赖项、鉴权等）见模块 3。
+> 本文为编排整理（编译）：原文分属多个页面，本站按"把 LLM API 封装成自己的服务"的主线重组；标注"本站补充"的内容为编辑所加。FastAPI 的完整教程（Pydantic 校验、依赖项、鉴权等）见「Python 进阶与框架」。

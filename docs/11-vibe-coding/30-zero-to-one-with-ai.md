@@ -126,7 +126,7 @@ order: 30
 
 ## 编者注：把这套流程落成你自己的 0→1 清单（本站编者补充，非原文内容）
 
-> 依本站编者按惯例，以下清单为本站编者补充，已与原文明确区隔。综合 Huntley 的流程与本模块已译内容（第 7 篇 Claude Code 最佳实践的"探索→计划→实现→提交"、第 15 篇 Spec Kit 的 constitution→specify→plan→tasks→implement 流水线），一个可执行的从 0 到 1 清单：
+> 依本站编者按惯例，以下清单为本站编者补充，已与原文明确区隔。综合 Huntley 的流程与本模块已译内容（《Claude Code 工作流与最佳实践》 Claude Code 最佳实践的"探索→计划→实现→提交"、《Spec 驱动开发（Spec-Driven Development）》 Spec Kit 的 constitution→specify→plan→tasks→implement 流水线），一个可执行的从 0 到 1 清单：
 
 **表：从 0 到 1 用 AI 做产品的实战清单**
 

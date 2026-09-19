@@ -211,8 +211,8 @@ Find customers who haven't made a purchase in 90 days
 
 许多云端 MCP 服务器需要认证，Claude Code 支持 OAuth 2.0。当远程服务器返回 `401 Unauthorized` 或 `403 Forbidden` 时，Claude Code 会将其标记为需要认证，随后引导完成 OAuth 流程；命令行也提供 `/mcp` 内的认证入口（详见原文"Authenticate with remote MCP servers"一节）。
 
-> 译注：编码场景选 MCP 服务器的小抄——issue/PR 协作选 GitHub/GitLab 官方服务器；设计对齐选 Figma；数据库用 DBHub 之类 + 只读账号；内部系统自建 stdio 服务器并放进项目级 `.mcp.json`（凭据走环境变量）。MCP 与 Function Calling 的取舍对比见模块 9；在 CI 中用 MCP 的完整链路见本模块第 23 篇。
+> 译注：编码场景选 MCP 服务器的小抄——issue/PR 协作选 GitHub/GitLab 官方服务器；设计对齐选 Figma；数据库用 DBHub 之类 + 只读账号；内部系统自建 stdio 服务器并放进项目级 `.mcp.json`（凭据走环境变量）。MCP 与 Function Calling 的取舍对比见「Agent」；在 CI 中用 MCP 的完整链路见《开源工具生态：Cline 与 Windsurf》。
 
 ---
 
-> **来源**：本文翻译自 [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp)，作者 Anthropic（Claude Code 官方文档），许可署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）。抓取于 2026-09-13。协议本身的概念详解与自建 server 实战见模块 9《MCP 协议详解》与《MCP server 实战》，本文聚焦"在编码工作流中怎么用"。长尾小节（WebSocket 传输、channels、插件分发、企业托管配置等）从略，见原文。
+> **来源**：本文翻译自 [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp)，作者 Anthropic（Claude Code 官方文档），许可署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）。抓取于 2026-09-13。协议本身的概念详解与自建 server 实战见《MCP 协议详解》与《MCP server 实战》，本文聚焦"在编码工作流中怎么用"。长尾小节（WebSocket 传输、channels、插件分发、企业托管配置等）从略，见原文。

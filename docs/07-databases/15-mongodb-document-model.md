@@ -63,9 +63,29 @@ var mydoc = {
 
 字段名是字符串，但有如下限制：
 
-- 字段名 `_id` 保留作主键：其值在集合内必须唯一、不可变，类型可以是除数组与正则外的任何类型；若 `_id` 含子字段，子字段名不能以 `$` 开头。
+- 字段名 `_id` 保留作主键：其值在集合内必须唯一、不可变，类型可以是除数组与正则外的任何类型；若 `_id` 含子字段，子字段名不能以 `---
+title: MongoDB 文档模型
+source_url: https://www.mongodb.com/docs/manual/core/document/
+author: MongoDB Inc.（MongoDB 文档手册）
+license: CC BY-NC-SA 3.0 US
+fetched_at: 2026-09-13
+translated: true
+order: 15
+versions: MongoDB 文档手册当前版（含 5.0/6.1 起的行为说明）
+---
+ 开头。
 - 字段名**不能**包含 null 字符。
-- 服务器允许存储含点（`.`）与美元符（`$`）的字段名；MongoDB 5.0 起对二者有更好的支持（仍有限制，详见官方 Field Name Considerations）。
+- 服务器允许存储含点（`.`）与美元符（`---
+title: MongoDB 文档模型
+source_url: https://www.mongodb.com/docs/manual/core/document/
+author: MongoDB Inc.（MongoDB 文档手册）
+license: CC BY-NC-SA 3.0 US
+fetched_at: 2026-09-13
+translated: true
+order: 15
+versions: MongoDB 文档手册当前版（含 5.0/6.1 起的行为说明）
+---
+）的字段名；MongoDB 5.0 起对二者有更好的支持（仍有限制，详见官方 Field Name Considerations）。
 - 每个字段名在文档内必须唯一。不要保存含重复字段的文档——MongoDB 的 CRUD 操作在文档有重复字段时可能行为异常。查询语言不支持重复字段名的文档：某些 BSON 构造器允许构造重复字段的文档，但插入不被支持（即使插入看似成功）——驱动可能静默丢弃重复值，或插入含重复字段的非法文档，查询结果将不一致；对这类文档的更新同样不受支持。MongoDB 6.1 起可用 `validate` 命令（`full: true`）检查文档是否有重复字段名；任何版本都可用聚合运算符 `$objectToArray` 检查。
 
 ## 点表示法（Dot Notation）
@@ -97,12 +117,32 @@ MongoDB 用点表示法访问数组元素与内嵌文档的字段。
 
 可用 `"name.last"` 指定 `last` 字段，用 `"contact.phone.number"` 指定 `number` 字段（原文以此为例展示多级内嵌的寻址）。
 
-原文还列出与数组更新/读取相关的位置运算符：`$[]`（更新数组全部元素）、`$[<identifier>]`（按 arrayFilters 条件更新匹配元素）、更新中的 `$`（更新第一个匹配查询条件的元素）与投影中的 `$`（返回第一个匹配元素）。
+原文还列出与数组更新/读取相关的位置运算符：`$[]`（更新数组全部元素）、`$[<identifier>]`（按 arrayFilters 条件更新匹配元素）、更新中的 `---
+title: MongoDB 文档模型
+source_url: https://www.mongodb.com/docs/manual/core/document/
+author: MongoDB Inc.（MongoDB 文档手册）
+license: CC BY-NC-SA 3.0 US
+fetched_at: 2026-09-13
+translated: true
+order: 15
+versions: MongoDB 文档手册当前版（含 5.0/6.1 起的行为说明）
+---
+（更新第一个匹配查询条件的元素）与投影中的 `---
+title: MongoDB 文档模型
+source_url: https://www.mongodb.com/docs/manual/core/document/
+author: MongoDB Inc.（MongoDB 文档手册）
+license: CC BY-NC-SA 3.0 US
+fetched_at: 2026-09-13
+translated: true
+order: 15
+versions: MongoDB 文档手册当前版（含 5.0/6.1 起的行为说明）
+---
+（返回第一个匹配元素）。
 
 ## 与关系模型的取舍（站内补充）
 
 - **何时选文档模型**：数据的读写天然以"聚合根"为单位（如一条 LLM 会话连同其全部消息、一次评测连同其全部样本得分），内嵌文档一次读取即可整体返回，免去多次 JOIN；字段在不同记录间天然不齐（多模态消息、不同厂商的 trace 字段）时，动态模式比"满是可空列的宽表"干净得多。
-- **何时不选**：需要跨实体复杂 JOIN、强事务约束、多对多关系频繁变动的场景，关系模型（本模块 01-07 篇）仍是首选。MongoDB 自 4.0 起支持多文档 ACID 事务，但"文档模型 + 事务"通常应保留给真正需要原子更新多文档的场合，而不是替代规范化的关系设计。
+- **何时不选**：需要跨实体复杂 JOIN、强事务约束、多对多关系频繁变动的场景，关系模型（本「数据结构与算法」-07 篇）仍是首选。MongoDB 自 4.0 起支持多文档 ACID 事务，但"文档模型 + 事务"通常应保留给真正需要原子更新多文档的场合，而不是替代规范化的关系设计。
 - **快速上手**：Community 版可用 Docker（`docker run -d -p 27017:27017 mongo`）启动，配合 `mongosh` 或 PyMongo/ Motor 练习本篇的文档读写。
 
 ---

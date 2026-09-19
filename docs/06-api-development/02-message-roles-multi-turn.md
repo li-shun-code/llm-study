@@ -25,7 +25,7 @@ Chat Completions 的每条消息对象必填两个字段：
 - **system / developer**：设定模型的行为方式与身份。openai-python README 的对照示例中使用了 `developer` 角色——这是现行文档对"开发者指令"的叫法，与老教程里的 `system` 语义相同（新模型更服从 `developer` 指令）；
 - **user**：终端用户的输入；
 - **assistant**：模型的历史回复；
-- **tool**：工具调用结果（详见第 04 篇 Function Calling）。
+- **tool**：工具调用结果（详见《Function Calling / Tool Use：让模型调用你的函数》 Function Calling）。
 
 一个典型的多轮请求（Knock-knock 冷笑话需要上下文才能接住）：
 
@@ -94,7 +94,7 @@ print(response.choices[0].message.content)
 # 输出：Fractions represent parts of a whole. They have a numerator (top number) and a denominator (bottom number).
 ```
 
-系统提示词的设计方法论见模块 5《系统提示词设计》。
+系统提示词的设计方法论见《系统提示词设计》。
 
 ## 三、少样本对话示例（Few-shot）
 
@@ -208,7 +208,7 @@ def num_tokens_from_messages(messages, model="gpt-5.5"):
     return num_tokens
 ```
 
-> 编者注：原文函数针对 `gpt-3.5-turbo-0613` 等历史模型定义了精确常量；对现行模型，官方建议将此函数视为估算工具，并在生产中用 API 返回的 `usage` 字段校准。tiktoken 的完整讲解见模块 4《Token 与上下文窗口》。
+> 编者注：原文函数针对 `gpt-3.5-turbo-0613` 等历史模型定义了精确常量；对现行模型，官方建议将此函数视为估算工具，并在生产中用 API 返回的 `usage` 字段校准。tiktoken 的完整讲解见《Token 与上下文窗口》。
 
 ## 六、本篇小结
 

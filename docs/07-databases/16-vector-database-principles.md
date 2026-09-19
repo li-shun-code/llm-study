@@ -66,7 +66,7 @@ Milvus 2022 年支持了十亿级向量，2023 年扩展到数百亿级并保持
 
 - **向量相似度度量（Distance Metric）**：常用余弦相似度（Cosine Similarity，看夹角）、欧氏距离（L2，看空间直线距离）与内积（IP/Dot Product）。选哪种取决于 Embedding 模型的训练目标——遵循模型卡的建议即可。
 - **精确 vs 近似**：向量维度动辄数百上千，逐一向量比较的暴力检索（FLAT）结果精确但太慢；ANN 索引（IVF 聚类、HNSW 图、DiskANN 磁盘索引等）以牺牲少量召回换取数量级的加速。上文的 HNSW/IVF/DiskANN 都属此类。
-- **在 LLM 应用中的位置**：模块 8 的 RAG 流程是"文档 → 切块 → Embedding → 存入向量库 → 查询时 ANN 检索 → 重排 → 喂给 LLM"。本篇是"库"的原理，下一篇动手实操。
+- **在 LLM 应用中的位置**：「RAG」的 RAG 流程是"文档 → 切块 → Embedding → 存入向量库 → 查询时 ANN 检索 → 重排 → 喂给 LLM"。本篇是"库"的原理，下一篇动手实操。
 
 原文另附 API/SDK（RESTful、PyMilvus、Go、Java、Node.js、C#、C++）、生态工具（Attu 图形界面、Birdwatcher 调试、Prometheus/Grafana 监控、Milvus Backup/CDC、Spark 连接器与 VTS 数据传输）与 AI 集成（PyMilvus 内置若干 Embedding/重排模型、LangChain 等框架的向量存储组件），此处从略，详见原文。
 

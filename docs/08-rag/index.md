@@ -4,7 +4,7 @@ order: 8
 isRoot: true
 ---
 
-# 模块 8 · RAG
+# 「RAG」· RAG
 
 检索增强生成全链路：从最脏的文档解析到进阶的 GraphRAG 与评估。
 

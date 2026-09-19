@@ -102,7 +102,7 @@ app = FastAPI()
 # 声明：API Key 从请求头 X-API-Key 中读取
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
-# 服务端自己的密钥列表（演示用；生产环境从环境变量/数据库读取，见模块 0 的 .env 方案）
+# 服务端自己的密钥列表（演示用；生产环境从环境变量/数据库读取，见「Python 基础」的 .env 方案）
 VALID_KEYS = set(filter(None, os.getenv("APP_API_KEYS", "").split(",")))
 
 
@@ -143,7 +143,7 @@ $ curl -H "X-API-Key: sk-demo" "http://127.0.0.1:8000/v1/chat?prompt=hi"
 ## 延伸阅读
 
 - 官方教程《安全》系列后续章节（`get-current-user`、OAuth2 with JWT）与《高级安全》；
-- FastAPI 的 `lifespan` 机制：用 `@asynccontextmanager` 函数（见本模块第 3 篇）管理启动/关闭资源；
+- FastAPI 的 `lifespan` 机制：用 `@asynccontextmanager` 函数（见《上下文管理器：contextlib 完全指南》）管理启动/关闭资源；
 - 官方文档《Bigger Applications》：用 `APIRouter` 把多个文件组织成项目结构。
 
 ---

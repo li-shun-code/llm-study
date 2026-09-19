@@ -319,4 +319,4 @@ tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
 
 ---
 
-> **来源**：本文翻译自 [Build an MCP server](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server)，作者 Model Context Protocol 项目（Anthropic 等维护），许可 MIT。抓取于 2026-09-13。本文选取官方教程的 Python 路线全文翻译（原文另含 TypeScript 路线，结构相同）；代码按 Python MCP SDK 2.0+ 的 `MCPServer` 新写法，`uv` 工程化的环境搭建参见本站模块 3。
+> **来源**：本文翻译自 [Build an MCP server](https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server)，作者 Model Context Protocol 项目（Anthropic 等维护），许可 MIT。抓取于 2026-09-13。本文选取官方教程的 Python 路线全文翻译（原文另含 TypeScript 路线，结构相同）；代码按 Python MCP SDK 2.0+ 的 `MCPServer` 新写法，`uv` 工程化的环境搭建参见本站「Python 进阶与框架」。

@@ -56,7 +56,7 @@ versions: Milvus 官方文档当前版（milvus-docs v3.0.x）
 
 ## 站内补充：四个开源向量库同台对比
 
-> 依据本模块 13-15 篇已译介的各官方文档（Chroma/Qdrant/Milvus 仓库与文档为 Apache-2.0，pgvector 为 PostgreSQL Licence）整理：
+> 依据本「Java 设计模式教学专栏」-15 篇已译介的各官方文档（Chroma/Qdrant/Milvus 仓库与文档为 Apache-2.0，pgvector 为 PostgreSQL Licence）整理：
 
 **表：本模块涉及的四个开源向量库**
 

@@ -82,11 +82,11 @@ results = collection.query(
 )
 ```
 
-注意其中的默认行为：`add` 时不传 `embeddings`，Chroma 会调用内置的默认 Embedding 模型自动向量化——这正是"嵌入式数据库"省事的地方；要从模块 6 的 Embedding API 换成自己生成的向量，把向量传给 `embeddings` 参数即可。
+注意其中的默认行为：`add` 时不传 `embeddings`，Chroma 会调用内置的默认 Embedding 模型自动向量化——这正是"嵌入式数据库"省事的地方；要从「API 与应用开发」的 Embedding API 换成自己生成的向量，把向量传给 `embeddings` 参数即可。
 
 ## 对照与选择（站内补充）
 
-- **想 5 分钟内跑通 RAG 原型**：Chroma 的 `Client()` 零部署 + 自动 Embedding 最快；模块 8 的最小 RAG 可以直接用它。
+- **想 5 分钟内跑通 RAG 原型**：Chroma 的 `Client()` 零部署 + 自动 Embedding 最快；「RAG」的最小 RAG 可以直接用它。
 - **想要更贴近生产的过滤、量化与横向扩展**：Qdrant 的载荷过滤体系与分布式特性更完整；单机 `docker run` 起步，后续平滑升级。
 - **两者都支持元数据过滤 + 向量检索的混合查询**，语义与"在哪个会话/哪个用户的数据里搜"这类业务过滤可以一次完成。
 - 下一篇的 Milvus（含 Milvus Lite）与 pgvector 则分别代表"大规模专用向量数据库"与"复用现有 PostgreSQL"两条路线。

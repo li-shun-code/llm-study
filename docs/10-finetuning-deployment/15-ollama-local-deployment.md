@@ -9,7 +9,7 @@ versions: Ollama 官方 README 与 docs.ollama.com 当前版（2026-09，含 oll
 order: 15
 ---
 
-本篇为重做版：正文主体完整翻译自 Ollama 官方 GitHub README 与官方文档站（quickstart、CLI、import、GPU、FAQ、Docker 六个页面），替换原先的编者总结内容，文末逐节署名。
+本篇正文完整译自 Ollama 官方 GitHub README 与官方文档站（quickstart、CLI、import、GPU、FAQ、Docker 六个页面），文末逐节署名。
 
 # Ollama（译自官方 README）
 

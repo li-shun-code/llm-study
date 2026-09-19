@@ -53,7 +53,7 @@ response = client.responses.create(
 )
 ```
 
-**输出形状**：模型返回包含一个或多个输出项的**响应对象**；本文主要用 `response.output_text` 便捷地取最终文本。若要**结构化输出**，依然是文本——用 `text={"format": ...}` 要求模型按 JSON 输出，然后 `json.loads(response.output_text)`（`text.format` 与 Pydantic 校验的完整用法见模块 6《JSON Mode 与结构化输出》一篇）。
+**输出形状**：模型返回包含一个或多个输出项的**响应对象**；本文主要用 `response.output_text` 便捷地取最终文本。若要**结构化输出**，依然是文本——用 `text={"format": ...}` 要求模型按 JSON 输出，然后 `json.loads(response.output_text)`（`text.format` 与 Pydantic 校验的完整用法见《JSON Mode 与结构化输出》一篇）。
 
 ## 快速决策表
 

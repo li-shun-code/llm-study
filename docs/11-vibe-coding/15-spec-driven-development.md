@@ -175,7 +175,7 @@ while :; do cat PROMPT.md | npx claude-code ; done
 
 这个循环粗糙但有效：预算封顶、可随时打断、产物是 PR。它的精神内核——把"做什么"写清楚，把"怎么做"交给循环——正是 Spec Kit 把它工程化的起点。
 
-> 译注：Spec 驱动与本模块其他篇章的关系——Spec Kit 的 `/speckit-implement` 本质是第 7 篇"可验证的完成标准"的项目化；`/speckit-tasks` 对应第 30 篇 0→1 流程中的任务拆解；`/speckit-converge` 与第 21 篇代码审查共享同一个思想：**让另一个上下文对照规格检查实现**。
+> 译注：Spec 驱动与本模块其他篇章的关系——Spec Kit 的 `/speckit-implement` 本质是第 7 篇"可验证的完成标准"的项目化；`/speckit-tasks` 对应《从 0 到 1 用 AI 做产品：未来属于能直接动手的人》 0→1 流程中的任务拆解；`/speckit-converge` 与第 21 篇代码审查共享同一个思想：**让另一个上下文对照规格检查实现**。
 
 ---
 

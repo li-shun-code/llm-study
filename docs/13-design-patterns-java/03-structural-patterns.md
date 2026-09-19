@@ -10,7 +10,7 @@ order: 3
 
 # 结构型模式：组合优于继承的工程实践
 
-结构型模式回答"对象如何组装成更大的结构"：用组合、包装与接口适配替代继承膨胀。仓库在结构型（Structural）分类下收录 34 个模式（如 adapter、bridge、composite、decorator、facade、flyweight、proxy、private-class-data、twin、extension-objects、dynamic-proxy、value-object 等）。任务规划中的"module"模式并不存在于该仓库，本篇按仓库实际清单讲解 8 个 GoF 核心/扩展结构型模式。每个模式的意图与适用场景译自该模式目录 README 原文，代码引自仓库真实实现并标注路径。
+结构型模式回答"对象如何组装成更大的结构"：用组合、包装与接口适配替代继承膨胀。仓库在结构型（Structural）分类下收录 34 个模式（如 adapter、bridge、composite、decorator、facade、flyweight、proxy、private-class-data、twin、extension-objects、dynamic-proxy、value-object 等）。本篇从中讲解 8 个 GoF 核心与扩展结构型模式。每个模式的意图与适用场景译自该模式目录 README 原文，代码引自仓库真实实现并标注路径。
 
 ## 一、适配器（adapter）
 

@@ -319,7 +319,7 @@ ResponseFunctionToolCall(arguments='{"query":"most common cause of death in the 
 - 新模型支持一轮并行多个工具调用；`tool_choice` 可强制或禁止调用；
 - Responses API 除自定义函数外还提供免执行的托管工具。
 
-Agent 体系的工具使用（ReAct、MCP 与 Function Calling 的关系）将在模块 9 展开。
+Agent 体系的工具使用（ReAct、MCP 与 Function Calling 的关系）将在「Agent」展开。
 
 ---
 

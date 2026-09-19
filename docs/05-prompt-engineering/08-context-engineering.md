@@ -147,4 +147,4 @@ versions: 原文发布于 2025-09-29；论述为 Agent 时代的通用工程原�
 
 ---
 
-> **编译说明**：原文两张插图保留 Anthropic CDN 原始外链；正文中 "effectively bypassing" 一处按原文保留。文中的产品名（Claude Code、CLAUDE.md、记忆工具等）为 Anthropic 生态术语，概念对应关系不受限于此——压缩、笔记、子 Agent 三种技术在任何 Agent 框架中都有同构实现（延伸阅读见模块 9）。
+> **编译说明**：原文两张插图保留 Anthropic CDN 原始外链；正文中 "effectively bypassing" 一处按原文保留。文中的产品名（Claude Code、CLAUDE.md、记忆工具等）为 Anthropic 生态术语，概念对应关系不受限于此——压缩、笔记、子 Agent 三种技术在任何 Agent 框架中都有同构实现（延伸阅读见「Agent」）。

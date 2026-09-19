@@ -238,7 +238,7 @@ async def chat(state: MessagesState, runtime: Runtime):
     ...
 ```
 
-这正是"向量存储 + 快速检索"在 Agent 记忆场景的落地——与本站模块 8 的向量检索一脉相承。
+这正是"向量存储 + 快速检索"在 Agent 记忆场景的落地——与本站「RAG」的向量检索一脉相承。
 
 # 查看与操作检查点状态
 
@@ -256,7 +256,7 @@ list(graph.get_state_history(config))
 checkpointer.delete_thread("1")
 ```
 
-`get_state` 返回的 `StateSnapshot` 包含当时的消息列表、元数据（写入来源、步骤号、时间戳）与父检查点指针；`get_state_history` 则按时间倒序列出整条"时间线"。这个能力是第 11 篇 Human-in-the-loop（中断恢复）与"时间旅行"（Time Travel）调试的基础。
+`get_state` 返回的 `StateSnapshot` 包含当时的消息列表、元数据（写入来源、步骤号、时间戳）与父检查点指针；`get_state_history` 则按时间倒序列出整条"时间线"。这个能力是《长时运行 Agent 的上下文管理：压缩（Compaction）》 Human-in-the-loop（中断恢复）与"时间旅行"（Time Travel）调试的基础。
 
 # 数据库管理
 

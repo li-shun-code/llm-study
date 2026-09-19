@@ -82,7 +82,7 @@ SELECT * FROM places ORDER BY location <-> point '(101,456)' LIMIT 10;
 
 **BRIN**：Block Range Index 的缩写，存储表中连续物理块区间内取值的摘要，因此对"取值与表行的物理顺序高度相关"的列最有效（典型如时间序列）；对有线性排序的数据类型，它记录每个块区间的最小/最大值，支持 `<`、`<=`、`=`、`>=`、`>` 查询。
 
-> 站内提示：模块 8 的 RAG/向量检索会再遇到 GiST 家族的近亲——pgvector 为向量列提供 ivfflat 与 hnsw 索引，原理与"搜索树/近邻搜索"一脉相承。
+> 站内提示：「RAG」的 RAG/向量检索会再遇到 GiST 家族的近亲——pgvector 为向量列提供 ivfflat 与 hnsw 索引，原理与"搜索树/近邻搜索"一脉相承。
 
 ## 检查索引使用
 

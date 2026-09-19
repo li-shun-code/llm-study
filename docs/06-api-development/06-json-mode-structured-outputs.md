@@ -294,7 +294,7 @@ def get_response(user_input, context):
 - `refusal` 字段承接安全拒绝，先判 `parsed`/`refusal` 再取数据；
 - 与函数调用结合时用 `pydantic_function_tool`，参数直接得到强类型对象。
 
-模块 5 曾以整篇篇幅收录本主题的提示词侧视角，现已并入 API 实现篇（即本篇）；提示词侧原则（Schema 命名、描述与示例设计）在本篇第 2、3 节中一并呈现。
+「Prompt 工程」曾以整篇篇幅收录本主题的提示词侧视角，现已并入 API 实现篇（即本篇）；提示词侧原则（Schema 命名、描述与示例设计）在本篇第 2、3 节中一并呈现。
 
 ---
 

@@ -31,7 +31,7 @@ MAF 为"把智能体从原型带到生产"的团队而设计：为构建、编�
 - **中间件（Middleware）**：灵活的中间件系统，用于请求/响应处理、异常处理与自定义管线；
 - **编排模式与工作流**：基于图的工作流支持顺序、并发、交接、群组协作模式，包含检查点（checkpointing）、流式、human-in-the-loop 与时间旅行（time-travel）；
 - **Foundry 托管智能体（新）**：只需额外两行代码即可把智能体部署到 Foundry 托管基础设施；
-- **可观测性**：内置 OpenTelemetry 集成，支持分布式追踪、监控与调试（见第 16 篇）；
+- **可观测性**：内置 OpenTelemetry 集成，支持分布式追踪、监控与调试（见《OpenAI Agents SDK：轻量多智能体框架入门》）；
 - **声明式智能体**：用 YAML 定义智能体，便于快速启动与版本管理；
 - **Agent Skills**：从文件、内联代码、类库等多来源构建领域知识库供智能体发现和使用；
 - **AF Labs**：面向基准测试、强化学习等前沿特性的实验性包；
@@ -284,7 +284,7 @@ class MarketState(BaseModel):
 | Microsoft Agent Framework（原 AutoGen + Semantic Kernel） | 生产级多智能体编排（.NET/Python/Go），图工作流 + 治理 + OpenTelemetry | 微软生态、企业生产、需要 .NET 的团队 |
 | CrewAI | 角色驱动的团队协作（Crews）+ 事件驱动控制流（Flows） | 想快速搭"角色分工小组"原型的 Python 开发者 |
 | LangGraph | 显式图状态机，精细控制中断/持久化 | 需要完全掌控执行拓扑的团队（本模块第 10-11 篇） |
-| OpenAI Agents SDK | 轻量 handoff/工具优先 | OpenAI 生态、想要最小抽象的团队（第 13 篇） |
+| OpenAI Agents SDK | 轻量 handoff/工具优先 | OpenAI 生态、想要最小抽象的团队（《LangGraph 入门：用 Graph API 与 Functional API 构建你的第一个智能体》） |
 
 **表：主流多智能体框架选型对比。**
 

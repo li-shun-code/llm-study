@@ -81,4 +81,4 @@ order: 19
 
 ---
 
-> 前置知识：pytest 与测试金字塔见模块 3《pytest 测试》。
+> 前置知识：pytest 与测试金字塔见《pytest 测试》。

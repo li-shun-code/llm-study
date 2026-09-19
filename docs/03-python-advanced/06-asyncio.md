@@ -51,7 +51,7 @@ async def loudmouth_penguin(magic_number: int):
 
 协程代表函数体或逻辑。协程必须显式启动；仅仅创建协程并不能启动它。值得注意的是，协程可以在函数体的不同位置**暂停和恢复**。这种暂停和恢复能力使得异步行为成为可能！
 
-协程和协程函数是利用生成器和生成器函数构建的（生成器见本模块第 2 篇）。与协程函数类似，调用生成器函数并不会运行该函数，而是创建一个生成器对象，再用 `next()` 驱动它运行到下一个 `yield`。
+协程和协程函数是利用生成器和生成器函数构建的（生成器见《迭代器与生成器（函数式编程指引）》）。与协程函数类似，调用生成器函数并不会运行该函数，而是创建一个生成器对象，再用 `next()` 驱动它运行到下一个 `yield`。
 
 ### 任务
 
@@ -231,7 +231,7 @@ async def main():
         await long_running_task()
 ```
 
-如果 `long_running_task` 耗费 10 秒以上完成，该上下文管理器将取消当前任务并处理所引发的 `CancelledError`，将其转化为可被捕获和处理的 `TimeoutError`。对 LLM API 调用加超时，就该这么写（结合 `httpx.AsyncClient` 见本模块第 10 篇）。
+如果 `long_running_task` 耗费 10 秒以上完成，该上下文管理器将取消当前任务并处理所引发的 `CancelledError`，将其转化为可被捕获和处理的 `TimeoutError`。对 LLM API 调用加超时，就该这么写（结合 `httpx.AsyncClient` 见《HTTPX：新一代 Python HTTP 客户端》）。
 
 ### 任务取消
 

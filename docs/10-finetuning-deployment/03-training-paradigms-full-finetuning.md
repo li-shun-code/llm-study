@@ -461,4 +461,4 @@ class SupervisedDataset(Dataset):
 
 ---
 
-> **编者按**：模块 4 的《训练范式总览》从概念上介绍了预训练（Pre-training）→ 有监督微调（SFT）→ 偏好对齐（RLHF/DPO）三个阶段。本文承接该篇，以 Hugging Face Transformers 为主框架，完整走一遍"从初始化模型 → 预训练数据处理 → Trainer 训练 → DeepSpeed 分布式 → SFT 全参微调"的工程流程。原文以 Qwen-2.5-1.5B 为例；文中对过长的分布式脚本细节做了节选，均以"编者注"标明。
+> **编者按**：「LLM 基础」的《训练范式总览》从概念上介绍了预训练（Pre-training）→ 有监督微调（SFT）→ 偏好对齐（RLHF/DPO）三个阶段。本文承接该篇，以 Hugging Face Transformers 为主框架，完整走一遍"从初始化模型 → 预训练数据处理 → Trainer 训练 → DeepSpeed 分布式 → SFT 全参微调"的工程流程。原文以 Qwen-2.5-1.5B 为例；文中对过长的分布式脚本细节做了节选，均以"编者注"标明。

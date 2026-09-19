@@ -174,7 +174,7 @@ for request in requests_to_search:
 
 **表：两种动作风格的对比。**
 
-与第 13 篇 OpenAI Agents SDK 的沙箱智能体、第 15 篇 Computer Use 对照着看：三者都在回答同一个问题——"给模型多大的行动自由，配多大的安全边界"。
+与《LangGraph 入门：用 Graph API 与 Functional API 构建你的第一个智能体》 OpenAI Agents SDK 的沙箱智能体、《AutoGen 与 CrewAI：多智能体框架现状（AutoGen 已并入 Microsoft Agent Framework）》 Computer Use 对照着看：三者都在回答同一个问题——"给模型多大的行动自由，配多大的安全边界"。
 
 ---
 

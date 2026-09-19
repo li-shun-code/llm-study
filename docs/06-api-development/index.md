@@ -4,7 +4,7 @@ order: 6
 isRoot: true
 ---
 
-# 模块 6 · API 与应用开发
+# 「API 与应用开发」· API 与应用开发
 
 动手调用 LLM API 并封装成服务：流式、工具调用、成本优化，以 Responses API 与 Chat Completions 为主线。
 

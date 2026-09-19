@@ -4,7 +4,7 @@ order: 9
 isRoot: true
 ---
 
-# 模块 9 · Agent
+# 「Agent」· Agent
 
 从 ReAct 到多智能体与 MCP/A2A：构建、记忆、观测并生产化智能体。
 

@@ -259,8 +259,8 @@ SET hnsw.ef_search = 100;
 
 ## 两条路线怎么选（站内补充）
 
-- **已有 PostgreSQL、数据量中等、想和业务数据同库同事务**：pgvector——向量与业务表直接 JOIN，备份/权限/生态全部复用（本模块 09 篇的 PG 技能直接迁移）。
-- **向量规模大、检索负载重、需要专门的分布式架构**：Milvus——Milvus Lite 本地起步，Standalone/Distributed 平滑扩容，API 不变；模块 8 的 RAG 实战会再见到它。
+- **已有 PostgreSQL、数据量中等、想和业务数据同库同事务**：pgvector——向量与业务表直接 JOIN，备份/权限/生态全部复用（本「Agent」 篇的 PG 技能直接迁移）。
+- **向量规模大、检索负载重、需要专门的分布式架构**：Milvus——Milvus Lite 本地起步，Standalone/Distributed 平滑扩容，API 不变；「RAG」的 RAG 实战会再见到它。
 - 下一篇把 Chroma、Qdrant、Milvus、pgvector 与云上托管方案放到同一张表里做选型对比。
 
 ---

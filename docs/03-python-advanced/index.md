@@ -4,7 +4,7 @@ order: 3
 isRoot: true
 ---
 
-# 模块 3 · Python 进阶与框架
+# 「Python 进阶与框架」· Python 进阶与框架
 
 从语言进阶到工程化：内存与并发、类型系统、正则、HTTP 客户端与数据校验，以及 LLM 应用服务端的标配 FastAPI 与 Docker，再到测试、日志、性能分析与代码质量工具链。
 

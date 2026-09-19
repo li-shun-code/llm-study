@@ -4,7 +4,7 @@ order: 0
 isRoot: true
 ---
 
-# 模块 0 · Python 基础
+# 「Python 基础」· Python 基础
 
 零基础从环境搭建学到面向对象与文件处理，为后续所有模块打底。
 

@@ -4,7 +4,7 @@ order: 11
 isRoot: true
 ---
 
-# 模块 11 · Vibe Coding
+# 「Vibe Coding」· Vibe Coding
 
 AI 时代的编程工作方式：从第一次 AI 结对到团队落地，Claude Code/Cursor 工作流、规范文件、Spec 驱动与上下文工程的完整进阶课程。
 

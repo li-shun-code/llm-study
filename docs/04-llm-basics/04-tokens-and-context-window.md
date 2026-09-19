@@ -173,7 +173,7 @@ def num_tokens_from_messages(messages, model="gpt-4o-mini-2024-07-18"):
     return num_tokens
 ```
 
-> 注：对 GPT-5/6 系列等新模型，官方推荐直接读取 API 响应中的 `usage` 字段获得精确计数（Responses API 返回 `usage.input_tokens` / `usage.output_tokens`），上述估算函数主要用于请求发送前的预算控制。详见模块 6《成本与 Token 优化》。
+> 注：对 GPT-5/6 系列等新模型，官方推荐直接读取 API 响应中的 `usage` 字段获得精确计数（Responses API 返回 `usage.input_tokens` / `usage.output_tokens`），上述估算函数主要用于请求发送前的预算控制。详见《成本与 Token 优化》。
 
 ## 五、上下文窗口（Context Window）
 
@@ -181,7 +181,7 @@ def num_tokens_from_messages(messages, model="gpt-4o-mini-2024-07-18"):
 
 1. **单次能处理多长的文档**（能否整本塞进去）；
 2. **多轮对话能记忆多久**（超出窗口的早期消息必须截断或摘要化）；
-3. **RAG/Agent 能携带多少工具结果**（模块 8/9 的关键约束）。
+3. **RAG/Agent 能携带多少工具结果**（「RAG」/9 的关键约束）。
 
 **表：部分当前模型的上下文窗口（2026-09-13 核实）**
 

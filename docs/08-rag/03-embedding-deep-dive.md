@@ -94,7 +94,7 @@ import pandas as pd
 pd.DataFrame(embeddings).to_csv("embeddings.csv", index=False)
 ```
 
-> 编者注：这是演示级的存法。生产 RAG 中，嵌入会连同原文一起存入向量数据库（FAISS、Chroma、Milvus、pgvector 等，见模块 7 与本模块第 05/06 篇），由其负责索引与近邻搜索。
+> 编者注：这是演示级的存法。生产 RAG 中，嵌入会连同原文一起存入向量数据库（FAISS、Chroma、Milvus、pgvector 等，见「数据库」与本模块第 05/06 篇），由其负责索引与近邻搜索。
 
 ### 3. 找出与查询最相似的 FAQ
 

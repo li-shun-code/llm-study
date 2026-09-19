@@ -18,7 +18,7 @@ order: 13
 
 概念性介绍参见官方 [Graph API 概览](https://docs.langchain.com/oss/python/langgraph/graph-api) 与 [Functional API 概览](https://docs.langchain.com/oss/python/langgraph/functional-api)。
 
-> **信息**：本示例需要一个 [Claude (Anthropic)](https://www.anthropic.com/) 账号与 API Key，并在终端设置 `ANTHROPIC_API_KEY` 环境变量（API Key 管理方式参见本站模块 0 的 .env 方案）。所有可用的聊天模型提供商参见官方 [chat model integrations](https://docs.langchain.com/oss/python/integrations/chat) 页。中文读者也可以用任何 OpenAI 兼容端点替换 `init_chat_model` 的模型参数。
+> **信息**：本示例需要一个 [Claude (Anthropic)](https://www.anthropic.com/) 账号与 API Key，并在终端设置 `ANTHROPIC_API_KEY` 环境变量（API Key 管理方式参见本站「Python 基础」的 .env 方案）。所有可用的聊天模型提供商参见官方 [chat model integrations](https://docs.langchain.com/oss/python/integrations/chat) 页。中文读者也可以用任何 OpenAI 兼容端点替换 `init_chat_model` 的模型参数。
 
 先安装依赖：
 
@@ -98,7 +98,7 @@ class MessagesState(TypedDict):
     llm_calls: int
 ```
 
-> **提示**：LangGraph 的状态在智能体的整个执行过程中持久存在。`Annotated` 类型配合 `operator.add`，确保新消息是**追加**到现有列表，而不是替换它——这就是模块 1 数据结构里"半群/monoid 归并"思想在状态合并上的应用。
+> **提示**：LangGraph 的状态在智能体的整个执行过程中持久存在。`Annotated` 类型配合 `operator.add`，确保新消息是**追加**到现有列表，而不是替换它——这就是「数据结构与算法」数据结构里"半群/monoid 归并"思想在状态合并上的应用。
 
 ## 第 3 步：定义模型节点
 
@@ -210,7 +210,7 @@ for m in messages["messages"]:
     m.pretty_print()
 ```
 
-> **提示**：可以用 [LangSmith](https://smith.langchain.com) 追踪和调试你的智能体（详见本模块第 16 篇）。
+> **提示**：可以用 [LangSmith](https://smith.langchain.com) 追踪和调试你的智能体（详见《OpenAI Agents SDK：轻量多智能体框架入门》）。
 
 恭喜！你已经用 LangGraph Graph API 构建了第一个智能体。
 

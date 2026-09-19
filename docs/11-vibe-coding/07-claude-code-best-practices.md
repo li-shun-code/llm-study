@@ -436,7 +436,7 @@ nothing outside the task's scope changed. Report gaps, not style preferences.
 - Common workflows：调试、测试、PR 等日常任务的分步配方
 - CLAUDE.md：存放项目约定与持久上下文
 
-> 译注：本文与模块 5《Prompt 工程》、模块 9《Agent》多有呼应：给 Claude 可运行的验证手段即"让智能体闭合回路"，子智能体与并行会话即本模块第 22 篇《多智能体协作编码》的实践基础，CLAUDE.md 与 Skills 则详见本模块第 10、11 篇。
+> 译注：本文与《Prompt 工程》、《Agent》多有呼应：给 Claude 可运行的验证手段即"让智能体闭合回路"，子智能体与并行会话即《多智能体协作编码》的实践基础，CLAUDE.md 与 Skills 则详见本模块第 10、11 篇。
 
 ---
 

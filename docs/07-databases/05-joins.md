@@ -107,7 +107,7 @@ SELECT *
 
 这种缩写风格你会非常频繁地遇到。
 
-> 站内提示：本模块 02 篇设计的"会话-消息"表就是典型的 JOIN 场景——取出某个会话的全部消息用 `messages m JOIN conversations c ON m.conversation_id = c.id`；若要连未发送任何消息的空会话也列出来，就该用 `LEFT OUTER JOIN`（会话在左）。
+> 站内提示：本「计算机基础」 篇设计的"会话-消息"表就是典型的 JOIN 场景——取出某个会话的全部消息用 `messages m JOIN conversations c ON m.conversation_id = c.id`；若要连未发送任何消息的空会话也列出来，就该用 `LEFT OUTER JOIN`（会话在左）。
 
 ---
 

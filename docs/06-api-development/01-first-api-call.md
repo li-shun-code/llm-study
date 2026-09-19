@@ -9,7 +9,7 @@ order: 1
 versions: openai-python 2026-09 最新稳定版（HTTPX2 传输层）、示例模型 gpt-5.5 / gpt-4o-mini
 ---
 
-本篇是整个模块的起点：安装官方 SDK、配置 API Key（用模块 0 讲过的 `.env` 方案，不要把 Key 写进代码），然后分别用 **Responses API** 与 **Chat Completions API** 发出第一个调用。OpenAI 现在的主推接口是 Responses API；Chat Completions 是长期支持（"supported indefinitely"）的上一代标准，两者并讲、互相印证。
+本篇是整个模块的起点：安装官方 SDK、配置 API Key（用「Python 基础」讲过的 `.env` 方案，不要把 Key 写进代码），然后分别用 **Responses API** 与 **Chat Completions API** 发出第一个调用。OpenAI 现在的主推接口是 Responses API；Chat Completions 是长期支持（"supported indefinitely"）的上一代标准，两者并讲、互相印证。
 
 > 编者注：早期的 Assistants API 已废弃，本站一律不作为教学内容；如你读到基于 Assistants/Threads 的旧教程，请按本模块的 Responses API 写法对照迁移。
 
@@ -39,7 +39,7 @@ load_dotenv()  # 读取当前目录下的 .env，把变量注入环境
 # 之后 OpenAI() 会自动读取环境变量 OPENAI_API_KEY，无需显式传参
 ```
 
-`.env`、虚拟环境、环境变量管理的完整细节见模块 0《环境变量与 API Key 管理》。Key 可在 platform.openai.com 的 API Keys 设置页申请。
+`.env`、虚拟环境、环境变量管理的完整细节见《环境变量与 API Key 管理》。Key 可在 platform.openai.com 的 API Keys 设置页申请。
 
 ## 三、Responses API：当前的主接口
 
@@ -120,7 +120,7 @@ print(completion.choices[0].message.content)
 | 输入 | `input`（字符串或消息列表） | `messages`（消息列表） |
 | 系统指令 | `instructions` 参数 / `system` 角色 | `system` / `developer` 角色 |
 | 取回文本 | `response.output_text` | `completion.choices[0].message.content` |
-| 会话状态 | 可由 API 保存（`previous_response_id`，见第 02 篇） | 应用自己维护 `messages` 列表 |
+| 会话状态 | 可由 API 保存（`previous_response_id`，见《消息角色与多轮会话管理》） | 应用自己维护 `messages` 列表 |
 
 ## 五、异步客户端
 
@@ -206,7 +206,7 @@ response = client.responses.create(
 
 响应的 `output` 里会交替出现 `web_search_call`（搜索动作）与 `message`（带引用注释的回答）两种输出项。
 
-多模态输入也可以在一条请求里完成——图片 + 文本 + 工具的组合（`input_image` 内容块的用法详见本模块第 13 篇）：
+多模态输入也可以在一条请求里完成——图片 + 文本 + 工具的组合（`input_image` 内容块的用法详见《视觉理解 API：把图片喂给多模态模型》）：
 
 ```python
 response_multimodal = client.responses.create(
@@ -232,7 +232,7 @@ Cookbook 对两种 API 的工作流差异总结得很到位：同样"看图 + �
 
 ## 七、本篇小结
 
-- 安装 `openai`，Key 走 `.env`（模块 0 方案），客户端默认读环境变量；
+- 安装 `openai`，Key 走 `.env`（「Python 基础」方案），客户端默认读环境变量；
 - Responses API 是主接口：`client.responses.create(model, input)` + `response.output_text`；
 - Chat Completions 长期支持：`messages` 列表 + `choices[0].message.content`；
 - Responses API 额外提供 API 侧会话状态（`retrieve` / `previous_response_id`）与托管工具；

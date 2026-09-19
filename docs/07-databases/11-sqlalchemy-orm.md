@@ -302,7 +302,7 @@ COMMIT
 
 （原文提示：`session.delete(patrick)` 时会先发出 SELECT——因为上次 `commit()` 后对象已过期（Expired），需要在新事务里重新加载；这种过期机制是可选的，不适用时通常会把它关掉。）
 
-> 站内提示：本站模块 6/8 的实战项目（FastAPI 服务、RAG 落库）都默认用 SQLAlchemy 2.0 风格访问 SQLite/PostgreSQL；把本篇的 `Session(engine)` 与 07 篇的事务概念对照着看，`commit()` 之前的每一步 flush 都是可回滚的。
+> 站内提示：本站「API 与应用开发」/8 的实战项目（FastAPI 服务、RAG 落库）都默认用 SQLAlchemy 2.0 风格访问 SQLite/PostgreSQL；把本篇的 `Session(engine)` 与 07 篇的事务概念对照着看，`commit()` 之前的每一步 flush 都是可回滚的。
 
 ---
 

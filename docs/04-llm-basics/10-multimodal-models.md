@@ -16,7 +16,7 @@ order: 10
 2. **连接器**（connector，常为投影层或轻量交叉注意力）：把视觉向量"翻译"到语言模型的向量空间；
 3. **语言模型**（LLM 解码器）：把图像 token 与文本 token 拼在一起统一处理。
 
-对 LLM 应用开发者而言，VLM 意味着：同一个 API/模型里，输入可以混排图片与文字——截图问答、票据提取、UI 理解、图表解读都由一个模型完成（API 用法见模块 6《视觉理解 API》）。
+对 LLM 应用开发者而言，VLM 意味着：同一个 API/模型里，输入可以混排图片与文字——截图问答、票据提取、UI 理解、图表解读都由一个模型完成（API 用法见《视觉理解 API》）。
 
 ## 二、过去一年发生了什么（译自原文）
 
@@ -68,8 +68,8 @@ VLM 甚至在机器人领域留下印记，在那儿它们叫视觉-语言-动�
 
 - **检测/分割/计数**：VLM 已不止"看图说话"——可以输出边界框做零样本目标检测与指认（pointing），Florence-2、PaliGemma 一系是该方向代表；
 - **多模态安全模型**：专门审查图像-文本输入输出的护栏模型（如 Llama Guard 3 Vision）；
-- **多模态 RAG**：检索器与重排器全面多模态化（ColPali/ColQwen 等用"视觉 embedding"直接检索文档页面图像），详见模块 8《多模态 RAG》；
-- **多模态 Agent**：会看屏幕、操作 UI 的 Agent（UI 导航、计算机操作），Qwen2.5-VL 一系展现了强 Agent 倾向——模块 9《Computer Use》正是这一方向的落地；
+- **多模态 RAG**：检索器与重排器全面多模态化（ColPali/ColQwen 等用"视觉 embedding"直接检索文档页面图像），详见《多模态 RAG》；
+- **多模态 Agent**：会看屏幕、操作 UI 的 Agent（UI 导航、计算机操作），Qwen2.5-VL 一系展现了强 Agent 倾向——《Computer Use》正是这一方向的落地；
 - **视频语言模型**：长视频理解成为独立赛道；
 - **新基准**：MMT-Bench、MMMU-Pro 等更难的多模态评测，把"选项泄漏"等旧基准问题一并修掉。
 
@@ -78,13 +78,13 @@ VLM 甚至在机器人领域留下印记，在那儿它们叫视觉-语言-动�
 - 多模态已是**旗舰标配**而非附加能力：OpenAI GPT-6 Astra 官方参数即"文本+图像输入"；Google Gemini 3 系以原生多模态为招牌（文本/图像/视频/音频）；阿里百炼提供全模态 `qwen3.5-omni-plus`（含实时语音版）；
 - 开源侧以 **Qwen3-VL**（[QwenLM/Qwen3-VL](https://github.com/QwenLM/Qwen3-VL)）与 GLM 系多模态（GLM-5.3-Flash 预训练语料即含 30T token 多模态数据）为代表，尺寸阶梯齐全；
 - "Any-to-any / 全模态"继续收敛：一个模型同时理解并生成文本、图像、音频、视频（Gemini Omni、Qwen-Omni 系）正在成为旗舰形态；
-- 开发者入门路径：先用 API 体验（模块 6《视觉理解 API》），再选一个 2B 级开源 VLM 在本地/Colab 复现"图像问答 → 文档提取 → UI Agent"三连（模块 10 的部署文章可直接复用）。
+- 开发者入门路径：先用 API 体验（《视觉理解 API》），再选一个 2B 级开源 VLM 在本地/Colab 复现"图像问答 → 文档提取 → UI Agent"三连（「微调与部署」的部署文章可直接复用）。
 
 ## 延伸阅读
 
 - VLM 入门第一篇（LLaVA 详解、如何发现/评估/微调开源 VLM）：[Vision Language Models Explained](https://huggingface.co/blog/vlms)（2024-04）
 - MoE 机制详解：[Mixture of Experts Explained](https://huggingface.co/blog/moe)
-- 站内延伸：模块 8《多模态 RAG》、模块 9《Computer Use/浏览器操作 Agent》、模块 6《视觉理解 API》
+- 站内延伸：《多模态 RAG》、《Computer Use/浏览器操作 Agent》、《视觉理解 API》
 
 ---
 

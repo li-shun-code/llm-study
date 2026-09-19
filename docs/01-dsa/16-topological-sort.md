@@ -180,4 +180,4 @@ struct TopoSort {
 ---
 
 > **来源**：本文转载自 [拓扑排序](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/topo.md)，作者 OI Wiki 项目，许可 CC BY-SA 4.0。抓取于 2026-09-13。
-> 原文面向算法竞赛、代码示例为 C++；本站以 Python 为主，可对照学习其思路。本篇呼应模块 9：LangGraph 的 DAG 执行依赖拓扑序。
+> 原文面向算法竞赛、代码示例为 C++；本站以 Python 为主，可对照学习其思路。本篇呼应「Agent」：LangGraph 的 DAG 执行依赖拓扑序。

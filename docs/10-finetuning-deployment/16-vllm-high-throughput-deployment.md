@@ -9,7 +9,7 @@ order: 16
 versions: vLLM（V1 引擎，2026-09 官方文档最新版）
 ---
 
-上一篇讲了 vLLM 为什么快（[推理原理](./14-inference-principles)），这一篇把它跑起来：安装、离线批量推理、OpenAI 兼容在线服务，以及生产环境必备的 Docker 容器化。容器化基础（镜像/卷/端口映射）见模块 3 的 Docker 篇。
+上一篇讲了 vLLM 为什么快（[推理原理](./14-inference-principles)），这一篇把它跑起来：安装、离线批量推理、OpenAI 兼容在线服务，以及生产环境必备的 Docker 容器化。容器化基础（镜像/卷/端口映射）见「Python 进阶与框架」的 Docker 篇。
 
 ## 前提条件
 

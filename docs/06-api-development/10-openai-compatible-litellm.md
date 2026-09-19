@@ -25,7 +25,7 @@ client = OpenAI(
 # 之后 chat.completions.create(...) 的写法完全一致
 ```
 
-模块 0 的"环境变量与 API Key 管理"同样适用：`base_url` 与 `api_key` 都从 `.env` 读，一行环境变量切换厂商。本站附录的 AI 学习助手（AiAssistant 组件）就是按"自配 OpenAI 兼容端点"设计的。
+「Python 基础」的"环境变量与 API Key 管理"同样适用：`base_url` 与 `api_key` 都从 `.env` 读，一行环境变量切换厂商。本站附录的 AI 学习助手（AiAssistant 组件）就是按"自配 OpenAI 兼容端点"设计的。
 
 **路线 2：统一路由库 LiteLLM。** [LiteLLM](https://docs.litellm.ai) 是开源库，用**同一个 `completion()` 接口**调用 100+ 家模型（OpenAI、Anthropic、Vertex AI、Bedrock 等），并内置重试/回退（fallback）、Router 负载均衡与可自托管的 LLM 网关（Proxy，含虚拟密钥、成本追踪与管理 UI）。当你要在**运行时动态切换厂商**、做多供应商容灾时，它比手改 `base_url` 更顺手。
 
@@ -215,7 +215,7 @@ asyncio.run(completion_call())
 
 - **Router 与 fallback**：同一逻辑名挂多个部署，按限流/错误自动切换（第 07 篇的"降级模型"策略的库级实现）；
 - **LLM Gateway（Proxy）**：以容器方式自托管网关，应用拿虚拟密钥（virtual keys）访问模型，网关统一记账、限流、观测——团队共享模型访问的常见架构；
-- **成本核算**：配合 `completion_cost` 等辅助能力把第 09 篇的成本意识落到账单层面。
+- **成本核算**：配合 `completion_cost` 等辅助能力把前述的成本意识落到账单层面。
 
 ## 六、本篇小结
 

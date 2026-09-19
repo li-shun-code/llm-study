@@ -27,7 +27,7 @@ pip install -U langchain
 
 ## 二、配置 API Key
 
-从任一受支持的模型供应商获取 Key，写进 shell 环境或 `.env` 文件（配合 `python-dotenv` 的 `load_dotenv()` 加载——与模块 0 的方案一致）：
+从任一受支持的模型供应商获取 Key，写进 shell 环境或 `.env` 文件（配合 `python-dotenv` 的 `load_dotenv()` 加载——与「Python 基础」的方案一致）：
 
 ```sh
 export OPENAI_API_KEY="your-api-key"
@@ -63,9 +63,9 @@ result = agent.invoke(
 print(result["messages"][-1].content_blocks)
 ```
 
-换模型只改模型名前缀（如 `"claude-sonnet-4-6"`、`"google_genai:gemini-2.5-flash-lite"`、`"openrouter:anthropic/claude-sonnet-4-6"`、`"baseten:zai-org/GLM-5.2"`、`"ollama:devstral-2"`）并配好对应 Key——模型字符串的 `provider:model` 语法与第 10 篇 LiteLLM 的思路异曲同工。
+换模型只改模型名前缀（如 `"claude-sonnet-4-6"`、`"google_genai:gemini-2.5-flash-lite"`、`"openrouter:anthropic/claude-sonnet-4-6"`、`"baseten:zai-org/GLM-5.2"`、`"ollama:devstral-2"`）并配好对应 Key——模型字符串的 `provider:model` 语法与《OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型》 LiteLLM 的思路异曲同工。
 
-当你提示旧金山天气时，Agent 会理解这是在问该市的天气，**自动调用天气工具**并组织回答。这就是模型 + 工具 + 循环的最小闭环（Function Calling 原理见第 04 篇，Agent 体系在模块 9 展开）。
+当你提示旧金山天气时，Agent 会理解这是在问该市的天气，**自动调用天气工具**并组织回答。这就是模型 + 工具 + 循环的最小闭环（Function Calling 原理见《Function Calling / Tool Use：让模型调用你的函数》，Agent 体系在「Agent」展开）。
 
 ## 四、构建一个真实世界的 Agent
 
@@ -110,7 +110,7 @@ def fetch_text_from_url(url: str) -> str:
     return text
 ```
 
-官方强调：**工具要写好文档**——工具名、描述、参数名都会成为模型提示词的一部分（这正是第 04 篇 Function Calling 的原则在框架层的体现）。`@tool` 装饰器负责补充元数据，并支持通过 `ToolRuntime` 参数做运行时注入。
+官方强调：**工具要写好文档**——工具名、描述、参数名都会成为模型提示词的一部分（这正是《Function Calling / Tool Use：让模型调用你的函数》 Function Calling 的原则在框架层的体现）。`@tool` 装饰器负责补充元数据，并支持通过 `ToolRuntime` 参数做运行时注入。
 
 ### 3. 配置模型参数
 
@@ -220,7 +220,7 @@ export LANGSMITH_TRACING="true"
 export LANGSMITH_API_KEY="..."
 ```
 
-设置后重跑脚本，即可在 LangSmith 控制台检查每次 Agent 调用的完整轨迹。（模块 9 的"可观测性与 Tracing"专题会系统展开。）
+设置后重跑脚本，即可在 LangSmith 控制台检查每次 Agent 调用的完整轨迹。（「Agent」的"可观测性与 Tracing"专题会系统展开。）
 
 ## 六、本篇小结
 
@@ -230,7 +230,7 @@ export LANGSMITH_API_KEY="..."
 - Deep Agents 是"内置规划/文件系统/子代理"的超集，粗粒度需求先试它；
 - 接 LangSmith 看 trace，是调试 Agent 行为的第一手段。
 
-Agent 的完整知识地图（ReAct、规划、记忆、多智能体、MCP）在模块 9。
+Agent 的完整知识地图（ReAct、规划、记忆、多智能体、MCP）在「Agent」。
 
 ---
 

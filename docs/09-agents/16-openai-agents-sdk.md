@@ -50,7 +50,7 @@ pip install openai-agents
 
 ### uv
 
-如果你熟悉 [uv](https://docs.astral.sh/uv/)（本站模块 3 有专文介绍），安装更简单：
+如果你熟悉 [uv](https://docs.astral.sh/uv/)（本站「Python 进阶与框架」有专文介绍），安装更简单：
 
 ```bash
 uv init
@@ -107,7 +107,7 @@ result = Runner.run_sync(
 print(result.final_output)
 ```
 
-沙箱智能体是"代码解释器型 Agent"的工程化形态——模型在受控容器里读写文件、执行命令，而不是在你的宿主机上裸奔（安全考量见第 18 篇）。
+沙箱智能体是"代码解释器型 Agent"的工程化形态——模型在受控容器里读写文件、执行命令，而不是在你的宿主机上裸奔（安全考量见《Computer Use 与浏览器操作 Agent：让模型亲手操作图形界面》）。
 
 ### 运行一个实时智能体
 
@@ -174,7 +174,7 @@ OpenAI 承诺继续把 Agents SDK 作为开源框架来构建，让社区能在�
 
 # 与本模块其他文章的关系
 
-- 它的 **Tools** 机制就是模块 6 讲过的 Function Calling 的 SDK 封装；**MCP** 一节则展示如何把任意 MCP 服务器的能力挂到 Agent 上（见第 4 篇对比）；
+- 它的 **Tools** 机制就是「API 与应用开发」讲过的 Function Calling 的 SDK 封装；**MCP** 一节则展示如何把任意 MCP 服务器的能力挂到 Agent 上（见第 4 篇对比）；
 - **Handoffs** 与 **Agents as tools** 是第 9 篇多智能体模式在 SDK 里的两种实现；
 - **Guardrails** 与 **Human in the loop** 分别对应第 11、18 篇的安全与审批主题；
 - **Tracing** 默认把运行轨迹上传到 OpenAI 控制台，也可导出为 OpenTelemetry 接入 Langfuse 等（第 16 篇）。

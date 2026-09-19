@@ -9,7 +9,7 @@ versions: Transformers 主分支文档（2026-09）；bitsandbytes 当前开发�
 order: 13
 ---
 
-本篇为重做版：正文主体完整翻译自两份一手文档——Hugging Face Transformers 官方文档的量化总览页（含完整的量化方法选型表）与 bitsandbytes 官方 README（含完整的平台支持矩阵），替换原先的编者总结内容。文末逐节署名。
+本篇正文完整译自两份一手文档——Hugging Face Transformers 官方文档的量化总览页（含量化方法选型表）与 bitsandbytes 官方 README（含平台支持矩阵），文末逐节署名。
 
 # 量化总览（译自 Transformers 官方文档 Quantization Overview）
 
@@ -124,4 +124,4 @@ Transformers 支持多种量化方法，各有优劣，你可以为具体用例�
 
 ---
 
-> **来源**：抓取于 2026-09-13。本篇为编者总结版的重做：正文主体替换为原文完整翻译。① 第一节译自 Hugging Face Transformers 官方文档 [Quantization Overview](https://huggingface.co/docs/transformers/quantization/overview)（GitHub 主分支 docs/source/en/quantization/overview.md，作者 Hugging Face，Apache 2.0；选型大表为完整翻译——原表的 Markdown 行内链接改为文字链接，列顺序与标记含义保持一致；Resources 与 User-Friendly Quantization Tools 两节完整翻译）。② 第二节译自 [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes) 官方 README（作者 Titius Dettmers 与 bitsandbytes 贡献者，MIT 许可；三大特性、系统要求、加速器支持矩阵为完整翻译——原 HTML 表格改写为等效 Markdown 表格、合并图例；文档链接、赞助、许可与引用各节为完整翻译，三条 BibTeX 原文保留于官方仓库，此处转述条目信息）。两节之间的过渡句与表内括号说明为本篇编者注，不属原文。
+> **来源**：抓取于 2026-09-13。正文为原文完整翻译。① 第一节译自 Hugging Face Transformers 官方文档 [Quantization Overview](https://huggingface.co/docs/transformers/quantization/overview)（GitHub 主分支 docs/source/en/quantization/overview.md，作者 Hugging Face，Apache 2.0；选型大表为完整翻译——原表的 Markdown 行内链接改为文字链接，列顺序与标记含义保持一致；Resources 与 User-Friendly Quantization Tools 两节完整翻译）。② 第二节译自 [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes) 官方 README（作者 Titius Dettmers 与 bitsandbytes 贡献者，MIT 许可；三大特性、系统要求、加速器支持矩阵为完整翻译——原 HTML 表格改写为等效 Markdown 表格、合并图例；文档链接、赞助、许可与引用各节为完整翻译，三条 BibTeX 原文保留于官方仓库，此处转述条目信息）。两节之间的过渡句与表内括号说明为本篇编者注，不属原文。

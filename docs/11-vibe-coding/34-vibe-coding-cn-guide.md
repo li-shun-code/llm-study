@@ -666,7 +666,7 @@ AI 特别适合生成：
 | prompts / skills / tools | 提示词库、技能库、Codex 配置 | 07（Claude Code 最佳实践）、12（Skills） |
 | research | 对主流 AI 编程仓库的逐个深度解析（Cline、Aider、OpenCode 等） | 02（工具全景）、21（Cline 与 Windsurf） |
 
-编者按语：这个仓库最值得学的是它把"AI 不能自证正确"落实为机器门禁的思路——与本模块第 19 篇 TDD with AI、第 24 篇安全陷阱一脉相承；而"拼好码"则可以看作 Simon Willison"vibe engineering"（见第 1 篇延伸节）的一种中文社区表达。
+编者按语：这个仓库最值得学的是它把"AI 不能自证正确"落实为机器门禁的思路——与《TDD with AI：Kent Beck 的增强编程实践》 TDD with AI、第 24 篇安全陷阱一脉相承；而"拼好码"则可以看作 Simon Willison"vibe engineering"（见第 1 篇延伸节）的一种中文社区表达。
 
 ---
 

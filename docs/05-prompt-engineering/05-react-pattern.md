@@ -155,7 +155,7 @@ def run_react(question: str, max_steps: int = 8) -> str:
     raise RuntimeError("超过最大步数，仍未收敛")
 ```
 
-这套"Thought → Action → Observation"循环，正是模块 9 Agent 章节里 Agent 执行循环的原型。
+这套"Thought → Action → Observation"循环，正是「Agent」Agent 章节里 Agent 执行循环的原型。
 
 原文的示例 notebook 见 [dair-ai/Prompt-Engineering-Guide/notebooks/react.ipynb](https://github.com/dair-ai/Prompt-Engineering-Guide/blob/main/notebooks/react.ipynb)。
 
