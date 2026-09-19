@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev docs",
-    "build": "vitepress build docs",
+    "build": "node scripts/renumber.mjs --apply && node scripts/gen-sidebar.mjs docs && node scripts/gen-manifest.mjs && node scripts/check-frontmatter.mjs docs && vitepress build docs",
     "preview": "vitepress preview docs",
+    "check": "node scripts/check-frontmatter.mjs docs && node scripts/scan-leaks.mjs docs && node --test tests/*.test.mjs",
     "tts-proxy": "node scripts/tts-proxy.mjs"
   },
   "devDependencies": {
