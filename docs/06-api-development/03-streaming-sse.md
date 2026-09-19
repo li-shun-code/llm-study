@@ -60,7 +60,7 @@ asyncio.run(main())
 ```python
 # 带 stream=True 的 Chat Completions 请求
 response = client.chat.completions.create(
-    model='gpt-4o-mini',
+    model='gpt-5.5',
     messages=[
         {'role': 'user', 'content': "What's 1+1? Answer in one word."}
     ],
@@ -98,7 +98,7 @@ start_time = time.time()
 
 # 流式请求：数到 100，逗号分隔、不换行
 response = client.chat.completions.create(
-    model='gpt-4o-mini',
+    model='gpt-5.5',
     messages=[
         {'role': 'user', 'content': 'Count to 100, with a comma between each number and no newlines. E.g., 1, 2, 3, ...'}
     ],
@@ -156,7 +156,7 @@ full_reply_content = ''.join(collected_messages)
 
 ```python
 response = client.chat.completions.create(
-    model='gpt-4o-mini',
+    model='gpt-5.5',
     messages=[
         {'role': 'user', "content": "What's 1+1? Answer in one word."}
     ],
@@ -170,7 +170,47 @@ for chunk in response:
     print("****************")
 ```
 
-## 五、SDK 的高级流式助手（可选）
+## 五、Responses API 的事件流：按类型分支，别再猜属性
+
+本篇的主线接口是 Responses API，它的流不是"分块数组"而是**命名事件流**，每个事件都有 `type`。最小可用解析器：
+
+```python
+response = client.responses.create(
+    model="gpt-5.5",
+    input="用三句话介绍一下向量数据库",
+    stream=True,
+    # 让最后一个 response.completed 事件里带上完整 token 用量（默认即包含在响应对象中）
+)
+
+final_text_parts = []
+for event in response:
+    if event.type == "response.created":
+        print("response id:", event.response.id)      # 断线重连、后台任务续传都靠它
+    elif event.type == "response.output_item.added":
+        print("\n[新输出项]", event.item.type)         # message / reasoning / web_search_call …
+    elif event.type == "response.output_text.delta":
+        print(event.delta, end="", flush=True)         # 文本增量：这是打字机效果的那条
+        final_text_parts.append(event.delta)
+    elif event.type == "response.output_text.done":
+        print("\n[文本完成]", len(event.text), "字符")
+    elif event.type == "response.function_call_arguments.delta":
+        print("\n[工具参数增量]", event.delta)          # 工具调用参数也是流式生成
+    elif event.type == "response.completed":
+        usage = event.response.usage
+        print("[完成] in/out tokens:", usage.input_tokens, usage.output_tokens)
+    elif event.type == "response.failed" or event.type == "error":
+        raise RuntimeError(f"流内错误事件：{getattr(event, 'code', None)} {getattr(event, 'message', None)}")
+```
+
+四条经验（本站踩出来的）：
+
+1. **别用 `hasattr` 猜事件形状**。按 `event.type` 分支，升级 SDK 时不会因为字段迁移而静默丢内容；
+2. **累积文本自己拼**，但最终以 `response.completed` 里的 `response.output_text` 为准——断流后拼接结果可能不完整；
+3. **`event.sequence_number` 是断流续传的锚点**，配合 `background=True` 可以从上一个序号续订，见《Responses API 会话与后台任务》；
+4. **错误也可能是事件**：`response.failed` / `error` 不会抛异常，只在流里出现，必须显式处理，否则表现为"话说到一半没了"。
+
+## 六、SDK 的高级流式助手（可选）
+
 
 openai-python 还提供 `client.chat.completions.stream()` 上下文管理器——它在原始分块之上提供更细粒度的事件（内容增量、拒绝增量、工具调用参数增量等）与自动累积（原文见 SDK 的 Structured Outputs Parsing / Streaming Helpers 文档）：
 
@@ -181,7 +221,7 @@ client = AsyncOpenAI()
 
 async with client.chat.completions.stream(
     model='gpt-5.5',
-    messages=[...],
+    messages=[{"role": "user", "content": "用三句话介绍一下向量数据库"}],
 ) as stream:
     async for event in stream:
         if event.type == 'content.delta':
@@ -190,18 +230,18 @@ async with client.chat.completions.stream(
 
 常用事件类型：`chunk`（每个原始分块）、`content.delta` / `content.done`（内容增量与完成）、`refusal.delta` / `refusal.done`（拒绝内容）、`tool_calls.function.arguments.delta` / `.done`（工具调用参数流式生成）。流结束后 `stream.get_final_completion()` 可直接取回累积完成的完整响应对象。
 
-> 编者提示：SDK 文档中的 Assistants 流式助手（`beta.threads.runs.stream` 等）随 Assistants API 一并废弃，请勿在新项目中使用；Responses API 的事件流用 `client.responses.create(..., stream=True)` 迭代即可。
+> 编者提示：SDK 文档中的 Assistants 流式助手（`beta.threads.runs.stream` 等）随 Assistants API 一并废弃，请勿在新项目中使用；Responses API 的事件流用 `client.responses.create(..., stream=True)` 迭代即可（上一节给了完整解析器）。
 
-## 六、何时不要用流式
+## 七、何时不要用流式
 
 原文的两点提醒值得记牢：
 
 1. **内容审核更困难**：`stream=True` 下内容是一段段到达的，部分内容难以在展示前整体评估，生产应用需要自己在流上叠加审核/过滤逻辑；
 2. **流不可自动重试**：openai-python 文档明确——消费 `Stream`/`AsyncStream` 时的读超时抛 `APITimeoutError`、其他请求失败抛 `APIConnectionError`，且**流式消费不会被 SDK 自动重试**，因为重放请求可能把已经输出给用户的内容再输出一遍（错误处理详见《错误处理、重试与限流》）。
 
-## 七、本篇小结
+## 八、本篇小结
 
-- `stream=True` 让响应以 SSE 事件流下发，首 token 延迟从秒级降到约 0.1 秒；
+- `stream=True` 让响应以 SSE 事件流下发，首 token 延迟从秒级降到约 0.1 秒；Responses API 侧按 `event.type` 分支（`response.output_text.delta` 是文本增量），Chat Completions 侧读 `chunk.choices[0].delta.content`；
 - Chat Completions 从 `chunk.choices[0].delta.content` 取增量；Responses API 迭代 `client.responses.create(..., stream=True)` 返回的事件流；
 - 拼接碎片得到完整文本；`stream_options={"include_usage": True}` 拿整次请求用量；
 - 流式不可自动重试，展示侧需自建审核与中断恢复逻辑。

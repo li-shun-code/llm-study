@@ -3,12 +3,12 @@ title: 成本管理：Token 消耗、订阅选择与用量优化
 source_url: https://code.claude.com/docs/en/costs
 author: Anthropic（Claude Code 官方文档 Manage costs effectively）
 license: 署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名）
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: true
 order: 11
 group: 用量与成本
 ---
-前面三篇讲的是"AI 代码的隐性风险"——安全陷阱、供应链投毒与 IP 合规，本篇讲另一种隐性成本——**字面意义的账单**。第 6 篇说过"上下文是稀缺资源"；稀缺的另一面是"贵"。当无人值守的智能体（《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》）成批消耗 token 时，成本管理就从"个人习惯"升级为"工程问题"。本篇主体翻译 Claude Code 官方文档《Manage costs effectively》：如何看账、如何按组织设限、以及十几种降耗策略。
+前面各篇讲的是"AI 代码的隐性风险"——安全陷阱、供应链投毒与合规责任；本篇讲另一种隐性成本——**字面意义的账单**。《心智模型：LLM 如何"看"你的代码》说过"上下文是稀缺资源"；稀缺的另一面就是"贵"。当无人值守的智能体（《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》）成批消耗 token 时，成本管理就从"个人习惯"升级为"工程问题"。本篇主体翻译 Claude Code 官方文档《Manage costs effectively》：如何看账、如何按组织设限、以及十几种降耗策略。
 
 > 官方开篇即给出基准数字：Claude Code 按 API token 消耗计费（订阅计划按月付）。各企业部署的**平均成本约为每个开发者每个活跃日 13 美元、每月 150-250 美元**，90% 的用户保持在每日 30 美元以下。官方建议：先小规模试点，用下文的跟踪工具建立基线，再推广。
 
@@ -33,7 +33,7 @@ Usage by model:
 
 ### Prompt cache 统计：为什么"缓存命中"就是省钱
 
-`/usage` 会显示 `Prompt cache (main)` 行——本次会话提示缓存的命中率、未命中次数与缓存冷热状态。缓存未命中（miss）意味着"重新处理了缓存里已有的内容"，常见诱因包括工具定义变化等（官方提示缓存页有完整清单）。这一行把第 6 篇讲的"上下文经济学"变成了可观测指标：**同样一个问题，在热缓存的会话里和在冷缓存的会话里，成本可能差一个数量级**。
+`/usage` 会显示 `Prompt cache (main)` 行——本次会话提示缓存的命中率、未命中次数与缓存冷热状态。缓存未命中（miss）意味着"重新处理了缓存里已有的内容"，常见诱因包括工具定义变化等（官方提示缓存页有完整清单）。这一行把《心智模型：LLM 如何"看"你的代码》讲的"上下文经济学"变成了可观测指标：**同样一个问题，在热缓存的会话里和在冷缓存的会话里，成本可能差一个数量级**。
 
 ### `/insights`：不止于 token 的工作方式报告
 
@@ -52,12 +52,12 @@ Usage by model:
 1. **主动管理上下文**
    - **任务之间 `/clear`**：切到不相关的工作就开新会话——陈旧上下文让每条后续消息都多付 token；清之前用 `/rename` 命名、之后 `/resume` 可随时回来
    - **自定义压缩指令**：`/compact Focus on code samples and API usage` 指定摘要保留什么；或在 CLAUDE.md 里写 "Compact instructions" 一节
-2. **选对模型**：Sonnet 能胜任大多数编码任务且便宜得多，Opus 留给复杂架构决策与多步推理；子智能体干简单活时在配置里指定 `model: haiku`
+2. **选对模型**：Sonnet 能胜任大多数编码任务且便宜得多，Opus 留给复杂架构决策与多步推理；子智能体干简单活时在配置里指定 `model: haiku`。按 2026-09 的 API 牌价（每百万 token 输入/输出）：**Sonnet 5 $2/$10、Opus 5 $5/$25、Haiku 4.5 $1/$5、Fable 5.1 $10/$50**——**同一档位内部的价差是 5 倍，跨档位是 25 倍**；而 Claude Code 的默认模型按账号类型解析（Pro/Team 标准席默认 Sonnet 5，Max/Team Premium/Enterprise/API 默认 Opus 5），**你不需要为"默认值是什么"付钱，只需要为"你把它调成了什么"付钱**
 3. **降低 MCP 开销**：MCP 工具定义默认延迟加载；**能用 CLI 就别用 MCP**——`gh`、`aws`、`gcloud` 这类命令行工具不增加任何工具清单开销，Claude 可以直接执行；`/mcp` 里禁用不活跃的服务器
 4. **给类型化语言装代码智能插件**：精确的符号导航（"go to definition"一次顶 grep+读多个候选文件），编辑后自动报告类型错误——省掉不必要的文件读取与编译
 5. **把处理卸载给 hooks 与技能**：与其让 Claude 读一万行日志找错误，不如用 PreToolUse hook 先 grep 出 `ERROR` 行——上下文从几万 token 降到几百；"codebase-overview"技能让架构、目录、命名规范即调即得，不必花 token 读一堆文件摸结构（官方附了过滤测试输出的 hook 完整脚本）
 6. **把指令从 CLAUDE.md 挪进技能**：CLAUDE.md 每次会话都全文加载；专用流程（PR 评审、数据库迁移）挪进按需加载的技能，**CLAUDE.md 目标控制在 200 行以内**
-7. **调整扩展思考**：扩展思考默认开启（显著提升规划与推理），但 thinking token 按输出计费、默认预算可达每请求数万 token
+7. **调整扩展思考与投入档位**：扩展思考默认开启（显著提升规划与推理），但 thinking token 按输出计费、默认预算可达每请求数万 token。**2026 年更要紧的杠杆是"投入档位（effort level）"**：Fable 5.1/5、Opus 5、Sonnet 5、Opus 4.8/4.7 支持 `low`/`medium`/`high`/`xhigh`/`max` 五档，Opus 4.6 与 Sonnet 4.6 没有 `xhigh`（设了会回落到 `high`），不支持 effort 的模型设了也不生效。这一档对账单的影响远超直觉——《AI 编码工具与模型评测基准：SWE-bench 与 Terminal-Bench》里那份 Terminal-Bench 4.0 榜单快照就是同一"脚手架 + 模型"只调档位，成绩从 34.9% 走到 53.9%、成本从 $1,557 走到 $5,969。**默认值不是最优值：机械任务降档、评审与规则撰写升档**，这与《开源编码 Skills（一）：Superpowers 编码流程族》的"每个角色用能胜任的最弱模型"是同一条建议
 8. **把冗长操作委托给子智能体**：子智能体在自己的上下文里翻找，只把总结带回主上下文
 9. **提示词写具体**：明确的目标减少来回轮次——每一轮都携带全部上下文
 
@@ -70,10 +70,10 @@ Usage by model:
 - **定时任务与跨会话消息**：会话空闲时定时任务照常触发、别的会话发来消息也会开新一轮——每轮都带全量上下文
 - **`/compact` 本身就是大请求**：它要读整段对话才能摘要——想要新开始时，`/clear` 才是零成本选项
 
-> 译注：把本篇与第 16 篇上下文工程对读，会发现"省 token 的手段"与"让 AI 更强的手段"高度重合——上下文越小越聚焦，模型表现越好、成本越低。**降耗的本质不是少用 AI，而是让每一个 token 都在干活。**
+> 译注：把本篇与《上下文工程：为 AI Agent 管理稀缺的注意力》对读，会发现"省 token 的手段"与"让 AI 更强的手段"高度重合——上下文越小越聚焦，模型表现越好、成本越低。**降耗的本质不是少用 AI，而是让每一个 token 都在干活。**
 
 ---
 
-> 下一篇预告：个人的账单管好了，最后一公里是组织：AI 编码规范怎么在团队落地、用什么指标度量采纳与效果——第 29 篇讲团队推广与度量。
+> 延伸阅读：个人的账单管好了，最后一公里是组织——AI 编码规范怎么在团队落地、用什么指标度量采纳与效果，见《团队落地：AI 编码规范的团队推广与度量》。
 
-> **来源**：本文翻译自 [Manage costs effectively](https://code.claude.com/docs/en/costs)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）。"译注"为本站编者补充并已标明；长尾小节（usage-credits 管理、各计费路径的报表细节、行为变化说明等）从略，见原文。抓取于 2026-09-13。
+> **来源**：本文翻译自 [Manage costs effectively](https://code.claude.com/docs/en/costs)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）。"选对模型"里补入的 2026-09 牌价与账号默认模型、"投入档位"一节补入的 effort 档位支持表，核自 [Model configuration](https://code.claude.com/docs/en/model-config)（Anthropic，2026-09-19）与 [Claude Pricing](https://claude.com/pricing)；榜单成本数据取自《AI 编码工具与模型评测基准：SWE-bench 与 Terminal-Bench》一文的 Terminal-Bench 4.0 快照。"译注"与编者补充均已标明；长尾小节（usage-credits 管理、各计费路径的报表细节、行为变化说明等）从略，见原文。首次抓取 2026-09-13，2026-09-19 复核官方开篇基准数字（每开发者每活跃日均约 13 美元、每月 150-250 美元、90% 用户低于每日 30 美元）仍然成立。

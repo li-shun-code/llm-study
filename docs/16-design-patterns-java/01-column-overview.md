@@ -49,7 +49,7 @@ order: 1
 
 > 本项目基于 MIT 许可证授权。（仓库 LICENSE.md 原文：The MIT License, Copyright 2014-2024 Ilkka Seppälä；另注：model-view-viewmodel 模块使用了 ZK 框架，该框架以 LGPL 授权，见仓库 lgpl-3.0.txt。）
 
-需要说明的是：本专栏此前策划时曾按 Apache-2.0 口径拟稿，经对仓库 LICENSE.md、README 徽章及每个 Java 文件的许可头逐项核实，该仓库实际采用 **MIT 许可证**，本文及后续各篇的署名信息均按 MIT 标注。
+本专栏涉及的仓库许可统一按 **MIT** 标注：仓库根目录 `LICENSE.md` 原文为 "The MIT License, Copyright 2014-2024 Ilkka Seppälä"，README 的 license 徽章与各 Java 源文件的许可头一致；唯一例外是 `model-view-viewmodel` 模块引用的 ZK 框架以 LGPL 授权（仓库附 `lgpl-3.0.txt`），涉及该模块的引用需同时尊重 LGPL。翻译与代码转载依 MIT 的"注明版权声明"要求进行，因此每篇文末都保留来源与许可署名。
 
 另外，仓库提供了官方多语言 README（含简体中文 localization/zh），但只覆盖主 README；各模式目录下的英文说明文档尚无官方中文版，本专栏的模式说明翻译均为编者依据英文原文的完整翻译。
 
@@ -213,12 +213,12 @@ callback（回调）、collection-pipeline（集合管道）、combinator（组�
 
 | 篇目 | 内容 |
 | --- | --- |
-| 02 创建型模式 | singleton、factory-method、abstract-factory、builder、prototype、object-pool、factory-kit、lazy-loading |
-| 03 结构型模式 | adapter、bridge、composite、decorator、facade、flyweight、proxy、private-class-data |
-| 04 行为型模式 | strategy、observer、chain-of-responsibility、command、template-method、state、visitor、mediator、memento、interpreter、iterator、null-object |
-| 05 企业级架构模式 | ambassador、anti-corruption-layer、actor-model、arrange-act-assert、data-transfer-object、unit-of-work、monostate、event-driven-architecture、layered-architecture（附 CQRS、repository 延伸阅读） |
+| 《创建型模式：单例、工厂与对象的受控诞生》 | singleton、factory-method、abstract-factory、builder、prototype、object-pool、factory-kit、lazy-loading |
+| 《结构型模式：组合优于继承的工程实践》 | adapter、bridge、composite、decorator、facade、flyweight、proxy、private-class-data |
+| 《行为型模式：对象间的职责分配与协作》 | strategy、observer、chain-of-responsibility、command、template-method、state、visitor、mediator、memento、interpreter、iterator、null-object |
+| 《企业级架构模式：从 Ambassador 到 Anti-Corruption Layer》 | ambassador、anti-corruption-layer、actor-model、arrange-act-assert、data-transfer-object、unit-of-work、monostate、event-driven-architecture、layered-architecture（附 CQRS、repository 延伸阅读） |
 
-需要提醒的是，仓库官方分类与本专栏的"经典四分法"并不完全重合：例如 lazy-loading 在仓库中被归入性能优化（Performance optimization）类，data-transfer-object 被归入结构型，monostate 被归入创建型，actor-model 被归入并发类。专栏第 02 篇把 lazy-loading、第 05 篇把 monostate、DTO 与 actor-model 收进来，是按教学脉络的编排，各篇中均以仓库官方分类为准作出标注。
+需要提醒的是，仓库官方分类与本专栏的"经典四分法"并不完全重合：例如 lazy-loading 在仓库中被归入性能优化（Performance optimization）类，data-transfer-object 被归入结构型，monostate 被归入创建型，actor-model 被归入并发类。《创建型模式》把 lazy-loading、《企业级架构模式》把 monostate、DTO 与 actor-model 收进来，是按教学脉络的编排，各篇中均以仓库官方分类为准作出标注。
 
 ---
 

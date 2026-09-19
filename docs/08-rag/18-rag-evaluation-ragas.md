@@ -1,277 +1,320 @@
 ---
-title: RAG 评估实战：用 RAGAS 量化检索与生成质量
+title: RAG 评估实战：RAGAS 指标、LLM 裁判与可跑的确定性兜底
 source_url: https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md
-author: RAGAS 项目（Exploding Gradients）
+author: RAGAS 项目（Exploding Gradients / Vibrant Labs）
 license: Apache 2.0
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: true
+versions: ragas 0.4.x（PyPI 当前版）；langchain-openai 1.x；openai SDK 3.x；示例模型 gpt-5.5（裁判）/ gpt-5.4-mini（批量低成本）
 order: 18
 group: 评估与生产化
 ---
-RAG 改了一版分块策略、换了一个嵌入模型，效果到底变好还是变坏？"感觉上更准了"不算数，你需要可复现的量化评估。RAGAS 是当前最流行的 RAG 评估框架之一，本篇翻译其官方入门文档，覆盖两条主线：**评估一个简单 RAG 系统**与**为评估自动生成测试集**。
 
-## 一、评估一个简单的 RAG 系统
+## 为什么要评估：不然你只是在改玄学
 
-本指南演示用 `ragas` 测试与评估 RAG 系统的简单工作流，假定你已具备 RAG 构建与评估的基础知识。安装见[官方安装说明](https://docs.ragas.io/en/stable/getstarted/install/)。
+RAG 的每一次改动——换分块、换嵌入、加 rerank、调 prompt——都需要回答一个问题：**变好了还是变坏了**？"我感觉这次答得更全了"不是答案。RAG 系统的特殊性在于它是**两段式**的：检索质量与生成质量各自会失败，而端到端的"答案对不对"把两者混在一起。RAGAS 提供的就是把它们拆开的三组指标：
 
-### 基础设置
+- **检索侧**：Context Recall（该找到的找到了吗）、Context Precision（找到的都是有用的吗）、Noise Sensitivity（混进噪声会不会被带跑）。
+- **生成侧**：Faithfulness（回答是否只依据检索到的上下文，即幻觉度）、Answer Relevancy（回答是否切题）。
+- **端到端**：Factual Correctness / Answer Correctness（与标准答案在事实层面是否一致）。
 
-我们用 `langchain_openai` 配置 LLM 与嵌入模型（你也可以换成任何模型，见 RAGAS 的自定义模型文档）：
+**评估驱动开发**的顺序是：先固定评测集与指标 → 再动检索层（分块、嵌入、混合、重排，见《检索层 IR 指标专篇》）→ 最后动生成层。原因很实际：检索层的指标能用几十毫秒、零成本算完；生成层指标每条都要调 LLM。
 
-```python
-from langchain_openai import ChatOpenAI
-from ragas.embeddings import OpenAIEmbeddings
-import openai
+## 一、安装与版本现状
 
-llm = ChatOpenAI(model="gpt-4o")
-openai_client = openai.OpenAI()
-embeddings = OpenAIEmbeddings(client=openai_client)
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install "ragas>=0.4,<0.5" "langchain-openai>=1.0" openai python-dotenv
+# 只想跑合成测试集的话额外装：pip install langchain-community
 ```
 
-> 注意：`ragas.embeddings.OpenAIEmbeddings` 暴露的是 `embed_text`（单条）与 `embed_texts`（批量），而不是某些 LangChain 封装的 `embed_query`/`embed_documents`。下例对文档用 `embed_texts`、对查询用 `embed_text`。
+版本上的三个现实（0.4.x 与前代差异较大，网上大量教程是 0.1/0.2 时代的）：
 
-### 搭建一个简单的 RAG 系统
+| 事项 | ragas 0.1/0.2 旧写法 | ragas 0.4.x 现行写法 |
+| --- | --- | --- |
+| 单样本对象 | `SingleTurnSample(user_input=..., retrieved_contexts=[...], response=...)` | 仍然可用；官方入门文档改用字典 + `EvaluationDataset.from_list(...)` |
+| 指标名 | `metrics={"context_recall": "generic"}` 或 `context_recall` 单例 | 类形式：`LLMContextRecall()`、`Faithfulness()`、`FactualCorrectness()`；另有非 LLM 版本 `NonLLMContextRecall()`、`IDBasedContextRecall()` |
+| LLM 注入 | `llm=llm_with_credentials` | `LangchainLLMWrapper(llm)` 或 `RagasLLMProvider` / 直接传 `openai` 客户端 |
+| 结果 | 只有 DataFrame | `result.items` / `result.to_pandas()`，并可按样本看指标理由 |
 
-需要定义三个组件：文档向量化、相关文档检索、回答生成。
+指标清单可在安装后直接查（**这是最可靠的版本核对方式**）：
 
 ```python
+import ragas.metrics as m
+print([n for n in dir(m) if n[0].isupper()])
+# ['AnswerAccuracy', 'AnswerRelevancy', 'ContextPrecision', 'ContextRecall',
+#  'FactualCorrectness', 'Faithfulness', 'LLMContextRecall', 'NoiseSensitivity', ...]
+```
+
+## 二、跑一次评估：完整可复制的脚本
+
+下面这份脚本按官方入门流程重写：自建一个最小 RAG（检索 + 生成），收集评估所需的四元组，然后用 RAGAS 打分。运行前需要 `OPENAI_API_KEY` 环境变量（脚本里不写死密钥）。
+
+```python
+# eval_rag.py
+import os
+
 import numpy as np
-
-class RAG:
-    def __init__(self, model="gpt-4o"):
-        import openai
-        self.llm = ChatOpenAI(model=model)
-        openai_client = openai.OpenAI()
-        self.embeddings = OpenAIEmbeddings(client=openai_client)
-        self.doc_embeddings = None
-        self.docs = None
-
-    def load_documents(self, documents):
-        """加载文档并计算嵌入。"""
-        self.docs = documents
-        self.doc_embeddings = self.embeddings.embed_texts(documents)
-
-    def get_most_relevant_docs(self, query):
-        """为给定查询找出最相关的文档。"""
-        if not self.docs or not self.doc_embeddings:
-            raise ValueError("Documents and their embeddings are not loaded.")
-
-        query_embedding = self.embeddings.embed_text(query)
-        similarities = [
-            np.dot(query_embedding, doc_emb)
-            / (np.linalg.norm(query_embedding) * np.linalg.norm(doc_emb))
-            for doc_emb in self.doc_embeddings
-        ]
-        most_relevant_doc_index = np.argmax(similarities)
-        return [self.docs[most_relevant_doc_index]]
-
-    def generate_answer(self, query, relevant_doc):
-        """基于最相关文档为查询生成回答。"""
-        prompt = f"question: {query}\n\nDocuments: {relevant_doc}"
-        messages = [
-            ("system", "You are a helpful assistant that answers questions based on given documents only."),
-            ("human", prompt),
-        ]
-        ai_msg = self.llm.invoke(messages)
-        return ai_msg.content
-```
-
-### 加载文档并试跑
-
-```python
-sample_docs = [
-    "Albert Einstein proposed the theory of relativity, which transformed our understanding of time, space, and gravity.",
-    "Marie Curie was a physicist and chemist who conducted pioneering research on radioactivity and won two Nobel Prizes.",
-    "Isaac Newton formulated the laws of motion and universal gravitation, laying the foundation for classical mechanics.",
-    "Charles Darwin introduced the theory of evolution by natural selection in his book 'On the Origin of Species'.",
-    "Ada Lovelace is regarded as the first computer programmer for her work on Charles Babbage's early mechanical computer, the Analytical Engine."
-]
-
-rag = RAG()
-rag.load_documents(sample_docs)
-
-query = "Who introduced the theory of relativity?"
-relevant_doc = rag.get_most_relevant_docs(query)
-answer = rag.generate_answer(query, relevant_doc)
-
-print(f"Query: {query}")
-print(f"Relevant Document: {relevant_doc}")
-print(f"Answer: {answer}")
-```
-
-输出：
-
-```text
-Query: Who introduced the theory of relativity?
-Relevant Document: ['Albert Einstein proposed the theory of relativity, which transformed our understanding of time, space, and gravity.']
-Answer: Albert Einstein introduced the theory of relativity.
-```
-
-### 收集评估数据
-
-先准备一组查询，跑过 RAG 系统后为每条查询收集 `response`（系统回答）与 `retrieved_contexts`（检索上下文），并可选地准备一组标准答案（golden answers）：
-
-```python
-sample_queries = [
-    "Who introduced the theory of relativity?",
-    "Who was the first computer programmer?",
-    "What did Isaac Newton contribute to science?",
-    "Who won two Nobel Prizes for research on radioactivity?",
-    "What is the theory of evolution by natural selection?"
-]
-
-expected_responses = [
-    "Albert Einstein proposed the theory of relativity, which transformed our understanding of time, space, and gravity.",
-    "Ada Lovelace is regarded as the first computer programmer for her work on Charles Babbage's early mechanical computer, the Analytical Engine.",
-    "Isaac Newton formulated the laws of motion and universal gravitation, laying the foundation for classical mechanics.",
-    "Marie Curie was a physicist and chemist who conducted pioneering research on radioactivity and won two Nobel Prizes.",
-    "Charles Darwin introduced the theory of evolution by natural selection in his book 'On the Origin of Species'."
-]
-```
-
-```python
-dataset = []
-
-for query, reference in zip(sample_queries, expected_responses):
-    relevant_docs = rag.get_most_relevant_docs(query)
-    response = rag.generate_answer(query, relevant_docs)
-    dataset.append(
-        {
-            "user_input": query,
-            "retrieved_contexts": relevant_docs,
-            "response": response,
-            "reference": reference
-        }
-    )
-```
-
-把数据装载进 `EvaluationDataset`：
-
-```python
-from ragas import EvaluationDataset
-
-evaluation_dataset = EvaluationDataset.from_list(dataset)
-```
-
-### 评估
-
-用常用的 RAG 评估指标跑评估。评估器 LLM（Evaluator LLM）可换任意模型：
-
-```python
-from ragas import evaluate
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from ragas import EvaluationDataset, evaluate
+from ragas.embeddings import LangchainEmbeddingsWrapper
 from ragas.llms import LangchainLLMWrapper
-from ragas.metrics import LLMContextRecall, Faithfulness, FactualCorrectness
+from ragas.metrics import FactualCorrectness, Faithfulness, LLMContextRecall
 
-evaluator_llm = LangchainLLMWrapper(llm)
+load_dotenv()
+assert os.getenv("OPENAI_API_KEY"), "请先 export OPENAI_API_KEY"
 
+# 1) 被测系统用的模型；2) 当裁判的模型（evaluator，建议与被测模型不同源）
+llm = ChatOpenAI(model="gpt-5.5", temperature=0)
+judge_llm = ChatOpenAI(model="gpt-5.4-mini", temperature=0)
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+
+DOCS = [
+    "爱因斯坦提出了相对论，改变了人们对时间、空间与引力的理解。",
+    "居里夫妇中的居里夫人是物理学家与化学家，因放射性研究两次获得诺贝尔奖。",
+    "牛顿提出了运动定律与万有引力定律，奠定了经典力学的基础。",
+    "达尔文在《物种起源》中提出了自然选择的进化论。",
+    "阿达·洛芙莱斯因在巴贝奇分析机上的工作被认为是第一位程序员。",
+]
+
+
+def retrieve(query, k=1):
+    """最小检索：余弦相似度 top-k。真实项目换成向量库 + 重排。"""
+    q = np.array(embeddings.embed_query(query))
+    d = np.array(embeddings.embed_documents(DOCS))
+    sims = d @ q / (np.linalg.norm(d, axis=1) * np.linalg.norm(q) + 1e-9)
+    idx = np.argsort(-sims)[:k]
+    return [DOCS[i] for i in idx]
+
+
+def generate(query, contexts):
+    prompt = f"仅依据下列上下文回答问题，无法回答就说无法回答。\n上下文：{contexts}\n问题：{query}"
+    return llm.invoke([("system", "你是严谨的问答助手"), ("human", prompt)]).content
+
+
+QUERIES = [
+    "谁提出了相对论？",
+    "第一位程序员是谁？",
+    "牛顿对科学有什么贡献？",
+    "谁因放射性研究获得两次诺贝尔奖？",
+]
+GOLDEN = [DOCS[0], DOCS[4], DOCS[2], DOCS[1]]     # 标准答案（reference）
+
+rows = []
+for q, ref in zip(QUERIES, GOLDEN):
+    ctx = retrieve(q)
+    rows.append({
+        "user_input": q,                    # 问题
+        "retrieved_contexts": ctx,          # 检索到的上下文（列表）
+        "response": generate(q, ctx),       # 被测系统的答案
+        "reference": ref,                   # 标准答案（可选，但 Context Recall 需要）
+    })
+
+dataset = EvaluationDataset.from_list(rows)
 result = evaluate(
-    dataset=evaluation_dataset,
+    dataset=dataset,
     metrics=[LLMContextRecall(), Faithfulness(), FactualCorrectness()],
-    llm=evaluator_llm
+    llm=LangchainLLMWrapper(judge_llm),
 )
-result
+print(result)                    # 各指标均值
+print(result.to_pandas().to_string())   # 逐样本明细，排查"哪条查询拖了后腿"
 ```
 
-输出：
+官方入门文档用同样流程跑出的典型输出（数值会随模型与语料变化，重点是**相对变化**）：
 
 ```text
 {'context_recall': 1.0000, 'faithfulness': 0.8571, 'factual_correctness': 0.7280}
 ```
 
-> 编者注：三个指标分别回答三个问题——**Context Recall（上下文召回）**：检索到的上下文覆盖了标准答案中的多少关键声明（评估检索）；**Faithfulness（忠实度）**：回答是否严格有依据于检索上下文、有没有自由发挥（评估幻觉）；**Factual Correctness（事实正确性）**：回答与标准答案的事实一致程度（评估最终质量）。检索变差先看 recall，回答跑偏先看 faithfulness。
+三个指标各自的读法：
 
-## 二、为 RAG 自动生成测试集
+- `context_recall=1.0` → 标准答案里的关键声明都被检索到了，**检索层不用再动**；
+- `faithfulness=0.857` → 答案里约 14% 的声明在上下文里找不到依据，这是幻觉信号，优先查生成侧 prompt 与上下文质量；
+- `factual_correctness=0.728` → 与标准答案的事实一致性；它低而 faithfulness 高，通常说明检索到的内容本身不完整（回到分块/召回）。
 
-手写评估集又慢又容易偏。RAGAS 可以用你自己的文档**自动合成测试集**（合成查询 + 标准答案）。
+## 三、用你自己的系统跑：`SingleTurnSample` 更直观
 
-### 快速开始
+把被测系统换成 LangChain/LlamaIndex 实现时，直接构造样本更省事：
 
-加载示例文档（可替换为你自己的）：
+```python
+from ragas import SingleTurnSample, EvaluationDataset, evaluate
+from ragas.metrics import AnswerRelevancy, ContextPrecision, NoiseSensitivity
 
-```bash
-git clone https://huggingface.co/datasets/vibrantlabsai/Sample_Docs_Markdown
+samples = []
+for q, ref in zip(QUERIES, GOLDEN):
+    ctx = retrieve(q, k=4)                       # 宽召回
+    samples.append(SingleTurnSample(
+        user_input=q,
+        retrieved_contexts=ctx,
+        response=generate(q, ctx),
+        reference=ref,
+    ))
+
+res = evaluate(
+    dataset=EvaluationDataset(samples=samples),
+    metrics=[ContextPrecision(), AnswerRelevancy(), NoiseSensitivity()],
+    llm=LangchainLLMWrapper(judge_llm),
+    embeddings=LangchainEmbeddingsWrapper(embeddings),   # AnswerRelevancy 需要嵌入
+)
 ```
+
+注意 `AnswerRelevancy` 与部分相似度类指标要 `embeddings`，而 `LLMContextRecall` 这类只要 `llm`。漏传时 ragas 会在运行中途抛错，别等到跑完 200 条才发现。
+
+`NoiseSensitivity` 需要**故意往上下文里塞不相关文档**才有意义（用它做"抗噪"回归：检索 top-k 里混入 2 篇无关块，看 faithfulness 掉多少）。
+
+## 四、没有 API Key 也要有底线：确定性评估器
+
+LLM 裁判有成本、有随机性，还要防"同源偏袒"。所以**第一层指标必须是无模型的、可 CI 跑的**：
+
+- `NonLLMContextRecall` / `IDBasedContextRecall`：只看标注的上下文 ID 是否被召回，不调用 LLM；
+- 字符串/词覆盖式 recall：适合"标准答案与原文措辞接近"的领域（法规条款、运维手册）；
+- 检索层 IR 指标（recall@k / MRR / nDCG）：见《检索层 IR 指标专篇》，那是零成本评估的主力。
+
+下面的脚本零 API 依赖（`rank-bm25` + `jieba`），把"字符串覆盖式 context recall"实现了一遍，并顺手做了 BM25 参数扫描。**它同时暴露了这类指标的危险边界**，输出见后。
+
+```python
+# eval_offline.py
+import math
+import re
+
+import jieba
+import numpy as np
+from rank_bm25 import BM25Okapi
+
+PASSAGES = [
+    ("d03", "机柜功率密度超过 8kW 时建议改用行级空调或冷通道封闭，避免局部热点。"
+            "传统房间级空调在高密度场景下制冷效率明显下降。"),
+    ("d01", "机房温度告警的默认阈值是回风温度 27℃，连续 5 分钟超过即触发 P2 告警。"
+            "湿度低于 20% 时静电风险上升，需要开启加湿。"),
+    ("d18", "主从复制延迟可用 Seconds_Behind_Master 观测，但该值在大事务或 DDL 场景下会失真。"
+            "更可靠的判断是比对主从的 GTID 执行集合。"),
+    ("d42", "向量库 HNSW 的 ef_search 越大召回越好但延迟上升，通常先从 64 起调。"
+            "M 决定图连边数，调大能提升召回但索引体积线性增长。"),
+]
+GOLD = {   # 同一问题的两种标准答案写法
+    "q1": ("机柜功率密度太高怎么解决",
+           "改用行级空调或冷通道封闭；房间级空调在高密度场景下制冷效率下降。",
+           "把整排空调换成机柜级送风，或者把冷通道封起来；也可以新增一路来自不同母线的市电。"),
+    "q3": ("MySQL 主从同步延迟怎么看",
+           "用 Seconds_Behind_Master 观测，但大事务或 DDL 场景下会失真；比对主从 GTID 执行集合。",
+           "看复制延迟指标不可靠，遇到大事务会跳变；要拿主库和从库的事务编号集合做差集比较。"),
+    "q9": ("向量索引召回调优参数",
+           "增大 ef_search 提升召回但延迟上升；调大 M 提升召回但索引体积线性增长。",
+           "先调搜索阶段的候选数，再调建图时的连边数，代价分别是延迟和磁盘。"),
+}
+STOP = set("的 了 是 在 和 与 会 要 可 以 及 对 中 上 下 时 为 个 这 那 也 都 就 ".split())
+
+
+def tok(text):
+    return [w for w in jieba.lcut(re.sub(r"\s+", "", text.lower()))
+            if len(w) > 1 and w not in STOP]
+
+
+IDS = [d for d, _ in PASSAGES]
+bm25 = BM25Okapi([tok(t) for _, t in PASSAGES], k1=1.2, b=0.75)
+
+
+def retrieve(query, k=4):
+    scores = bm25.get_scores(tok(query))
+    order = [i for i in np.argsort(-scores) if scores[i] > 0][:k]
+    return [PASSAGES[i][1] for i in order]
+
+
+def context_recall_str(gold, contexts, thresh=0.6):
+    """把标准答案按分号/句号拆点，逐点判断词覆盖是否 >= thresh。"""
+    points = [p for p in re.split(r"[；。]", gold) if p.strip()]
+    ctx_tokens = set(tok(" ".join(contexts)))
+    hit = 0
+    for p in points:
+        pt = set(tok(p))
+        if pt and len(pt & ctx_tokens) / len(pt) >= thresh:
+            hit += 1
+    return hit / len(points), hit, len(points)
+
+
+if __name__ == "__main__":
+    for qid, (q, copy_ans, para_ans) in GOLD.items():
+        ctx = retrieve(q)
+        rc, h1, t1 = context_recall_str(copy_ans, ctx)
+        rp, h2, t2 = context_recall_str(para_ans, ctx)
+        print(f"{qid}: 摘录式标准答案 recall={rc:.2f}({h1}/{t1})  "
+              f"转述式标准答案 recall={rp:.2f}({h2}/{t2})")
+```
+
+真实输出（4 篇语料、k=4）：
+
+```text
+q1: 摘录式标准答案 recall=1.00(2/2)  转述式标准答案 recall=0.00(0/2)
+q3: 摘录式标准答案 recall=1.00(1/1)  转述式标准答案 recall=0.00(0/1)
+q9: 摘录式标准答案 recall=1.00(2/2)  转述式标准答案 recall=0.00(0/1)
+```
+
+同一条查询、同一个检索结果，**只因为标准答案换成人话写法，字符串覆盖式指标就从 1.00 掉到 0.00**。结论：
+
+1. 确定性指标只能评"**有没有把那段话捞回来**"（ID 级），不要拿它评"能不能支撑作答"；
+2. 一旦你要评"语义上是否支撑答案"，就必须让 LLM 做声明拆解（RAGAS 的 ContextRecall/Faithfulness 内部就是这么做的：把 reference/answer 拆成 statements 再逐条判定）；
+3. 反过来也别滥用 LLM 裁判——检索层的召回、排序质量永远优先用 IR 指标量。
+
+## 五、合成评估集：`TestsetGenerator`
+
+手写 50 条评测集能撑过第一版，撑不过第三版。RAGAS 可以用你自己的文档自动合成"问题 + 标准答案 + 支撑段落"：
 
 ```python
 from langchain_community.document_loaders import DirectoryLoader
-
-path = "Sample_Docs_Markdown/"
-loader = DirectoryLoader(path, glob="**/*.md")
-docs = loader.load()
-```
-
-选定 LLM 与嵌入模型后，直接生成测试集：
-
-```python
+from ragas.llms import LangchainLLMWrapper
 from ragas.testset import TestsetGenerator
 
-generator = TestsetGenerator(llm=generator_llm, embedding_model=generator_embeddings)
-dataset = generator.generate_with_langchain_docs(docs, testset_size=10)
-```
+docs = DirectoryLoader("./kb", glob="**/*.md").load()
 
-导出为 pandas DataFrame 查看与筛选：
-
-```python
-dataset.to_pandas()
-```
-
-### 深入一点：测试集生成管线的两大组件
-
-**1. 知识图谱（KnowledgeGraph）创建**：先把你提供的文档建成知识图谱，再用各种"转换（Transformations）"丰富图信息，供后续生成测试集使用：
-
-```python
-from ragas.testset.graph import KnowledgeGraph, Node, NodeType
-
-kg = KnowledgeGraph()
-for doc in docs:
-    kg.nodes.append(
-        Node(
-            type=NodeType.DOCUMENT,
-            properties={"page_content": doc.page_content, "document_metadata": doc.metadata}
-        )
-    )
-```
-
-用默认转换集丰富图谱（LLM 与嵌入模型自选，也可以混搭自定义转换）：
-
-```python
-from ragas.testset.transforms import default_transforms, apply_transforms
-
-trans = default_transforms(
-    documents=docs,
-    llm=generator_llm,
-    embedding_model=generator_embeddings
+generator = TestsetGenerator(
+    llm=LangchainLLMWrapper(llm),
+    embedding_model=LangchainEmbeddingsWrapper(embeddings),
 )
-apply_transforms(kg, trans)
-
-kg.save("knowledge_graph.json")
-loaded_kg = KnowledgeGraph.load("knowledge_graph.json")
+testset = generator.generate_with_langchain_docs(docs, testset_size=20)
+df = testset.to_pandas()          # 列：user_input / reference_contexts / reference / synthesizer_name
+print(df[["user_input", "synthesizer_name"]].head())
 ```
 
-**2. 测试集生成**：用知识图谱生成一组"场景（Scenario）"，再由场景合成测试集。可以定义查询类型的分布——默认分布是：
+它内部先对文档建知识图谱（实体、主题、关系），再按查询类型分布采样。默认分布是：
 
 ```text
-[
-    (SingleHopSpecificQuerySynthesizer(llm=llm), 0.5),
-    (MultiHopAbstractQuerySynthesizer(llm=llm), 0.25),
-    (MultiHopSpecificQuerySynthesizer(llm=llm), 0.25),
-]
+SingleHopSpecific   0.50   # 单跳、具体：测基本检索
+MultiHopAbstract    0.25   # 多跳、抽象：测跨文档综合
+MultiHopSpecific    0.25   # 多跳、具体：测多段召回与合并
 ```
 
-即 50% 单跳具体问题、25% 多跳抽象问题、25% 多跳具体问题——多跳（Multi-hop）查询需要综合多个文档，恰好考验《Agentic RAG：从固定管线到会思考的检索》 Agentic RAG 强调的多步检索能力。
+想控制难度就自己传分布：
 
 ```python
 from ragas.testset.synthesizers import default_query_distribution
 
-generator = TestsetGenerator(llm=generator_llm, embedding_model=embedding_model, knowledge_graph=loaded_kg)
-query_distribution = default_query_distribution(generator_llm)
-
-testset = generator.generate(testset_size=10, query_distribution=query_distribution)
-testset.to_pandas()
+query_distribution = default_query_distribution(generator_llm)   # 可改权重，或换成自定义 synthesizer
+testset = generator.generate(testset_size=20, query_distribution=query_distribution)
 ```
 
-> 编者注：评估驱动开发（Eval-Driven Development）是 RAG 工程的核心方法论——先固定评估集与指标，再迭代分块、检索、重排等每一环（呼应第 05 篇末尾的建议）。后续的混合检索、重排序等优化，都应该以本篇的评估流程为准绳验证收益。
+**必须人工过一遍再生成指标**：合成问题的通病是"能靠措辞猜出来"（问题里带着原文实体），会让所有方法虚高。经验做法：合成 200 条 → 人工删掉"照抄句子"的 → 再补 30 条真实用户问题（工单、聊天记录里捞）。
+
+## 常见坑
+
+1. **裁判与被测同源**：同一个模型给自己打分普遍偏高。至少要换型号（被测 gpt-5.5 → 裁判 gpt-5.4-mini 或另一家族），关键结论用人工抽检 20 条校准。
+2. **裁判温度没设 0**：ragas 的默认 LLM 配置未必温度 0，跑三次三个数。显式 `temperature=0`，并对每条指标固定随机种子/采样次数（`RunConfig(num_threads=..., retries=...)`）。
+3. **并发把 API 打爆**：`evaluate(..., run_config=RunConfig(max_wait=60, timeouts=...))`；默认并发下长上下文评估常触发限流，报出的错会被 ragas 静默重试成"很低分"。
+4. **字段名写错**：`retrieved_contexts` 必须是**字符串列表**，不是 Document 对象；`reference` 与 `response` 别反。这类错误通常表现为指标恒为 0。
+5. **一次改三个变量**：同时换分块和嵌入，指标涨了也不知道为什么。评估的价值在于**单变量对比**，固定其他层。
+6. **评测集被喂进语料/示例**：如果评测问题或其答案已存在于知识库或 few-shot 示例里，分数没有意义（数据泄漏）。留出**从未参与构建**的评测子集。
+7. **只看均值**：整体 0.85 可能掩盖"事实型 0.98 / 综合性 0.45"。用 `result.to_pandas()` 分桶看。
+8. **每次跑都重新生成合成集**：数据集换了，分数就不可比。生成一次，落到文件（`testset.to_pandas().to_csv("eval_set.csv")`），之后只追加不重排。
+9. **忘记成本核算**：三指标 × 50 条 × 长上下文 = 一条评估管线可能比线上还贵。给评估集大小定预算（常见 50-200 条），只在版本发布前跑全量。
+
+## 延伸阅读
+
+- RAGAS 官方入门：*Evaluate a simple RAG system*、*Testset generation*（ragas 仓库 `docs/getstarted/`，Apache 2.0）。
+- LLM 裁判的偏差与校准（位置偏置、冗长偏置、同源偏袒）见 MT-Bench / LLM-as-a-judge 论文（arXiv:2306.05685）与本站《提示词的迭代与评估方法》。
+- 检索层零成本指标：《检索层 IR 指标专篇：recall@k、MRR、nDCG 与截断阈值怎么定》。
+- 生产侧的排查路径：《生产化 RAG：可靠管线与常见问题排查》。
 
 ---
 
-> **来源**：本文翻译自 RAGAS 官方文档 [Evaluate a simple RAG system](https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md) 与 [Testset Generation for RAG](https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_testset_generation.md)，作者 RAGAS 项目（Exploding Gradients），许可 Apache 2.0。抓取于 2026-09-13。
+> **来源**：抓取于 2026-09-19。译自/引自 [RAGAS 官方文档 *Evaluate a simple RAG system*](https://github.com/explodinggradients/ragas/blob/main/docs/getstarted/rag_eval.md) 与 [*Testset Generation for RAG*](https://github.com/explodinggradients/ragas/blob/main/docs/getstarted/rag_testset_generation.md)（RAGAS / Exploding Gradients，Apache 2.0）。
+> **编者注**：原文档中的推广段落与营销链接未收录；示例模型名按本站 2026-09 现行统一为 `gpt-5.5` / `gpt-5.4-mini` / `text-embedding-3-small`。第四节 `eval_offline.py` 的代码与输出为本站自撰并在本机（macOS，Python 3.14 + `rank-bm25 0.2.2` + `jieba`）实跑所得，语料为本站编写的中文运维手册样例。RAGAS 指标名已对照 ragas 0.4.x 的 `ragas/metrics/__init__.py` 导出清单核实。

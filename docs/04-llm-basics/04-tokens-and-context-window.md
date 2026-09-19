@@ -181,19 +181,19 @@ def num_tokens_from_messages(messages, model="gpt-4o-mini-2024-07-18"):
 
 1. **单次能处理多长的文档**（能否整本塞进去）；
 2. **多轮对话能记忆多久**（超出窗口的早期消息必须截断或摘要化）；
-3. **RAG/Agent 能携带多少工具结果**（「RAG」/9 的关键约束）。
+3. **RAG/Agent 能携带多少工具结果**（详见《什么是 RAG》与《上下文工程：为 AI Agent 管理稀缺的注意力》）。
 
-**表：部分当前模型的上下文窗口（2026-09-13 核实）**
+**表：部分当前模型的上下文窗口（2026-09-13 核实；模型分层与 ID 以《主流模型生态对比（2026-09）》为准，本表只取"窗口"这一列做直觉参照）**
 
 | 模型 | 上下文窗口 | 来源 |
 | ---- | ---------- | ---- |
-| OpenAI GPT-6 Astra（`gpt-6-astra`） | 1,050,000（输入 922K + 输出 128K） | [Microsoft Learn: Azure OpenAI models](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models) |
+| OpenAI 旗舰（`gpt-6-astra`） | 1,050,000（输入 922K + 输出 128K） | [Microsoft Learn: Azure OpenAI models](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models) |
 | 智谱 GLM-5.2 | 1M（"solid 1M-token context"） | [zai-org/GLM-5](https://github.com/zai-org/GLM-5) |
 | Qwen3-235B-A22B-Instruct-2507 | 1M（256K 原生，可扩展至 1M） | [QwenLM/Qwen3](https://github.com/QwenLM/Qwen3) |
 
 关于长窗口的三个实用提醒：
 
-- **窗口 ≠ 有效记忆**。长上下文中段的召回精度会下降（"lost in the middle"现象），关键信息尽量放在开头或结尾，或用 RAG 精准投喂而不是无脑塞满；
+- **窗口 ≠ 有效记忆**。长上下文中段的召回精度会显著下降（"lost in the middle"现象），关键信息尽量放在开头或结尾，或用 RAG 精准投喂而不是无脑塞满；实测数据与缓解手法见本模块《长上下文的有效利用：Lost in the Middle 与位置偏置》；
 - **长窗口 = 高成本**。计费按 token 数走，100 万 token 的输入即便按长上下文折扣价也是实打实的费用，且推理时延显著上升；部分厂商（如 OpenAI GPT-6 系列）对"短上下文/长上下文"分档计价；
 - **输出也占窗口**。输出上限（如 GPT-6 Astra 的 128K）通常远小于输入上限，规划长文生成任务时要分别核对两个数字。
 

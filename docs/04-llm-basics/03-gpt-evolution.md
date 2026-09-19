@@ -85,29 +85,18 @@ few-shot：请你判断'这真是一个绝佳的机会'的情感是正向还是�
 
 在 GPT 系列模型的基础上，通过引入**预训练 → 指令微调 → 人类反馈强化学习**的三阶段训练（详见本模块《训练范式总览》），OpenAI 发布了跨时代的 ChatGPT，引发了大模型热潮。
 
-## 五、GPT-3 之后：到 GPT-6 的演进（编者注，2026-09 核实）
+## 五、GPT-3 之后：从 ChatGPT 到今天（编者注，2026-09 核实）
 
-以上是 happy-llm 原文内容。从 ChatGPT 到今天，GPT 系列又经历了数代演进，以下按 OpenAI 官方发布信息（经 [Microsoft Learn 模型文档](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)交叉核实，2026-09-13 时点）梳理：
+以上是 happy-llm 原文内容。从 ChatGPT 到今天，GPT 系列又经历了数代演进——**具体的版本号、发布时间、上下文规格等版本信息，全站统一维护在《主流模型生态对比（2026-09）》一篇（本模块「生态与选型」分组），此处不再重复列表，以免一处更新、两处过时。**
 
-**表：GPT 系列 2023–2026 演进时间线（编者整理）**
+一句话结论：**GPT 系列的主线是"把规模换成的能力，逐步改写成可调节的 API 参数"**——从 GPT-3.5 的对话对齐，到 GPT-4 的多模态与更强推理，再到推理范式独立成线、并最终与常规档位合并进同一个旗舰模型家族，参战维度从"更大"变成"同一模型内可调的思考深度与输出详尽度"。当前在售的分层与模型 ID 请以《主流模型生态对比（2026-09）》为准。
 
-| 时间 | 模型 | 意义 |
-| ---- | ---- | ---- |
-| 2022.11 | ChatGPT（GPT-3.5） | SFT+RLHF 对话对齐，引爆 LLM 时代 |
-| 2023.03 | GPT-4 | 多模态输入、更强推理 |
-| 2024.05 | GPT-4o | 全模态（omni）原生端到端 |
-| 2024.09 | o1-preview | "推理模型"新范式：思考再回答 |
-| 2025.08 | GPT-5 | 统一"快回答 + 深思考"的路由式旗舰 |
-| 2025.11–12 | GPT-5.1 / GPT-5.2 | GPT-5.2（2025-12-11）成为当时的旗舰推理模型 |
-| 2026.07 | GPT-5.6（sol / terra / luna） | 旗舰推理系列，128K 输出、1.05M 上下文 |
-| 2026.09.03 | **GPT-6 Astra**（`gpt-6-astra`） | 当前旗舰：1,050,000 上下文（输入 922K + 输出 128K），知识截止 2026 年 4 月 |
+值得学习者注意的几个趋势（细节数字见《主流模型生态对比（2026-09）》）：
 
-值得学习者注意的几个趋势：
-
-- **上下文长度从 2K 走向百万级**：GPT-1 时代上下文仅 512 token，GPT-6 Astra 已达约 100 万 token（详见本模块《Token 与上下文窗口》）；
-- **推理模型成为独立产品线**：从 o1 到 GPT-5.6/GPT-6，"先思考后回答"的推理范式已全面铺开（详见本模块《推理模型》）；
-- **API 形态迁移**：工具调用、结构化输出等能力如今只在 Responses API 上提供完整支持——Azure 文档对 GPT-6 Astra 明确标注 "Tool calling requires the Responses API"，且该模型不再支持自定义 `temperature` / `top_p`（采样控制转向 `reasoning_effort` 与 `verbosity`，详见本模块《采样参数》）；
-- **模型家族分层**：当前 OpenAI 在售家族包括 GPT-6（旗舰）、GPT-5.6（推理系列）、GPT-5.4（mini/nano 轻量系列）与 GPT-5.x-Codex（代码系列），按"能力/时延/价格"分层组合使用。
+- **上下文长度从 2K 走向百万级**：GPT-1 时代上下文仅 512 token，今天的旗舰已达约 100 万 token 量级；但"窗口大小 ≠ 有效利用"，详见本模块《Token 与上下文窗口》与《长上下文的有效利用：位置与注意力预算》；
+- **推理成为独立范式并与主产品线合流**：从"思考后再回答"的专门模型，到如今同一旗舰内部用参数控制思考深度（详见本模块《推理模型》）；
+- **API 形态迁移**：工具调用、结构化输出等能力如今只在 Responses API 上提供完整支持，最新旗舰也不再支持自定义 `temperature` / `top_p`（采样控制转向 `reasoning_effort` 与 `verbosity`，详见本模块《采样参数》）；
+- **家族分层而非单点最强**：厂商普遍按"能力 / 时延 / 价格"给出多层模型，选型时应先看任务落在哪一层（分层清单见《主流模型生态对比（2026-09）》）。
 
 对学习者而言，GPT 系列的演进史最重要的启示是：**Decoder-Only + CLM 这一个朴素起点，在"数据、算力、对齐"三个维度持续放大之后，涌现出了通用能力**。这也是理解后续所有开源模型（LLaMA、Qwen、GLM、DeepSeek 等）的坐标系——它们绝大多数都沿承了这一架构路线。
 
@@ -123,4 +112,4 @@ few-shot：请你判断'这真是一个绝佳的机会'的情感是正向还是�
 ---
 
 > **来源**：本文转载自 [第三章 预训练语言模型 · 3.3 Decoder-Only PLM（GPT 一节）](https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter3/%E7%AC%AC%E4%B8%89%E7%AB%A0%20%E9%A2%84%E8%AE%AD%E7%BB%83%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md)，作者 DataWhale happy-llm 项目，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 第七节"GPT-3 之后：到 GPT-6 的演进"为本站基于 OpenAI 官方发布信息及 [Microsoft Learn：Azure OpenAI 模型文档](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)（CC BY 4.0）编写的时效性补充，版本信息核实于 2026-09-13。
+> 第五节"GPT-3 之后：从 ChatGPT 到今天"为本站基于 OpenAI 官方发布信息及 [Microsoft Learn：Azure OpenAI 模型文档](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models)（CC BY 4.0）编写的时效性补充；其中的**具体版本号与时间线已统一交由本模块《主流模型生态对比（2026-09）》维护**，本节只保留不随版本更迭而失效的架构与产品形态结论。

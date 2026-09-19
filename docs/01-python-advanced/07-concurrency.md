@@ -25,6 +25,39 @@ group: 并发与异步
 
 此模块在 WebAssembly 平台上无效或不可用。 请参阅 WebAssembly 平台 了解详情。
 
+## 先给结论：三种执行器怎么选
+
+`concurrent.futures` 的价值在于：`ThreadPoolExecutor`、`InterpreterPoolExecutor`、`ProcessPoolExecutor` 实现同一个抽象接口 `Executor`，所以换执行器不用改业务代码。下表是三者与 `asyncio` 的横向对照（依据官方文档各节整理）：
+
+| 维度 | `ThreadPoolExecutor` | `InterpreterPoolExecutor`（3.14+） | `ProcessPoolExecutor` | `asyncio` + `TaskGroup` |
+| --- | --- | --- | --- | --- |
+| 并行单位 | 线程 | 线程，但每个线程跑在独立子解释器里 | 进程 | 单线程事件循环里的协程 |
+| 受 GIL 限制 | 是（CPU 密集无法多核加速） | 否，每个解释器有自己的 GIL，可真多核 | 否，各进程独立 GIL | 不适用（单线程） |
+| 最适合的负载 | I/O 等待（HTTP、数据库、文件）；调用会释放 GIL 的 C 扩展 | CPU 密集且不想付进程开销 | CPU 密集、需要真并行 | 高并发 I/O，成千上万路同时等待 |
+| 参数/返回值约束 | 直接引用共享对象，无需序列化 | 需用 `pickle` 序列化，且工作解释器之间**不能共享可变对象** | 参数与返回值必须可 pickle，`__main__` 必须可被导入 | 无序列化开销，直接共享内存对象 |
+| `max_workers` 默认值 | `min(32, (os.process_cpu_count() or 1) + 4)` | 同 `ThreadPoolExecutor` | `os.process_cpu_count()`；Windows 上上限 61 | 无此概念，用 `Semaphore` 限流 |
+| 提交任务的相对开销 | 低 | 中（序列化 + 跨解释器） | 高（序列化 + 进程间通信），故 `map()` 有 `chunksize` | 最低 |
+| 崩溃隔离 | 一个线程抛未捕获异常只影响该任务；`initializer` 失败会让池 `BrokenThreadPool` | `initializer` 失败可能被替换为 `ExecutionFailed` | 子进程被杀（如 OOM）会让池 `BrokenProcessPool` | 一个未处理异常可能掀掉整个循环 |
+| 典型坑 | 不适合长驻任务：解释器退出前会 join 所有线程；`Future` 互相等待会死锁 | 依赖模块全局状态的代码会表现不一致 | 交互式解释器里不能用；必须放进 `if __name__ == "__main__"` 守卫 | 任何一处同步阻塞调用（`time.sleep`、`requests`）都会卡住整个循环 |
+
+据此的选择顺序（本站推荐的决策路径）：
+
+1. **先问是不是 I/O 密集**。是 → 优先 `asyncio`（单线程就能压住上万并发，且和 LLM SDK 的异步客户端天然契合）；如果代码必须是同步的（很多老库、某些 SDK 只有同步接口），用 `ThreadPoolExecutor` 把阻塞调用挪出事件循环。
+2. **CPU 密集**（分词、嵌入计算、特征工程、大批 JSON 解析）→ `ProcessPoolExecutor`；在 3.14+ 且代码不依赖跨任务共享可变对象时，`InterpreterPoolExecutor` 是开销更小的替代。
+3. **混合负载**（边下载边解析）→ 外层 `asyncio`，重计算段 `await loop.run_in_executor(process_pool, fn, *args)`。
+
+下面这张 GIL 决策表用来回答「换线程池到底有没有用」：
+
+| 你的任务实际在做什么 | 多线程能否加速 | 推荐做法 |
+| --- | --- | --- |
+| 等待网络/磁盘（`urllib`、`requests`、数据库驱动、`socket`） | 能，等待期间解释器会释放 GIL | `ThreadPoolExecutor` 或 `asyncio` |
+| 调用会释放 GIL 的 C 扩展（NumPy 大矩阵运算、`zlib`、部分 `hashlib`） | 能 | `ThreadPoolExecutor` |
+| 纯 Python CPU 运算（循环、解析、字符串处理） | **不能**，只是轮流持有 GIL | `ProcessPoolExecutor` / 子解释器 |
+| 依赖全局解释器状态或大量模块级可变量 | 多线程安全但多进程/子解释器会割裂状态 | 保持单进程，改用批处理或优化算法 |
+| Python 3.13+ 且启用自由线程构建 | 多线程可多核（实验性） | 直接 `ThreadPoolExecutor`，注意扩展需为 free-threaded 重编 |
+
+> **一句话选型**：I/O 密集用 `asyncio`（同步生态才用线程池）；CPU 密集用进程池；分不清就先测 —— 用《性能分析：profile/cProfile 与 py-spy》里的方法确认时间到底花在等待还是在算。
+
 ## Executor 对象
 
 **concurrent.futures.Executor**
@@ -367,6 +400,20 @@ if __name__ == '__main__':
 
 在 3.8 版本发生变更: 如果 `Future` 已经完成则此方法会引发 `concurrent.futures.InvalidStateError`。
 
+### Future 方法速查
+
+| 方法 | 作用 | 未取消/未完成时的行为 | 会抛出的异常 |
+| --- | --- | --- | --- |
+| `cancel()` | 尝试取消调用 | 尚未开始的挂起任务可被取消 | — |
+| `cancelled()` | 是否已成功取消 | — | — |
+| `running()` | 是否正在执行且不可取消 | — | — |
+| `done()` | 是否已取消或正常结束 | — | — |
+| `result(timeout=None)` | 取返回值，最多等待 `timeout` 秒 | 阻塞等待 | `TimeoutError`（超时）、`CancelledError`（已取消）、任务自身异常 |
+| `exception(timeout=None)` | 取任务抛出的异常 | 阻塞等待；任务正常结束返回 `None` | `TimeoutError`、`CancelledError` |
+| `add_done_callback(fn)` | 注册回调，回调以 future 为唯一参数 | 若已完成/已取消则立即调用 | 回调抛 `Exception` 会被记录并忽略 |
+
+`set_running_or_notify_cancel()`、`set_result()`、`set_exception()` 只供 `Executor` 实现与单元测试使用，业务代码不要调用。
+
 ## 模块函数
 
 **concurrent.futures.wait(_fs_, _timeout\=None_, _return\_when\=ALL\_COMPLETED_)**
@@ -377,21 +424,11 @@ _timeout_ 可以用来控制返回前最大的等待秒数。 _timeout_ 可以�
 
 _return\_when_ 指定此函数应在何时返回。它必须为以下常数之一:
 
-常量
-
-描述
-
-**concurrent.futures.FIRST\_COMPLETED**
-
-函数将在任意 future 对象结束或取消时返回。
-
-**concurrent.futures.FIRST\_EXCEPTION**
-
-该函数将在任何 future 对象通过引发异常而结束时返回。 如果没有任何 future 对象引发异常那么它将等价于 `ALL_COMPLETED`。
-
-**concurrent.futures.ALL\_COMPLETED**
-
-函数将在所有 future 对象结束或取消时返回。
+| 常量 | 描述 |
+| --- | --- |
+| `concurrent.futures.FIRST_COMPLETED` | 函数将在任意 future 对象结束或取消时返回。 |
+| `concurrent.futures.FIRST_EXCEPTION` | 该函数将在任何 future 对象通过引发异常而结束时返回。如果没有任何 future 对象引发异常那么它将等价于 `ALL_COMPLETED`。 |
+| `concurrent.futures.ALL_COMPLETED` | 函数将在所有 future 对象结束或取消时返回。 |
 
 **concurrent.futures.as\_completed(_fs_, _timeout\=None_)**
 
@@ -516,6 +553,21 @@ for t in threads:
 与使用多个进程来绕过 global interpreter lock (GIL) 的 `multiprocessing` 模块不同，threading 模块是在单个进程内部操作的，这意味着所有线程共享相同的内存空间。不过，对于 CPU 密集型任务来说 GIL 会限制 threading 带来的性能提升，因为在同一时刻只有一个线程能执行 Python 字节码。尽管如此，在许多场景中线程仍然是实现并发的有用工具。
 
 对于 Python 3.13， 自由线程 构建版可以禁用 GIL，启用真正的线程并行执行，但此特性在默认情况下不可用 (参见 [**PEP 703**](https://peps.python.org/pep-0703/))。
+
+## threading 同步原语速查
+
+下面这张表把 `threading` 提供的锁与信号对象放在一处对照（各条目细节见后文对应小节）。它们都支持作为上下文管理器使用（`Lock`、`RLock`、`Condition`、`Semaphore`、`BoundedSemaphore`），进入时 `acquire()`、退出时 `release()`，因此正常情况下不必手写 `try/finally`。
+
+| 原语 | 解决什么问题 | 关键方法 | 常见坑 |
+| --- | --- | --- | --- |
+| `Lock` | 互斥：同一时刻只允许一个线程进入临界区 | `acquire(blocking=True, timeout=-1)`、`release()` | 不可重入：同一线程二次 `acquire()` 会自锁死；`acquire(False)` 返回布尔而非抛异常 |
+| `RLock` | 同一线程可重复加锁（递归调用、方法间共享锁） | 同 `Lock`；`_release_save()`/`_acquire_restore()`/`_is_owned()` 供 `Condition` 用 | 本质是工厂函数，返回平台相关实现，别用 `isinstance` 判定类型；跨线程释放仍会死锁 |
+| `Condition` | 等待「某条件成立」，避免忙轮询 | `wait(timeout=None)`、`wait_for(predicate)`、`notify(n=1)`、`notify_all()` | 必须在持有锁时调用 `wait()`/`notify()`；`notify()` 不会立即释放锁，被唤醒的线程要等通知方退出 `with` 才继续 |
+| `Semaphore` | 限流：允许最多 N 个线程并发访问 | `acquire()`、`release()` | 忘记 `release()` 会永久占坑；`release()` 可以超过初值 |
+| `BoundedSemaphore` | 同上，但阻止把计数放回超过初值 | 同上 | 多余的 `release()` 会抛 `ValueError`，正是用它来抓「release 比 acquire 多」的 bug |
+| `Event` | 一次性/可重复的「开关」，一对多广播 | `set()`、`wait(timeout=None)`、`clear()`、`is_set()` | `wait()` 返回布尔表示是否超时；`clear()` 与 `set()` 竞争会造成漏唤醒 |
+| `Timer` | 延迟 N 秒后在某线程执行 | `start()`、`cancel()` | `cancel()` 只在计时器尚未触发时有效 |
+| `Barrier` | 让 N 个线程在同一屏障点会合 | `wait(timeout=None)`、`abort()`、`reset()` | 某个线程掉队会让屏障进入 broken 态，之后所有 `wait()` 抛 `BrokenBarrierError`；建议创建时给合理 timeout |
 
 ## 参考
 

@@ -448,4 +448,4 @@ your-LOCAL-repository/
 
 ---
 
-> 编者注：Streamlit 与 Gradio 的取舍——Gradio（见上一篇）面向"模型演示"场景，`Interface`/`ChatInterface` 开箱即用；Streamlit 面向"数据应用"场景，脚本式开发、控件与布局更自由，配合 `st.cache_resource` 缓存 LLM 客户端、`st.cache_data` 缓存检索结果，是快速搭建 RAG/对话数据面板的利器。安装：`pip install streamlit`，运行：`streamlit run app.py`。
+> 编者注：Streamlit 与 Gradio 的取舍——Gradio（见《Gradio 快速开始：为机器学习模型构建演示应用》）面向"模型演示"场景，`Interface`/`ChatInterface` 开箱即用；Streamlit 面向"数据应用"场景，脚本式开发、控件与布局更自由，配合 `st.cache_resource` 缓存 LLM 客户端、`st.cache_data` 缓存检索结果，是快速搭建 RAG/对话数据面板的利器。安装：`pip install streamlit`，运行：`streamlit run app.py`。

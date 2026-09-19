@@ -14,7 +14,7 @@ group: 线性结构
 
 链表的设计使得各个节点可以分散存储在内存各处，它们的内存地址无须连续。
 
-![链表定义与存储方式](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/linked_list.assets/linkedlist_definition.png)
+![链表定义与存储方式](assets/carray_and_linkedlist__linked_list__linkedlist_definition.png)
 
 观察上图，链表的组成单位是<u>节点（node）</u>对象。每个节点都包含两项数据：节点的“值”和指向下一节点的“引用”。
 
@@ -65,7 +65,15 @@ n3.next = n4
 
 相比之下，在数组中插入元素的时间复杂度为 O(n) ，在大数据量下的效率较低。
 
-![链表插入节点示例](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/linked_list.assets/linkedlist_insert_node.png)
+![链表插入节点示例](assets/carray_and_linkedlist__linked_list__linkedlist_insert_node.png)
+
+```python
+def insert(n0: ListNode, P: ListNode):
+    """在链表的节点 n0 之后插入节点 P"""
+    n1 = n0.next
+    P.next = n1
+    n0.next = P
+```
 
 
 ### 删除节点
@@ -74,17 +82,50 @@ n3.next = n4
 
 请注意，尽管在删除操作完成后节点 `P` 仍然指向 `n1` ，但实际上遍历此链表已经无法访问到 `P` ，这意味着 `P` 已经不再属于该链表了。
 
-![链表删除节点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/linked_list.assets/linkedlist_remove_node.png)
+![链表删除节点](assets/carray_and_linkedlist__linked_list__linkedlist_remove_node.png)
+
+```python
+def remove(n0: ListNode):
+    """删除链表的节点 n0 之后的首个节点"""
+    if not n0.next:
+        return
+    # n0 -> P -> n1
+    P = n0.next
+    n1 = P.next
+    n0.next = n1
+```
 
 
 ### 访问节点
 
 **在链表中访问节点的效率较低**。如上一节所述，我们可以在 O(1) 时间下访问数组中的任意元素。链表则不然，程序需要从头节点出发，逐个向后遍历，直至找到目标节点。也就是说，访问链表的第 i 个节点需要循环 i - 1 轮，时间复杂度为 O(n) 。
 
+```python
+def access(head: ListNode, index: int) -> ListNode | None:
+    """访问链表中索引为 index 的节点"""
+    for _ in range(index):
+        if not head:
+            return None
+        head = head.next
+    return head
+```
+
 
 ### 查找节点
 
 遍历链表，查找其中值为 `target` 的节点，输出该节点在链表中的索引。此过程也属于线性查找。代码如下所示：
+
+```python
+def find(head: ListNode, target: int) -> int:
+    """在链表中查找值为 target 的首个节点"""
+    index = 0
+    while head:
+        if head.val == target:
+            return index
+        head = head.next
+        index += 1
+    return -1
+```
 
 
 ## 数组 vs. 链表
@@ -120,7 +161,7 @@ class ListNode:
         self.prev: ListNode | None = None  # 指向前驱节点的引用
 ```
 
-![常见链表种类](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/linked_list.assets/linkedlist_common_types.png)
+![常见链表种类](assets/carray_and_linkedlist__linked_list__linkedlist_common_types.png)
 
 ## 链表典型应用
 

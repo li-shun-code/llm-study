@@ -8,7 +8,7 @@ translated: true
 order: 10
 group: Cursor 与其他工具
 ---
-**编者按**：Headless 与 CI 的话题已全部移至下一篇（《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》），本篇收敛为**开源工具生态的选型对比**：两家非 Anthropic/OpenAI 系的代表——开源的 Cline 与并入 Cognition/Devin Desktop 的 Windsurf。正文主体译自两家的官方文档，另译 VS Code 官方仓库的"Code-OSS 与 Visual Studio Code"说明作背景（为什么编辑器分叉生态会长成今天这样）。对比表与收束一节为本站编者内容，已标明。
+**编者按**：Headless 与 CI 的话题已全部移至《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》），本篇收敛为**开源工具生态的选型对比**：两家非 Anthropic/OpenAI 系的代表——开源的 Cline 与并入 Cognition/Devin Desktop 的 Windsurf。正文主体译自两家的官方文档，另译 VS Code 官方仓库的"Code-OSS 与 Visual Studio Code"说明作背景（为什么编辑器分叉生态会长成今天这样）。对比表与收束一节为本站编者内容，已标明。
 
 ## 一、背景：编辑器生态的 fork 结构（译自 VS Code 官方仓库）
 
@@ -137,7 +137,7 @@ Cascade 是 Devin Desktop 中的**两个本地智能体之一**；另一个是 D
 | 安全边界 | CLINE_COMMAND_PERMISSIONS allow/deny、人工批准 | 工作区受限模式、检查点/回滚 |
 | 适合谁 | 预算敏感、要求数据自持、想用国产/开源模型、多编辑器混用 | 想要"编辑器即智能体"一体体验、偏好图形化规划与检查点 |
 
-收束两句话：**分叉（Windsurf/Devin Desktop）换取深度整合，扩展（Cline）换取普适与开放**——两条路线没有绝对优劣，绑定成本与可迁移性才是决策变量。工具会继续换名字（本模块开篇两年内就发生了 Windsurf→Cognition 一例），方法论不会：无论选谁，"批准模型 + 可验证完成标准 + Git 存档"这套骨架（第 6-8、13 篇）原样适用。Headless 与 CI 形态见下一篇。
+收束两句话：**分叉（Windsurf/Devin Desktop）换取深度整合，扩展（Cline）换取普适与开放**——两条路线没有绝对优劣，绑定成本与可迁移性才是决策变量。工具会继续换名字（本模块开篇两年内就发生了 Windsurf→Cognition 一例），方法论不会：无论选谁，"批准模型 + 可验证完成标准 + Git 存档"这套骨架——见《Claude Code 工作流与最佳实践》《Claude Code 权限系统与安全机制》《第一次 AI 结对：从零做一个命令行小工具》与《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》——原样适用。Headless 与 CI 形态见《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》。
 
 ---
 

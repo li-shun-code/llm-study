@@ -1,610 +1,340 @@
 ---
-title: 函数定义与参数
-source_url: https://www.runoob.com/python3/python3-function.html
-author: 菜鸟教程
-license: © 菜鸟教程（转载署名）
-fetched_at: 2026-09-13
-translated: false
+title: 函数：参数种类与返回值设计
+source_url: https://docs.python.org/zh-cn/3/tutorial/controlflow.html
+author: Python Software Foundation
+license: PSF 许可证第 2 版（转载署名）
+fetched_at: 2026-09-19
+translated: true
+versions: Python 3.14 文档
 order: 15
 group: 函数
 ---
-函数是组织好的，可重复使用的，用来实现单一，或相关联功能的代码段。
+写函数不只是「把几行代码起个名字」。函数的**签名**（有哪些参数、谁能省略、谁必须写名字）和**返回契约**（返回什么、失败时返回什么）决定了这段代码三个月后还能不能用。这一篇按官方教程 4.8 与 4.9 的次序，把参数的四种形态、默认值的求值规则、以及最坑人的「可变默认参数」讲清楚。
 
-函数能提高应用的模块性，和代码的重复利用率。你已经知道Python提供了许多内建函数，比如print()。但你也可以自己创建函数，这被叫做用户自定义函数。
-
-## 定义一个函数
-
-你可以定义一个由自己想要功能的函数，以下是简单的规则：
-
--   函数代码块以 **def** 关键词开头，后接函数标识符名称和圆括号 **()**。
--   任何传入参数和自变量必须放在圆括号中间，圆括号之间可以用于定义参数。
--   函数的第一行语句可以选择性地使用文档字符串—用于存放函数说明。
--   函数内容以冒号 : 起始，并且缩进。
--   **return [表达式]** 结束函数，选择性地返回一个值给调用方，不带表达式的 return 相当于返回 None。
-
-![函数结构示意图](https://www.runoob.com/wp-content/uploads/2014/05/py-tup-10-26-1.png)
-
-### 语法
-
-Python 定义函数使用 def 关键字，一般格式如下：
+## 定义与调用
 
 ```python
-def 函数名（参数列表）:
-    函数体
+def fib(n):
+    """打印小于 n 的斐波那契数列。"""
+    a, b = 0, 1
+    while a < n:
+        print(a, end=" ")
+        a, b = b, a + b
+    print()
+
+fib(2000)
+# 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
 ```
 
-默认情况下，参数值和参数名称是按函数声明中定义的顺序匹配起来的。
-
-让我们使用函数来输出"Hello World！"：
+`def` 把函数名与函数对象关联到当前符号表。同一个对象可以有多个名字：
 
 ```python
-#!/usr/bin/python3
+def fib(n):
+    """打印小于 n 的斐波那契数列。"""
+    a, b = 0, 1
+    while a < n:
+        print(a, end=" ")
+        a, b = b, a + b
+    print()
 
-def hello() :
-    print("Hello World!")
-
-hello()
+f = fib            # 不是调用，只是给同一个函数对象再起一个名字
+f(100)
+# 0 1 1 2 3 5 8 13 21 34 55 89
 ```
 
-更复杂点的应用，函数中带上参数变量。
+函数体内部**赋值**都写进局部符号表，**读取**则按 局部 → 外层函数 → 全局 → 内置 的顺序查找。因此可以在函数里读全局变量，但不要随意给它赋值（要赋值就得显式用 `global` 或 `nonlocal`），参见《常见陷阱汇总》里的 `UnboundLocalError` 一节。
 
-比较两个数，并返回较大的数：
+没有 `return` 的函数也**有返回值**，那是 `None`：
 
 ```python
-#!/usr/bin/python3
+def fib(n):
+    """打印小于 n 的斐波那契数列。"""
+    a, b = 0, 1
+    while a < n:
+        print(a, end=" ")
+        a, b = b, a + b
+    print()
 
-def max(a, b):
-    if a > b:
-        return a
-    else:
-        return b
-
-a = 4
-b = 5
-print(max(a, b))
+print(fib(0))      # None
 ```
 
-以上实例输出结果：
-
-```plain
-5
-```
-
-计算面积函数：
+如果函数是「做某件事」而不是「给出某个结果」，就让它像 `fib` 这样只产生副作用；如果要给调用方数据，就明确 `return`。官方教程给出的对照版本是返回结果列表的 `fib2`：
 
 ```python
-#!/usr/bin/python3
-# 计算面积函数
-def area(width, height):
-    return width * height
+def fib2(n):
+    """返回包含小于 n 的斐波那契数的列表。"""
+    result = []
+    a, b = 0, 1
+    while a < n:
+        result.append(a)
+        a, b = b, a + b
+    return result
 
-def print_welcome(name):
-    print("Welcome", name)
-
-print_welcome("Runoob")
-w = 4
-h = 5
-print("width =", w, " height =", h, " area =", area(w, h))
+print(fib2(100))   # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
 ```
 
-以上实例输出结果：
+## 文档字符串
 
-```plain
-Welcome Runoob
-width = 4  height = 5  area = 20
-```
+函数内第一条语句若是字符串字面值，它就是文档字符串（docstring），可被 `help()`、IDE 提示和文档生成工具读取。官方约定：
 
-## 函数调用
-
-定义一个函数：给了函数一个名称，指定了函数里包含的参数，和代码块结构。
-
-这个函数的基本结构完成以后，你可以通过另一个函数调用执行，也可以直接从 Python 命令提示符执行。
-
-如下实例调用了 **printme()** 函数：
+- 第一行是一句摘要，大写开头、句号结尾，**不要**在这行重复对象名或类型。
+- 多行时第二行留空，把摘要与后续段落分开；后面的段落交代调用约定、副作用等。
 
 ```python
-#!/usr/bin/python3
-# 定义函数
-def printme( str ):
-   # 打印任何传入的字符串
-   print (str)
-   return
+def trim_context(text, limit=4000):
+    """把文本裁剪到给定的字符上限。
 
-# 调用函数
-printme("我要调用用户自定义函数!")
-printme("再次调用同一函数")
+    参数 text 会先去除首尾空白；超长时从尾部截断并追加省略号。
+    本函数不修改传入的对象，总是返回一个新字符串。
+    """
+    cleaned = text.strip()
+    if len(cleaned) <= limit:
+        return cleaned
+    return cleaned[:limit] + "……"
+
+print(trim_context.__doc__.splitlines()[0])   # 第一行摘要
+help(trim_context)                             # 交互式查看完整文档
 ```
 
-以上实例输出结果：
+Python 解析器会去掉模块、类、函数文档字符串里的公共缩进，所以放心按缩进写。
 
-```plain
-我要调用用户自定义函数!
-再次调用同一函数
-```
+## 参数的四种形态
 
-## 参数传递
-
-在 python 中，类型属于对象，对象有不同类型的区分，变量是没有类型的：
+### 1. 默认值参数
 
 ```python
-a=[1,2,3]
+def ask_ok(prompt, retries=4, reminder="请重新回答"):
+    while True:
+        reply = input(prompt).strip().lower()
+        if reply in {"y", "ye", "yes"}:
+            return True
+        if reply in {"n", "no", "nop", "nope"}:
+            return False
+        retries -= 1
+        if retries < 0:
+            raise ValueError("无效的用户响应")
+        print(reminder)
 
-a="Runoob"
+# 三种调用方式（运行时会等待用户输入，这里只展示写法）：
+#   ask_ok("真的要退出吗？")                        只给必选参数
+#   ask_ok("覆盖该文件吗？", 2)                     给一个可选参数
+#   ask_ok("覆盖该文件吗？", 2, "只能回答是或否！")   全部给出
+print(ask_ok.__defaults__)                         # (4, '请重新回答') —— 默认值存在这里
 ```
 
-以上代码中，**[1,2,3]** 是 List 类型，**"Runoob"** 是 String 类型，而变量 a 是没有类型，它仅仅是一个对象的引用（一个指针），可以是指向 List 类型对象，也可以是指向 String 类型对象。
-
-### 可更改(mutable)与不可更改(immutable)对象
-
-在 python 中，strings, tuples, 和 numbers 是不可更改的对象，而 list,dict 等则是可以修改的对象。
-
--   **不可变类型：**变量赋值 **a=5** 后再赋值 **a=10**，这里实际是新生成一个 int 值对象 10，再让 a 指向它，而 5 被丢弃，不是改变 a 的值，相当于新生成了 a。
-
--   **可变类型：**变量赋值 **la=[1,2,3,4]** 后再赋值 **la[2]=5** 则是将 list la 的第三个元素值更改，本身la没有动，只是其内部的一部分值被修改了。
-
-python 函数的参数传递：
-
--   **不可变类型：**类似 C++ 的值传递，如整数、字符串、元组。如 fun(a)，传递的只是 a 的值，没有影响 a 对象本身。如果在 fun(a) 内部修改 a 的值，则是新生成一个 a 的对象。
-
--   **可变类型：**类似 C++ 的引用传递，如 列表，字典。如 fun(la)，则是将 la 真正的传过去，修改后 fun 外部的 la 也会受影响。
-
-python 中一切都是对象，严格意义我们不能说值传递还是引用传递，我们应该说传不可变对象和传可变对象。
-
-### python 传不可变对象实例
-
-通过 **id()** 函数来查看内存地址变化：
+官方教程强调：**默认值在函数定义时求值，且只求值一次**。所以：
 
 ```python
-def change(a):
-    print(id(a))   # 指向的是同一个对象
-    a=10
-    print(id(a))   # 一个新对象
+i = 5
+def f(arg=i):
+    print(arg)
 
-a=1
-print(id(a))
-change(a)
+i = 6
+f()          # 输出 5，不是 6
 ```
 
-以上实例输出结果为：
-
-```plain
-4379369136
-4379369136
-4379369424
-```
-
-可以看见在调用函数前后，形参和实参指向的是同一个对象（对象 id 相同），在函数内部修改形参后，形参指向的是不同的 id。
-
-### 传可变对象实例
-
-可变对象在函数里修改了参数，那么在调用这个函数的函数里，原始的参数也被改变了。例如：
+**重要警告**：默认值是列表、字典、类实例等可变对象时，这条规则会产生「函数记住了上次调用」的效果：
 
 ```python
-#!/usr/bin/python3
-# 可写函数说明
-def changeme( mylist ):
-   "修改传入的列表"
-   mylist.append([1,2,3,4])
-   print ("函数内取值: ", mylist)
-   return
+def accumulate_bad(value, bucket=[]):        # 反面教材
+    bucket.append(value)
+    return bucket
 
-# 调用changeme函数
-mylist = [10,20,30]
-changeme( mylist )
-print ("函数外取值: ", mylist)
+print(accumulate_bad(1))     # [1]
+print(accumulate_bad(2))     # [1, 2]  —— 第二次调用看到上次的残留
+print(accumulate_bad(3))     # [1, 2, 3]
 ```
 
-传入函数的和在末尾添加新内容的对象用的是同一个引用。故输出结果如下：
-
-```plain
-函数内取值:  [10, 20, 30, [1, 2, 3, 4]]
-函数外取值:  [10, 20, 30, [1, 2, 3, 4]]
-```
-
-## 参数
-
-以下是调用函数时可使用的正式参数类型：
-
--   必需参数
--   关键字参数
--   默认参数
--   不定长参数
-
-### 必需参数
-
-必需参数须以正确的顺序传入函数。调用时的数量必须和声明时的一样。
-
-调用 printme() 函数，你必须传入一个参数，不然会出现语法错误：
+正确写法是用 `None` 做哨兵，在函数体内创建新对象：
 
 ```python
-#!/usr/bin/python3
-#可写函数说明
-def printme( str ):
-   "打印任何传入的字符串"
-   print (str)
-   return
+def accumulate(value, bucket=None):
+    if bucket is None:
+        bucket = []
+    bucket.append(value)
+    return bucket
 
-# 调用 printme 函数，不加参数会报错
-printme()
+print(accumulate(1))         # [1]
+print(accumulate(2))         # [2]  —— 每次调用互不影响
 ```
 
-以上实例输出结果：
+### 2. 关键字参数
 
-```plain
-Traceback (most recent call last):
-  File "test.py", line 10, in <module>
-    printme()
-TypeError: printme() missing 1 required positional argument: 'str'
-```
-
-### 关键字参数
-
-关键字参数和函数调用关系紧密，函数调用使用关键字参数来确定传入的参数值。
-
-使用关键字参数允许函数调用时参数的顺序与声明时不一致，因为 Python 解释器能够用参数名匹配参数值。
-
-以下实例在函数 printme() 调用时使用参数名：
+`kwarg=value` 形式的调用让参数顺序不再重要，也提升可读性。官方示例：
 
 ```python
-#!/usr/bin/python3
-#可写函数说明
-def printme( str ):
-   "打印任何传入的字符串"
-   print (str)
-   return
+def parrot(voltage, state="一只僵死的鹦鹉", action=".voilà", type="挪威蓝"):
+    print(f"如果给 {voltage} 伏电压，这只鹦鹉一定会 {action}。")
+    print(f"羽毛：{type}；状态：{state}！")
 
-#调用printme函数
-printme( str = "菜鸟教程")
+parrot(1000)                                        # 1 个位置参数
+parrot(voltage=1000)                                # 1 个关键字参数
+parrot(action="飞起来", voltage=1000000)             # 关键字顺序随意
+parrot("一百万伏", "快不行了", "跳起来")               # 3 个位置参数
 ```
 
-以上实例输出结果：
-
-```plain
-菜鸟教程
-```
-
-以下实例中演示了函数参数的使用不需要使用指定顺序：
+无效的调用形式，报的错值得记住：
 
 ```python
-#!/usr/bin/python3
-#可写函数说明
-def printinfo( name, age ):
-   "打印任何传入的字符串"
-   print ("名字: ", name)
-   print ("年龄: ", age)
-   return
-
-#调用printinfo函数
-printinfo( age=50, name="runoob" )
+parrot()                      # TypeError: missing 1 required positional argument: 'voltage'
+parrot(voltage=5.0, "dead")   # SyntaxError: positional argument follows keyword argument
+parrot(110, voltage=220)      # TypeError: got multiple values for argument 'voltage'
+parrot(actor="John Cleese")   # TypeError: got an unexpected keyword argument 'actor'
 ```
 
-以上实例输出结果：
+关键字参数必须跟在位置参数后面；同一参数不能既按位置又按关键字传。
 
-```plain
-名字:  runoob
-年龄:  50
-```
-
-### 默认参数
-
-调用函数时，如果没有传递参数，则会使用默认参数。以下实例中如果没有传入 age 参数，则使用默认值：
+当最后一个形参写成 `**name` 时，它收集所有多余的关键字参数到一个字典里；`*name` 收集多余的位置参数到元组，且 `*name` 必须在 `**name` 之前：
 
 ```python
-#!/usr/bin/python3
-#可写函数说明
-def printinfo( name, age = 35 ):
-   "打印任何传入的字符串"
-   print ("名字: ", name)
-   print ("年龄: ", age)
-   return
+def cheeseshop(kind, *arguments, **keywords):
+    print(f"-- 有 {kind} 吗？")
+    for arg in arguments:
+        print(arg)
+    print("-" * 40)
+    for kw in keywords:
+        print(kw, ":", keywords[kw])
 
-#调用printinfo函数
-printinfo( age=50, name="runoob" )
-print ("------------------------")
-printinfo( name="runoob" )
+cheeseshop("Limburger", "它太软了，先生。", "真的很软，先生。",
+           shopkeeper="Michael Palin", client="John Cleese", sketch="奶酪店小品")
 ```
 
-以上实例输出结果：
+注意输出中关键字参数的顺序与调用时一致。
 
-```plain
-名字:  runoob
-年龄:  50
-------------------------
-名字:  runoob
-年龄:  35
-```
-
-### 不定长参数
-
-你可能需要一个函数能处理比当初声明时更多的参数。这些参数叫做不定长参数，和上述 2 种参数不同，声明时不会命名。基本语法如下：
+### 3. 仅位置与仅关键字（`/` 与 `*`）
 
 ```python
-def functionname([formal_args,] *var_args_tuple ):
-   "函数_文档字符串"
-   function_suite
-   return [expression]
+def f(pos1, pos2, /, pos_or_kwd, *, kwd1, kwd2):
+    ...
+#     -------- 仅位置   -- 二者皆可 -- 仅关键字
 ```
 
-加了星号 * 的参数会以元组(tuple)的形式导入，存放所有未命名的变量参数。
+- 写在 `/` **之前**的形参只能用位置传，调用方看不到参数名也无所谓。
+- 写在 `*` **之后**的形参必须写成 `kwd1=...` 的形式。
+- 两者之间的形参怎么传都行。
 
 ```python
-#!/usr/bin/python3
-# 可写函数说明
-def printinfo( arg1, *vartuple ):
-   "打印任何传入的参数"
-   print ("输出: ")
-   print (arg1)
-   print (vartuple)
+def combined_example(pos_only, /, standard, *, kwd_only):
+    print(pos_only, standard, kwd_only)
 
-# 调用printinfo 函数
-printinfo( 70, 60, 50 )
+combined_example(1, 2, kwd_only=3)      # 1 2 3
+combined_example(1, standard=2, kwd_only=3)   # 1 2 3
+combined_example(pos_only=1, standard=2, kwd_only=3)
+# TypeError: got some positional-only arguments passed as keyword arguments: 'pos_only'
 ```
 
-以上实例输出结果：
+什么时候用？官方教程给了三条判断：想让调用方**不依赖参数名**（未来可改名而不破坏 API）、或**强制指定顺序**时用仅位置；参数名本身就是文档（比如 `encoding=`、`top_k=`）时用仅关键字，逼调用方写出来，避免一串位置参数读不懂。
 
-```plain
-输出:
-70
-(60, 50)
-```
+另一个细节：`def foo(name, **kwds)` 里，关键字 `'name'` 永远会和形参 `name` 绑定，`foo(1, **{"name": 2})` 会抛 `TypeError: got multiple values for argument 'name'`；把 `name` 改成仅位置（`def foo(name, /, **kwds)`）就能返回 `True`——仅位置形参的名字可以安全地出现在 `**kwds` 里。
 
-如果在函数调用时没有指定参数，它就是一个空元组。我们也可以不向函数传递未命名的变量。如下实例：
-
-```python
-#!/usr/bin/python3
-# 可写函数说明
-def printinfo( arg1, *vartuple ):
-   "打印任何传入的参数"
-   print ("输出: ")
-   print (arg1)
-   for var in vartuple:
-      print (var)
-   return
-
-# 调用printinfo 函数
-printinfo( 10 )
-printinfo( 70, 60, 50 )
-```
-
-以上实例输出结果：
-
-```plain
-输出:
-10
-输出:
-70
-60
-50
-```
-
-还有一种就是参数带两个星号 **，基本语法如下：
-
-```python
-def functionname([formal_args,] **var_args_dict ):
-   "函数_文档字符串"
-   function_suite
-   return [expression]
-```
-
-加了两个星号 ** 的参数会以字典的形式导入。
-
-```python
-#!/usr/bin/python3
-# 可写函数说明
-def printinfo( arg1, **vardict ):
-   "打印任何传入的参数"
-   print ("输出: ")
-   print (arg1)
-   print (vardict)
-
-# 调用printinfo 函数
-printinfo(1, a=2,b=3)
-```
-
-以上实例输出结果：
-
-```plain
-输出:
-1
-{'a': 2, 'b': 3}
-```
-
-声明函数时，参数中星号 * 可以单独出现，例如：
-
-```python
-def f(a,b,*,c):
-    return a+b+c
-```
-
-如果单独出现星号 *，则星号 * 后的参数必须用关键字传入：
-
-```plain
->>> def f(a,b,*,c):
-...     return a+b+c
-...
->>> f(1,2,3)   # 报错
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: f() takes 2 positional arguments but 3 were given
->>> f(1,2,c=3) # 正常
-6
->>>
-```
-
-## 匿名函数
-
-Python 使用 lambda 来创建匿名函数。
-
-所谓匿名，意即不再使用 **def** 语句这样标准的形式定义一个函数。
-
--   lambda 只是一个表达式，函数体比 **def** 简单很多。
--   lambda 的主体是一个表达式，而不是一个代码块。仅仅能在 lambda 表达式中封装有限的逻辑进去。
--   lambda 函数拥有自己的命名空间，且不能访问自己参数列表之外或全局命名空间里的参数。
--   虽然 lambda 函数看起来只能写一行，却不等同于 C 或 C++ 的内联函数，内联函数的目的是调用小函数时不占用栈内存从而减少函数调用的开销，提高代码的执行速度。
-
-### 语法
-
-lambda 函数的语法只包含一个语句，如下：
-
-```python
-lambda [arg1 [,arg2,.....argn]]:expression
-```
-
-设置参数 a 加上 10：
-
-```python
-x = lambda a : a + 10
-print(x(5))
-```
-
-以上实例输出结果：
-
-```plain
-15
-```
-
-以下实例匿名函数设置两个参数：
-
-```python
-#!/usr/bin/python3
-# 可写函数说明
-sum = lambda arg1, arg2: arg1 + arg2
-
-# 调用sum函数
-print ("相加后的值为 : ", sum( 10, 20 ))
-print ("相加后的值为 : ", sum( 20, 20 ))
-```
-
-以上实例输出结果：
-
-```plain
-相加后的值为 :  30
-相加后的值为 :  40
-```
-
-我们可以将匿名函数封装在一个函数内，这样可以使用同样的代码来创建多个匿名函数。
-
-以下实例将匿名函数封装在 myfunc 函数中，通过传入不同的参数来创建不同的匿名函数：
-
-```python
-def myfunc(n):
-    return lambda a : a * n
-
-mydoubler = myfunc(2)
-mytripler = myfunc(3)
-
-print(mydoubler(11))
-print(mytripler(11))
-```
-
-以上实例输出结果：
-
-```plain
-22
-33
-```
-
-更多匿名函数还可以参考：[Python lambda（匿名函数）](https://www.runoob.com/python3/python-lambda.html)
-
-## return 语句
-
-**return [表达式]** 语句用于退出函数，选择性地向调用方返回一个表达式。不带参数值的 return 语句返回 None。之前的例子都没有示范如何返回数值，以下实例演示了 return 语句的用法：
-
-```python
-#!/usr/bin/python3
-# 可写函数说明
-def sum( arg1, arg2 ):
-   # 返回2个参数的和."
-   total = arg1 + arg2
-   print ("函数内 : ", total)
-   return total
-
-# 调用sum函数
-total = sum( 10, 20 )
-print ("函数外 : ", total)
-```
-
-以上实例输出结果：
-
-```plain
-函数内 :  30
-函数外 :  30
-```
-
-## 强制位置参数
-
-Python3.8 新增了一个函数形参语法 / 用来指明函数形参必须使用指定位置参数，不能使用关键字参数的形式。
-
-在以下的例子中，形参 a 和 b 必须使用指定位置参数，c 或 d 可以是位置形参或关键字形参，而 e 和 f 要求为关键字形参：
-
-```python
-def f(a, b, /, c, d, *, e, f):
-    print(a, b, c, d, e, f)
-```
-
-以下使用方法是正确的：
-
-```python
-f(10, 20, 30, d=40, e=50, f=60)
-```
-
-以下使用方法会发生错误：
-
-```python
-f(10, b=20, c=30, d=40, e=50, f=60)   # b 不能使用关键字参数的形式
-f(10, 20, 30, 40, 50, f=60)           # e 必须使用关键字参数的形式
-```
-
-## 任意实参列表与解包（*args / **kwargs）
-
-> **补充**：以下两节完整选自 [Python 官方教程 · 更多控制流工具 4.9.4 任意实参列表与 4.9.5 解包实参列表](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#arbitrary-argument-lists)，作者 Python Software Foundation，许可 PSF 许可证第 2 版。
-
-### 任意实参列表
-
-调用函数时，使用任意数量的实参是最少见的选项。这些实参包含在元组中（详见[元组和序列](https://docs.python.org/zh-cn/3/tutorial/datastructures.html#tut-tuples)）。在可变数量的实参之前，可能有若干个普通参数：
+### 4. 任意实参列表与解包调用
 
 ```python
 def write_multiple_items(file, separator, *args):
     file.write(separator.join(args))
 ```
 
-*variadic* 参数用于采集传递给函数的所有剩余参数，因此，它们通常在形参列表的末尾。`*args` 形参后的任何形式参数只能是仅限关键字参数，即只能用作关键字参数，不能用作位置参数：
+`*args` 用于收集剩余位置参数，通常放在形参表末尾；它之后的形参只能是仅关键字：
 
-```plain
->>> def concat(*args, sep="/"):
-...     return sep.join(args)
-...
->>> concat("earth", "mars", "venus")
-'earth/mars/venus'
->>> concat("earth", "mars", "venus", sep=".")
-'earth.mars.venus'
+```python
+def concat(*args, sep="/"):
+    return sep.join(args)
+
+print(concat("earth", "mars", "venus"))               # earth/mars/venus
+print(concat("earth", "mars", "venus", sep="."))      # earth.mars.venus
 ```
 
-### 解包实参列表
+调用方向相反：数据已经在列表或元组里，用 `*` 拆开成独立位置参数；字典用 `**` 拆成关键字参数。
 
-函数调用要求独立的位置参数，但实参在列表或元组里时，要执行相反的操作。例如，内置的 [`range()`](https://docs.python.org/zh-cn/3/library/stdtypes.html#range) 函数要求独立的 *start* 和 *stop* 实参。如果这些参数不是独立的，则要在调用函数时，用 `*` 操作符把实参从列表或元组解包出来：
+```python
+args = [3, 6]
+print(list(range(*args)))          # [3, 4, 5]
 
-```plain
->>> list(range(3, 6))            # 附带两个参数的正常调用
-[3, 4, 5]
->>> args = [3, 6]
->>> list(range(*args))            # 附带从一个列表解包的参数的调用
-[3, 4, 5]
+options = {"voltage": 4000000, "state": "彻底不行"}
+parrot(**options)
+# -- 如果给 4000000 伏电压，这只鹦鹉一定会 .voilà。羽毛：挪威蓝；状态：彻底不行！
 ```
 
-同样，字典可以用 `**` 操作符传递关键字参数：
+这条规则在封装第三方 API 时尤其常见：`def call(**kwargs)` 收集参数，再 `client.create(**kwargs)` 转发。
 
-```plain
->>> def parrot(voltage, state='a stiff', action='voom'):
-...     print("-- This parrot wouldn't", action, end=' ')
-...     print("if you put", voltage, "volts through it.", end=' ')
-...     print("E's", state, "!")
-...
->>> d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
->>> parrot(**d)
--- This parrot wouldn't VOOM if you put four million volts through it. E's bleedin' demised !
+## 返回值的设计
+
+- **要么所有分支都有值，要么都没有。** 官方教程要求 `return` 语句保持一致：有的分支返回值、有的隐式返回 `None`，会让调用方写出 `if result:` 这种含糊的判断。显式写 `return None` 比空 `return` 更清楚。
+- **不要把「失败」和「空结果」混成一个值。** 返回 `[]`、`""`、`0` 时，调用方无法区分「正常但为空」和「出错」。可选做法：返回 `(值, 错误)` 元组（见《元组与序列解包》）、抛异常（见《异常处理》）、或返回 `None` 并在文档字符串里写清。
+- **原地修改的方法一律返回 `None`。** 这是 Python 对可变对象的统一约定，`sort`、`reverse`、`update`、`add` 都不返回自身，因此 `data = data.sort()` 会把数据变成 `None`。
+
+## lambda：只配当参数
+
+`lambda a, b: a + b` 创建只有单个表达式的匿名函数，语义上就是 `def` 的语法糖：
+
+```python
+pairs = [(1, "one"), (2, "two"), (3, "three")]
+pairs.sort(key=lambda p: p[1])
+print(pairs)      # [(1, 'one'), (3, 'three'), (2, 'two')]
 ```
+
+PEP 8 明确要求：**不要**用 `f = lambda x: 2*x` 给 lambda 起名字，那样写得到的函数名是 `<lambda>`，出错时回溯信息更难读，且抹掉了 lambda 唯一的优势。要具名函数就用 `def`。更多用法见《lambda 与高阶函数》。
+
+## 函数注解
+
+```python
+def f(ham: str, eggs: str = "eggs") -> str:
+    return ham + " and " + eggs
+
+print(f.__annotations__)
+# {'ham': <class 'str'>, 'eggs': <class 'str'>, 'return': <class 'str'>}
+print(f("spam"))          # spam and eggs
+```
+
+注解以字典形式存在 `__annotations__` 里，对函数运行**没有任何影响**——Python 不据此做类型检查。它的价值在于给 `mypy`、编辑器和阅读者提供信息，写法与限制见进阶模块的《类型注解》篇目。
+
+## 常见坑
+
+**1. 可变默认参数。** 本文第一号坑，见 4.9.1；`bucket=[]` 改成 `bucket=None` + 函数内判断。
+
+**2. `*args` 后还能不能加参数。** `def f(*args, x)` 是合法的，但 `x` 变成仅关键字参数；而 `def f(x, *args, **kwargs)` 里 `*args` 之后写 `**kwargs` 是唯一允许的星号组合顺序。
+
+**3. 函数里改不改得动外部变量。** 读取全局变量可以，赋值不行（会变成局部变量或抛 `UnboundLocalError`）。需要修改时用参数传入、结果返回，或者明确 `global`。
+
+**4. 忘了 return。** 递归函数最容易：`def sum_all(nums): if not nums: return 0; return nums[0] + sum_all(nums[1:])`，漏写最后的 `return` 会让整条递归返回 `None`，报 `TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'`。
+
+**5. 参数过多。** 形参列表长到需要记顺序时，就该把相关参数收进数据类或字典，或者把多数参数设为仅关键字，强制调用方写名字。
+
+## 最小项目：一个可复用的提示词拼装函数
+
+把「默认值 + 仅关键字 + 文档字符串 + 明确返回类型」四件事落在同一段代码里：
+
+```python
+def build_prompt(task: str, *, context: list[str] | None = None,
+                 tone: str = "简洁", language: str = "中文") -> str:
+    """拼装发给模型的提示词。
+
+    task 是必选的任务描述；其余参数只能按关键字传，避免多个字符串位置写反。
+    始终返回一个新字符串，不修改传入的 context 列表。
+    """
+    parts = [f"请用{language}回答，风格：{tone}。"]
+    if context:
+        joined = "\n".join(f"[{i}] {doc}" for i, doc in enumerate(context, start=1))
+        parts.append(f"参考资料：\n{joined}")
+    parts.append(f"问题：{task}")
+    return "\n\n".join(parts)
+
+
+prompt = build_prompt("RAG 的评估指标有哪些？",
+                      context=["召回率与准确率", "nDCG 与 MRR"],
+                      tone="详尽")
+print(prompt)
+print(build_prompt("元组能不能当字典的键？"))     # 用默认值，短得多
+```
+
+这个签名的好处一眼可见：`context=`、`tone=`、`language=` 在调用处自带说明，新增可选参数不会破坏已有调用，`None` 默认值避免了共享可变对象的陷阱。
+
+## 延伸阅读
+
+- 官方教程 4.8 定义函数 / 4.9 函数定义详解：<https://docs.python.org/zh-cn/3/tutorial/controlflow.html#defining-functions>
+- 官方教程 4.10 小插曲：编码风格：<https://docs.python.org/zh-cn/3/tutorial/controlflow.html#intermezzo-coding-style>
+- 站内相邻文章：《lambda 与高阶函数》《迭代与解包技巧》《PEP 8 命名与代码风格基线》《异常处理》《可变/不可变与深浅拷贝》
 
 ---
 
-> **来源**：本文转载自 [Python3 函数](https://www.runoob.com/python3/python3-function.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。文中「任意实参列表与解包（*args / **kwargs）」一节另选译自 [Python 官方教程 · 更多控制流工具（4.9.4 任意实参列表 / 4.9.5 解包实参列表）](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#arbitrary-argument-lists)，作者 Python Software Foundation，许可 PSF 许可证第 2 版。
+> **来源**：抓取于 2026-09-19。译自 [4.8 定义函数、4.9 函数定义详解 — Python 官方教程（中文）](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#defining-functions)（Python Software Foundation，PSF 许可证第 2 版），并引 [4.10 小插曲：编码风格](https://docs.python.org/zh-cn/3/tutorial/controlflow.html#intermezzo-coding-style) 与 [PEP 8 — Style Guide for Python Code](https://peps.python.org/pep-0008/)（作者与许可同上，PEP 为公共领域）。返回值设计与最小项目小节为本站补充。

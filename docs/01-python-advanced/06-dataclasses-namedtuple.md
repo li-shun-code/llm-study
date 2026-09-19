@@ -111,6 +111,21 @@ class C:
 
     如果 _eq_ 和 _frozen_ 均为真值，则默认 `@dataclass` 将为你生成 `__hash__()` 方法。 如果 _eq_ 为真值而 _frozen_ 为假值，则 `__hash__()` 将被设为 `None`，即将其标记为不可哈希（因为它属于可变对象）。 如果 _eq_ 为假值，则 `__hash__()` 将保持不变，这意味着将使用超类的 `__hash__()` 方法（如果超类是 `object`，这意味着它将回退为基于 id 的哈希）。
 
+    下表总结这些规则（`__hash__()` 隐式生成规则，对应官方文档 3.12/3.13 的表格）：
+
+    | unsafe_hash | eq | frozen | 结果 |
+    | --- | --- | --- | --- |
+    | False | False | False | 使用父类的 `__hash__()`（通常是 `object` 基于 id 的实现）。 |
+    | False | False | True | 使用父类的 `__hash__()`。 |
+    | False | True | False | `__hash__ = None`，实例不可哈希（因为可变）。 |
+    | False | True | True | 生成 `__hash__()`，由 `eq` 中使用的字段计算。 |
+    | True | False | False | 生成 `__hash__()`，由 `eq` 中使用的字段计算（此时不生成 `__eq__`）。 |
+    | True | False | True | 生成 `__hash__()`。 |
+    | True | True | False | 生成 `__hash__()`，但类其实是可变的，需自行承担风险。 |
+    | True | True | True | 生成 `__hash__()`。 |
+
+    注意：既在类里显式定义 `__hash__()` 又设置 `unsafe_hash=True` 会抛出 `TypeError`。
+
 -   _frozen_: 如为真值 (默认为 `False`)，则对字段赋值将引发异常。 这模拟了只读的冻结实例。 详见下方的 讨论。
 
     如果类中定义了 `__setattr__()` 或 `__delattr__()` 方法，并且 _frozen_ 参数为 True，则会引发 `TypeError` 异常。
@@ -614,4 +629,4 @@ print(i.quantity_on_hand)   # 2
 
 ---
 
-> 编者注：`NamedTuple` 的完整官方文档收录于《类型注解：typing 模块核心章节》一篇的"特殊类型原语"一节。两者的快速对比：`@dataclass` 生成的是普通类（可变、支持方法与继承、运行时无字段校验）；`typing.NamedTuple` 生成的是元组子类（不可变、可解包、按位置/名称访问）。需要运行时校验、序列化（`model_dump`）与嵌套模型时，用下一篇的 Pydantic；纯内部数据结构优先标准库 dataclass，零依赖。
+> 编者注：`NamedTuple` 的完整官方文档收录于《类型注解：typing 模块核心章节》一篇的"特殊类型原语"一节。两者的快速对比：`@dataclass` 生成的是普通类（可变、支持方法与继承、运行时无字段校验）；`typing.NamedTuple` 生成的是元组子类（不可变、可解包、按位置/名称访问）。需要运行时校验、序列化（`model_dump`）与嵌套模型时，用《Pydantic 模型（Models）：数据校验的核心》；纯内部数据结构优先标准库 dataclass，零依赖。

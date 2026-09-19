@@ -89,7 +89,7 @@ z = C
 ['hello', 'world', 'ibm', 'apple']
 ```
 
-### if ... else
+## if ... else
 
 使用列表生成式的时候，有些童鞋经常搞不清楚`if...else`的用法。
 
@@ -133,7 +133,7 @@ SyntaxError: invalid syntax
 
 可见，在一个列表生成式中，`for`前面的`if ... else`是表达式，而`for`后面的`if`是过滤条件，不能带`else`。
 
-### 练习
+## 练习
 
 如果list中既包含字符串，又包含整数，由于非字符串类型没有`lower()`方法，所以列表生成式会报错：
 
@@ -171,11 +171,11 @@ else:
     print('测试失败!')
 ```
 
-### 参考源码
+## 参考源码
 
 [do_list_compr.py](https://liaoxuefeng.com/books/python/advanced/list-comprehension/do_list_compr.py)
 
-### 小结
+## 小结
 
 运用列表生成式，可以快速生成list，可以通过一个list推导出另一个list，而代码却十分简洁。
 

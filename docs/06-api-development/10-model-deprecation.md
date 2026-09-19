@@ -162,7 +162,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-  model="gpt-4.1-nano", # 换成你的模型部署名
+  model="gpt-5.4-mini",  # 换成你的部署名（原文示例为 gpt-4.1-nano）
   input="This is a test.",
 )
 

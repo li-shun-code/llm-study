@@ -39,13 +39,13 @@ Tracy
 
 所以`for x in ...`循环就是把每个元素代入变量`x`，然后执行缩进块的语句。
 
-再比如我们想计算1-10的整数之和，可以用一个`sum`变量做累加：
+再比如我们想计算1-10的整数之和，可以用一个`total`变量做累加（注意：**不要**用 `sum` 当变量名，它会遮蔽内置函数 `sum()`）：
 
 ```python
-sum = 0
+total = 0
 for x in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
-    sum = sum + x
-print(sum)
+    total = total + x
+print(total)
 ```
 
 如果要计算1-100的整数之和，从1写到100有点困难，幸好Python提供一个`range()`函数，可以生成一个整数序列，再通过`list()`函数可以转换为list。比如`range(5)`生成的序列是从0开始小于5的整数：
@@ -58,10 +58,10 @@ print(sum)
 `range(101)`就可以生成0-100的整数序列，计算如下：
 
 ```python
-sum = 0
+total = 0
 for x in range(101):
-    sum = sum + x
-print(sum)
+    total = total + x
+print(total)
 ```
 
 请自行运行上述代码，看看结果是不是当年高斯同学心算出的5050。
@@ -69,17 +69,61 @@ print(sum)
 第二种循环是while循环，只要条件满足，就不断循环，条件不满足时退出循环。比如我们要计算100以内所有奇数之和，可以用while循环实现：
 
 ```python
-sum = 0
+total = 0
 n = 99
 while n > 0:
-    sum = sum + n
+    total = total + n
     n = n - 2
-print(sum)
+print(total)
 ```
 
 在循环内部变量`n`不断自减，直到变为`-1`时，不再满足while条件，循环退出。
 
-### 练习
+## 循环的三件套：`range`、`enumerate`、`zip`
+
+`for x in range(101)` 里的 `range()` 生成一个惰性的整数序列，它不占内存、可以反复遍历。写循环时最常配套的另外两个内置函数是 `enumerate()`（同时拿序号和元素）与 `zip()`（把两个序列按位配对），它们能替掉绝大多数 `for i in range(len(seq))` 写法：
+
+```python
+names = ["Bart", "Lisa", "Adam"]
+for i, name in enumerate(names, start=1):
+    print(f"{i}. Hello, {name}!")
+# 1. Hello, Bart!
+# 2. Hello, Lisa!
+# 3. Hello, Adam!
+
+scores = [90, 85, 92]
+for name, score in zip(names, scores):
+    print(name, score)
+# Bart 90
+# Lisa 85
+# Adam 92
+```
+
+完整的循环惯用法（含 `zip` 的 `strict=True`、反向遍历、`itertools` 工具）见《迭代与解包技巧》。
+
+## 循环三件套：`range`、`enumerate`、`zip`
+
+`for x in range(101)` 里的 `range()` 生成惰性的整数序列：不占内存、可以反复遍历。写循环时最常配套的另外两个内置函数是 `enumerate()`（同时拿序号与元素）和 `zip()`（把两个序列按位配对），它们能替掉绝大多数 `for i in range(len(seq))` 写法：
+
+```python
+names = ["Bart", "Lisa", "Adam"]
+for i, name in enumerate(names, start=1):
+    print(f"{i}. Hello, {name}!")
+# 1. Hello, Bart!
+# 2. Hello, Lisa!
+# 3. Hello, Adam!
+
+scores = [90, 85, 92]
+for name, score in zip(names, scores):
+    print(name, score)
+# Bart 90
+# Lisa 85
+# Adam 92
+```
+
+更完整的循环惯用法（`zip` 的 `strict=True`、反向遍历、`sorted(set(...))` 去重、`itertools` 工具）见《迭代与解包技巧》。
+
+## 练习
 
 请利用循环依次对list中的每个名字打印出`Hello, xxx!`：
 
@@ -87,7 +131,7 @@ print(sum)
 L = ['Bart', 'Lisa', 'Adam']
 ```
 
-### break
+## break
 
 在循环中，`break`语句可以提前退出循环。例如，本来要循环打印1～100的数字：
 
@@ -117,7 +161,7 @@ print('END')
 
 可见`break`的作用是提前结束循环。
 
-### continue
+## continue
 
 在循环过程中，也可以通过`continue`语句，跳过当前的这次循环，直接开始下一次循环。
 
@@ -143,13 +187,13 @@ while n < 10:
 
 可见`continue`的作用是提前结束本轮循环，并直接开始下一轮循环。
 
-### 参考源码
+## 参考源码
 
 [do_for.py](https://liaoxuefeng.com/books/python/basic/loop/do_for.py)
 
 [do_while.py](https://liaoxuefeng.com/books/python/basic/loop/do_while.py)
 
-### 小结
+## 小结
 
 循环是让计算机做重复任务的有效的方法。
 

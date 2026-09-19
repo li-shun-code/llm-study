@@ -196,8 +196,64 @@ ACK 到来时，拥塞窗口按已确认的字节数增长。粗略地说：一�
 - 思考慢启动与拥塞避免之间来回切换的原因：在拥塞探测的不同阶段，各自有什么优势？
 - 流量控制的目的是什么？
 
+
+## 实操：用 tcpdump 看清握手、重传与窗口
+
+TCP 的一切机制——三次握手、序列号、窗口、RST——只有抓包看一遍才真的记得住。安装：`apt install tcpdump` / `dnf install tcpdump`（需要 root 或 `CAP_NET_RAW`），macOS 自带（BPF 语法同源）。
+
+```bash
+sudo tcpdump -i any -nn -s0 -c 200 'tcp port 443 and host 93.184.216.34' -w /tmp/tls.pcap
+sudo tcpdump -r /tmp/tls.pcap -nn | head      # 先落盘再读，避免边抓边解析丢包
+```
+
+`-i any` 抓所有接口，`-nn` 不解析主机名与端口名（快且诚实），`-s0` 不截断，`-c 200` 限量，`-w` 存 pcap（Wireshark 可直接打开）。**过滤表达式一定要整体加引号**，否则 `[]`、`>` 会被 shell 吃掉。
+
+一次完整握手的典型输出：
+
+```text
+09:12:31.512345 IP 10.0.0.5.52344 > 93.184.216.34.443: Flags [S], seq 1122334455, win 64240, options [mss 1460,sackOK,TS val 333 ecr 0,nop,wscale 7], length 0
+09:12:31.541102 IP 93.184.216.34.443 > 10.0.0.5.52344: Flags [S.], seq 77889900, ack 1122334456, win 65536, options [mss 1460,nop,wscale 7], length 0
+09:12:31.541130 IP 10.0.0.5.52344 > 93.184.216.34.443: Flags [.], ack 1, win 502, options [nop,nop,TS val 334 ecr 333], length 0
+```
+
+读法逐字段拆：
+
+| 字段 | 含义 | 能判断什么 |
+|---|---|---|
+| `Flags [S]` / `[S.]` / `[.]` / `[F.]` / `[R]` | SYN / SYN-ACK / 纯 ACK / FIN / RST | 连接生命周期；`[R]` 出现说明对端拒收（端口没监听、连接已被回收） |
+| `seq` / `ack` | 序列号与确认号 | **`ack = 对端 seq + 1`** 才正常；正文"序列号是按字节计"的直接体现 |
+| `win 64240` | 接收窗口（**要乘以 `wscale`**，例如 wscale 7 → ×128） | 流量控制的实际额度 |
+| `length 0` | 本包携带的应用字节数 | `length > 0` 才是数据段 |
+| `mss 1460` | 最大报文段 | 与 MTU/分片问题相关（1500 − 20 IP − 20 TCP） |
+
+于是**握手两次包的时间差（541102 − 512345 ≈ 28.8 ms）就是一个 RTT**——比 `ping` 更贴近真实连接成本（ICMP 与 TCP 的路径与队列可能不同）。
+
+针对性过滤器（BPF 直接读 TCP 头字段）：
+
+```bash
+sudo tcpdump -i eth0 -nn 'tcp[tcpflags] & tcp-syn != 0'        # 只看 SYN/SYN-ACK：新连接风暴一眼可见
+sudo tcpdump -i eth0 -nn 'tcp[tcpflags] & tcp-rst != 0'        # 只看 RST
+sudo tcpdump -i eth0 -nn 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0'  # 零窗口（win 0）：接收方说"别再发了"
+sudo tcpdump -i eth0 -nn 'tcp port 80 and greater 1000'        # 只看大包
+```
+
+### 重传、队列与更省事的观测
+
+手工用 `-S`（绝对序号）对比同一个 `seq` 出现两次能确认重传，但生产上更快的路径是这三条：
+
+```bash
+ss -tin dst 93.184.216.34       # 每条连接的 rtt:、retrans:、cwnd:、pacing_rate、lastsnd
+nstat -az | egrep -i 'TcpRetransSegs|TcpExtTCPTimeouts|TcpExtDelayedACKs'
+netstat -s | grep -i -A2 retrans  # 累计计数，看趋势而不是绝对值
+```
+
+`ss -tin` 里 `retrans:1/12` 表示"当前有 1 段未确认重传 / 累计 12 次"，配合 `rtt:` 与 `cwnd:` 就能回答"慢在丢包还是慢在应用写不动"。抓 HTTPS 时看到的全是密文（这正常，TLS 的意义所在）：要定位问题用 **`--keylog`**（curl ≥7.37，环境变量 `SSLKEYLOGFILE=/tmp/keys.log` 让 Wireshark/tshark 能解出 HTTP/1.1 明文）或改用 `mitmproxy`；HTTP/2 的帧层则要 `tshark -r x.pcap -Y http2`。
+
+容器里抓不到包，是因为抓错了 network namespace：`sudo nsenter -t <容器内业务进程PID> -n tcpdump -i any -nn ...`，或在 sidecar/宿主 netns 上抓 veth。高流量机器上务必带 `-w` + `-G 60 -W 10`（切片滚动）再离线解析，别让终端成为丢包点。
+
+
 > 译注：对照《网络分层模型》看，TCP 是"传输层负责数据完整性、分包与重组"这一职责在互联网上最成功的实现；它与《UDP》构成了传输层的阴阳两面——可靠但重，轻快但尽力而为。理解了三次握手、序列号/ACK、滑动窗口与拥塞控制，你也就能理解为什么 LLM 应用的流式输出（SSE over HTTP）能稳定地在公网上逐 token 推送：底层全是 TCP 在默默重传、排序、控速。
 
 ---
 
-> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/transmission-control-protocol-tcp.html) 第 14 章 "Transmission Control Protocol (TCP)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。
+> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/transmission-control-protocol-tcp.html) 第 14 章 "Transmission Control Protocol (TCP)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13；末尾“实操”一节据 [tcpdump(8)](https://www.tcpdump.org/manpages/tcpdump.1.html)（TCP/IP 架构手册页，BSD 风格许可）、[ss(8)](https://man7.org/linux/man-pages/man8/ss.8.html) 与 [nstat(8)](https://man7.org/linux/man-pages/man8/nstat.8.html) 核实用法，由本站编写。

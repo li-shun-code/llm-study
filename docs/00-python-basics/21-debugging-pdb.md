@@ -1,14 +1,213 @@
 ---
-title: 调试入门：pdb 与断点
+title: 调试入门：pdb、breakpoint() 与 debugpy
 source_url: https://docs.python.org/zh-cn/3/library/pdb.html
 author: Python Software Foundation
 license: PSF 许可证第 2 版（转载署名）
-fetched_at: 2026-09-13
-translated: false
+fetched_at: 2026-09-19
+translated: true
 versions: Python 3.14 文档
 order: 21
 group: 模块、异常与调试
 ---
+调试器解决的是这一类问题：程序跑完了，输出不对，但你不知道**哪一行、哪个变量**先坏的。靠 `print()` 也能查，但要改代码、要重跑、要在几十个打印行里找线索。调试器让你**在出事的那一行停下来**，直接看现场、求值、甚至改变量继续跑。
+
+本篇目标很具体：学会一条命令下断点、十条调试器命令，以及怎么在 VS Code 里用图形界面做同一件事。完整的 `pdb` 模块文档整理在文末折叠的「参考」段，需要查参数时再展开。
+
+## 三步上手
+
+**第一步：在可疑位置写一行 `breakpoint()`。**
+
+```python
+def normalize(text):
+    cleaned = text.strip().lower()
+    breakpoint()                 # 程序会在这里停下，进入调试器
+    return cleaned.replace(" ", "_")
+
+normalize("  RAG Pipeline  ")
+```
+
+运行 `python demo.py`，终端提示符会变成 `(Pdb)`，表示你已经站在 `return` 那一行之前，当前作用域里的变量都能直接查。
+
+**第二步：确认现场，然后放行。**
+
+```text
+> /tmp/demo.py(4)normalize()
+-> return cleaned.replace(" ", "_")
+(Pdb) p text                 # 原始入参
+  RAG Pipeline
+(Pdb) p cleaned              # 上一步的结果
+rag pipeline
+(Pdb) n                      # 执行当前行，停在下一行
+> /tmp/demo.py(5)normalize()
+(Pdb) c                      # 一路跑到下一个断点或程序结束
+```
+
+**第三步：程序已经崩了，就做事后调试。** 交互式环境里抛完异常后立刻输入：
+
+```python
+import pdb
+pdb.pm()      # 进入最后一次未捕获异常发生处的栈帧
+```
+
+或者不用 `pdb`，直接在 shell 里带模块启动，异常发生时会自动进入事后调试：
+
+```bash
+python -m pdb demo.py
+```
+
+`breakpoint()` 与 `import pdb; pdb.set_trace()` 效果相同，但前者是内置函数、不需要导入，而且可以被 `PYTHONBREAKPOINT=0` 一次性全局禁用（生产构建里忘了删断点也不会炸），所以推荐用 `breakpoint()`。
+
+## 十条命令，覆盖 95% 的调试场景
+
+调试器命令大多可以缩写为一两个字母（`h(elp)` 表示能输 `h` 或 `help`，但不能输 `he`，也不能大写）。下面十条按使用频率排序：
+
+| 命令 | 作用 | 什么时候用 |
+| --- | --- | --- |
+| `h` / `help 命令名` | 列出全部命令 / 查某条命令 | 忘了有什么命令时 |
+| `l` / `ll` | 列出当前行附近源码 / 列出整个函数 | 不知道自己在哪 |
+| `p 表达式` | 求值并打印 | 最常用，看变量 |
+| `pp 表达式` | 用 `pprint` 美观打印 | 看长字典、嵌套结构 |
+| `n` | 执行当前行，停在下一行（**不进入**函数） | 逐行推进 |
+| `s` | 执行当前行，进入被调用的函数内部 | 想钻进函数 |
+| `r` | 一直运行到当前函数返回 | 不想逐行走完整个函数 |
+| `c` | 继续运行，直到下一个断点 | 看完了，放行 |
+| `b 文件:行` / `b 函数名` | 设断点；`b` 单独用列出所有断点 | 运行前批量下断点 |
+| `q` | 退出调试器并中止程序 | 结束 |
+
+再记三条就能应对复杂情况：`w`（打印调用栈，看是谁调进来的）、`u`/`d`（在栈帧间上下移动，换上下文看变量）、`interact`（开一个完整的 REPL，尽情试表达式）。
+
+两个实用细节：
+
+- 输入**空白行**会重复上一条命令；若上一条是 `l`，则往下再列 11 行。
+- 调试器认不出的输入会被当成 Python 语句执行，所以可以直接 `count = 0` 改现场变量，或调用函数。要显式区分时加前缀 `!`，例如 `(Pdb) ! n=42`。
+
+## 命令行启动与被调模块
+
+```bash
+python -m pdb myscript.py            # 从头开始调试
+python -m pdb -m mypackage.module    # 调试一个模块
+python -m pdb -c "b 42" myscript.py  # 启动时就先下断点
+python -m pdb -p 1234                # 附加到运行中的进程（3.12 起）
+```
+
+带模块启动时，若被调试程序异常退出，`pdb` 会自动进入事后调试，结束后**重启程序**并保留断点等状态——适合反复试同一个错误。
+
+库代码里也可以用 `Pdb` 类做定制，最常用的是 `skip`：调试自己的代码时不步进第三方库的栈帧。
+
+```python
+import pdb
+pdb.Pdb(skip=["django.*", "httpx.*"]).set_trace()
+```
+
+## VS Code + debugpy：图形化调试
+
+命令行调试器在服务器上很可靠，但本地开发时点断点、看变量面板、把鼠标悬停在变量上看值效率更高。VS Code 的 Python 调试由 **Python Debugger 扩展**（`ms-python.debugpy`，随 Python 扩展自动安装）提供，底层就是 `debugpy`。
+
+基本流程：
+
+1. 打开项目文件夹（不是单个文件，`launch.json` 需要工作区）。
+2. 侧栏 **运行和调试** → **create a launch.json file** → 选 **Python Debugger** → 选 **Python File**。
+3. 在编辑器行号左侧点一下打断点，按 `F5` 启动。变量、调用栈、监视面板都在左侧。
+
+`.vscode/launch.json` 里最常用的两个配置：
+
+```jsonc
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "当前文件",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true          // 只步进自己的代码，不进第三方库
+    },
+    {
+      "name": "附加到 5678",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": { "host": "localhost", "port": 5678 }
+    }
+  ]
+}
+```
+
+命令行方式（远程容器、跑在别的进程里的服务）：
+
+```bash
+python -m debugpy --listen 5678 --wait-for-client ./myscript.py
+uv run --with debugpy python -m debugpy --listen 5678 ./myscript.py   # uv 项目不必装进环境
+```
+
+然后从 VS Code 用上面的 attach 配置连上去。`--wait-for-client` 表示「等调试器接上再开始跑」，调试启动阶段的代码时需要它。远程机器上还要把 host 写成 `0.0.0.0:5678` 并做端口转发。
+
+**解释器要对上。** VS Code 默认用当前工作区选定的 Python 解释器调试；uv 项目里如果右下角显示的不是 `.venv/bin/python`，就 `Cmd/Ctrl+Shift+P` → `Python: Select Interpreter` 改过来——「命令行能跑、调试报 `ModuleNotFoundError`」几乎都是这里错配（见《环境与依赖管理》）。
+
+## 常见坑
+
+**1. 断点打在了不执行的那一行。** 放在 `import` 之前、死分支里、或装饰器还没跑完的模块顶层，`(Pdb)` 就不出现。先用 `p` 验证自己确实进来了。
+
+**2. 在错误的栈帧里看变量。** 停下时你的上下文是**当前帧**；要看调用方的变量先 `w` 再 `u` 移动帧。否则会遇到「这个变量明明有值，`p` 却说未定义」。
+
+**3. 用 `pdb.set_trace()` 忘了删。** 提交前全局搜 `breakpoint(`；CI 里它会直接读 stdin 并抛异常（无终端时报 `OSError` 或永久挂起），设 `PYTHONBREAKPOINT=0` 可以彻底关掉。
+
+**4. 被装饰器包住时进不去。** 带 `@functools.wraps` 的函数、C 扩展、生成器与协程都不能被 `step` 正常步进。异步代码在 3.12 起可用 `await pdb.set_trace_async()`，否则要停在同步部分。
+
+**5. `display` 看不到可变对象的变化。** `display lst` 比较的是**同一个对象的引用**，`lst.append(1)` 原地改动后它显示不出差异。用切片拷贝：`display lst[:]`。
+
+**6. 多进程 / 子进程里断点不生效。** `pdb` 只管当前进程；多进程场景要么在子进程目标函数里放 `breakpoint()` 并给它独立终端（`stdin`/`stdout` 参数化 `Pdb`），要么改用 debugpy 的 `--listen` 各端口分别附加。
+
+**7. 别用 `input()` 假装调试。** 在 `if __name__ == "__main__":` 里塞一堆 `input()` 的临时调试代码比 `breakpoint()` 更难删干净，而且没法看栈帧。
+
+## 最小项目：把批量调用里的脏数据揪出来
+
+一段真实形态的代码：批量清洗文本时结果里混进了空字符串，但从输出看不出是哪条输入造成的。用调试器在有问题的样本上停下，而不是打印整个列表。
+
+```python
+def clean(text):
+    parts = text.strip().split(",")
+    tags = [p.lower() for p in parts]
+    breakpoint()                      # 只在需要时进来查
+    return [t for t in tags if t]
+
+
+samples = ["a, b ,c", "d,,e", "  "]
+results = []
+for sample in samples:
+    results.append(clean(sample))
+print(results)
+```
+
+调试过程（在 `samples` 第二条 `d,,e` 进入时）：
+
+```text
+(Pdb) p text                     # 当前处理的原始输入
+'d,,e'
+(Pdb) p parts                    # 看切分结果，发现空串
+['d', '', 'e']
+(Pdb) p [t for t in tags if t]   # 直接在当前帧里验证修复方案
+['d', 'e']
+(Pdb) q                          # 结论拿到了，退出改代码
+```
+
+想「只在坏样本上停」，把无条件断点换成**条件断点**：进入后执行 `b clean, len(text) < 4`（或用 `condition` 给已有断点加条件），不满足条件的迭代就不会停下来——这比在代码里写 `if` 调试分支干净得多。
+
+## 延伸阅读
+
+- `pdb` 模块与全部调试器命令：<https://docs.python.org/zh-cn/3/library/pdb.html>
+- 内置函数 `breakpoint()` 与 `sys.breakpointhook()`：<https://docs.python.org/zh-cn/3/library/functions.html#breakpoint>
+- VS Code Python 调试配置：<https://code.visualstudio.com/docs/python/debugging>
+- `debugpy` 项目：<https://github.com/microsoft/debugpy>
+- 站内相邻文章：《环境与依赖管理》《异常处理》《模块与包》《常见陷阱汇总》
+
+## 参考：pdb 完整文档（译自官方库文档）
+
+下面是 `pdb` 模块页的完整译文与全部调试器命令说明，篇幅较长，需要查具体参数时展开。
+
+<details>
+<summary>展开：命令行接口、模块函数、`Pdb` 类与全部调试器命令</summary>
+
 `pdb` 模块为 Python 程序定义了一个交互式源代码调试器。它支持在源代码行级别设置（条件）断点和单步执行、检查栈帧、列出源代码，以及在任意栈帧的上下文中求值任意 Python 代码。它还支持事后调试（post-mortem debugging），并且可以在程序控制下被调用。
 
 调试器是可扩展的——调试器实际被定义为 `Pdb` 类。该类目前没有文档，但通过阅读源码很容易理解它。扩展接口使用了 [`bdb`](https://docs.python.org/zh-cn/3/library/bdb.html) 和 [`cmd`](https://docs.python.org/zh-cn/3/library/cmd.html) 模块。
@@ -56,7 +255,7 @@ print(f"{val} * 2 is {double(val)}")
 3 * 2 is 6
 ```
 
-## 命令行接口
+### 命令行接口
 
 也可以从命令行调用 `pdb` 来调试其他脚本。例如:
 
@@ -207,7 +406,7 @@ import pdb; pdb.Pdb(skip=['django.*']).set_trace()
 
 请参阅上文解释同名函数的文档。
 
-## 调试器命令
+### 调试器命令
 
 下方列出的是调试器可接受的命令。如下所示，大多数命令可以缩写为一个或两个字母。如 `h(elp)` 表示可以输入 `h` 或 `help` 来输入帮助命令 (但不能输入 `he` 或 `hel`，也不能是 `H` 或 `Help` 或 `HELP`)。 命令的参数必须用空格（空格符或制表符）分隔。在命令语法中，可选参数括在方括号 (`[]`) 中，使用时请勿输入方括号。命令语法中的选择项由竖线 (`|`) 分隔。
 
@@ -542,7 +741,7 @@ out()
 
 一个帧是否会被认为源自特定模块是由帧全局变量 `__name__` 来决定的。
 
-## 补充：内置函数 `breakpoint()`
+### 补充：内置函数 `breakpoint()`
 
 > **补充**：以下内容选自 [Python 官方文档 · 内置函数 `breakpoint()`](https://docs.python.org/zh-cn/3/library/functions.html#breakpoint)，作者与许可同上。
 
@@ -554,8 +753,8 @@ out()
 
 引发一个 [审计事件](https://docs.python.org/zh-cn/3/library/sys.html) `builtins.breakpoint` 并附带参数 `breakpointhook`.
 
-
+</details>
 
 ---
 
-> **来源**：本文转载自 [pdb --- The Python Debugger - Python 3 官方文档（中文）](https://docs.python.org/zh-cn/3/library/pdb.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。原文为官方中文译文，本站仅做格式转换。
+> **来源**：抓取于 2026-09-19。折叠段「参考」译自 [pdb — The Python Debugger — Python 标准库（中文）](https://docs.python.org/zh-cn/3/library/pdb.html)（Python Software Foundation，PSF 许可证第 2 版），并引 [内置函数 `breakpoint()`](https://docs.python.org/zh-cn/3/library/functions.html#breakpoint)（作者与许可同上）；教程式主体、十条命令取舍、VS Code 与 `debugpy` 的操作步骤依据 [VS Code Python 调试文档](https://code.visualstudio.com/docs/python/debugging) 与 [debugpy 项目说明](https://github.com/microsoft/debugpy) 整理，属本站编者注，命令与配置以官方页面当前版本为准。

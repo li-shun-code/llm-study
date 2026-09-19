@@ -8,7 +8,7 @@ translated: true
 order: 4
 group: 日常开发流
 ---
-上一篇调试的结论是"让智能体找根因"。本篇把尺度拉大：当代码改动从"一个函数"变成"一整个代码库"，瓶颈不再是定位问题，而是**上下文策略**——没有任何一个窗口能装下百万行代码，那么改动靠什么保持一致？本篇主篇翻译 Anthropic 官方博客《How Anthropic runs large-scale code migrations with Claude Code》（2026-07，含 Bun 百万行 Zig→Rust 移植案例），再译工程师 Aman Agrawal 的日常重构观察做对照，最后用官方工作流与 Rakuten 案例收束。
+调试的结论是"让智能体找根因"。本篇把尺度拉大：当代码改动从"一个函数"变成"一整个代码库"，瓶颈不再是定位问题，而是**上下文策略**——没有任何一个窗口能装下百万行代码，那么改动靠什么保持一致？本篇主篇翻译 Anthropic 官方博客《How Anthropic runs large-scale code migrations with Claude Code》（2026-07，含 Bun 百万行 Zig→Rust 移植案例），再译工程师 Aman Agrawal 的日常重构观察做对照，最后用官方工作流与 Rakuten 案例收束，并给出一份可复制的重构提示词与验收清单。
 
 ## 一、主篇：Anthropic 的大规模代码迁移方法论（官方博客全文节译）
 
@@ -86,8 +86,55 @@ Jarred 的 Bun 迁移已上生产。代价也有：约 4% 的 Rust 代码在 uns
 
 **产业规模佐证**（译自 Anthropic 客户案例 Rakuten）：乐天机器学习工程师 Kenta Naruse 让 Claude Code 在 vLLM（1,250 万行、多语言的开源大库）中实现一个指定的激活向量提取方法——**单次运行 7 小时自治完成，未写一行代码，只偶给指导**，数值精度 99.9%；团队平均新特性上市时间从 24 个工作日降至 5 天（-79%）。
 
+## 四、可复制的重构提示词与验收清单（本站编者整理）
+
+> 上面三个尺度（日常 / 大规模迁移 / 产业案例）共用同一套动作，差别只在扇出规模。以下模板覆盖前两个尺度。
+
+**模板 A：先要建议，不动手**（对应 Aman 的"场景二"）
+
+```text
+目标：把 <模块/文件> 从 <旧写法> 迁到 <新写法>，行为保持不变。
+约束：不得改变公共 API 与序列化格式；不得顺手升级依赖；不得改动 tests/。
+请先只输出重构方案：
+1) 按风险从低到高列出可独立提交的小步（每步 ≤400 行变更）；
+2) 每步注明：影响文件、可能破坏的行为、用哪个测试/命令验证；
+3) 标出你认为"不该重构"的部分和理由。
+不要在这轮修改任何文件。
+```
+
+**模板 B：执行其中一步**
+
+```text
+执行方案第 <n> 步。要求：
+- 只改这一步涉及的文件；diff 里不得出现无关格式化或重命名
+- 开始前先运行 `<验证命令>` 记录基线；结束后再运行一次，并逐项对比输出
+- 若基线本身是红的，先停下告诉我，不要试图"顺手修好"
+- 结束时给出：改动摘要、行为不变的证据（两次命令输出）、回滚方式（git revert 单个提交）
+```
+
+**模板 C：大规模迁移的规则书与压力测试**（对应主篇第 1—2 步）
+
+```text
+我们要把 <N> 个文件从 <源语言/框架> 迁到 <目标>。这一轮不产出迁移结果，只打磨规则。
+1) 读 <旧代码目录>，产出 rulebook.md：类型映射、惯用法对照、错误处理约定、禁止事项，
+   每条规则给出一个"旧写法 → 新写法"的真实例子（引用文件:行号）。
+2) 按 rulebook 各译 3 个代表性文件；再按"资深 <目标语言> 工程师"的直觉译同一批文件。
+3) 对比两版 diff，列出规则没覆盖的歧义点，把它们写成新规则补进 rulebook.md。
+4) 译出的文件全部丢弃；本轮交付物只有 rulebook.md 与差距清单。
+```
+
+**验收清单（重构合并前逐项打勾）**
+
+- [ ] 行为不变的证据是**机械的**：同一组测试/命令在改动前后输出一致（或差异已被解释）。
+- [ ] 每一步是**一个可独立回滚的提交**，不存在"要回滚就得全回滚"的大提交。
+- [ ] diff 里没有未要求的改动：新依赖、命名风格漂移、无关格式化、被顺手删掉的注释。
+- [ ] 公共 API、序列化格式、错误码、日志字段四类契约逐项确认过。
+- [ ] 性能没有静默退化：关键路径至少有一次前后对比数字（哪怕是粗略基准）。
+- [ ] 规范文件已同步：若这次重构改变了约定，`AGENTS.md`/`CLAUDE.md` 里的相关条目同时更新（写法见《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》）。
+- [ ] 若属于大规模迁移：新增的失败模式已**回写进规则书**，而不是只在当前文件里打补丁。
+
 ---
 
-> 下一篇预告：重构要求"行为不变"，TDD 干脆让测试先行。第 19 篇迎来本模块方法论篇的重磅作者——TDD 概念奠基人 Kent Beck，讲他与 Claude 结对的"增强编程"。
+> 相关阅读：重构的前提是"改一步验一步"，把它变成默认见《TDD with AI：Kent Beck 的增强编程实践》；改完之后的独立审查见《AI 结对与代码审查》。
 
-> **来源**：本文第一、三部分译自 [How Anthropic runs large-scale code migrations with Claude Code](https://claude.com/blog/ai-code-migration)（2026-07-16）与 [Common workflows](https://code.claude.com/docs/en/common-workflows)（Claude Code 官方文档），及 [Rakuten 客户案例](https://www.anthropic.com/customers/rakuten)，作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；第二部分摘译自 Aman Agrawal《Some Observations on AI/Agentic Refactoring》（amanagrawal.blog，2025-05-06），署名翻译（作者公开博客，原文页未附开源许可）。"译注"为本站编者补充并已标明。抓取于 2026-09-13。
+> **来源**：本文第一、三部分译自 [How Anthropic runs large-scale code migrations with Claude Code](https://claude.com/blog/ai-code-migration)（2026-07-16）与 [Common workflows](https://code.claude.com/docs/en/common-workflows)（Claude Code 官方文档），及 [Rakuten 客户案例](https://www.anthropic.com/customers/rakuten)，作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；第二部分摘译自 Aman Agrawal《Some Observations on AI/Agentic Refactoring》（amanagrawal.blog，2025-05-06），署名翻译（作者公开博客，原文页未附开源许可）。开头段、"译注"、第四部分模板与清单、文末相关阅读为本站编者内容并已标明。原文配图未搬运。抓取于 2026-09-13。

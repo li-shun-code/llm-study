@@ -8,6 +8,10 @@ translated: false
 order: 25
 group: 算法策略（面试选学）
 ---
+> **难度**：★★★（面试选学）。贪心的代码往往很短，难点全在“为什么局部最优能推出全局最优”的证明上。
+> **适合**：已经能写出递归与动态规划解法，想知道哪些问题可以退化成一步排序或双指针。
+> **前置**：《递归入门》《动态规划（面试选学）》。本篇用动态规划作为对照来讨论贪心的适用边界，因此建议先读动态规划。
+
 ## 贪心算法
 
 
@@ -18,16 +22,34 @@ group: 算法策略（面试选学）
 - 动态规划会根据之前阶段的所有决策来考虑当前决策，并使用过去子问题的解来构建当前子问题的解。
 - 贪心算法不会考虑过去的决策，而是一路向前地进行贪心选择，不断缩小问题范围，直至问题被解决。
 
-我们先通过例题“零钱兑换”了解贪心算法的工作原理。这道题已经在“完全背包问题”章节中介绍过，相信你对它并不陌生。
+我们先通过例题“零钱兑换”了解贪心算法的工作原理。这道题已经在《动态规划（面试选学）》的“完全背包与零钱兑换”一节介绍过，相信你对它并不陌生。
 
 > **【问题】**
 > 给定 n 种硬币，第 i 种硬币的面值为 coins[i - 1] ，目标金额为 amt ，每种硬币可以重复选取，问能够凑出目标金额的最少硬币数量。如果无法凑出目标金额，则返回 -1 。
 
 本题采取的贪心策略如下图所示。给定目标金额，**我们贪心地选择不大于且最接近它的硬币**，不断循环该步骤，直至凑出目标金额为止。
 
-![零钱兑换的贪心策略](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/greedy_algorithm.assets/coin_change_greedy_strategy.png)
+![零钱兑换的贪心策略](assets/cgreedy__greedy_algorithm__coin_change_greedy_strategy.png)
 
 实现代码如下所示：
+
+```python
+def coin_change_greedy(coins: list[int], amt: int) -> int:
+    """零钱兑换：贪心"""
+    # 假设 coins 列表有序
+    i = len(coins) - 1
+    count = 0
+    # 循环进行贪心选择，直到无剩余金额
+    while amt > 0:
+        # 找到小于且最接近剩余金额的硬币
+        while i > 0 and coins[i] > amt:
+            i -= 1
+        # 选择 coins[i]
+        amt -= coins[i]
+        count += 1
+    # 若未找到可行方案，则返回 -1
+    return count if amt == 0 else -1
+```
 
 
 你可能会不由地发出感叹：So clean ！贪心算法仅用约十行代码就解决了零钱兑换问题。
@@ -42,7 +64,7 @@ group: 算法策略（面试选学）
 - **反例 coins = [1, 20, 50]**：假设 amt = 60 ，贪心算法只能找到 50 + 1 × 10 的兑换组合，共计 11 枚硬币，但动态规划可以找到最优解 20 + 20 + 20 ，仅需 3 枚硬币。
 - **反例 coins = [1, 49, 50]**：假设 amt = 98 ，贪心算法只能找到 50 + 1 × 48 的兑换组合，共计 49 枚硬币，但动态规划可以找到最优解 49 + 49 ，仅需 2 枚硬币。
 
-![贪心算法无法找出最优解的示例](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/greedy_algorithm.assets/coin_change_greedy_vs_dp.png)
+![贪心算法无法找出最优解的示例](assets/cgreedy__greedy_algorithm__coin_change_greedy_vs_dp.png)
 
 也就是说，对于零钱兑换问题，贪心算法无法保证找到全局最优解，并且有可能找到非常差的解。它更适合用动态规划解决。
 
@@ -60,7 +82,7 @@ group: 算法策略（面试选学）
 - **贪心选择性质**：只有当局部最优选择始终可以导致全局最优解时，贪心算法才能保证得到最优解。
 - **最优子结构**：原问题的最优解包含子问题的最优解。
 
-最优子结构已经在“动态规划”章节中介绍过，这里不再赘述。值得注意的是，一些问题的最优子结构并不明显，但仍然可使用贪心算法解决。
+最优子结构已经在《动态规划（面试选学）》中介绍过，这里不再赘述。值得注意的是，一些问题的最优子结构并不明显，但仍然可使用贪心算法解决。
 
 我们主要探究贪心选择性质的判断方法。虽然它的描述看上去比较简单，**但实际上对于许多问题，证明贪心选择性质并非易事**。
 
@@ -105,7 +127,7 @@ group: 算法策略（面试选学）
 > **【问题】**
 > 给定 n 个物品，第 i 个物品的重量为 wgt[i-1]、价值为 val[i-1] ，和一个容量为 cap 的背包。每个物品只能选择一次，**但可以选择物品的一部分，价值根据选择的重量比例计算**，问在限定背包容量下背包中物品的最大价值。示例如下图所示。
 
-![分数背包问题的示例数据](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.assets/fractional_knapsack_example.png)
+![分数背包问题的示例数据](assets/cgreedy__fractional_knapsack_problem__fractional_knapsack_example.png)
 
 分数背包问题和 0-1 背包问题整体上非常相似，状态包含当前物品 i 和容量 c ，目标是求限定背包容量下的最大价值。
 
@@ -114,7 +136,7 @@ group: 算法策略（面试选学）
 1. 对于物品 i ，它在单位重量下的价值为 val[i-1] / wgt[i-1] ，简称单位价值。
 2. 假设放入一部分物品 i ，重量为 w ，则背包增加的价值为 w × val[i-1] / wgt[i-1] 。
 
-![物品在单位重量下的价值](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.assets/fractional_knapsack_unit_value.png)
+![物品在单位重量下的价值](assets/cgreedy__fractional_knapsack_problem__fractional_knapsack_unit_value.png)
 
 #### 贪心策略确定
 
@@ -124,11 +146,43 @@ group: 算法策略（面试选学）
 2. 遍历所有物品，**每轮贪心地选择单位价值最高的物品**。
 3. 若剩余背包容量不足，则使用当前物品的一部分填满背包。
 
-![分数背包问题的贪心策略](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.assets/fractional_knapsack_greedy_strategy.png)
+![分数背包问题的贪心策略](assets/cgreedy__fractional_knapsack_problem__fractional_knapsack_greedy_strategy.png)
 
 #### 代码实现
 
 我们建立了一个物品类 `Item` ，以便将物品按照单位价值进行排序。循环进行贪心选择，当背包已满时跳出并返回解：
+
+```python
+class Item:
+    """物品"""
+
+    def __init__(self, w: int, v: int):
+        self.w = w  # 物品重量
+        self.v = v  # 物品价值
+
+
+
+
+def fractional_knapsack(wgt: list[int], val: list[int], cap: int) -> int:
+    """分数背包：贪心"""
+    # 创建物品列表，包含两个属性：重量、价值
+    items = [Item(w, v) for w, v in zip(wgt, val)]
+    # 按照单位价值 item.v / item.w 从高到低进行排序
+    items.sort(key=lambda item: item.v / item.w, reverse=True)
+    # 循环贪心选择
+    res = 0
+    for item in items:
+        if item.w <= cap:
+            # 若剩余容量充足，则将当前物品整个装进背包
+            res += item.v
+            cap -= item.w
+        else:
+            # 若剩余容量不足，则将当前物品的一部分装进背包
+            res += (item.v / item.w) * cap
+            # 已无剩余容量，因此跳出循环
+            break
+    return res
+```
 
 
 内置排序算法的时间复杂度通常为 O(n log n) ，空间复杂度通常为 O(log n) 或 O(n) ，取决于编程语言的具体实现。
@@ -147,7 +201,62 @@ group: 算法策略（面试选学）
 
 如下图所示，如果将物品重量和物品单位价值分别看作一张二维图表的横轴和纵轴，则分数背包问题可转化为“求在有限横轴区间下围成的最大面积”。这个类比可以帮助我们从几何角度理解贪心策略的有效性。
 
-![分数背包问题的几何表示](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.assets/fractional_knapsack_area_chart.png)
+![分数背包问题的几何表示](assets/cgreedy__fractional_knapsack_problem__fractional_knapsack_area_chart.png)
+
+## 示例：最大容量问题
+
+> **【问题】**
+> 输入一个数组 `ht` ，其中每个元素代表一个垂直隔板的高度。数组中的任意两个隔板以及它们之间的空间可以组成一个容器。容器的容量等于高度和宽度的乘积（面积），其中高度由较短的隔板决定，宽度是两个隔板的数组索引之差。请在数组中选择两个隔板，使组成的容器容量最大，返回最大容量。
+
+![最大容量问题的示例数据](assets/cgreedy__max_capacity_problem__max_capacity_example.png)
+
+容器由任意两个隔板围成，因此本题的状态为两个隔板的索引，记为 [i, j] 。设容量为 `cap[i, j]` ，则可得计算公式：
+
+**cap[i, j] = min(ht[i], ht[j]) × (j - i)**
+
+设数组长度为 n ，两个隔板的组合数量（状态总数）为 C(n, 2) = n(n - 1) / 2 个。最直接的做法是穷举所有状态求得最大容量，时间复杂度为 O(n²) 。
+
+#### 贪心策略确定
+
+这道题还有更高效率的解法。现选取一个状态 [i, j] ，其满足索引 i < j 且高度 `ht[i] < ht[j]` ，即 i 为短板、j 为长板。
+
+![初始状态](assets/cgreedy__max_capacity_problem__max_capacity_initial_state.png)
+
+**若此时将长板 j 向短板 i 靠近，则容量一定变小**。因为移动长板后宽度 j - i 必然变小，而高度由短板决定，因此高度只可能不变（i 仍为短板）或变小（移动后的 j 成为短板）。
+
+![向内移动长板后的状态](assets/cgreedy__max_capacity_problem__max_capacity_moving_long_board.png)
+
+反向思考，**我们只有向内收缩短板 i ，才有可能使容量变大**。因为虽然宽度一定变小，**但高度可能会变大**（移动后的短板 i 可能更长）。
+
+![向内移动短板后的状态](assets/cgreedy__max_capacity_problem__max_capacity_moving_short_board.png)
+
+由此得到本题的贪心策略：初始化两个指针分列数组两端，每轮向内移动短板对应的指针，直至两指针相遇。该题正是《双指针与滑动窗口》中“对撞双指针”的典型例子，只是这里多了一层“为什么移动短板”的贪心论证。
+
+#### 代码实现
+
+```python
+def max_capacity(ht: list[int]) -> int:
+    """最大容量：贪心"""
+    # 初始化 i, j，使其分列数组两端
+    i, j = 0, len(ht) - 1
+    # 初始最大容量为 0
+    res = 0
+    # 循环贪心选择，直至两板相遇
+    while i < j:
+        # 更新最大容量
+        cap = min(ht[i], ht[j]) * (j - i)
+        res = max(res, cap)
+        # 向内移动短板
+        if ht[i] < ht[j]:
+            i += 1
+        else:
+            j -= 1
+    return res
+```
+
+贪心选择下每个元素最多被访问一次，因此时间复杂度为 O(n) ，空间复杂度为 O(1) 。
+
+**正确性证明（反证法）**：设当前状态为 [i, j] 且 `ht[i] < ht[j]` 。所有以 i 为左边界、索引在 (i, j] 内的容器，其高度都不会超过 `ht[i]` 、宽度都小于 j - i ，因此容量都小于当前容器——也就是说，凡是包含短板 i 的更优解都不可能再由移动长板得到，可以安全地排除以 i 为短板的所有状态。移动长板 j 则会把这部分尚未穷尽的状态直接丢弃，故不可取。
 
 ## 示例：最大切分乘积问题
 
@@ -155,16 +264,16 @@ group: 算法策略（面试选学）
 > **【问题】**
 > 给定一个正整数 n ，将其切分为至少两个正整数的和，求切分后所有整数的乘积最大是多少，如下图所示。
 
-![最大切分乘积的问题定义](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.assets/max_product_cutting_definition.png)
+![最大切分乘积的问题定义](assets/cgreedy__max_product_cutting_problem__max_product_cutting_definition.png)
 
 假设我们将 n 切分为 m 个整数因子，其中第 i 个因子记为 nᵢ ，即
 
-**n = Σ_(i=1)^(m)nᵢ**
+**n = Σ nᵢ（i = 1, 2, …, m）**
 
 
 本题的目标是求得所有整数因子的最大乘积，即
 
-**max(Π_(i=1)^(m)nᵢ)**
+**max(Π nᵢ)（i = 1, 2, …, m）**
 
 
 我们需要思考的是：切分数量 m 应该多大，每个 nᵢ 应该是多少？
@@ -173,14 +282,14 @@ group: 算法策略（面试选学）
 
 根据经验，两个整数的乘积往往比它们的加和更大。假设从 n 中分出一个因子 2 ，则它们的乘积为 2(n-2) 。我们将该乘积与 n 作比较：
 
-**2(n-2) ≥ n ; 2n - n - 4 ≥ 0 ; n ≥ 4**
+**2(n - 2) ≥ n，即 2n - n - 4 = n - 4 ≥ 0，故 n ≥ 4**
 
 
 如下图所示，当 n ≥ 4 时，切分出一个 2 后乘积会变大，**这说明大于等于 4 的整数都应该被切分**。
 
 **贪心策略一**：如果切分方案中包含 ≥ 4 的因子，那么它就应该被继续切分。最终的切分方案只应出现 1、2、3 这三种因子。
 
-![切分导致乘积变大](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.assets/max_product_cutting_greedy_infer1.png)
+![切分导致乘积变大](assets/cgreedy__max_product_cutting_problem__max_product_cutting_greedy_infer1.png)
 
 接下来思考哪个因子是最优的。在 1、2、3 这三个因子中，显然 1 是最差的，因为 1 × (n-1) < n 恒成立，即切分出 1 反而会导致乘积减小。
 
@@ -188,7 +297,7 @@ group: 算法策略（面试选学）
 
 **贪心策略二**：在切分方案中，最多只应存在两个 2 。因为三个 2 总是可以替换为两个 3 ，从而获得更大的乘积。
 
-![最优切分因子](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.assets/max_product_cutting_greedy_infer2.png)
+![最优切分因子](assets/cgreedy__max_product_cutting_problem__max_product_cutting_greedy_infer2.png)
 
 综上所述，可推理出以下贪心策略。
 
@@ -201,13 +310,31 @@ group: 算法策略（面试选学）
 
 如下图所示，我们无须通过循环来切分整数，而可以利用向下整除运算得到 3 的个数 a ，用取模运算得到余数 b ，此时有：
 
-**n = 3 a + b**
+**n = 3a + b**
 
 
 请注意，对于 n ≤ 3 的边界情况，必须拆分出一个 1 ，乘积为 1 × (n - 1) 。
 
+```python
+def max_product_cutting(n: int) -> int:
+    """最大切分乘积：贪心"""
+    # 当 n <= 3 时，必须切分出一个 1
+    if n <= 3:
+        return 1 * (n - 1)
+    # 贪心地切分出 3 ，a 为 3 的个数，b 为余数
+    a, b = n // 3, n % 3
+    if b == 1:
+        # 当余数为 1 时，将一对 1 * 3 转化为 2 * 2
+        return int(math.pow(3, a - 1)) * 2 * 2
+    if b == 2:
+        # 当余数为 2 时，不做处理
+        return int(math.pow(3, a)) * 2
+    # 当余数为 0 时，不做处理
+    return int(math.pow(3, a))
+```
 
-![最大切分乘积的计算方法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.assets/max_product_cutting_greedy_calculation.png)
+
+![最大切分乘积的计算方法](assets/cgreedy__max_product_cutting_problem__max_product_cutting_greedy_calculation.png)
 
 **时间复杂度取决于编程语言的幂运算的实现方法**。以 Python 为例，常用的幂计算函数有三种。
 
@@ -227,5 +354,5 @@ group: 算法策略（面试选学）
 ---
 
 > **来源**：本文转载自 [贪心算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/greedy_algorithm.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[分数背包问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.md)、[最大切分乘积问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[分数背包问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/fractional_knapsack_problem.md)、[最大容量问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_capacity_problem.md)、[最大切分乘积问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/max_product_cutting_problem.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

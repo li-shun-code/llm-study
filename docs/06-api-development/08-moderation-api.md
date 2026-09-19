@@ -5,7 +5,7 @@ author: OpenAI Cookbook
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-versions: OpenAI Moderation API（omni-moderation-latest）；原文示例模型为 gpt-4o-mini，工作流在当前模型系同样适用
+versions: OpenAI Moderation API（omni-moderation-latest）；原文示例模型 gpt-4o-mini 已按现行命名改为 gpt-5.5
 order: 8
 group: 可靠性、安全与成本
 ---
@@ -22,7 +22,7 @@ group: 可靠性、安全与成本
 ```python
 from openai import OpenAI
 client = OpenAI()
-GPT_MODEL = 'gpt-4o-mini'
+GPT_MODEL = 'gpt-5.5'
 ```
 
 ## 1. 输入审核
@@ -258,7 +258,7 @@ for test in tests:
 
 ### 工作流
 
-实现一个小例子：额外调用一次 gpt-4o-mini 来评估消息是否应该被审核。
+实现一个小例子：额外调用一次模型（本篇用 `gpt-5.5`）来评估消息是否应该被审核。
 
 ```python
 def custom_moderation(content, parameters):
@@ -272,10 +272,10 @@ def custom_moderation(content, parameters):
 
     # 调用模型
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=GPT_MODEL,
         response_format={ "type": "json_object" },
         messages=[
-            {"role": "system", "content": "You are a content moderation assistant."},
+            {"role": "developer", "content": "You are a content moderation assistant."},
             {"role": "user", "content": prompt}
         ]
     )

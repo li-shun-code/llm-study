@@ -8,6 +8,10 @@ translated: false
 order: 24
 group: 算法策略（面试选学）
 ---
+> **难度**：★★★★（面试选学）。动态规划是面试中出现频率最高、也最容易“看得懂写不出”的题型。
+> **适合**：目标是把“状态 / 转移 / 边界”三件事写成可复用的解题流程，而不是背下面这几道题。
+> **前置**：需要先掌握《递归入门》的递归三要素与调用栈，以及《栈》中“用显式栈模拟递归”的思路；本篇不再重复递归基础，直接进入“重叠子问题”与“记忆化”。
+
 ## 初探动态规划
 
 
@@ -20,9 +24,36 @@ group: 算法策略（面试选学）
 
 如下图所示，对于一个 3 阶楼梯，共有 3 种方案可以爬到楼顶。
 
-![爬到第 3 阶的方案数量](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.assets/climbing_stairs_example.png)
+![爬到第 3 阶的方案数量](assets/cdynamic_programming__intro_to_dynamic_programming__climbing_stairs_example.png)
 
 本题的目标是求解方案数量，**我们可以考虑通过回溯来穷举所有可能性**。具体来说，将爬楼梯想象为一个多轮选择的过程：从地面出发，每轮选择上 1 阶或 2 阶，每当到达楼梯顶部时就将方案数量加 1 ，当越过楼梯顶部时就将其剪枝。代码如下所示：
+
+```python
+def backtrack(choices: list[int], state: int, n: int, res: list[int]) -> int:
+    """回溯"""
+    # 当爬到第 n 阶时，方案数量加 1
+    if state == n:
+        res[0] += 1
+    # 遍历所有选择
+    for choice in choices:
+        # 剪枝：不允许越过第 n 阶
+        if state + choice > n:
+            continue
+        # 尝试：做出选择，更新状态
+        backtrack(choices, state + choice, n, res)
+        # 回退
+
+
+
+
+def climbing_stairs_backtrack(n: int) -> int:
+    """爬楼梯：回溯"""
+    choices = [1, 2]  # 可选择向上爬 1 阶或 2 阶
+    state = 0  # 从第 0 阶开始爬
+    res = [0]  # 使用 res[0] 记录方案数量
+    backtrack(choices, state, n, res)
+    return res[0]
+```
 
 
 ### 方法一：暴力搜索
@@ -34,7 +65,7 @@ group: 算法策略（面试选学）
 **dp[i-1], dp[i-2], …, dp[2], dp[1]**
 
 
-由于每轮只能上 1 阶或 2 阶，因此当我们站在第 i 阶楼梯上时，上一轮只可能站在第 i - 1 阶或第 i - 2 阶上。换句话说，我们只能从第 i -1 阶或第 i - 2 阶迈向第 i 阶。
+由于每轮只能上 1 阶或 2 阶，因此当我们站在第 i 阶楼梯上时，前一轮只可能站在第 i - 1 阶或第 i - 2 阶上。换句话说，我们只能从第 i -1 阶或第 i - 2 阶迈向第 i 阶。
 
 由此便可得出一个重要推论：**爬到第 i - 1 阶的方案数加上爬到第 i - 2 阶的方案数就等于爬到第 i 阶的方案数**。公式如下：
 
@@ -43,16 +74,34 @@ group: 算法策略（面试选学）
 
 这意味着在爬楼梯问题中，各个子问题之间存在递推关系，**原问题的解可以由子问题的解构建得来**。下图展示了该递推关系。
 
-![方案数量递推关系](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.assets/climbing_stairs_state_transfer.png)
+![方案数量递推关系](assets/cdynamic_programming__intro_to_dynamic_programming__climbing_stairs_state_transfer.png)
 
 我们可以根据递推公式得到暴力搜索解法。以 dp[n] 为起始点，**递归地将一个较大问题拆解为两个较小问题的和**，直至到达最小子问题 dp[1] 和 dp[2] 时返回。其中，最小子问题的解是已知的，即 dp[1] = 1、dp[2] = 2 ，表示爬到第 1、2 阶分别有 1、2 种方案。
 
 观察以下代码，它和标准回溯代码都属于深度优先搜索，但更加简洁：
 
+```python
+def dfs(i: int) -> int:
+    """搜索"""
+    # 已知 dp[1] 和 dp[2] ，返回之
+    if i == 1 or i == 2:
+        return i
+    # dp[i] = dp[i-1] + dp[i-2]
+    count = dfs(i - 1) + dfs(i - 2)
+    return count
+
+
+
+
+def climbing_stairs_dfs(n: int) -> int:
+    """爬楼梯：搜索"""
+    return dfs(n)
+```
+
 
 下图展示了暴力搜索形成的递归树。对于问题 dp[n] ，其递归树的深度为 n ，时间复杂度为 O(2ⁿ) 。指数阶属于爆炸式增长，如果我们输入一个比较大的 n ，则会陷入漫长的等待之中。
 
-![爬楼梯对应递归树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.assets/climbing_stairs_dfs_tree.png)
+![爬楼梯对应递归树](assets/cdynamic_programming__intro_to_dynamic_programming__climbing_stairs_dfs_tree.png)
 
 观察上图，**指数阶的时间复杂度是“重叠子问题”导致的**。例如 dp[9] 被分解为 dp[8] 和 dp[7] ，dp[8] 被分解为 dp[7] 和 dp[6] ，两者都包含子问题 dp[7] 。
 
@@ -67,10 +116,35 @@ group: 算法策略（面试选学）
 
 代码如下所示：
 
+```python
+def dfs(i: int, mem: list[int]) -> int:
+    """记忆化搜索"""
+    # 已知 dp[1] 和 dp[2] ，返回之
+    if i == 1 or i == 2:
+        return i
+    # 若存在记录 dp[i] ，则直接返回之
+    if mem[i] != -1:
+        return mem[i]
+    # dp[i] = dp[i-1] + dp[i-2]
+    count = dfs(i - 1, mem) + dfs(i - 2, mem)
+    # 记录 dp[i]
+    mem[i] = count
+    return count
+
+
+
+
+def climbing_stairs_dfs_mem(n: int) -> int:
+    """爬楼梯：记忆化搜索"""
+    # mem[i] 记录爬到第 i 阶的方案总数，-1 代表无记录
+    mem = [-1] * (n + 1)
+    return dfs(n, mem)
+```
+
 
 观察下图，**经过记忆化处理后，所有重叠子问题都只需计算一次，时间复杂度优化至 O(n)** ，这是一个巨大的飞跃。
 
-![记忆化搜索对应递归树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.assets/climbing_stairs_dfs_memo_tree.png)
+![记忆化搜索对应递归树](assets/cdynamic_programming__intro_to_dynamic_programming__climbing_stairs_dfs_memo_tree.png)
 
 ### 方法三：动态规划
 
@@ -80,10 +154,25 @@ group: 算法策略（面试选学）
 
 由于动态规划不包含回溯过程，因此只需使用循环迭代实现，无须使用递归。在以下代码中，我们初始化一个数组 `dp` 来存储子问题的解，它起到了与记忆化搜索中数组 `mem` 相同的记录作用：
 
+```python
+def climbing_stairs_dp(n: int) -> int:
+    """爬楼梯：动态规划"""
+    if n == 1 or n == 2:
+        return n
+    # 初始化 dp 表，用于存储子问题的解
+    dp = [0] * (n + 1)
+    # 初始状态：预设最小子问题的解
+    dp[1], dp[2] = 1, 2
+    # 状态转移：从较小子问题逐步求解较大子问题
+    for i in range(3, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
+```
+
 
 下图模拟了以上代码的执行过程。
 
-![爬楼梯的动态规划过程](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.assets/climbing_stairs_dp.png)
+![爬楼梯的动态规划过程](assets/cdynamic_programming__intro_to_dynamic_programming__climbing_stairs_dp.png)
 
 与回溯算法一样，动态规划也使用“状态”概念来表示问题求解的特定阶段，每个状态都对应一个子问题以及相应的局部最优解。例如，爬楼梯问题的状态定义为当前所在楼梯阶数 i 。
 
@@ -96,6 +185,17 @@ group: 算法策略（面试选学）
 ### 空间优化
 
 细心的读者可能发现了，**由于 dp[i] 只与 dp[i-1] 和 dp[i-2] 有关，因此我们无须使用一个数组 `dp` 来存储所有子问题的解**，而只需两个变量滚动前进即可。代码如下所示：
+
+```python
+def climbing_stairs_dp_comp(n: int) -> int:
+    """爬楼梯：空间优化后的动态规划"""
+    if n == 1 or n == 2:
+        return n
+    a, b = 1, 2
+    for _ in range(3, n + 1):
+        a, b = b, a + b
+    return b
+```
 
 
 观察以上代码，由于省去了数组 `dp` 占用的空间，因此空间复杂度从 O(n) 降至 O(1) 。
@@ -122,7 +222,7 @@ group: 算法策略（面试选学）
 
 如下图所示，若第 1、2、3 阶的代价分别为 1、10、1 ，则从地面爬到第 3 阶的最小代价为 2 。
 
-![爬到第 3 阶的最小代价](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.assets/min_cost_cs_example.png)
+![爬到第 3 阶的最小代价](assets/cdynamic_programming__dp_problem_features__min_cost_cs_example.png)
 
 设 dp[i] 为爬到第 i 阶累计付出的代价，由于第 i 阶只可能从 i - 1 阶或 i - 2 阶走来，因此 dp[i] 只可能等于 dp[i - 1] + cost[i] 或 dp[i - 2] + cost[i] 。为了尽可能减少代价，我们应该选择两者中较小的那一个：
 
@@ -137,12 +237,40 @@ group: 算法策略（面试选学）
 
 根据状态转移方程，以及初始状态 dp[1] = cost[1] 和 dp[2] = cost[2] ，我们就可以得到动态规划代码：
 
+```python
+def min_cost_climbing_stairs_dp(cost: list[int]) -> int:
+    """爬楼梯最小代价：动态规划"""
+    n = len(cost) - 1
+    if n == 1 or n == 2:
+        return cost[n]
+    # 初始化 dp 表，用于存储子问题的解
+    dp = [0] * (n + 1)
+    # 初始状态：预设最小子问题的解
+    dp[1], dp[2] = cost[1], cost[2]
+    # 状态转移：从较小子问题逐步求解较大子问题
+    for i in range(3, n + 1):
+        dp[i] = min(dp[i - 1], dp[i - 2]) + cost[i]
+    return dp[n]
+```
+
 
 下图展示了以上代码的动态规划过程。
 
-![爬楼梯最小代价的动态规划过程](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.assets/min_cost_cs_dp.png)
+![爬楼梯最小代价的动态规划过程](assets/cdynamic_programming__dp_problem_features__min_cost_cs_dp.png)
 
 本题也可以进行空间优化，将一维压缩至零维，使得空间复杂度从 O(n) 降至 O(1) ：
+
+```python
+def min_cost_climbing_stairs_dp_comp(cost: list[int]) -> int:
+    """爬楼梯最小代价：空间优化后的动态规划"""
+    n = len(cost) - 1
+    if n == 1 or n == 2:
+        return cost[n]
+    a, b = cost[1], cost[2]
+    for i in range(3, n + 1):
+        a, b = b, min(a, b) + cost[i]
+    return b
+```
 
 
 ### 无后效性
@@ -158,25 +286,42 @@ group: 算法策略（面试选学）
 
 如下图所示，爬上第 3 阶仅剩 2 种可行方案，其中连续三次跳 1 阶的方案不满足约束条件，因此被舍弃。
 
-![带约束爬到第 3 阶的方案数量](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.assets/climbing_stairs_constraint_example.png)
+![带约束爬到第 3 阶的方案数量](assets/cdynamic_programming__dp_problem_features__climbing_stairs_constraint_example.png)
 
-在该问题中，如果上一轮是跳 1 阶上来的，那么下一轮就必须跳 2 阶。这意味着，**下一步选择不能由当前状态（当前所在楼梯阶数）独立决定，还和前一个状态（上一轮所在楼梯阶数）有关**。
+在该问题中，如果前一次跳的是 1 阶，那么下一次就必须跳 2 阶。这意味着，**下一步选择不能由当前状态（当前所在楼梯阶数）独立决定，还和前一个状态（前一次所在楼梯阶数）有关**。
 
-不难发现，此问题已不满足无后效性，状态转移方程 dp[i] = dp[i-1] + dp[i-2] 也失效了，因为 dp[i-1] 代表本轮跳 1 阶，但其中包含了许多“上一轮是跳 1 阶上来的”方案，而为了满足约束，我们就不能将 dp[i-1] 直接计入 dp[i] 中。
+不难发现，此问题已不满足无后效性，状态转移方程 dp[i] = dp[i-1] + dp[i-2] 也失效了，因为 dp[i-1] 代表本轮跳 1 阶，但其中包含了许多“前一次是跳 1 阶上来的”方案，而为了满足约束，我们就不能将 dp[i-1] 直接计入 dp[i] 中。
 
-为此，我们需要扩展状态定义：**状态 [i, j] 表示处在第 i 阶并且上一轮跳了 j 阶**，其中 j ∈ 1, 2 。此状态定义有效地区分了上一轮跳了 1 阶还是 2 阶，我们可以据此判断当前状态是从何而来的。
+为此，我们需要扩展状态定义：**状态 [i, j] 表示处在第 i 阶并且前一次跳了 j 阶**，其中 j ∈ {1, 2} 。此状态定义有效地区分了前一次跳了 1 阶还是 2 阶，我们可以据此判断当前状态是从何而来的。
 
-- 当上一轮跳了 1 阶时，上上一轮只能选择跳 2 阶，即 dp[i, 1] 只能从 dp[i-1, 2] 转移过来。
-- 当上一轮跳了 2 阶时，上上一轮可选择跳 1 阶或跳 2 阶，即 dp[i, 2] 可以从 dp[i-2, 1] 或 dp[i-2, 2] 转移过来。
+- 当前一次跳了 1 阶时，再前一次只能选择跳 2 阶，即 dp[i, 1] 只能从 dp[i-1, 2] 转移过来。
+- 当前一次跳了 2 阶时，再前一次可选择跳 1 阶或跳 2 阶，即 dp[i, 2] 可以从 dp[i-2, 1] 或 dp[i-2, 2] 转移过来。
 
 如下图所示，在该定义下，dp[i, j] 表示状态 [i, j] 对应的方案数。此时状态转移方程为：
 
-**dp[i, 1] = dp[i-1, 2] ; dp[i, 2] = dp[i-2, 1] + dp[i-2, 2]**
+**dp[i, 1] = dp[i-1, 2]，dp[i, 2] = dp[i-2, 1] + dp[i-2, 2]**
 
 
-![考虑约束下的递推关系](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.assets/climbing_stairs_constraint_state_transfer.png)
+![考虑约束下的递推关系](assets/cdynamic_programming__dp_problem_features__climbing_stairs_constraint_state_transfer.png)
 
 最终，返回 dp[n, 1] + dp[n, 2] 即可，两者之和代表爬到第 n 阶的方案总数：
+
+```python
+def climbing_stairs_constraint_dp(n: int) -> int:
+    """带约束爬楼梯：动态规划"""
+    if n == 1 or n == 2:
+        return 1
+    # 初始化 dp 表，用于存储子问题的解
+    dp = [[0] * 3 for _ in range(n + 1)]
+    # 初始状态：预设最小子问题的解
+    dp[1][1], dp[1][2] = 1, 0
+    dp[2][1], dp[2][2] = 0, 1
+    # 状态转移：从较小子问题逐步求解较大子问题
+    for i in range(3, n + 1):
+        dp[i][1] = dp[i - 1][2]
+        dp[i][2] = dp[i - 2][1] + dp[i - 2][2]
+    return dp[n][1] + dp[n][2]
+```
 
 
 在上面的案例中，由于仅需多考虑前面一个状态，因此我们仍然可以通过扩展状态定义，使得问题重新满足无后效性。然而，某些问题具有非常严重的“有后效性”。
@@ -227,7 +372,7 @@ group: 算法策略（面试选学）
 
 下图展示了一个例子，给定网格的最小路径和为 13 。
 
-![最小路径和示例数据](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.assets/min_path_sum_example.png)
+![最小路径和示例数据](assets/cdynamic_programming__dp_solution_pipeline__min_path_sum_example.png)
 
 **第一步：思考每轮的决策，定义状态，从而得到 dp 表**
 
@@ -237,7 +382,7 @@ group: 算法策略（面试选学）
 
 至此，我们就得到了下图所示的二维 dp 矩阵，其尺寸与输入网格 grid 相同。
 
-![状态定义与 dp 表](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.assets/min_path_sum_solution_state_definition.png)
+![状态定义与 dp 表](assets/cdynamic_programming__dp_solution_pipeline__min_path_sum_solution_state_definition.png)
 
 > **【备注】**
 > 动态规划和回溯过程可以描述为一个决策序列，而状态由所有决策变量构成。它应当包含描述解题进度的所有变量，其包含了足够的信息，能够用来推导出下一个状态。
@@ -246,6 +391,8 @@ group: 算法策略（面试选学）
 
 **第二步：找出最优子结构，进而推导出状态转移方程**
 
+
+
 对于状态 [i, j] ，它只能从上边格子 [i-1, j] 和左边格子 [i, j-1] 转移而来。因此最优子结构为：到达 [i, j] 的最小路径和由 [i, j-1] 的最小路径和与 [i-1, j] 的最小路径和中较小的那一个决定。
 
 根据以上分析，可推出下图所示的状态转移方程：
@@ -253,7 +400,7 @@ group: 算法策略（面试选学）
 **dp[i, j] = min(dp[i-1, j], dp[i, j-1]) + grid[i, j]**
 
 
-![最优子结构与状态转移方程](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.assets/min_path_sum_solution_state_transition.png)
+![最优子结构与状态转移方程](assets/cdynamic_programming__dp_solution_pipeline__min_path_sum_solution_state_transition.png)
 
 > **【备注】**
 > 根据定义好的 dp 表，思考原问题和子问题的关系，找出通过子问题的最优解来构造原问题的最优解的方法，即最优子结构。
@@ -266,7 +413,7 @@ group: 算法策略（面试选学）
 
 如下图所示，由于每个格子是由其左方格子和上方格子转移而来，因此我们使用循环来遍历矩阵，外循环遍历各行，内循环遍历各列。
 
-![边界条件与状态转移顺序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.assets/min_path_sum_solution_initial_state.png)
+![边界条件与状态转移顺序](assets/cdynamic_programming__dp_solution_pipeline__min_path_sum_solution_initial_state.png)
 
 > **【备注】**
 > 边界条件在动态规划中用于初始化 dp 表，在搜索中用于剪枝。
@@ -286,12 +433,28 @@ group: 算法策略（面试选学）
 
 实现代码如下：
 
+```python
+def min_path_sum_dfs(grid: list[list[int]], i: int, j: int) -> int:
+    """最小路径和：暴力搜索"""
+    # 若为左上角单元格，则终止搜索
+    if i == 0 and j == 0:
+        return grid[0][0]
+    # 若行列索引越界，则返回 +∞ 代价
+    if i < 0 or j < 0:
+        return float("inf")
+    # 计算从左上角到 (i-1, j) 和 (i, j-1) 的最小路径代价
+    up = min_path_sum_dfs(grid, i - 1, j)
+    left = min_path_sum_dfs(grid, i, j - 1)
+    # 返回从左上角到 (i, j) 的最小路径代价
+    return min(left, up) + grid[i][j]
+```
+
 
 下图给出了以 dp[2, 1] 为根节点的递归树，其中包含一些重叠子问题，其数量会随着网格 `grid` 的尺寸变大而急剧增多。
 
 从本质上看，造成重叠子问题的原因为：**存在多条路径可以从左上角到达某一单元格**。
 
-![暴力搜索递归树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.assets/min_path_sum_dfs.png)
+![暴力搜索递归树](assets/cdynamic_programming__dp_solution_pipeline__min_path_sum_dfs.png)
 
 每个状态都有向下和向右两种选择，从左上角走到右下角总共需要 m + n - 2 步，所以最差时间复杂度为 O(2^(m + n)) ，其中 n 和 m 分别为网格的行数和列数。请注意，这种计算方式未考虑临近网格边界的情况，当到达网格边界时只剩下一种选择，因此实际的路径数量会少一些。
 
@@ -299,14 +462,56 @@ group: 算法策略（面试选学）
 
 我们引入一个和网格 `grid` 相同尺寸的记忆列表 `mem` ，用于记录各个子问题的解，并将重叠子问题进行剪枝：
 
+```python
+def min_path_sum_dfs_mem(
+    grid: list[list[int]], mem: list[list[int]], i: int, j: int
+) -> int:
+    """最小路径和：记忆化搜索"""
+    # 若为左上角单元格，则终止搜索
+    if i == 0 and j == 0:
+        return grid[0][0]
+    # 若行列索引越界，则返回 +∞ 代价
+    if i < 0 or j < 0:
+        return float("inf")
+    # 若已有记录，则直接返回
+    if mem[i][j] != -1:
+        return mem[i][j]
+    # 左边和上边单元格的最小路径代价
+    up = min_path_sum_dfs_mem(grid, mem, i - 1, j)
+    left = min_path_sum_dfs_mem(grid, mem, i, j - 1)
+    # 记录并返回左上角到 (i, j) 的最小路径代价
+    mem[i][j] = min(left, up) + grid[i][j]
+    return mem[i][j]
+```
+
 
 如下图所示，在引入记忆化后，所有子问题的解只需计算一次，因此时间复杂度取决于状态总数，即网格尺寸 O(nm) 。
 
-![记忆化搜索递归树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.assets/min_path_sum_dfs_mem.png)
+![记忆化搜索递归树](assets/cdynamic_programming__dp_solution_pipeline__min_path_sum_dfs_mem.png)
 
 #### 方法三：动态规划
 
 基于迭代实现动态规划解法，代码如下所示：
+
+```python
+def min_path_sum_dp(grid: list[list[int]]) -> int:
+    """最小路径和：动态规划"""
+    n, m = len(grid), len(grid[0])
+    # 初始化 dp 表
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = grid[0][0]
+    # 状态转移：首行
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + grid[0][j]
+    # 状态转移：首列
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + grid[i][0]
+    # 状态转移：其余行和列
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i][j] = min(dp[i][j - 1], dp[i - 1][j]) + grid[i][j]
+    return dp[n - 1][m - 1]
+```
 
 
 下图展示了最小路径和的状态转移过程，其遍历了整个网格，**因此时间复杂度为 O(nm)** 。
@@ -319,8 +524,294 @@ group: 算法策略（面试选学）
 
 请注意，因为数组 `dp` 只能表示一行的状态，所以我们无法提前初始化首列状态，而是在遍历每行时更新它：
 
+```python
+def min_path_sum_dp_comp(grid: list[list[int]]) -> int:
+    """最小路径和：空间优化后的动态规划"""
+    n, m = len(grid), len(grid[0])
+    # 初始化 dp 表
+    dp = [0] * m
+    # 状态转移：首行
+    dp[0] = grid[0][0]
+    for j in range(1, m):
+        dp[j] = dp[j - 1] + grid[0][j]
+    # 状态转移：其余行
+    for i in range(1, n):
+        # 状态转移：首列
+        dp[0] = dp[0] + grid[i][0]
+        # 状态转移：其余列
+        for j in range(1, m):
+            dp[j] = min(dp[j - 1], dp[j]) + grid[i][j]
+    return dp[m - 1]
+```
+
+## 示例：0-1 背包问题
+
+背包问题是动态规划最常见的问题形式，并有 0-1 背包、完全背包、多重背包等变种。
+
+> **【问题】**
+> 给定 n 个物品，第 i 个物品的重量为 `wgt[i-1]`、价值为 `val[i-1]` ，和一个容量为 cap 的背包。每个物品只能选择一次，问在限定背包容量下能放入物品的最大价值。
+
+由于物品编号 i 从 1 开始计数、数组索引从 0 开始计数，因此物品 i 对应重量 `wgt[i-1]` 和价值 `val[i-1]` 。
+
+![0-1 背包的示例数据](assets/cdp__knapsack_problem__knapsack_example.png)
+
+该问题由 n 轮决策组成，每个物品都有“不放入”和“放入”两种决策，满足决策树模型；目标是“限定容量下的最大价值”，因此它是一个动态规划问题。
+
+**第一步：定义状态**。对每个物品，不放入则背包容量不变，放入则背包容量减小。由此得到状态定义：当前物品编号 i 和背包容量 c ，记为 [i, c] 。状态 [i, c] 对应的子问题为：**前 i 个物品在容量为 c 的背包中的最大价值**，记为 `dp[i, c]` 。待求解的是 `dp[n, cap]` ，因此需要尺寸为 (n + 1) × (cap + 1) 的二维 dp 表。
+
+**第二步：推导状态转移方程**。做出物品 i 的决策后，剩余的是前 i-1 个物品的子问题。
+
+- **不放入物品 i** ：背包容量不变，状态转移至 [i-1, c] 。
+- **放入物品 i** ：背包容量减少 `wgt[i-1]` ，价值增加 `val[i-1]` ，状态转移至 [i-1, c - wgt[i-1]] 。
+
+于是最优子结构为：**`dp[i, c]` 等于两种方案中价值更大的那一个**，即
+
+**dp[i, c] = max(dp[i-1, c], dp[i-1, c - wgt[i-1]] + val[i-1])**
+
+若当前物品重量超出剩余容量 c ，则只能选择不放入。
+
+**第三步：确定边界条件**。无物品或背包容量为 0 时最大价值为 0 ，即首列 `dp[i, 0]` 和首行 `dp[0, c]` 都等于 0 。当前状态由上方和左上方转移而来，因此两层循环正序遍历即可。
+
+按“暴力搜索 → 记忆化搜索 → 动态规划”的顺序实现：
+
+```python
+def knapsack_dfs(wgt: list[int], val: list[int], i: int, c: int) -> int:
+    """0-1 背包：暴力搜索"""
+    # 若已选完所有物品或背包无剩余容量，则返回价值 0
+    if i == 0 or c == 0:
+        return 0
+    # 若超过背包容量，则只能选择不放入背包
+    if wgt[i - 1] > c:
+        return knapsack_dfs(wgt, val, i - 1, c)
+    # 计算不放入和放入物品 i 的最大价值
+    no = knapsack_dfs(wgt, val, i - 1, c)
+    yes = knapsack_dfs(wgt, val, i - 1, c - wgt[i - 1]) + val[i - 1]
+    # 返回两种方案中价值更大的那一个
+    return max(no, yes)
+
+
+def knapsack_dfs_mem(
+    wgt: list[int], val: list[int], mem: list[list[int]], i: int, c: int
+) -> int:
+    """0-1 背包：记忆化搜索"""
+    # 若已选完所有物品或背包无剩余容量，则返回价值 0
+    if i == 0 or c == 0:
+        return 0
+    # 若已有记录，则直接返回
+    if mem[i][c] != -1:
+        return mem[i][c]
+    # 若超过背包容量，则只能选择不放入背包
+    if wgt[i - 1] > c:
+        return knapsack_dfs_mem(wgt, val, mem, i - 1, c)
+    # 计算不放入和放入物品 i 的最大价值
+    no = knapsack_dfs_mem(wgt, val, mem, i - 1, c)
+    yes = knapsack_dfs_mem(wgt, val, mem, i - 1, c - wgt[i - 1]) + val[i - 1]
+    # 记录并返回两种方案中价值更大的那一个
+    mem[i][c] = max(no, yes)
+    return mem[i][c]
+```
+
+![0-1 背包的记忆化搜索递归树](assets/cdp__knapsack_problem__knapsack_dfs_mem.png)
+
+迭代形式的动态规划，以及把二维 dp 表压缩成一维的“空间优化”版本如下。**请注意空间优化时必须倒序遍历容量 c** ：`dp[c]` 依赖的是“上一行”的 `dp[c - wgt[i-1]]` ，正序遍历会让它读到本行已经更新过的值，等价于同一个物品被重复选取，从而悄悄变成完全背包。这是背包问题最常见的错误。
+
+```python
+def knapsack_dp(wgt: list[int], val: list[int], cap: int) -> int:
+    """0-1 背包：动态规划"""
+    n = len(wgt)
+    # 初始化 dp 表
+    dp = [[0] * (cap + 1) for _ in range(n + 1)]
+    # 状态转移
+    for i in range(1, n + 1):
+        for c in range(1, cap + 1):
+            if wgt[i - 1] > c:
+                # 若超过背包容量，则不选物品 i
+                dp[i][c] = dp[i - 1][c]
+            else:
+                # 不选和选物品 i 这两种方案的较大值
+                dp[i][c] = max(dp[i - 1][c], dp[i - 1][c - wgt[i - 1]] + val[i - 1])
+    return dp[n][cap]
+
+
+def knapsack_dp_comp(wgt: list[int], val: list[int], cap: int) -> int:
+    """0-1 背包：空间优化后的动态规划"""
+    n = len(wgt)
+    # 初始化 dp 表
+    dp = [0] * (cap + 1)
+    # 状态转移
+    for i in range(1, n + 1):
+        # 倒序遍历
+        for c in range(cap, 0, -1):
+            if wgt[i - 1] > c:
+                dp[c] = dp[c]  # 若超过背包容量，则不选物品 i
+            else:
+                # 不选和选物品 i 这两种方案的较大值
+                dp[c] = max(dp[c], dp[c - wgt[i - 1]] + val[i - 1])
+    return dp[cap]
+```
+
+## 示例：完全背包与零钱兑换
+
+完全背包与 0-1 背包唯一的区别是**每个物品可以重复选取**，因此把物品 i 放入背包后，**仍可以从前 i 个物品中选择**，状态转移方程变为：
+
+**dp[i, c] = max(dp[i-1, c], dp[i, c - wgt[i-1]] + val[i-1])**
+
+![完全背包问题的示例数据](assets/cdp__unbounded_knapsack_problem__unbounded_knapsack_example.png)
+
+对比 0-1 背包的代码，只有状态转移中的一处从 i-1 变成了 i ，其余完全一致：
+
+```python
+def unbounded_knapsack_dp(wgt: list[int], val: list[int], cap: int) -> int:
+    """完全背包：动态规划"""
+    n = len(wgt)
+    dp = [[0] * (cap + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for c in range(1, cap + 1):
+            if wgt[i - 1] > c:
+                dp[i][c] = dp[i - 1][c]
+            else:
+                dp[i][c] = max(dp[i - 1][c], dp[i][c - wgt[i - 1]] + val[i - 1])
+    return dp[n][cap]
+
+
+def unbounded_knapsack_dp_comp(wgt: list[int], val: list[int], cap: int) -> int:
+    """完全背包：空间优化后的动态规划"""
+    n = len(wgt)
+    dp = [0] * (cap + 1)
+    for i in range(1, n + 1):
+        # 正序遍历
+        for c in range(1, cap + 1):
+            if wgt[i - 1] > c:
+                dp[c] = dp[c]
+            else:
+                dp[c] = max(dp[c], dp[c - wgt[i - 1]] + val[i - 1])
+    return dp[cap]
+```
+
+由于当前状态是从左边和上边转移而来，空间优化后应对每一行**正序**遍历——与 0-1 背包恰好相反，记住这个对照就不容易搞混。
+
+零钱兑换是完全背包的一种特例：给定 n 种面额的硬币（可重复使用）和目标金额 amt ，求凑出该金额所需的最少硬币数量；若无法凑出则返回 -1 。
+
+![零钱兑换问题的示例数据](assets/cdp__unbounded_knapsack_problem__coin_change_example.png)
+
+状态为“当前硬币编号 i 和剩余金额 a ”，子问题 `dp[i, a]` 表示前 i 种硬币凑出金额 a 所需的最少硬币数。边界条件为首行 `dp[0, a] = +∞`（无硬币可用），状态转移方程为：
+
+**dp[i, a] = min(dp[i-1, a], dp[i, a - coins[i-1]] + 1)**
+
+```python
+def coin_change_dp(coins: list[int], amt: int) -> int:
+    """零钱兑换：动态规划"""
+    n = len(coins)
+    MAX = amt + 1  # 用「比答案上界更大」的哨兵值代表 +∞
+    # 初始化 dp 表
+    dp = [[0] * (amt + 1) for _ in range(n + 1)]
+    # 状态转移：首行
+    for a in range(1, amt + 1):
+        dp[0][a] = MAX
+    # 状态转移：其余行和列
+    for i in range(1, n + 1):
+        for a in range(1, amt + 1):
+            if coins[i - 1] > a:
+                # 若超过目标金额，则不选硬币 i
+                dp[i][a] = dp[i - 1][a]
+            else:
+                # 不选和选硬币 i 这两种方案的较小值
+                dp[i][a] = min(dp[i - 1][a], dp[i][a - coins[i - 1]] + 1)
+    return dp[n][amt] if dp[n][amt] != MAX else -1
+
+
+def coin_change_dp_comp(coins: list[int], amt: int) -> int:
+    """零钱兑换：空间优化后的动态规划"""
+    n = len(coins)
+    MAX = amt + 1
+    dp = [MAX] * (amt + 1)
+    dp[0] = 0
+    for i in range(1, n + 1):
+        # 正序遍历
+        for a in range(1, amt + 1):
+            if coins[i - 1] > a:
+                dp[a] = dp[a]
+            else:
+                dp[a] = min(dp[a], dp[a - coins[i - 1]] + 1)
+    return dp[amt] if dp[amt] != MAX else -1
+```
+
+> **贪心为什么解不了零钱兑换**：面额为 `[1, 3, 2]` 、目标金额为 6 时，贪心会先取最大的 3 ，得到 `3 + 2 + 1` 共 3 个硬币，而最优解是 `3 + 3` 共 2 个。只有当面额系统“每个面额都是下一个面额的整数倍”（如人民币 1、2、5、10）时贪心才成立。一般情况必须用动态规划，详见《贪心算法（面试选学）》。
+
+## 示例：编辑距离
+
+编辑距离（Levenshtein 距离）指两个字符串互相转换的最少修改次数，常用于信息检索与自然语言处理中度量序列相似度；在 LLM 工程里，它也出现在预测去重、模糊匹配和 diff 类评估指标中。
+
+> **【问题】**
+> 输入两个字符串 s 和 t ，返回将 s 转换为 t 所需的最少编辑步数。允许三种操作：插入一个字符、删除一个字符、将字符替换为任意一个字符。
+
+![编辑距离的示例数据](assets/cdp__edit_distance_problem__edit_distance_example.png)
+
+设 s 和 t 的长度分别为 n 和 m 。先比较两字符串的尾部字符：若相同则可跳过，继续考虑规模更小的问题；若不同则必须做一次编辑操作使其对齐。因此状态为“当前在 s 和 t 中考虑前 i 、前 j 个字符”，记为 [i, j] ，子问题 `dp[i, j]` 表示**将 s 的前 i 个字符改为 t 的前 j 个字符所需的最少编辑步数**，dp 表尺寸为 (n + 1) × (m + 1) 。
+
+考虑尾部字符 `s[i-1]` 和 `t[j-1]` ，三种操作分别对应三个子问题：
+
+1. 在 `s[i-1]` 之后插入 `t[j-1]` ，剩余子问题 `dp[i, j-1]` 。
+2. 删除 `s[i-1]` ，剩余子问题 `dp[i-1, j]` 。
+3. 把 `s[i-1]` 替换为 `t[j-1]` ，剩余子问题 `dp[i-1, j-1]` 。
+
+![编辑距离的状态转移方程](assets/cdp__edit_distance_problem__edit_distance_state_transfer.png)
+
+由此得到状态转移方程，边界条件为首行 `dp[0, j] = j` 与首列 `dp[i, 0] = i`（分别与空串对齐，需要 i 或 j 次增删）：
+
+**dp[i, j] = min(dp[i, j-1] + 1, dp[i-1, j] + 1, dp[i-1, j-1])，当 s[i-1] ≠ t[j-1]；dp[i, j] = dp[i-1, j-1]，当 s[i-1] = t[j-1]**
+
+```python
+def edit_distance_dp(s: str, t: str) -> int:
+    """编辑距离：动态规划"""
+    n, m = len(s), len(t)
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+    # 状态转移：首行首列
+    for i in range(1, n + 1):
+        dp[i][0] = i
+    for j in range(1, m + 1):
+        dp[0][j] = j
+    # 状态转移：其余行和列
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if s[i - 1] == t[j - 1]:
+                # 若两字符相等，则直接跳过此两字符
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                # 最少编辑步数 = 插入、删除、替换这三种操作的最少编辑步数 + 1
+                dp[i][j] = min(dp[i][j - 1], dp[i - 1][j], dp[i - 1][j - 1]) + 1
+    return dp[n][m]
+
+
+def edit_distance_dp_comp(s: str, t: str) -> int:
+    """编辑距离：空间优化后的动态规划"""
+    n, m = len(s), len(t)
+    dp = [0] * (m + 1)
+    # 状态转移：首行
+    for j in range(1, m + 1):
+        dp[j] = j
+    # 状态转移：其余行
+    for i in range(1, n + 1):
+        # 状态转移：首列
+        leftup = dp[0]  # 暂存 dp[i-1, j-1]
+        dp[0] += 1
+        # 状态转移：其余列
+        for j in range(1, m + 1):
+            temp = dp[j]
+            if s[i - 1] == t[j - 1]:
+                dp[j] = leftup
+            else:
+                dp[j] = min(dp[j - 1], dp[j], leftup) + 1
+            leftup = temp  # 更新为下一轮的 dp[i-1, j-1]
+    return dp[m]
+```
+
+一维压缩时 `dp[i-1, j-1]` 会被本行覆盖，因此必须用一个 `leftup` 变量暂存左上角，这是二维降一维最典型的技巧。时间复杂度 O(nm) ，空间复杂度 O(m) 。
+
+---
+
 ---
 
 > **来源**：本文转载自 [初探动态规划](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[动态规划问题特性](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.md)、[动态规划解题思路](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[动态规划问题特性](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_problem_features.md)、[动态规划解题思路](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/dp_solution_pipeline.md)、[0-1 背包问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/knapsack_problem.md)、[完全背包与零钱兑换](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/unbounded_knapsack_problem.md)、[编辑距离问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/edit_distance_problem.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

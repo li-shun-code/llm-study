@@ -64,7 +64,7 @@ class Student(object):
 
 和普通的函数相比，在类中定义的函数只有一点不同，就是第一个参数永远是实例变量`self`，并且，调用时，不用传递该参数。除此之外，类的方法和普通函数没有什么区别，所以，你仍然可以用默认参数、可变参数、关键字参数和命名关键字参数。
 
-### 数据封装
+## 数据封装
 
 面向对象编程的一个重要特点就是数据封装。在上面的`Student`类中，每个实例就拥有各自的`name`和`score`这些数据。我们可以通过函数来访问这些数据，比如打印一个学生的成绩：
 
@@ -134,7 +134,7 @@ print(lisa.name, lisa.get_grade())
 print(bart.name, bart.get_grade())
 ```
 
-### 小结
+## 小结
 
 类是创建实例的模板，而实例则是一个一个具体的对象，各个实例拥有的数据都互相独立，互不影响；
 
@@ -156,7 +156,7 @@ Traceback (most recent call last):
 AttributeError: 'Student' object has no attribute 'age'
 ```
 
-### 参考源码
+## 参考源码
 
 [student.py](https://liaoxuefeng.com/books/python/oop/class/student.py)
 

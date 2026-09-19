@@ -23,57 +23,23 @@ Vinay Sajip （Vinay Sajip）
 
 你可以通过执行 `logger = logging.getLogger(__name__)` 创建一个日志记录器，然后调用日志记录器的 `debug()`, `info()`, `warning()`, `error()` 和 `critical()` 方法来使用日志记录功能。 要确定何时使用日志记录，以及确定要使用哪个日志记录器方法，请参阅下表。 它针对一组常见任务中的每一个都列出了最适合该任务的工具。
 
-你想要执行的任务
-
-此任务最好的工具
-
-对于命令行或程序的应用，结果显示在控制台。
-
-`print()`
-
-在对程序的普通操作发生时提交事件报告 (比如：状态监控和错误调查)
-
-日志记录器的 `info()` (或者对于诊断目的需要非常详细的输出时则使用 `debug()` 方法)
-
-提出一个警告信息基于一个特殊的运行时事件
-
-`warnings.warn()` 位于代码库中，该事件是可以避免的，需要修改客户端应用以消除告警
-
-对于客户端应用无法干预，但事件仍然需要被关注的场合则使用日志记录器的 `warning()` 方法
-
-对一个特殊的运行时事件报告错误
-
-引发异常
-
-报告错误而不引发异常 (如在长时间运行中的服务端进程的错误处理)
-
-日志记录器的 `error()`, `exception()` 或 `critical()` 方法分别适用于特定的错误及应用领域
+| 你想要执行的任务 | 此任务最好的工具 |
+| --- | --- |
+| 命令行脚本或程序的日常使用，把结果展示到控制台 | `print()` |
+| 在程序正常运行期间报告发生的事件（例如状态监控、故障排查） | 日志记录器的 `info()`（需要极详细诊断输出时用 `debug()`） |
+| 针对某个运行时事件提出警告 | 若问题可避免、应由调用方修改代码消除告警：库代码里用 `warnings.warn()`；若调用方无能为力但该事件仍需记录：日志记录器的 `warning()` |
+| 报告某个运行时事件出错 | 引发异常（raise） |
+| 报告错误被吞掉而不引发异常（例如长驻服务进程里的错误处理） | 日志记录器的 `error()`、`exception()` 或 `critical()`，按错误性质与应用领域选择 |
 
 日志记录器方法以它们所追踪的事件级别或严重程度来命名。标准的级别及其适用性如下所述（严重程度从低至高）：
 
-级别
-
-何时使用
-
-`DEBUG`
-
-细节信息，仅当诊断问题时适用。
-
-`INFO`
-
-确认程序按预期运行。
-
-`WARNING`
-
-表明有已经或即将发生的意外（例如：磁盘空间不足）。程序仍按预期进行。
-
-`ERROR`
-
-由于严重的问题，程序的某些功能已经不能正常执行
-
-`CRITICAL`
-
-严重的错误，表明程序已不能继续执行
+| 级别 | 何时使用 |
+| --- | --- |
+| `DEBUG` | 细节信息，仅当诊断问题时适用。 |
+| `INFO` | 确认程序按预期运行。 |
+| `WARNING` | 表明有已经或即将发生的意外（例如：磁盘空间不足）。程序仍按预期进行。 |
+| `ERROR` | 由于严重的问题，程序的某些功能已经不能正常执行。 |
+| `CRITICAL` | 严重的错误，表明程序已不能继续执行。 |
 
 默认的级别是 `WARNING`，意味着只会追踪该严重程度及以上的事件，除非 logging 包另有其他配置。
 
@@ -196,7 +162,39 @@ INFO:So should this
 WARNING:And this, too
 ```
 
-注意在前面例子中出现的“root”已消失。文档 LogRecord 属性 列出了可在格式字符串中出现的所有内容，但在简单的使用场景中，你只需要 _levelname_ （严重性）、_message_ （事件描述，包含可变的数据）或许再加上事件发生的时间。这将在下一节中介绍。
+注意在前面例子中出现的“root”已消失。下面的 LogRecord 属性表列出了可在格式字符串中出现的所有内容，但在简单的使用场景中，你只需要 _levelname_ （严重性）、_message_ （事件描述，包含可变的数据）或许再加上事件发生的时间。这将在下一节中介绍。
+
+#### LogRecord 可用属性
+
+`Formatter` 的格式字符串可以引用 `LogRecord` 的以下属性。标为「不必自行格式化」的项由日志系统内部使用，写进格式字符串没有意义。
+
+| 属性名 | 格式 | 说明 |
+| --- | --- | --- |
+| `args` | 不必自行格式化 | 与 `msg` 合并生成 `message` 的参数元组；当只有一个参数且它是字典时，则为提供合并值的字典。 |
+| `asctime` | `%(asctime)s` | 创建 `LogRecord` 的人类可读时间，默认形如 `2003-07-08 16:49:45,896`（逗号后是毫秒部分）。 |
+| `created` | `%(created)f` | 创建 `LogRecord` 的时间（`time.time_ns() / 1e9` 的返回值）。 |
+| `exc_info` | 不必自行格式化 | 异常元组（形如 `sys.exc_info()`）；无异常时为 `None`。 |
+| `exc_text` | 不必自行格式化 | 格式化为字符串的异常信息，在调用 `Formatter.format()` 时设置；无异常时为 `None`。 |
+| `filename` | `%(filename)s` | `pathname` 的文件名部分。 |
+| `funcName` | `%(funcName)s` | 发起日志调用的函数名。 |
+| `levelname` | `%(levelname)s` | 消息的文本日志级别（`'DEBUG'`、`'INFO'`、`'WARNING'`、`'ERROR'`、`'CRITICAL'`）。 |
+| `levelno` | `%(levelno)s` | 消息的数值日志级别（`DEBUG`、`INFO`、`WARNING`、`ERROR`、`CRITICAL`）。 |
+| `lineno` | `%(lineno)d` | 发出日志调用的源代码行号（如可获得）。 |
+| `message` | `%(message)s` | 已记录的消息，由 `msg % args` 计算得到，在调用 `Formatter.format()` 时设置。 |
+| `module` | `%(module)s` | 模块名（`filename` 的名称部分）。 |
+| `msecs` | `%(msecs)d` | 创建 `LogRecord` 时间的毫秒部分。 |
+| `msg` | 不必自行格式化 | 原始日志调用传入的格式字符串，与 `args` 合并生成 `message`；也可以是任意对象（见「使用任意对象作为消息」）。 |
+| `name` | `%(name)s` | 用于记录该调用的记录器名称。 |
+| `pathname` | `%(pathname)s` | 发出日志调用的源文件完整路径（如可获得）。 |
+| `process` | `%(process)d` | 进程 ID（如可获得）。 |
+| `processName` | `%(processName)s` | 进程名（如可获得）。 |
+| `relativeCreated` | `%(relativeCreated)d` | 创建 `LogRecord` 的时间，相对于 `logging` 模块加载时刻，单位为毫秒。 |
+| `stack_info` | 不必自行格式化 | 从当前线程栈底一直到发起本次日志调用栈帧的栈帧信息（如可获得）。 |
+| `thread` | `%(thread)d` | 线程 ID（如可获得）。 |
+| `threadName` | `%(threadName)s` | 线程名（如可获得）。 |
+| `taskName` | `%(taskName)s` | `asyncio.Task` 名称（如可获得）。 |
+
+用 `{}` 风格时可以在属性名后用冒号指定格式化标记，例如占位符 `{msecs:03.0f}` 会把毫秒值 `4` 格式化为 `004`。
 
 ### 在消息中显示日期/时间
 
@@ -551,33 +549,14 @@ logging.getLogger('foo').addHandler(logging.NullHandler())
 
 日志记录级别的数值在下表中给出。如果你想要定义自己的级别，并且需要它们具有相对于预定义级别的特定值，那么这你可能对以下内容感兴趣。如果你定义具有相同数值的级别，它将覆盖预定义的值；预定义的名称将失效。
 
-级别
-
-数值
-
-`CRITICAL`
-
-50
-
-`ERROR`
-
-40
-
-`WARNING`
-
-30
-
-`INFO`
-
-20
-
-`DEBUG`
-
-10
-
-`NOTSET`
-
-0
+| 级别 | 数值 | 含义 / 何时使用 |
+| --- | --- | --- |
+| `NOTSET` | 0 | 设在记录器上时表示：仍要回溯祖先记录器来确定有效级别；若最终仍解析为 `NOTSET`，则所有事件都会被记录。设在处理器上时表示：所有事件都会被处理。 |
+| `DEBUG` | 10 | 详细信息，通常只在开发者诊断问题时感兴趣。 |
+| `INFO` | 20 | 确认一切按预期运行。 |
+| `WARNING` | 30 | 已发生意外，或提示近期可能出现问题（例如「磁盘空间不足」），但软件仍按预期工作。 |
+| `ERROR` | 40 | 因更严重的问题，软件未能执行某个功能。 |
+| `CRITICAL` | 50 | 严重错误，表明程序本身可能已无法继续运行。 |
 
 级别也可以与记录器关联，可以由开发人员设置，也可以通过加载保存的日志配置来设置。在记录器上调用记录方法时，记录器会将自己的级别与调用的方法的级别进行比较。如果记录器的级别高于调用的方法的级别，则实际上不会生成任何记录消息。这是控制日志记录输出详细程度的基本机制。
 
@@ -674,29 +653,13 @@ if logger.isEnabledFor(logging.DEBUG):
 
 对于需要对收集的日志信息进行更精确控制的特定应用程序，还可以进行其他优化。以下列出了在日志记录过程中您可以避免的非必须处理操作：
 
-你不想收集的内容
-
-如何避免收集它
-
-有关调用来源的信息
-
-将 `logging._srcfile` 设置为 `None`。这避免了调用 `sys._getframe()`，这可能有助于加速 PyPy 等环境（无法加速使用 `sys._getframe()` 的代码）中的代码。
-
-线程信息
-
-将 `logging.logThreads` 设为 `False`。
-
-当前进程 ID (`os.getpid()`)
-
-将 `logging.logProcesses` 设为 `False`。
-
-当使用 `multiprocessing` 来管理多个进程时的当前进程名称。
-
-将 `logging.logMultiprocessing` 设为 `False`。
-
-在使用 `asyncio` 时的当前 `asyncio.Task` 名称。
-
-将 `logging.logAsyncioTasks` 设为 `False`。
+| 你不想收集的内容 | 如何避免收集它 |
+| --- | --- |
+| 有关调用来源（文件名/行号）的信息 | 将 `logging._srcfile` 设置为 `None`。这避免了调用 `sys._getframe()`，在 PyPy 这类无法加速 `sys._getframe()` 使用代码的环境中可能有助于提速。 |
+| 线程信息 | 将 `logging.logThreads` 设为 `False`。 |
+| 当前进程 ID（`os.getpid()`） | 将 `logging.logProcesses` 设为 `False`。 |
+| 使用 `multiprocessing` 管理多进程时的当前进程名 | 将 `logging.logMultiprocessing` 设为 `False`。 |
+| 使用 `asyncio` 时的当前 `asyncio.Task` 名 | 将 `logging.logAsyncioTasks` 设为 `False`。 |
 
 另请注意，核心日志记录模块仅包含基本处理器。如果你不导入 `logging.handlers` 和 `logging.config` ，它们将不会占用任何内存。
 

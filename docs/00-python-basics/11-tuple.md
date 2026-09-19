@@ -1,192 +1,193 @@
 ---
-title: 元组
-source_url: https://www.runoob.com/python3/python3-tuple.html
-author: 菜鸟教程
-license: © 菜鸟教程（转载署名）
-fetched_at: 2026-09-13
-translated: false
+title: 元组与序列解包
+source_url: https://docs.python.org/zh-cn/3/tutorial/datastructures.html
+author: Python Software Foundation
+license: PSF 许可证第 2 版（转载署名）
+fetched_at: 2026-09-19
+translated: true
+versions: Python 3.14 文档
 order: 11
 group: 容器与推导式
 ---
-Python 的元组与列表类似，不同之处在于元组的元素不能修改。
+元组（`tuple`）常常被解释成「不可变的列表」，这个说法只对了三分之一。官方教程给出的定位更准确：**列表用来装一堆同类的东西，元组用来装一条记录的不同字段**。一次函数返回的 `(值, 错误)`、一条数据库记录的 `(id, 名称, 时间)`、棋盘上的一格坐标 `(x, y)`——它们是「结构」而不是「集合」，长度和每个位置的含义是固定的。正因为结构固定且不可变，元组才能被哈希、当字典的键、放进集合，也才能被解包成语义清晰的变量。
 
-元组使用小括号 ( )，列表使用方括号 [ ]。
-
-元组创建很简单，只需要在括号中添加元素，并使用逗号隔开即可。
-
-![元组创建示意图](https://www.runoob.com/wp-content/uploads/2016/04/tup-2020-10-27-10-26-2.png)
-
-```plain
->>> tup1 = ('Google', 'Runoob', 1997, 2000)
->>> tup2 = (1, 2, 3, 4, 5 )
->>> tup3 = "a", "b", "c", "d"   #  不需要括号也可以
->>> type(tup3)
-<class 'tuple'>
-```
-
-创建空元组：
+## 创建：真正的语法是逗号，不是括号
 
 ```python
-tup1 = ()
+t = 12345, 54321, "hello!"     # 不写括号也是元组
+print(t[0])                    # 12345
+print(t)                       # (12345, 54321, 'hello!')
 ```
 
-元组中只包含一个元素时，需要在元素后面添加逗号 `,` ，否则括号会被当作运算符使用：
-
-```plain
->>> tup1 = (50)
->>> type(tup1)     # 不加逗号，类型为整型
-<class 'int'>
-
->>> tup1 = (50,)
->>> type(tup1)     # 加上逗号，类型为元组
-<class 'tuple'>
-```
-
-元组与字符串类似，下标索引从 0 开始，可以进行截取，组合等。
-
-![元组索引示意图](https://www.runoob.com/wp-content/uploads/2016/04/py-tup-10-26.png)
-
-## 访问元组
-
-元组可以使用下标索引来访问元组中的值，如下实例：
+括号在大多数场合只是为了让嵌套和表达式更易读：
 
 ```python
-tup1 = ('Google', 'Runoob', 1997, 2000)
-tup2 = (1, 2, 3, 4, 5, 6, 7 )
-
-print ("tup1[0]: ", tup1[0])
-print ("tup2[1:5]: ", tup2[1:5])
+t = (12345, 54321, "hello!")
+u = t, (1, 2, 3, 4, 5)         # 元组可以嵌套
+print(u)                       # ((12345, 54321, 'hello!'), (1, 2, 3, 4, 5))
 ```
 
-以上实例输出结果：
-
-```plain
-tup1[0]:  Google
-tup2[1:5]:  (2, 3, 4, 5)
-```
-
-## 修改元组
-
-元组中的元素值是不允许修改的，但我们可以对元组进行连接组合，如下实例：
+只有 0 个和 1 个元素的元组需要额外语法，这是官方教程都承认「丑陋但有效」的地方：
 
 ```python
-tup1 = (12, 34.56)
-tup2 = ('abc', 'xyz')
-
-# 以下修改元组元素操作是非法的。
-# tup1[0] = 100
-
-# 创建一个新的元组
-tup3 = tup1 + tup2
-print (tup3)
+empty = ()                     # 空元组
+singleton = "hello",           # 注意末尾的逗号
+print(len(empty), len(singleton))   # 0 1
+print(singleton)                    # ('hello',)
 ```
 
-以上实例输出结果：
+少了逗号，`(50)` 就是整数 50，`type((50))` 是 `<class 'int'>`。这类 bug 不会报错，只会让后面的解包突然炸出 `TypeError: cannot unpack non-iterable int object`。
 
-```plain
-(12, 34.56, 'abc', 'xyz')
-```
+## 不可变的是「绑定」，不是「内容」
 
-## 删除元组
-
-元组中的元素值是不允许删除的，但我们可以使用del语句来删除整个元组，如下实例：
+元组不允许元素重新赋值：
 
 ```python
-tup = ('Google', 'Runoob', 1997, 2000)
-
-print (tup)
-del tup
-print ("删除后的元组 tup : ")
-print (tup)
+t = (1, 2, 3)
+t[0] = 88888
+# TypeError: 'tuple' object does not support item assignment
 ```
 
-以上实例元组被删除后，输出变量会有异常信息，输出如下所示：
-
-```plain
-删除后的元组 tup :
-Traceback (most recent call last):
-  File "test.py", line 8, in <module>
-    print (tup)
-NameError: name 'tup' is not defined
-```
-
-## 元组运算符
-
-与字符串一样，元组之间可以使用 +、+=和 * 号进行运算。这就意味着他们可以组合和复制，运算后会生成一个新的元组。
-
-| Python 表达式 | 结果 | 描述 |
-| --- | --- | --- |
-| `len((1, 2, 3))` | `3` | 计算元素个数 |
-| `>>> a = (1, 2, 3)`<br>`>>> b = (4, 5, 6)`<br>`>>> c = a+b`<br>`>>> c` | `(1, 2, 3, 4, 5, 6)` | 连接，c 就是一个新的元组，它包含了 a 和 b 中的所有元素。 |
-| `>>> a = (1, 2, 3)`<br>`>>> b = (4, 5, 6)`<br>`>>> a += b`<br>`>>> a` | `(1, 2, 3, 4, 5, 6)` | 连接，a 就变成了一个新的元组，它包含了 a 和 b 中的所有元素。 |
-| `('Hi!',) * 4` | `('Hi!', 'Hi!', 'Hi!', 'Hi!')` | 复制 |
-| `3 in (1, 2, 3)` | `True` | 元素是否存在 |
-| `for x in (1, 2, 3): print (x, end=" ")` | `1 2 3` | 迭代 |
-
-## 元组索引，截取
-
-因为元组也是一个序列，所以我们可以访问元组中的指定位置的元素，也可以截取索引中的一段元素，如下所示：
-
-元组：
+（上面这行是故意的错误写法，用来展示报错信息。）但元组可以包含可变对象，且那些对象**照样能改**：
 
 ```python
-tup = ('Google', 'Runoob', 'Taobao', 'Wiki', 'Weibo','Weixin')
+v = ([1, 2, 3], [3, 2, 1])
+v[0].append(99)          # 允许：改的是列表对象本身
+print(v)                 # ([1, 2, 3, 99], [3, 2, 1])
 ```
 
-![元组切片示意图](https://www.runoob.com/wp-content/uploads/2016/04/py-tup-7.png)
+想换掉元组里的某个槽位则不行——这两件事的区别正是「内容可变」与「绑定可变」：
 
-| Python 表达式 | 结果 | 描述 |
-| --- | --- | --- |
-| `tup[1]` | `'Runoob'` | 读取第二个元素 |
-| `tup[-2]` | `'Weibo'` | 反向读取，读取倒数第二个元素 |
-| `tup[1:]` | `('Runoob', 'Taobao', 'Wiki', 'Weibo', 'Weixin')` | 截取元素，从第二个开始后的所有元素。 |
-| `tup[1:4]` | `('Runoob', 'Taobao', 'Wiki')` | 截取元素，从第二个开始到第四个元素（索引为 3）。 |
-
-运行实例如下：
-
-```plain
->>> tup = ('Google', 'Runoob', 'Taobao', 'Wiki', 'Weibo','Weixin')
->>> tup[1]
-'Runoob'
->>> tup[-2]
-'Weibo'
->>> tup[1:]
-('Runoob', 'Taobao', 'Wiki', 'Weibo', 'Weixin')
->>> tup[1:4]
-('Runoob', 'Taobao', 'Wiki')
->>>
+```python
+v = ([1, 2, 3], [3, 2, 1])
+v[0] = [0]
+# TypeError: 'tuple' object does not support item assignment
 ```
 
-## 元组内置函数
+由此推出两条实用结论：
 
-Python元组包含了以下内置函数：
+- 「元组不可变」≠「元组一定可哈希」。含列表的元组不可哈希，因此不能当字典键，`hash(([1], 2))` 会抛 `TypeError: unhashable type: 'list'`。
+- 重新赋值 `t = (...)` 不是修改原对象，而是让名字指向一个**新对象**（`id(t)` 会变）。这跟《可变/不可变与深浅拷贝》里讲的绑定模型是同一件事。
 
-| 序号 | 方法及描述 | 实例 |
-| ---- | ---------- | ---- |
-| 1 | len(tuple)：计算元组元素个数。 | `>>> tuple1 = ('Google', 'Runoob', 'Taobao')`<br>`>>> len(tuple1)`<br>`3` |
-| 2 | max(tuple)：返回元组中元素最大值。 | `>>> tuple2 = ('5', '4', '8')`<br>`>>> max(tuple2)`<br>`'8'` |
-| 3 | min(tuple)：返回元组中元素最小值。 | `>>> tuple2 = ('5', '4', '8')`<br>`>>> min(tuple2)`<br>`'4'` |
-| 4 | tuple(iterable)：将可迭代系列转换为元组。 | `>>> list1= ['Google', 'Taobao', 'Runoob', 'Baidu']`<br>`>>> tuple1=tuple(list1)`<br>`>>> tuple1`<br>`('Google', 'Taobao', 'Runoob', 'Baidu')` |
+## 序列解包：元组最实用的半边
 
-### 关于元组是不可变的
+官方教程把 `t = 12345, 54321, "hello!"` 称为**元组打包**（packing），反过来叫**序列解包**（unpacking）：
 
-所谓元组的不可变指的是元组所指向的内存中的内容不可变。
-
-```plain
->>> tup = ('r', 'u', 'n', 'o', 'o', 'b')
->>> tup[0] = 'g'     # 不支持修改元素
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'tuple' object does not support item assignment
->>> id(tup)     # 查看内存地址
-4440687904
->>> tup = (1,2,3)
->>> id(tup)
-4441088800    # 内存地址不一样了
+```python
+t = 12345, 54321, "hello!"
+x, y, z = t              # 左侧变量个数必须与右侧元素个数相等
+print(x, z)              # 12345 hello!
 ```
 
-从以上实例可以看出，重新赋值的元组 tup，绑定到新的对象了，不是修改了原来的对象。
+用 `*` 接住剩余项（Python 3 起，解包赋值左侧允许恰好一个 `*`）：
+
+```python
+first, *rest = [1, 2, 3, 4, 5]
+print(first, rest)       # 1 [2, 3, 4, 5]
+
+*head, last = (1, 2, 3, 4)
+print(head, last)        # [1, 2, 3] 4
+
+x, y, *_ = (1, 2, 3, 4)  # 不关心的部分用惯用名 `_` 丢弃
+```
+
+交换两个变量不需要临时变量，本质就是「右边打包、左边解包」：
+
+```python
+a, b = 1, 2
+a, b = b, a              # 右边先整体求值成元组 (2, 1)，再赋给左边
+```
+
+多重赋值其实是打包与解包的组合，`a = b = 0` 让两个名字指向同一个对象——如果右边是可变对象，改动会同时体现在两个名字上。
+
+## 元组支持哪些操作
+
+作为序列，元组支持列表能做的**读取**类操作，但没有 `append`/`sort` 等修改类方法：
+
+```python
+row = ("RAG", 0.91, 128)
+print(len(row))                 # 3
+print(row[1])                   # 0.91
+print(row[1:])                  # (0.91, 128)
+print(row.count("RAG"))         # 1
+print(row.index(0.91))          # 1
+print("Agent" in row)           # False
+print(("微调",) + row)          # ('微调', 'RAG', 0.91, 128) —— 生成新元组
+print(("x",) * 3)               # ('x', 'x', 'x')
+```
+
+`tuple(iterable)` 负责类型转换，`list(tuple_obj)` 反向转换：
+
+```python
+print(tuple([1, 2, 3]))     # (1, 2, 3)
+print(list((1, 2, 3)))      # [1, 2, 3]
+```
+
+想要「有字段名的元组」时用 `collections.namedtuple` 或 `dataclasses.dataclass`，可以用 `point.x` 这样的属性访问而不是 `p[0]`，详见《collections 常用容器：Counter、defaultdict 与 deque》与进阶模块的数据类篇目。
+
+## 元组当字典键与集合元素
+
+只有内容全部不可变的元组才能当键，这正是「多维坐标 → 值」这类映射的标准写法：
+
+```python
+distances = {(0, 0): 0, (0, 1): 1.0, (1, 1): 1.414}
+print(distances[(0, 1)])              # 1.0
+
+visited = {(1, 2), (3, 4)}            # 集合元素同理
+print((1, 2) in visited)              # True
+```
+
+用列表当键会直接抛 `TypeError: unhashable type: 'list'`——字典要求键可哈希，而列表可以被原地修改，哈希值就会失效。这条规则也解释了为什么 `dict` 的键必须是字符串、数字、元组这类不可变对象（参见《字典》）。
+
+## 常见坑
+
+**1. 单元素元组忘写逗号。** `t = (50)` 是整数。函数返回单值时若下游按元组解包，就会在调用点炸开。
+
+**2. 括号掩盖函数调用。** `func((1, 2))`、`func((1, 2, 3))` 里的双层括号容易看错；`tup = (1,)` 与 `tup = (1)` 的差别只能靠逗号区分。
+
+**3. 用元组当「可变的累加器」。** 循环里 `result += (item,)` 每轮都会新建一个元组，是 O(n²) 的写法。正确做法是先 `append` 到列表，最后 `tuple(...)` 转一次。
+
+**4. 解包数量不匹配。** `x, y = get_pair()` 在 `get_pair()` 返回三元组时抛 `ValueError: too many values to unpack`。不确定的结构用 `x, y, *rest = ...` 或先打印长度。
+
+**5. 混淆「同一种结构」和「同一类元素」。** 官方教程的表述是：元组一般装异质元素、按位置语义访问；列表一般装同质元素、按整体迭代。把 `(姓名, 年龄)` 与 `[姓名1, 姓名2, 姓名3]` 用成同一种容器，是后续维护时读不懂代码的根源。
+
+**6. 不要拿内置名当变量名。** `tuple = ...`、`list = ...`、`dict = ...` 会遮蔽内置类型；本文示例统一使用 `t`、`row`、`record` 之类的名字。
+
+## 最小项目：一次调用的「值 + 元信息」
+
+实际工程里最常见的元组用法是函数返回多个值，调用侧解包：
+
+```python
+def summarize(docs):
+    """返回 (条数, 平均长度, 最长的一条)。"""
+    if not docs:
+        return 0, 0.0, ""
+    total_len = sum(len(d) for d in docs)
+    return len(docs), total_len / len(docs), max(docs, key=len)
+
+
+chunks = ["检索增强生成", "智能体", "监督微调"]
+count, avg_len, longest = summarize(chunks)
+print(f"共 {count} 条，平均 {avg_len:.1f} 字，最长：{longest}")
+# 共 3 条，平均 4.3 字，最长：检索增强生成
+
+# 暂时只关心一条时，用 _ 丢弃其余位置
+_, average, _ = summarize(chunks)
+print(average)     # 4.333333333333334
+
+# 输入为空也安全，返回结构保持一致
+print(summarize([]))     # (0, 0.0, '')
+```
+
+固定返回元组的好处是调用侧一眼能看出「这个函数给出几个结果、分别是什么」；字段一旦超过三个或者需要命名，就该换成数据类。
+
+## 延伸阅读
+
+- 官方教程 5.3 元组和序列：<https://docs.python.org/zh-cn/3/tutorial/datastructures.html#tuples-and-sequences>
+- 官方教程 3.1.2 元组：<https://docs.python.org/zh-cn/3/tutorial/introduction.html#tuples-and-sequences>
+- 元组类型参考：<https://docs.python.org/zh-cn/3/library/stdtypes.html#tuple>
+- 站内相邻文章：《列表：增删改查与切片》《迭代与解包技巧》《字典》《可变/不可变与深浅拷贝》
 
 ---
 
-> **来源**：本文转载自 [Python3 元组](https://www.runoob.com/python3/python3-tuple.html)，作者 菜鸟教程，许可 © 菜鸟教程（转载署名）。抓取于 2026-09-13。
+> **来源**：抓取于 2026-09-19。译自 [5.3 元组和序列 — Python 官方教程（中文）](https://docs.python.org/zh-cn/3/tutorial/datastructures.html#tuples-and-sequences)（Python Software Foundation，PSF 许可证第 2 版），并引 [元组 — Python 标准库](https://docs.python.org/zh-cn/3/library/stdtypes.html#tuple)（作者与许可同上）。「字典键」「最小项目」等小节与编者注为本站补充。

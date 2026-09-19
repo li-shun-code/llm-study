@@ -16,13 +16,13 @@ group: 查找、排序与数组技巧
 > **【问题】**
 > 给定一个长度为 n 的数组 `nums` ，元素按从小到大的顺序排列且不重复。请查找并返回元素 `target` 在该数组中的索引。若数组不包含该元素，则返回 -1 。示例如下图所示。
 
-![二分查找示例数据](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search.assets/binary_search_example.png)
+![二分查找示例数据](assets/csearching__binary_search__binary_search_example.png)
 
 如下图所示，我们先初始化指针 i = 0 和 j = n - 1 ，分别指向数组首元素和尾元素，代表搜索区间 [0, n - 1] 。请注意，中括号表示闭区间，其包含边界值本身。
 
 接下来，循环执行以下两步。
 
-1. 计算中点索引 m = lfloor (i + j) / 2 rfloor ，其中 lfloor : rfloor 表示向下取整操作。
+1. 计算中点索引 m = ⌊(i + j) / 2⌋ ，其中 ⌊·⌋ 表示向下取整运算。
 2. 判断 `nums[m]` 和 `target` 的大小关系，分为以下三种情况。
     1. 当 `nums[m] < target` 时，说明 `target` 在区间 [m + 1, j] 中，因此执行 i = m + 1 。
     2. 当 `nums[m] > target` 时，说明 `target` 在区间 [i, m - 1] 中，因此执行 j = m - 1 。
@@ -30,9 +30,27 @@ group: 查找、排序与数组技巧
 
 若数组不包含目标元素，搜索区间最终会缩小为空。此时返回 -1 。
 
-值得注意的是，由于 i 和 j 都是 `int` 类型，**因此 i + j 可能会超出 `int` 类型的取值范围**。为了避免大数越界，我们通常采用公式 m = lfloor i + (j - i) / 2 rfloor 来计算中点。
+值得注意的是，由于 i 和 j 都是 `int` 类型，**因此 i + j 可能会超出 `int` 类型的取值范围**。为了避免大数越界，我们通常采用公式 m = ⌊i + (j - i) / 2⌋ 来计算中点。
 
 代码如下所示：
+
+```python
+def binary_search(nums: list[int], target: int) -> int:
+    """二分查找（双闭区间）"""
+    # 初始化双闭区间 [0, n-1] ，即 i, j 分别指向数组首元素、尾元素
+    i, j = 0, len(nums) - 1
+    # 循环，当搜索区间为空时跳出（当 i > j 时为空）
+    while i <= j:
+        # 理论上 Python 的数字可以无限大（取决于内存大小），无须考虑大数越界问题
+        m = (i + j) // 2  # 计算中点索引 m
+        if nums[m] < target:
+            i = m + 1  # 此情况说明 target 在区间 [m+1, j] 中
+        elif nums[m] > target:
+            j = m - 1  # 此情况说明 target 在区间 [i, m-1] 中
+        else:
+            return m  # 找到目标元素，返回其索引
+    return -1  # 未找到目标元素，返回 -1
+```
 
 
 **时间复杂度为 O(log n)** ：在二分循环中，区间每轮缩小一半，因此循环次数为 log₂ n 。
@@ -45,12 +63,29 @@ group: 查找、排序与数组技巧
 
 我们可以基于该表示实现具有相同功能的二分查找算法：
 
+```python
+def binary_search_lcro(nums: list[int], target: int) -> int:
+    """二分查找（左闭右开区间）"""
+    # 初始化左闭右开区间 [0, n) ，即 i, j 分别指向数组首元素、尾元素+1
+    i, j = 0, len(nums)
+    # 循环，当搜索区间为空时跳出（当 i = j 时为空）
+    while i < j:
+        m = (i + j) // 2  # 计算中点索引 m
+        if nums[m] < target:
+            i = m + 1  # 此情况说明 target 在区间 [m+1, j) 中
+        elif nums[m] > target:
+            j = m  # 此情况说明 target 在区间 [i, m) 中
+        else:
+            return m  # 找到目标元素，返回其索引
+    return -1  # 未找到目标元素，返回 -1
+```
+
 
 如下图所示，在两种区间表示下，二分查找算法的初始化、循环条件和缩小区间操作皆有所不同。
 
 由于“双闭区间”表示中的左右边界都被定义为闭区间，因此通过指针 i 和指针 j 缩小区间的操作也是对称的。这样更不容易出错，**因此一般建议采用“双闭区间”的写法**。
 
-![两种区间定义](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search.assets/binary_search_ranges.png)
+![两种区间定义](assets/csearching__binary_search__binary_search_ranges.png)
 
 ### 优点与局限性
 
@@ -75,7 +110,7 @@ group: 查找、排序与数组技巧
 > **【问题】**
 > 给定一个长度为 n 的有序数组 `nums` 和一个元素 `target` ，数组不存在重复元素。现将 `target` 插入数组 `nums` 中，并保持其有序性。若数组中已存在元素 `target` ，则插入到其左方。请返回插入后 `target` 在数组中的索引。示例如下图所示。
 
-![二分查找插入点示例数据](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_insertion.assets/binary_search_insertion_example.png)
+![二分查找插入点示例数据](assets/csearching__binary_search_insertion__binary_search_insertion_example.png)
 
 如果想复用上一节的二分查找代码，则需要回答以下两个问题。
 
@@ -88,6 +123,22 @@ group: 查找、排序与数组技巧
 进一步思考二分查找过程：当 `nums[m] < target` 时 i 移动，这意味着指针 i 在向大于等于 `target` 的元素靠近。同理，指针 j 始终在向小于等于 `target` 的元素靠近。
 
 因此二分结束时一定有：i 指向首个大于 `target` 的元素，j 指向最右一个小于 `target` 的元素。**易得当数组不包含 `target` 时，插入索引为 i** 。代码如下所示：
+
+```python
+def binary_search_insertion_simple(nums: list[int], target: int) -> int:
+    """二分查找插入点（无重复元素）"""
+    i, j = 0, len(nums) - 1  # 初始化双闭区间 [0, n-1]
+    while i <= j:
+        m = (i + j) // 2  # 计算中点索引 m
+        if nums[m] < target:
+            i = m + 1  # target 在区间 [m+1, j] 中
+        elif nums[m] > target:
+            j = m - 1  # target 在区间 [i, m-1] 中
+        else:
+            return m  # 找到 target ，返回插入点 m
+    # 未找到 target ，返回插入点 i
+    return i
+```
 
 
 ### 存在重复元素的情况
@@ -102,7 +153,7 @@ group: 查找、排序与数组技巧
 1. 执行二分查找，得到任意一个 `target` 的索引，记为 k 。
 2. 从索引 k 开始，向左进行线性遍历，当找到最左边的 `target` 时返回。
 
-![线性查找重复元素的插入点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_insertion.assets/binary_search_insertion_naive.png)
+![线性查找重复元素的插入点](assets/csearching__binary_search_insertion__binary_search_insertion_naive.png)
 
 此方法虽然可用，但其包含线性查找，因此时间复杂度为 O(n) 。当数组中存在很多重复的 `target` 时，该方法效率很低。
 
@@ -116,6 +167,22 @@ group: 查找、排序与数组技巧
 观察以下代码，判断分支 `nums[m] > target` 和 `nums[m] == target` 的操作相同，因此两者可以合并。
 
 即便如此，我们仍然可以将判断条件保持展开，因为其逻辑更加清晰、可读性更好。
+
+```python
+def binary_search_insertion(nums: list[int], target: int) -> int:
+    """二分查找插入点（存在重复元素）"""
+    i, j = 0, len(nums) - 1  # 初始化双闭区间 [0, n-1]
+    while i <= j:
+        m = (i + j) // 2  # 计算中点索引 m
+        if nums[m] < target:
+            i = m + 1  # target 在区间 [m+1, j] 中
+        elif nums[m] > target:
+            j = m - 1  # target 在区间 [i, m-1] 中
+        else:
+            j = m - 1  # 最右一个小于 target 的元素在区间 [i, m-1] 中
+    # 返回插入点 i
+    return i
+```
 
 
 > **【提示】**
@@ -142,6 +209,18 @@ group: 查找、排序与数组技巧
 
 当遇到以上两种情况时，直接返回 -1 即可。代码如下所示：
 
+```python
+def binary_search_left_edge(nums: list[int], target: int) -> int:
+    """二分查找最左一个 target"""
+    # 等价于查找 target 的插入点
+    i = binary_search_insertion(nums, target)
+    # 未找到 target ，返回 -1
+    if i == len(nums) or nums[i] != target:
+        return -1
+    # 找到 target ，返回索引 i
+    return i
+```
+
 
 ### 查找右边界
 
@@ -155,9 +234,23 @@ group: 查找、排序与数组技巧
 
 如下图所示，查找完成后，指针 i 指向最左一个 `target + 1`（如果存在），而 j 指向最右一个 `target` ，**因此返回 j 即可**。
 
-![将查找右边界转化为查找左边界](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_edge.assets/binary_search_right_edge_by_left_edge.png)
+![将查找右边界转化为查找左边界](assets/csearching__binary_search_edge__binary_search_right_edge_by_left_edge.png)
 
 请注意，返回的插入点是 i ，因此需要将其减 1 ，从而获得 j ：
+
+```python
+def binary_search_right_edge(nums: list[int], target: int) -> int:
+    """二分查找最右一个 target"""
+    # 转化为查找最左一个 target + 1
+    i = binary_search_insertion(nums, target + 1)
+    # j 指向最右一个 target ，i 指向首个大于 target 的元素
+    j = i - 1
+    # 未找到 target ，返回 -1
+    if j == -1 or nums[j] != target:
+        return -1
+    # 找到 target ，返回索引 j
+    return j
+```
 
 
 #### 转化为查找元素
@@ -169,7 +262,7 @@ group: 查找、排序与数组技巧
 - 查找最左一个 `target` ：可以转化为查找 `target - 0.5` ，并返回指针 i 。
 - 查找最右一个 `target` ：可以转化为查找 `target + 0.5` ，并返回指针 j 。
 
-![将查找边界转化为查找元素](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_edge.assets/binary_search_edge_by_element.png)
+![将查找边界转化为查找元素](assets/csearching__binary_search_edge__binary_search_edge_by_element.png)
 
 代码在此省略，以下两点值得注意。
 
@@ -179,5 +272,5 @@ group: 查找、排序与数组技巧
 ---
 
 > **来源**：本文转载自 [二分查找](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[二分查找插入点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_insertion.md)、[二分查找边界](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_edge.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[二分查找插入点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_insertion.md)、[二分查找边界](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search_edge.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

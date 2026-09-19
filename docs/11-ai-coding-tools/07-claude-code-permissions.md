@@ -8,7 +8,7 @@ translated: true
 order: 7
 group: Claude Code
 ---
-上一篇的最佳实践反复出现一句话："给 Claude 可运行的验证手段，但守住闸门"。闸门就是本篇的主角。第 6 篇建立的心智模型告诉我们：Claude 能读你的终端、跑任意命令——那么"它被允许做什么"就必须是一个工程化系统而不是一句口头约定。本篇主体翻译官方《Configure permissions》，并译出《Choose a permission mode》与《Configure the sandboxed Bash tool》的核心章节：**规则 → 模式 → 沙箱**三层，从"问你什么"到"根本做不了"。
+《Claude Code 工作流与最佳实践》里反复出现一句话："给 Claude 可运行的验证手段，但守住闸门"。闸门就是本篇的主角。《心智模型：LLM 如何"看"你的代码》建立的那套认知告诉我们：Claude 能读你的终端、跑任意命令——那么"它被允许做什么"就必须是一个工程化系统而不是一句口头约定。本篇主体翻译官方《Configure permissions》，并译出《Choose a permission mode》与《Configure the sandboxed Bash tool》的核心章节：**规则 → 模式 → 沙箱**三层，从"问你什么"到"根本做不了"。
 
 ## 一、权限系统与三类规则（译自官方 Permissions 页）
 
@@ -103,7 +103,7 @@ auto 模式（2026 年起为 Pro/Max/Team 计划交互会话的默认起始模�
 
 ## 四、把三层装进脑子（本站编者小结）
 
-用一句话串起本篇：**规则管"问不问"，模式管"默认怎么问"，沙箱管"问了也做不到"**。对照第 7 篇最佳实践的用法：
+用一句话串起本篇：**规则管"问不问"，模式管"默认怎么问"，沙箱管"问了也做不到"**。对照《Claude Code 工作流与最佳实践》里的用法：
 
 - 交互开发：`acceptEdits`（或 auto）+ 少量 allow 规则（`npm test`、`git status`）+ deny 掉 `.env` 读取
 - 无人值守脚本：`dontAsk` + 显式 allowlist + 沙箱 + 严格域名白名单——《Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体》 Headless/CI 会原样复用这个配方
@@ -111,6 +111,6 @@ auto 模式（2026 年起为 Pro/Max/Team 计划交互会话的默认起始模�
 
 ---
 
-> 下一篇预告：Claude Code 的纵深到此完成，我们把镜头转向另一极——第 9 篇回到编辑器形态，讲 Cursor 的 Rules 规则系统：另一条"让 AI 守规矩"的路径。
+> 延伸阅读：Claude Code 的纵深到此完成，把镜头转向另一极——《Cursor 入门与 Rules 规则系统》回到编辑器形态，讲另一条"让 AI 守规矩"的路径；想把规矩变成绕不过的闸门，见《Claude Code Hooks：用确定性脚本守住智能体循环》。
 
 > **来源**：本文主体翻译自 [Configure permissions](https://code.claude.com/docs/en/permissions)，"权限模式"与"沙箱"两节分别译自 [Choose a permission mode](https://code.claude.com/docs/en/permission-modes) 与 [Configure the sandboxed Bash tool](https://code.claude.com/docs/en/sandboxing)（均为 Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）。文末"把三层装进脑子"为本站编者小结并已标明；长尾小节（各工具细项规则、企业托管配置、故障排查等）从略，见原文。抓取于 2026-09-13。

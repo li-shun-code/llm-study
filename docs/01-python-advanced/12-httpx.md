@@ -1,6 +1,6 @@
 ---
-title: HTTPX：新一代 Python HTTP 客户端
-source_url: https://www.python-httpx.org/quickstart/
+title: HTTPX 实战：异步客户端、流式响应与重试
+source_url: https://www.python-httpx.org/async/
 author: Tom Christie（Encode 团队）
 license: BSD 三条款许可证
 fetched_at: 2026-09-13
@@ -9,523 +9,64 @@ versions: HTTPX 当前稳定版
 order: 12
 group: HTTP 客户端
 ---
-*编者导读：HTTPX 是继 requests 之后最受欢迎的 Python HTTP 客户端，API 与 requests 高度兼容，并额外支持异步、HTTP/2 与连接池细粒度控制。本篇由官方 quickstart、async 支持与 advanced（clients/authentication/timeouts/proxies/event-hooks/ssl/text-encodings/resource-limits/extensions）全部页面完整翻译而成。*
+## 本篇的定位
 
-## 快速开始
+基础用法（GET/POST、查询参数、表单与文件上传、JSON 编解码、响应状态码与响应头、Cookies、SSL 校验、代理）在《HTTP 客户端：requests 用法与 requests / httpx 选型》里已经完整讲过；httpx 的顶层 API 与 requests 几乎逐字对齐，那些内容**本篇不再重复**。选型结论与 requests ↔ httpx 迁移对照表也放在那篇，避免两处各说一套。
 
-首先，导入 HTTPX：
+本篇只讲 httpx 真正区别于 requests、且必须在异步工程里掌握的四件事：
 
-```pycon
->>> import httpx
-```
+1. **异步客户端**：`AsyncClient`、`await` 版响应流、与事件循环绑定的生命周期；
+2. **连接池与 keep-alive**：为什么必须复用 client 实例、`Limits` 怎么调；
+3. **流式与 SSE**：`iter_bytes` / `iter_lines` / `aiter_*` 家族与超时预算；
+4. **重试与退避**：httpx 自身**不带**重试，怎么和 `tenacity` 组合才不重复扣费。
 
-现在，试着获取一个网页：
+下面这节是阅读本篇所需的最小前提：httpx 与 requests 行为不一致的默认值。不看清楚就会踩坑。
 
-```pycon
->>> r = httpx.get('https://httpbin.org/get')
->>> r
-<Response [200 OK]>
-```
+### 行为差异：默认值不一致的地方
 
-类似地，发起 HTTP POST 请求：
+| 项目 | requests 默认 | httpx 默认 | 迁移后果 |
+| --- | --- | --- | --- |
+| 跟随重定向 | `get/post` 等顶层函数与 `Session` **自动跟随**（`allow_redirects=True`） | **不跟随**，需 `follow_redirects=True` | 迁移后 3xx 被当成失败；`r.url` 不再是最终地址 |
+| 超时 | **不设超时**（`timeout=None`，可能永久挂起） | 所有网络操作默认 5 秒（连接/读取/写入/池各 5 秒） | 这是 httpx 最重要的安全性改进；requests 代码迁过来后偶发 `ReadTimeout` 属正常 |
+| 异常基类 | 父类 `requests.RequestException`；`raise_for_status()` 抛 `HTTPError` | 父类 `httpx.HTTPError`；请求异常 `RequestError`（带 `.request`）、状态异常 `HTTPStatusError`（带 `.request` 与 `.response`） | 按名字 `except requests.HTTPError` 的代码要改名，`as exc` 用法不变 |
+| HTTP 版本 | 仅 HTTP/1.1 | 默认 HTTP/1.1；`http2=True` 显式开 HTTP/2（需 `h2` 包） | 开 HTTP/2 后多路复用，`limits` 的语义随之变化 |
+| 编码探测 | 未声明 charset 时用 `apparent_encoding` 猜 | 未声明时按 UTF-8；要猜需 `detect_encoding()` | 老站点乱码表现不同 |
+| 客户端状态 | `Session` 不校验「用前是否打开」 | `Client`/`AsyncClient` 关闭后再用抛 `RuntimeError` | 别把 client 存成模块级全局又随手 `close()` |
+| 请求构造 | `Request(...)` 需 `prepare()` 才变 `PreparedRequest` | `Request` 可直接发；`client.build_request()` 返回可改对象 | 事件钩子、签名中间件的写法不同 |
+| WebSocket | 不支持 | `client.websocket_connect()`（仅 `ws://`/`wss://`，由 httpx-ws 提供） | 只有 httpx 能连 WS |
 
-```pycon
->>> r = httpx.post('https://httpbin.org/post', data={'key': 'value'})
-```
+### 异常体系（本篇后面所有重试代码的前提）
 
-PUT、DELETE、HEAD 和 OPTIONS 请求都遵循同样的风格：
-
-```pycon
->>> r = httpx.put('https://httpbin.org/put', data={'key': 'value'})
->>> r = httpx.delete('https://httpbin.org/delete')
->>> r = httpx.head('https://httpbin.org/get')
->>> r = httpx.options('https://httpbin.org/get')
-```
-
-### 在 URL 中传递参数
-
-要在请求中附带 URL 查询参数，使用 `params` 关键字：
-
-```pycon
->>> params = {'key1': 'value1', 'key2': 'value2'}
->>> r = httpx.get('https://httpbin.org/get', params=params)
-```
-
-想看这些值如何被编码进 URL 字符串，可以检查请求实际使用的 URL：
-
-```pycon
->>> r.url
-URL('https://httpbin.org/get?key2=value2&key1=value1')
-```
-
-也可以把列表作为值传入：
-
-```pycon
->>> params = {'key1': 'value1', 'key2': ['value2', 'value3']}
->>> r = httpx.get('https://httpbin.org/get', params=params)
->>> r.url
-URL('https://httpbin.org/get?key1=value1&key2=value2&key2=value3')
-```
-
-### 响应内容
-
-HTTPX 会自动把响应内容解码为 Unicode 文本：
-
-```pycon
->>> r = httpx.get('https://www.example.org/')
->>> r.text
-'<!doctype html>\n<html>\n<head>\n<title>Example Domain</title>...'
-```
-
-可以查看将用于解码响应的编码：
-
-```pycon
->>> r.encoding
-'UTF-8'
-```
-
-某些情况下响应可能没有显式的编码信息，此时 HTTPX 会尝试自动确定编码。
-
-```pycon
->>> r.encoding
-None
->>> r.text
-'<!doctype html>\n<html>\n<head>\n<title>Example Domain</title>...'
-```
-
-如果需要覆盖默认行为、显式设置解码编码，也可以做到：
-
-```pycon
->>> r.encoding = 'ISO-8859-1'
-```
-
-### 二进制响应内容
-
-对非文本响应，响应内容也可以按字节访问：
-
-```pycon
->>> r.content
-b'<!doctype html>\n<html>\n<head>\n<title>Example Domain</title>...'
-```
-
-`gzip` 和 `deflate` 这类 HTTP 响应压缩编码会自动解码。如果安装了 `brotlipy`，还支持 `brotli`；安装了 `zstandard` 则支持 `zstd`。
-
-例如，用请求返回的二进制数据创建图片：
-
-```pycon
->>> from PIL import Image
->>> from io import BytesIO
->>> i = Image.open(BytesIO(r.content))
-```
-
-### JSON 响应内容
-
-Web API 的响应通常以 JSON 编码：
-
-```pycon
->>> r = httpx.get('https://api.github.com/events')
->>> r.json()
-[{u'repository': {u'open_issues': 0, u'url': 'https://github.com/...' ...  }}]
-```
-
-### 自定义请求头
-
-要在请求中附加额外的头，使用 `headers` 关键字参数：
-
-```pycon
->>> url = 'https://httpbin.org/headers'
->>> headers = {'user-agent': 'my-app/0.0.1'}
->>> r = httpx.get(url, headers=headers)
-```
-
-### 发送表单编码数据
-
-某些 HTTP 请求（如 `POST` 和 `PUT`）可以在请求体中携带数据。常见方式之一是表单编码（form-encoded），即 HTML 表单使用的格式：
-
-```pycon
->>> data = {'key1': 'value1', 'key2': 'value2'}
->>> r = httpx.post("https://httpbin.org/post", data=data)
->>> print(r.text)
-{
-  ...
-  "form": {
-    "key2": "value2",
-    "key1": "value1"
-  },
-  ...
-}
-```
-
-表单编码数据的一个键也可以对应多个值：
-
-```pycon
->>> data = {'key1': ['value1', 'value2']}
->>> r = httpx.post("https://httpbin.org/post", data=data)
->>> print(r.text)
-{
-  ...
-  "form": {
-    "key1": [
-      "value1",
-      "value2"
-    ]
-  },
-  ...
-}
-```
-
-### 发送多部分（Multipart）文件上传
-
-也可以用 HTTP multipart 编码上传文件：
-
-```pycon
->>> with open('report.xls', 'rb') as report_file:
-...     files = {'upload-file': report_file}
-...     r = httpx.post("https://httpbin.org/post", files=files)
->>> print(r.text)
-{
-  ...
-  "files": {
-    "upload-file": "<... binary content ...>"
-  },
-  ...
-}
-```
-
-可以用元组作为文件值，显式指定文件名与内容类型：
-
-```pycon
->>> with open('report.xls', 'rb') as report_file:
-...     files = {'upload-file': ('report.xls', report_file, 'application/vnd.ms-excel')}
-...     r = httpx.post("https://httpbin.org/post", files=files)
->>> print(r.text)
-{
-  ...
-  "files": {
-    "upload-file": "<... binary content ...>"
-  },
-  ...
-}
-```
-
-如果需要在 multipart 表单中附带非文件的数据字段，使用 `data=...` 参数：
-
-```pycon
->>> data = {'message': 'Hello, world!'}
->>> with open('report.xls', 'rb') as report_file:
-...     files = {'file': report_file}
-...     r = httpx.post("https://httpbin.org/post", data=data, files=files)
->>> print(r.text)
-{
-  ...
-  "files": {
-    "file": "<... binary content ...>"
-  },
-  "form": {
-    "message": "Hello, world!",
-  },
-  ...
-}
-```
-
-### 发送 JSON 编码数据
-
-如果只需要简单的键值结构，表单编码够用；对更复杂的数据结构，通常应改用 JSON 编码：
-
-```pycon
->>> data = {'integer': 123, 'boolean': True, 'list': ['a', 'b', 'c']}
->>> r = httpx.post("https://httpbin.org/post", json=data)
->>> print(r.text)
-{
-  ...
-  "json": {
-    "boolean": true,
-    "integer": 123,
-    "list": [
-      "a",
-      "b",
-      "c"
-    ]
-  },
-  ...
-}
-```
-
-### 发送二进制请求数据
-
-对其他编码，应使用 `content=...` 参数，传入 `bytes` 类型或产出 `bytes` 的生成器：
-
-```pycon
->>> content = b'Hello, world'
->>> r = httpx.post("https://httpbin.org/post", content=content)
-```
-
-上传二进制数据时，你可能还想设置自定义的 `Content-Type` 头。
-
-### 响应状态码
-
-可以查看响应的 HTTP 状态码：
-
-```pycon
->>> r = httpx.get('https://httpbin.org/get')
->>> r.status_code
-200
-```
-
-HTTPX 还提供了按文本短语访问状态码的便捷方式：
-
-```pycon
->>> r.status_code == httpx.codes.OK
-True
-```
-
-可以对任何非 2xx 成功码的响应引发异常：
-
-```pycon
->>> not_found = httpx.get('https://httpbin.org/status/404')
->>> not_found.status_code
-404
->>> not_found.raise_for_status()
-Traceback (most recent call last):
-  File "/Users/tomchristie/GitHub/encode/httpcore/httpx/models.py", line 837, in raise_for_status
-    raise HTTPStatusError(message, response=self)
-httpx._exceptions.HTTPStatusError: 404 Client Error: Not Found for url: https://httpbin.org/status/404
-For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
-```
-
-对成功状态码，该方法返回 `Response` 实例而不抛异常：
-
-```pycon
->>> r.raise_for_status()
-```
-
-该方法返回响应实例，允许内联使用。例如：
-
-```pycon
->>> r = httpx.get('...').raise_for_status()
->>> data = httpx.get('...').raise_for_status().json()
-```
-
-### 响应头
-
-响应头以类字典接口提供：
-
-```pycon
->>> r.headers
-Headers({
-    'content-encoding': 'gzip',
-    'transfer-encoding': 'chunked',
-    'connection': 'close',
-    'server': 'nginx/1.0.4',
-    'x-runtime': '148ms',
-    'etag': '"e1ca502697e5c9317743dc078f67693f"',
-    'content-type': 'application/json'
-})
-```
-
-`Headers` 数据类型不区分大小写，可以任意大小写访问：
-
-```pycon
->>> r.headers['Content-Type']
-'application/json'
-
->>> r.headers.get('content-type')
-'application/json'
-```
-
-同一响应头的多个值会合并为单个逗号分隔的值，遵循 [RFC 7230](https://tools.ietf.org/html/rfc7230#section-3.2)：
-
-> 接收方可以将多个同名字段头合并为一个 "field-name: field-value" 对，而不改变消息语义，做法是把后续字段值按顺序追加到合并后的字段值后面，以逗号分隔。
-
-### 流式响应
-
-对大文件下载，你可能希望使用流式响应，避免把整个响应体一次性载入内存。
-
-可以流式读取响应的二进制内容……
-
-```pycon
->>> with httpx.stream("GET", "https://www.example.com") as r:
-...     for data in r.iter_bytes():
-...         print(data)
-```
-
-或文本……
-
-```pycon
->>> with httpx.stream("GET", "https://www.example.com") as r:
-...     for text in r.iter_text():
-...         print(text)
-```
-
-或逐行流式读取文本……
-
-```pycon
->>> with httpx.stream("GET", "https://www.example.com") as r:
-...     for line in r.iter_lines():
-...         print(line)
-```
-
-HTTPX 使用通用换行符，把所有情况统一为 `\n`。
-
-某些情况下你可能想访问未经内容解码的原始字节。此时服务器施加的 `gzip`、`deflate`、`brotli` 或 `zstd` 等内容编码不会被自动解码：
-
-```pycon
->>> with httpx.stream("GET", "https://www.example.com") as r:
-...     for chunk in r.iter_raw():
-...         print(chunk)
-```
-
-以这些方式使用流式响应时，`response.content` 与 `response.text` 属性不可用，访问会报错。不过你也可以利用流式功能有条件地加载响应体：
-
-```pycon
->>> with httpx.stream("GET", "https://www.example.com") as r:
-...     if int(r.headers['Content-Length']) < TOO_LONG:
-...         r.read()
-...         print(r.text)
-```
-
-### Cookies
-
-响应中设置的 cookie 可以轻松访问：
-
-```pycon
->>> r = httpx.get('https://httpbin.org/cookies/set?chocolate=chip')
->>> r.cookies['chocolate']
-'chip'
-```
-
-要在发出的请求中携带 cookie，使用 `cookies` 参数：
-
-```pycon
->>> cookies = {"peanut": "butter"}
->>> r = httpx.get('https://httpbin.org/cookies', cookies=cookies)
->>> r.json()
-{'cookies': {'peanut': 'butter'}}
-```
-
-Cookie 以 `Cookies` 实例返回，它是一个类字典数据结构，还提供按域或路径访问 cookie 的额外 API：
-
-```pycon
->>> cookies = httpx.Cookies()
->>> cookies.set('cookie_on_domain', 'hello, there!', domain='httpbin.org')
->>> cookies.set('cookie_off_domain', 'nope.', domain='example.org')
->>> r = httpx.get('http://httpbin.org/cookies', cookies=cookies)
->>> r.json()
-{'cookies': {'cookie_on_domain': 'hello, there!'}}
-```
-
-### 重定向与历史
-
-默认情况下，HTTPX 对所有 HTTP 方法都**不会**跟随重定向，但可以显式启用。
-
-例如，GitHub 会把所有 HTTP 请求重定向到 HTTPS：
-
-```pycon
->>> r = httpx.get('http://github.com/')
->>> r.status_code
-301
->>> r.history
-[]
->>> r.next_request
-<Request('GET', 'https://github.com/')>
-```
-
-可以用 `follow_redirects` 参数修改默认的重定向处理：
-
-```pycon
->>> r = httpx.get('http://github.com/', follow_redirects=True)
->>> r.url
-URL('https://github.com/')
->>> r.status_code
-200
->>> r.history
-[<Response [301 Moved Permanently]>]
-```
-
-响应的 `history` 属性可用于查看被跟随的重定向：它按发生顺序包含所有被跟随的重定向响应。
-
-### 超时
-
-HTTPX 默认为所有网络操作加入合理的超时，意味着连接若不能正常建立，总会抛出错误而不是无限挂起。
-
-网络无活动的默认超时为五秒。可以把值调得更严或更松：
-
-```pycon
->>> httpx.get('https://github.com/', timeout=0.001)
-```
-
-也可以完全禁用超时……
-
-```pycon
->>> httpx.get('https://github.com/', timeout=None)
-```
-
-更高级的超时管理见下文《超时》一节。
-
-### 认证
-
-HTTPX 支持 Basic 与 Digest HTTP 认证。
-
-提供 Basic 认证凭据时，把明文 `str` 或 `bytes` 组成的二元组作为 `auth` 参数传给请求函数：
-
-```pycon
->>> httpx.get("https://example.com", auth=("my_user", "password123"))
-```
-
-提供 Digest 认证凭据时，需要用明文用户名和密码实例化 `DigestAuth` 对象，然后像上面一样作为 `auth` 参数传入：
-
-```pycon
->>> auth = httpx.DigestAuth("my_user", "password123")
->>> httpx.get("https://example.com", auth=auth)
-<Response [200 OK]>
-```
-
-### 异常
-
-发生错误时 HTTPX 会抛出异常。其中最重要的异常类是 `RequestError` 与 `HTTPStatusError`。
-
-`RequestError` 是一个父类，涵盖发起 HTTP 请求期间发生的任何异常。这些异常都带有 `.request` 属性：
+发生错误时 HTTPX 会抛出异常。最重要的两类是 `RequestError` 与 `HTTPStatusError`：
 
 ```python
+import httpx
+
 try:
     response = httpx.get("https://www.example.com/")
 except httpx.RequestError as exc:
-    print(f"An error occurred while requesting {exc.request.url!r}.")
-```
+    # 连接失败、超时、协议错误等——还没有响应对象
+    print(f"请求 {exc.request.url!r} 时出错")
 
-`HTTPStatusError` 由 `response.raise_for_status()` 在响应非 2xx 成功码时抛出。这类异常同时带有 `.request` 和 `.response` 属性：
-
-```python
 response = httpx.get("https://www.example.com/")
 try:
     response.raise_for_status()
 except httpx.HTTPStatusError as exc:
-    print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
+    # 只有这里才同时拿得到 request 与 response
+    print(f"{exc.response.status_code} 响应：{exc.request.url!r}")
 ```
 
-还有一个基类 `HTTPError` 同时涵盖这两类，可用于统一捕获"请求失败"或"4xx/5xx 响应"：
+基类 `httpx.HTTPError` 同时涵盖「请求失败」与「4xx/5xx 响应」，适合兜底捕获：
 
 ```python
 try:
     response = httpx.get("https://www.example.com/")
     response.raise_for_status()
 except httpx.HTTPError as exc:
-    print(f"Error while requesting {exc.request.url!r}.")
+    print(f"请求 {exc.request.url!r} 出错：{exc}")
 ```
 
-或者分别处理：
-
-```python
-try:
-    response = httpx.get("https://www.example.com/")
-    response.raise_for_status()
-except httpx.RequestError as exc:
-    print(f"An error occurred while requesting {exc.request.url!r}.")
-except httpx.HTTPStatusError as exc:
-    print(f"Error response {exc.response.status_code} while requesting {exc.request.url!r}.")
-```
-
-完整的异常列表见官方《Exceptions（API 参考）》。
+重试设计的关键就在这里：**只有 `RequestError` 的子类（以及少数 5xx/429）值得重试**，`HTTPStatusError` 里的 400/401/403/404/422 重试一万次也不会成功。完整异常列表见官方 API 参考的 Exceptions 一节。
 
 ## 异步支持
 
@@ -1649,10 +1190,165 @@ with httpx.stream("GET", "https://www.example.com") as response:
     print("TLS version", ssl_object.version())
 ```
 
+## 实战：异步客户端 + 流式 + 重试
+
+前面各节是能力清单，这一节把它们装成一个能直接抄进项目的模块。场景是 LLM/RAG 服务里最常见的两类调用：一次性 JSON 补全，和逐 token 流式返回。
+
+### 一个完整的客户端：生命周期 + 重试 + 流式 + 限流
+
+下面这一份可以直接落进项目。四个方法分别对应四种真实需求，注意每个方法各自的超时与重试边界：
+
+```python
+import asyncio
+import json
+from collections.abc import AsyncIterator
+
+import httpx
+from tenacity import (
+    retry,
+    retry_if_exception,
+    stop_after_attempt,
+    wait_random_exponential,
+)
+
+TIMEOUT = httpx.Timeout(10.0, connect=5.0, read=120.0)
+LIMITS = httpx.Limits(max_connections=100, max_keepalive_connections=20,
+                      keepalive_expiry=30.0)
+RETRYABLE_STATUS = {408, 409, 425, 429, 500, 502, 503, 504}
+
+
+def _retryable(exc: BaseException) -> bool:
+    """只重试「重试有可能成功」的错误。"""
+    if isinstance(exc, httpx.HTTPStatusError):
+        return exc.response.status_code in RETRYABLE_STATUS
+    return isinstance(exc, (httpx.ConnectError, httpx.PoolTimeout,
+                            httpx.ConnectTimeout, httpx.ReadTimeout))
+
+
+class LLMClient:
+    """一个应用一个实例：连接池、鉴权头、base_url 全部复用。"""
+
+    def __init__(self, base_url: str, api_key: str, concurrency: int = 8):
+        self._client = httpx.AsyncClient(
+            base_url=base_url,
+            timeout=TIMEOUT,
+            limits=LIMITS,
+            headers={"Authorization": f"Bearer {api_key}"},   # 从配置读，不写死
+            follow_redirects=True,          # httpx 默认不跟随，这里显式打开
+            http2=False,                    # 需要 HTTP/2 时装 h2 包并改 True
+        )
+        self._sem = asyncio.Semaphore(concurrency)   # 调度层限流，见「与并发限流配合」
+
+    async def __aenter__(self) -> "LLMClient":
+        return self
+
+    async def __aexit__(self, *exc: object) -> None:
+        await self._client.aclose()
+
+    # ---- 1) 一次性 JSON 调用：带重试与总超时预算 --------------------
+    @retry(
+        retry=retry_if_exception(_retryable),
+        stop=stop_after_attempt(4),
+        wait=wait_random_exponential(multiplier=0.5, max=8),  # 指数退避 + 抖动
+        reraise=True,                                         # 耗尽后抛原异常而非 RetryError
+    )
+    async def _complete_once(self, model: str, prompt: str) -> str:
+        resp = await self._client.post(
+            "/v1/chat/completions",
+            json={"model": model,
+                  "messages": [{"role": "user", "content": prompt}]},
+        )
+        resp.raise_for_status()                 # 4xx/5xx 转成 HTTPStatusError
+        return resp.json()["choices"][0]["message"]["content"]
+
+    async def complete(self, model: str, prompt: str, budget: float = 30.0) -> str:
+        async with self._sem:                   # 先拿并发名额
+            async with asyncio.timeout(budget):  # 再套总预算（含所有重试次数）
+                return await self._complete_once(model, prompt)
+
+    # ---- 2) 流式（SSE）调用：不重试，必须关闭 ------------------------
+    async def stream(self, model: str, prompt: str) -> AsyncIterator[str]:
+        req = self._client.build_request(
+            "POST", "/v1/chat/completions",
+            json={"model": model, "stream": True,
+                  "messages": [{"role": "user", "content": prompt}]},
+        )
+        # 不用 `async with client.stream(...)`：生成器被提前丢弃时
+        # 上下文管理器未必及时退出。显式 send + try/finally 更可控。
+        resp = await self._client.send(req, stream=True)
+        try:
+            resp.raise_for_status()
+            async for line in resp.aiter_lines():
+                if not line.startswith("data: "):
+                    continue                    # SSE 心跳、注释行、空行
+                payload = line[len("data: "):]
+                if payload == "[DONE]":
+                    break
+                delta = json.loads(payload)["choices"][0].get("delta", {})
+                if text := delta.get("content"):
+                    yield text
+        finally:
+            await resp.aclose()                 # 漏掉这行 = 连接悬挂 + 资源泄漏
+```
+
+用法（`python -m asyncio` 或任意协程环境里可直接跑）：
+
+```python
+import asyncio
+
+
+async def main() -> None:
+    async with LLMClient("https://api.example.com", api_key="从环境读") as llm:
+        prompts = ["介绍一下向量数据库", "解释 GIL", "什么是 RRF 融合"]
+        results = await asyncio.gather(*(llm.complete("m", p) for p in prompts))
+        print([r[:20] for r in results])
+
+        async for chunk in llm.stream("m", "写一首关于秋天的短诗"):
+            print(chunk, end="", flush=True)
+
+
+asyncio.run(main())
+```
+
+三条硬规则：
+
+1. **一个进程一个（或每类上游一个）`AsyncClient`**。在热循环里 `async with httpx.AsyncClient()` 每次都重建 TCP+TLS，官方文档明确警告这会毁掉连接池收益。
+2. **`AsyncClient` 绑定创建它的事件循环**。别在模块顶层创建后跨 `asyncio.run()` 复用——典型报错是 `RuntimeError: Event loop is closed`。正确做法是在应用启动钩子里建、关闭钩子里 `aclose()`（FastAPI 的 lifespan 正是干这个的，见《FastAPI 进阶：依赖注入、中间件与流式响应》）。
+3. **`read` 超时指「两块数据之间的最大空档」，不是总时长**。所以流式里 `read=120` 表示允许 120 秒没有增量；整次调用的上限要用 `asyncio.timeout()` 自己兜，就像 `complete()` 里那样。（`asyncio.timeout()` 需要 Python 3.11+；更早版本用 `asyncio.wait_for(..., timeout=budget)` 包一层。）
+
+### 重试：httpx 自己那层和你那层不是一回事
+
+| 机制 | 覆盖的失败点 | 是否幂等安全 | 何时用 |
+| --- | --- | --- | --- |
+| `HTTPTransport(retries=N)` / `AsyncHTTPTransport(retries=N)` | 仅 TCP 连接建立失败 | 安全（请求还没发出去） | 想无脑降低连接抖动，先开 `retries=1` |
+| `tenacity` / 手写退避重试 | 连接、超时、白名单内的 5xx/429 | **不安全**：请求可能已到达服务端并生效 | 只用于幂等读操作，或带幂等键的写操作 |
+| 读超时后盲目重发 | `ReadTimeout` | 最危险：结果可能已经产生并已计费 | LLM 场景必须配合幂等/去重键 |
+
+为什么要 `tenacity` 而不是自己写 for 循环 try/except：退避抖动、按异常类型筛选、耗尽后行为、指标埋点这几件事每件都容易写错，而它已被大量生产系统验证。**特别注意 `reraise=True`**：不加它，重试用尽后你收到的是 `tenacity.RetryError`，原始异常被埋在 `.last_attempt` 里，日志与上层 `except httpx.HTTPStatusError` 全部失效。
+
+流式路径**故意不套重试**：已经吐给用户的 token 撤不回来，盲目重发会让用户看到重复内容。要做的是把已产出文本交给上层，由上层决定「续写」还是「整段重来」。429 的 `Retry-After` 头应当优先于固定退避，处理方式见《错误处理、重试与限流》。
+
+### 与并发限流配合
+
+单靠连接池的 `max_connections` 限流不够：超过上限的请求会**排队等连接**，等不到就抛 `PoolTimeout`，而且会连带把无关请求一起堵死。所以 `complete()` 里先 `async with self._sem` 拿名额，再发请求。
+
+一句话记住分工：**`max_connections` 管「对上游开多少条 TCP」，`Semaphore` 管「同时在跑多少个业务请求」**。前者是传输层参数，后者是调度层参数，数值一般不同——长连接复用率高时前者可以明显小于后者。完整范式（`TaskGroup` + `Semaphore` + 退避）见《asyncio 并发限流与重试范式》。
+
+### 流式的另外两个坑
+
+- **不要在 `async for` 里做重活**。`aiter_lines()` 的背压会传导回服务端；解析、落库、渲染应放到消费端，或用 `asyncio.Queue` 解耦。
+- **HTTP/2 下别拉长 `read`**。`http2=True` 时多个流复用同一条连接，一条连接的读超时会波及该连接上所有流；并发高时应调 `max_connections`，而不是把 `read` 设成几百秒。
+
+### 自查清单
+
+- [ ] `AsyncClient` 是应用级单例，且在 lifespan 里 `aclose()` 了吗？
+- [ ] `follow_redirects=True` 显式设了吗？（httpx 默认不跟随）
+- [ ] 超时给了 `httpx.Timeout` 的四维配置，而不是一个裸数字或 `None` 吗？
+- [ ] 重试只对幂等读操作开启，并且处理了 429 的 `Retry-After` 吗？
+- [ ] 流式路径的 `resp.aclose()` 放在 `finally` 里了吗？
+- [ ] 4xx 错误码没有触发重试（`_retryable` 白名单里没有 400/401/403/404）吗？
+- [ ] 单元测试用 `httpx.MockTransport` 替身，不打真实网络（见《typing.Protocol 与结构化子类型》里如何用假客户端测重试）吗？
+
 ---
 
-> **来源**：本文由 HTTPX 官方文档以下页面完整翻译并合并而成：[QuickStart（快速开始）](https://www.python-httpx.org/quickstart/)、[Async Support（异步支持）](https://www.python-httpx.org/async/)、[Advanced → Clients（客户端实例）](https://www.python-httpx.org/advanced/clients/)、[Authentication（认证）](https://www.python-httpx.org/advanced/authentication/)、[Timeouts（超时）](https://www.python-httpx.org/advanced/timeouts/)、[Proxies（代理）](https://www.python-httpx.org/advanced/proxies/)、[Event Hooks（事件钩子）](https://www.python-httpx.org/advanced/event-hooks/)、[SSL Verification（SSL 校验）](https://www.python-httpx.org/advanced/ssl/)、[Text Encodings（文本编码）](https://www.python-httpx.org/advanced/text-encodings/)、[Resource Limits（连接池限制）](https://www.python-httpx.org/advanced/resource-limits/)、[Extensions（扩展）](https://www.python-httpx.org/advanced/extensions/)。作者 Tom Christie（Encode），许可 BSD 三条款许可证。抓取于 2026-09-13。原文 Advanced 下的 Transports 页（自定义 transport 开发）未收录，见官方链接。
-
----
-
-> 编者注：与 requests 的关键差异——① requests 默认无超时，而 HTTPX 默认 5 秒网络无活动即超时（LLM API 调用强烈建议保留超时，不要设 `None`）；② HTTPX 默认不跟随重定向（requests 默认跟随）；③ 流式转发 LLM 响应时用 `client.stream(...)` + `aiter_lines()`/`aiter_text()`，配合本模块《FastAPI 进阶》一篇的 `StreamingResponse`。异步调用示例需要能执行 `await` 的环境（脚本中用 `asyncio.run(...)` 包一层）。
+> **来源**：抓取于 2026-09-19。本篇译自/引自 HTTPX 官方文档：[Async Support（异步支持）](https://www.python-httpx.org/async/)、[Advanced → Clients（客户端实例）](https://www.python-httpx.org/advanced/clients/)、[Advanced → Streaming（流式）](https://www.python-httpx.org/advanced/clients/#streaming-responses)、[Authentication（认证）](https://www.python-httpx.org/advanced/authentication/)、[Timeouts（超时）](https://www.python-httpx.org/advanced/timeouts/)、[Resource Limits（连接池限制）](https://www.python-httpx.org/advanced/resource-limits/)、[Proxies（代理）](https://www.python-httpx.org/advanced/proxies/)、[Event Hooks（事件钩子）](https://www.python-httpx.org/advanced/event-hooks/)、[SSL Verification（SSL 校验）](https://www.python-httpx.org/advanced/ssl/)、[Text Encodings（文本编码）](https://www.python-httpx.org/advanced/text-encodings/)、[Extensions（扩展）](https://www.python-httpx.org/advanced/extensions/)。作者 Tom Christie（Encode 团队），许可 BSD 三条款许可证。原 QuickStart 与 `advanced/transports` 两页未收录：前者与 requests 重复，已合并进《HTTP 客户端：requests 用法与 requests / httpx 选型》；后者为自定义 transport 开发，超出本篇范围，需要时读官方原文。「行为差异」表与「实战」全章（含生命周期、重试白名单、SSE 解析、限流分层与自查清单）由本站编写，`tenacity` 用法参照 [tenacity 官方文档](https://tenacity.readthedocs.io/en/latest/)（Julien Danjou，Apache 2.0）。

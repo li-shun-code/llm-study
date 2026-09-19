@@ -5,7 +5,7 @@ author: OpenAI Cookbook（How to format inputs to ChatGPT models、responses_exa
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版；原 notebook 基于 gpt-3.5-turbo/gpt-4 时代撰写，本站示例按现行 API 校订
+versions: openai-python 2026-09 最新稳定版；示例模型统一为 gpt-5.5，角色名统一为官方现行值
 order: 2
 group: 调用基础
 ---
@@ -154,7 +154,7 @@ while True:
     print("AI：", reply)
 ```
 
-历史越滚越长时，token 成本与上下文窗口都会成为瓶颈，因此要做"裁剪"或"摘要"（完整工程化讨论见第 09 篇成本优化与第 17 篇实战）。
+历史越滚越长时，token 成本与上下文窗口都会成为瓶颈，因此要做"裁剪"或"摘要"（完整工程化讨论见《成本与 Token 优化：Prompt Caching 与 Batch API》与《实战：命令行聊天机器人》）。
 
 **Responses API 提供了另一种答案：让 API 替你保存状态。** Cookbook 的 `responses_example` 演示了三种玩法：
 
@@ -165,14 +165,14 @@ print(fetched_response.output[0].content[0].text)
 
 # 2) 用 previous_response_id 续接，无需重发历史
 response_two = client.responses.create(
-    model="gpt-4o-mini",
+    model="gpt-5.5",
     input="tell me another",
     previous_response_id=response.id
 )
 
 # 3) 从任意节点"分叉"出新对话分支
 response_two_forked = client.responses.create(
-    model="gpt-4o-mini",
+    model="gpt-5.5",
     input="I didn't like that joke, tell me another",
     previous_response_id=response.id  # 以第一个响应为父节点
 )

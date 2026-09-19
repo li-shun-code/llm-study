@@ -1,574 +1,384 @@
 ---
-title: 内存管理与垃圾回收：引用计数与 gc 模块
-source_url: https://docs.python.org/zh-cn/3/c-api/refcounting.html
-author: Python 软件基金会（PSF）文档团队
+title: Python 内存管理实战：引用计数、gc、弱引用与内存泄漏排查
+source_url: https://docs.python.org/zh-cn/3/library/weakref.html
+author: Python 软件基金会（PSF）文档团队；示例与编者注由本站补充
 license: PSF 许可证第 2 版
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: false
 versions: Python 3.14 官方文档
 order: 4
 group: 语言机制进阶
 ---
-本节介绍的函数和宏被用于管理 Python 对象的引用计数。
 
-**Py\_ssize\_t Py\_REFCNT(PyObject \*o)
-**
+# Python 内存管理实战：引用计数、gc、弱引用与内存泄漏排查
 
-_属于 稳定 ABI 自 3.14 版起._
+## 为什么需要关心这件事
 
-获取 Python 对象 _o_ 的引用计数。
+「Python 有 GC，不用管内存」是新手期最有毒的一句话。真实工程里反复出现的三类问题全都需要你懂机制：
 
-请注意返回的值可能并不真正反映实际持有的对象引用数。例如，有些对象属于 immortal 对象并具有并不反映实际引用数的非常高的 refcount 值。因此，除了 0 或 1 这两个值，不要依赖返回值的准确性。
+- **进程越跑越大**。服务挂一周从 300 MB 涨到 6 GB，最后被 OOM killer 干掉。
+- **内存没问题但吞吐上不去**。批处理脚本每处理一批就触发一次全量 GC，停顿时间吃掉 20% 的 CPU。
+- **`__del__` 不执行 / 执行时机诡异**。你以为的「关闭文件」逻辑其实要等进程退出才跑。
 
-使用 `Py_SET_REFCNT()` 函数来设置一个对象引用计数。
+这一篇的目标是：让你知道**该用哪个工具看**、**看到什么算异常**、**改哪一行代码**。全部命令在 CPython 3.12+ 可直接运行。
 
-备注
+## 一、三套机制各管什么
 
-在 Python 的 自由线程构建版，返回 1 并不足以确定是否能安全地将 _o_ 视为不可被其他线程访问。对于此类场景请改用 `PyUnstable_Object_IsUniquelyReferenced()`。
+CPython 的内存管理是三层叠加，不是一套 GC 包打天下：
 
-另请参阅 `PyUnstable_Object_IsUniqueReferencedTemporary()` 函数。
+| 层 | 负责什么 | 何时释放 | 代价 | 你会在哪儿感知到它 |
+| --- | --- | --- | --- | --- |
+| **引用计数** | 绝大多数对象的释放（`dict`、`list`、自定义类实例…） | 引用数归零的**那一瞬间**，确定性释放 | 每次赋值/传参都要增减计数；无法处理循环引用 | `del x` 后内存立刻回落，靠的就是它 |
+| **分代循环 GC**（`gc` 模块） | 只处理「容器之间互相引用成环」这一种情况 | 计数分配超过阈值时批量扫描 | 扫描有停顿；对象越多越慢 | `gc.collect()`、GC 停顿、`gc.callbacks` |
+| **内存分配器**（pymalloc + 系统 `malloc`） | 小块内存的复用与对齐 | 由前两层触发归还 | arena 可以「已释放但不还给 OS」 | RSS 不降但 tracemalloc 显示已释放 |
 
-在 3.10 版本发生变更: `Py_REFCNT()` 被改为内联的静态函数。
+> 关键推论：**「Python 进程 RSS 没降」不等于「内存泄漏」。** 小对象内存被 pymalloc 的 arena 缓存住是为下一次分配提速；只有 tracemalloc/统计显示**仍被引用的对象数量持续增长**才是真泄漏。
 
-在 3.11 版本发生变更: 形参类型不再是 const PyObject\*。
+关于 C 层的 `Py_INCREF()` / `Py_DECREF()`：那是给写 C 扩展和嵌入 Python 的人准备的（见官方 C-API 手册），纯 Python 代码里解释器自动插好，你不需要也无法手动调用。3.12 起 `None`、`True`、小整数等「永生对象」的引用计数不再变化（一个哨兵值），所以你在下一节会看到 `getrefcount(True)` 返回一个巨大的固定数——不是 bug。
 
-**void Py\_SET\_REFCNT(PyObject \*o, Py\_ssize\_t refcnt)
-**
-
-将对象 _o_ 的引用计数器设为 _refcnt_。
-
-在 启用自由线程的 Python 编译版 中，如果 _refcnt_ 大于 `UINT32_MAX`，该对象将被设为 immortal 对象。
-
-此函数对 immortal 对象没有效果。
-
-版本 3.9 中新增。
-
-在 3.12 版本发生变更: 永生对象不会被修改。
-
-**void Py\_INCREF(PyObject \*o)
-**
-
-表示为对象 _o_ 获取一个新的 strong reference，指明该对象正在被使用且不应被销毁。
-
-此函数对 immortal 对象没有效果。
-
-此函数通常被用来将 borrowed reference 原地转换为 strong reference。 `Py_NewRef()` 函数可被用来创建新的 strong reference。
-
-当对象使用完毕后，可调用 `Py_DECREF()` 来释放它。
-
-此对象必须不为 `NULL`；如果你不能确定它不为 `NULL`，请使用 `Py_XINCREF()`。
-
-不要预期此函数会以任何方式实际地改变 _o_。至少对 [**某些对象**](https://peps.python.org/pep-0683/) 来说，此函数将没有任何效果。
-
-在 3.12 版本发生变更: 永生对象不会被修改。
-
-**void Py\_XINCREF(PyObject \*o)
-**
-
-与 `Py_INCREF()` 类似，但对象 _o_ 可以为 `NULL`，在这种情况下此函数将没有任何效果。
-
-另请参阅 `Py_XNewRef()`。
-
-**PyObject \*Py\_NewRef(PyObject \*o)
-**
-
-_属于 稳定 ABI 自 3.10 版起._
-
-为对象创建一个新的 strong reference: 在 _o_ 上调用 `Py_INCREF()` 并返回对象 _o_。
-
-当不再需要这个 strong reference 时，应当在其上调用 `Py_DECREF()` 来释放引用。
-
-对象 _o_ 必须不为 `NULL`；如果 _o_ 可以为 `NULL` 则应改用 `Py_XNewRef()`。
-
-例如：
-
-```c
-Py_INCREF(obj);
-self->attr = obj;
-```
-
-可以写成:
-
-```c
-self->attr = Py_NewRef(obj);
-```
-
-另请参阅 `Py_INCREF()`。
-
-版本 3.10 中新增。
-
-**PyObject \*Py\_XNewRef(PyObject \*o)
-**
-
-_属于 稳定 ABI 自 3.10 版起._
-
-类似于 `Py_NewRef()`，但对象 _o_ 可以为 NULL。
-
-如果对象 _o_ 为 `NULL`，该函数也将返回 `NULL`。
-
-版本 3.10 中新增。
-
-**void Py\_DECREF(PyObject \*o)
-**
-
-释放一个指向对象 _o_ 的 strong reference，表明该引用不再被使用。
-
-此函数对 immortal 对象没有效果。
-
-当最后一个 strong reference 被释放时 (即对象的引用计数变为 0)，将会调用该对象所属类型的 deallocation 函数 (它必须不为 `NULL`)。
-
-此函数通常被用于在退出作用域之前删除一个 strong reference。
-
-此对象必须不为 `NULL`；如果你不能确定它不为 `NULL`，请使用 `Py_XDECREF()`。
-
-不要预期此函数会以任何方式实际地改变 _o_。至少对 [**某些对象**](https://peps.python.org/pep-0683/) 来说，此函数将没有任何效果。
-
-警告
-
-释放函数会导致任意 Python 代码被调用（例如当一个带有 `__del__()` 方法的类实例被释放时就是如此）。 虽然这些代码中的异常不会被传播，但被执行的代码能够自由访问所有 Python 全局变量。这意味着在调用 `Py_DECREF()` 之前任何可通过全局变量获取的对象都应该处于完好的状态。 例如，从一个列表中删除对象的代码应该将被删除对象的引用拷贝到一个临时变量中，更新列表数据结构，然后再为临时变量调用 `Py_DECREF()`.
-
-在 3.12 版本发生变更: 永生对象不会被修改。
-
-**void Py\_XDECREF(PyObject \*o)
-**
-
-与 `Py_DECREF()` 类似，但对象 _o_ 可以为 `NULL`，在这种情况下此函数将没有任何效果。来自 `Py_DECREF()` 的警告同样适用于此处。
-
-**void Py\_CLEAR(PyObject \*o)
-**
-
-释放一个指向对象 _o_ 的 strong reference。对象可以为 `NULL`，在此情况下该宏将没有任何效果；在其他情况下其效果与 `Py_DECREF()` 相同，区别在于其参数也会被设为 `NULL`。针对 `Py_DECREF()` 的警告不适用于所传递的对象，因为该宏会细心地使用一个临时变量并在释放引用之前将参数设为 `NULL`.
-
-当需要释放指向一个在垃圾回收期间可能会被遍历的对象的引用时使用该宏是一个好主意。
-
-在 3.12 版本发生变更: 该宏参数现在只会被求值一次。如果该参数具有附带影响，它们将不会再被复制。
-
-**void Py\_IncRef(PyObject \*o)
-**
-
-_属于 稳定 ABI._
-
-表示获取一个指向对象 _o_ 的新 strong reference。 `Py_XINCREF()` 的函数版本。 它可被用于 Python 的运行时动态嵌入。
-
-**void Py\_DecRef(PyObject \*o)
-**
-
-_属于 稳定 ABI._
-
-释放一个指向对象 _o_ 的 strong reference。 `Py_XDECREF()` 的函数版本。它可被用于 Python 的运行时动态嵌入。
-
-**Py\_SETREF(dst, src)
-**
-
-该宏可安全地释放一个指向对象 _dst_ 的 strong reference，并将 _dst_ 设为 _src_。
-
-在 `Py_CLEAR()` 的情况中，这样“直观”的代码可能会是致命的:
-
-```c
-Py_DECREF(dst);
-dst = src;
-```
-
-安全的方式是这样:
-
-```c
-Py_SETREF(dst, src);
-```
-
-这样使得在释放对旧 _dst_ 值的引用 _之前_ 将 _dst_ 设为 _src_，从而让任何因 _dst_ 被去除而触发的代码不再相信 _dst_ 指向一个有效的对象。
-
-版本 3.6 中新增。
-
-在 3.12 版本发生变更: 该宏参数现在只会被求值一次。如果某个参数具有附带影响，它们将不会再被复制。
-
-**Py\_XSETREF(dst, src)
-**
-
-使用 `Py_XDECREF()` 代替 `Py_DECREF()` 的 `Py_SETREF` 宏的变种。
-
-版本 3.6 中新增。
-
-在 3.12 版本发生变更: 该宏参数现在只会被求值一次。如果某个参数具有附带影响，它们将不会再被复制。
-
-
-## 对象、类型和引用计数（扩展与嵌入视角）
-
-## 对象、类型和引用计数
-
-多数 Python/C API 函数都有一个或多个参数以及一个 PyObject\* 类型的返回值。这种类型是指向任意 Python 对象的不透明数据类型的指针。由于所有 Python 对象类型在大多数情况下都被 Python 语言用相同的方式处理（例如，赋值、作用域规则和参数传递等），因此用单个 C 类型来表示它们是很适宜的。几乎所有 Python 对象都存在于堆中：你不可声明一个类型为 `PyObject` 的自动或静态的变量，只能声明类型为 PyObject\* 的指针变量。唯一的例外是 type 对象；因为这种对象永远不能被释放，所以它们通常都是静态的 `PyTypeObject` 对象。
-
-所有 Python 对象（甚至 Python 整数）都有一个  和一个 _reference count_。对象的类型确定它是什么类型的对象（例如整数、列表或用户定义函数；还有更多，如 标准类型层级结构 中所述）。对于每个众所周知的类型，都有一个宏来检查对象是否属于该类型；例如，当（且仅当） _a_ 所指的对象是 Python 列表时 `PyList_Check(a)` 为真。
-
-### 引用计数
-
-引用计数之所以重要是因为现有计算机的内存大小是有限的（并且往往限制得很严格）；它会计算有多少不同的地方对一个对象进行了 strong reference。这些地方可以是另一个对象，也可以是全局（或静态）C 变量，或是某个 C 函数中的局部变量。当某个对象的最后一个 strong reference 被释放时（即其引用计数变为零），该对象就会被取消分配。如果该对象包含对其他对象的引用，则会释放这些引用。如果不再有对其他对象的引用，这些对象也会同样地被取消分配，依此类推。（在这里对象之间的相互引用显然是个问题；目前的解决办法，就是“不要这样做”。）
-
-对于引用计数总是会显式地执行操作。通常的做法是使用 `Py_INCREF()` 宏来获取对象的新引用（即让引用计数加一），并使用 `Py_DECREF()` 宏来释放引用（即让引用计数减一）。`Py_DECREF()` 宏比 incref 宏复杂得多，因为它必须检查引用计数是否为零然后再调用对象的释放器。释放器是一个函数指针，它包含在对象的类型结构体中。如果对象是复合对象类型，如列表，则特定于类型的释放器会负责释放对象中包含的其他对象的引用，并执行所需的其他终结化操作。引用计数不会发生溢出；用于保存引用计数的位数至少会与虚拟内存中不同内存位置的位数相同 (假设 `sizeof(Py_ssize_t) >= sizeof(void*)`)。因此，引用计数的递增是一个简单的操作。
-
-没有必要为每个包含指向对象指针的局部变量持有 strong reference (即增加引用计数)。理论上说，当变量指向对象时对象的引用计数就会加一，而当变量离开其作用域时引用计数就会减一。不过，这两种情况会相互抵消，所以最后引用计数并没有改变。使用引用计数的唯一真正原因在于只要我们的变量指向对象就可以防止对象被释放。只要我们知道至少还有一个指向某对象的引用与我们的变量同时存在，就没有必要临时获取一个新的 strong reference (即增加引用计数)。出现引用计数增加的一种重要情况是对象作为参数被传递给扩展模块中的 C 函数而这些函数又在 Python 中被调用；调用机制会保证在调用期间对每个参数持有一个引用。
-
-然而，一个常见的陷阱是从列表中提取对象并在不获取新引用的情况下将其保留一段时间。某个其他操作可能在无意中从列表中移除该对象，释放这个引用，并可能撤销分配其资源。真正的危险在于看似无害的操作可能会调用任意的 Python 代码来做这件事；有一条代码路径允许控制权从 `Py_DECREF()` 流回到用户，因此几乎任何操作都有潜在的危险。
-
-安全的做法是始终使用泛型操作（名称以 `PyObject_`, `PyNumber_`, `PySequence_` 或 `PyMapping_` 开头的函数）。这些操作总是为其返回的对象创建一个新的 strong reference (即增加引用计数)。这使得调用者有责任在获得结果之后调用 `Py_DECREF()`；这种做法很快就能习惯成自然。
-
-#### 引用计数细节
-
-Python/C API 中函数的引用计数最好是使用 _引用所有权_ 来解释。所有权是关联到引用，而不是对象（对象不能被拥有：它们总是会被共享）。“拥有一个引用”意味着当不再需要该引用时必须在其上调用 Py\_DECREF。所有权也可以被转移，这意味着接受该引用所有权的代码在不再需要它时必须通过调用 `Py_DECREF()` 或 `Py_XDECREF()` 来最终释放它 --- 或是继续转移这个责任（通常是转给其调用方）。当一个函数将引用所有权转给其调用方时，则称调用方收到一个 _新的_ 引用。当未转移所有权时，则称调用方是 _借入_ 这个引用。对于 borrowed reference 来说不需要任何额外操作。
-
-反过来，当调用方把一个对象的引用传入某个函数时，会有两种可能：该函数_窃取_这个对象的引用，或者不窃取。
-
-_窃取引用_是指：当你把引用传给某个函数后，该函数会认定自己已经拥有了这个引用。由于新的拥有者可以自行决定何时调用 `Py_DECREF()`，你（调用方）在调用之后就不能再使用这个引用了。
-
-很少有函数会窃取引用；两个重要的例外是 `PyList_SetItem()` 和 `PyTuple_SetItem()`，它们会窃取对条目的引用（但不是条目所在的元组或列表！）。这些函数被设计为会窃取引用是因为在使用新创建的对象来填充元组或列表时有一个通常的惯例；例如，创建元组 `(1, 2, "three")` 的代码看起来可以是这样的（暂时不要管错误处理；下面会显示更好的代码编写方式）:
-
-```c
-PyObject *t;
-
-t = PyTuple_New(3);
-PyTuple_SetItem(t, 0, PyLong_FromLong(1L));
-PyTuple_SetItem(t, 1, PyLong_FromLong(2L));
-PyTuple_SetItem(t, 2, PyUnicode_FromString("three"));
-```
-
-在这里，`PyLong_FromLong()` 返回了一个新的引用并且它立即被 `PyTuple_SetItem()` 所窃取。 当你想要继续使用一个对象而对它的引用将被窃取时，请在调用窃取引用的函数之前使用 `Py_INCREF()` 来抓取另一个引用。
-
-顺便提一下，`PyTuple_SetItem()` 是设置元组条目的 _唯一_ 方式；`PySequence_SetItem()` 和 `PyObject_SetItem()` 会拒绝这样做因为元组是不可变数据类型。你应当只对你自己创建的元组使用 `PyTuple_SetItem()`。
-
-等价于填充一个列表的代码可以使用 `PyList_New()` 和 `PyList_SetItem()` 来编写。
-
-然而，在实践中，你很少会使用这些创建和填充元组或列表的方式。有一个通用的函数 `Py_BuildValue()` 可以根据 C 值来创建大多数常用对象，由一个 _格式字符串_ 来指明。例如，上面的两个代码块可以用下面的代码来代替（还会负责错误检测）:
-
-```c
-PyObject *tuple, *list;
-
-tuple = Py_BuildValue("(iis)", 1, 2, "three");
-list = Py_BuildValue("[iis]", 1, 2, "three");
-```
-
-在对条目使用 `PyObject_SetItem()` 等操作时更常见的做法是只借入引用，比如将参数传递给你正在编写的函数。在这种情况下，它们在引用方面的行为更为清晰，因为你不必为了把引用转走而获取一个新的引用（“让它被偷取”）。例如，这个函数将列表（实际上是任何可变序列）中的所有条目都设为给定的条目:
-
-```c
-int
-set_all(PyObject *target, PyObject *item)
-{
-    Py_ssize_t i, n;
-
-    n = PyObject_Length(target);
-    if (n < 0)
-        return -1;
-    for (i = 0; i < n; i++) {
-        PyObject *index = PyLong_FromSsize_t(i);
-        if (!index)
-            return -1;
-        if (PyObject_SetItem(target, index, item) < 0) {
-            Py_DECREF(index);
-            return -1;
-        }
-        Py_DECREF(index);
-    }
-    return 0;
-}
-```
-
-对于函数返回值的情况略有不同。虽然向大多数函数传递一个引用不会改变你对该引用的所有权责任，但许多返回一个引用的函数会给你该引用的所有权。原因很简单：在许多情况下，返回的对象是临时创建的，而你得到的引用是对该对象的唯一引用。因此，返回对象引用的通用函数，如 `PyObject_GetItem()` 和 `PySequence_GetItem()`，将总是返回一个新的引用（调用方将成为该引用的所有者）。
-
-一个需要了解的重点在于你是否拥有一个由函数返回的引用只取决于你所调用的函数 --- _附带物_ (作为参数传给函数的对象的类型) _不会带来额外影响！_ 因此，如果你使用 `PyList_GetItem()` 从一个列表提取条目，你并不会拥有其引用 --- 但是如果你使用 `PySequence_GetItem()` (它恰好接受完全相同的参数) 从同一个列表获取同样的条目，你就会拥有一个对所返回对象的引用。
-
-下面是说明你要如何编写一个函数来计算一个整数列表中条目的示例；一个是使用 `PyList_GetItem()`，而另一个是使用 `PySequence_GetItem()` 函数:
-
-```c
-long
-sum_list(PyObject *list)
-{
-    Py_ssize_t i, n;
-    long total = 0, value;
-    PyObject *item;
-
-    n = PyList_Size(list);
-    if (n < 0)
-        return -1; /* Not a list */
-    for (i = 0; i < n; i++) {
-        item = PyList_GetItem(list, i); /* 不能失败 */
-        if (!PyLong_Check(item)) continue; /* 跳过非整数 */
-        value = PyLong_AsLong(item);
-        if (value == -1 && PyErr_Occurred())
-            /* 太大的整数无法适应 C long 类型，放弃 */
-            return -1;
-        total += value;
-    }
-    return total;
-}
-```
-
-```c
-long
-sum_sequence(PyObject *sequence)
-{
-    Py_ssize_t i, n;
-    long total = 0, value;
-    PyObject *item;
-    n = PySequence_Length(sequence);
-    if (n < 0)
-        return -1; /* 没有长度 */
-    for (i = 0; i < n; i++) {
-        item = PySequence_GetItem(sequence, i);
-        if (item == NULL)
-            return -1; /* 不是序列，或其他错误 */
-        if (PyLong_Check(item)) {
-            value = PyLong_AsLong(item);
-            Py_DECREF(item);
-            if (value == -1 && PyErr_Occurred())
-                /* 太大的整数无法适应 C long 类型，放弃 */
-                return -1;
-            total += value;
-        }
-        else {
-            Py_DECREF(item); /* 丢弃引用所有权 */
-        }
-    }
-    return total;
-}
-```
-
-### 类型
-
-在 Python/C API 中扮演重要角色的其他数据类型很少；大多为简单 C 类型如 int, long, double 和 char\* 等。有一些结构类型被用来描述静态表格以列出模块所导出的函数或新对象类型的数据属性，还有一个结构类型被用来描述复数的值。这些结构类型将与使用它们的函数放到一起讨论。
-
-**type Py\_ssize\_t
-**
-
-_属于 稳定 ABI._
-
-一个使得 `sizeof(Py_ssize_t) == sizeof(size_t)` 的有符号整数类型。C99 没有直接定义这样的东西（size\_t 是一个无符号整数类型）。请参阅 [**PEP 353**](https://peps.python.org/pep-0353/) 了解详情。`PY_SSIZE_T_MAX` 是 `Py_ssize_t` 类型的最大正数值。
-
-
-## gc —— 垃圾回收器接口
-
-* * *
-
-此模块提供可选的垃圾回收器的接口，提供的功能包括：关闭收集器、调整收集频率、设置调试选项。它同时提供对回收器找到但是无法释放的不可达对象的访问。由于 Python 使用了带有引用计数的回收器，如果你确定你的程序不会产生循环引用，你可以关闭回收器。可以通过调用 `gc.disable()` 关闭自动垃圾回收。若要调试一个存在内存泄漏的程序，调用 `gc.set_debug(gc.DEBUG_LEAK)`；需要注意的是，它包含 `gc.DEBUG_SAVEALL`，使得被垃圾回收的对象会被存放在 gc.garbage 中以待检查。
-
-`gc` 模块提供了下列函数：
-
-**gc.enable()**
-
-启用自动垃圾回收
-
-**gc.disable()**
-
-停用自动垃圾回收
-
-**gc.isenabled()**
-
-如果启用了自动回收则返回 `True`。
-
-**gc.collect(_generation\=2_)**
-
-不带参数时，将运行完全的回收。 可选的参数 _generation_ 是一个指定要回收哪一代 (从 0 到 2) 的整数值。 如果 generation 值无效则会引发 `ValueError`。 返回值为已回收对象和不可回收对象的总数。
-
-每当运行完整收集或最高代 (2) 收集时，为多个内置类型所维护的空闲列表会被清空。由于特定类型特别是 `float` 的实现，在某些空闲列表中并非所有项都会被释放。
-
-当解释器已经在执行收集任务时调用 `gc.collect()` 的效果是未定义的。
-
-在 3.14 版本发生变更: `generation=1` 执行一次增量回收。
-
-在 3.14.5 版本发生变更: `generation=1` 执行中间代的回收。
-
-**gc.set\_debug(_flags_)**
-
-设置垃圾回收器的调试标识位。调试信息会被写入 `sys.stderr` 。此文档末尾列出了各个标志位及其含义；可以使用位操作对多个标志位进行设置以控制调试。
-
-**gc.get\_debug()**
-
-返回当前调试标识位。
-
-**gc.get\_objects(_generation\=None_)**
-
-返回一个由垃圾回收器所跟踪的所有对象组成的列表，不包括已返回对象的列表。 如果 _generation_ 不为 `None`，则只返回垃圾回收器所跟踪的属于该 generation 的对象。
-
-在 3.8 版本发生变更: 新的 _generation_ 形参。
-
-在 3.14 版本发生变更: 第 1 代已被移除
-
-在 3.14.5 版本发生变更: 世代 1 被重新引入以保持 3.13 的 GC 行为。
-
-引发一个 审计事件 `gc.get_objects` 并附带参数 `generation`。
-
-**gc.get\_stats()**
-
-返回一个包含三个字典对象的列表，每个字典分别包含对应代的从解释器开始运行的垃圾回收统计数据。字典的键的数目在将来可能发生改变，目前每个字典包含以下内容：
-
--   `collections` 是该代被回收的次数；
-
--   `collected` 是该代中被回收的对象总数；
-
--   `uncollectable` 是在这一代中被发现无法收集的对象总数（因此被移动到 `garbage` 列表中）。
-
-
-版本 3.4 中新增。
-
-**gc.set\_threshold(_threshold0_\[, _threshold1_\[, _threshold2_\]\])**
-
-设置垃圾回收阈值（收集频率）。将 _threshold0_ 设为零会禁用回收。
-
-垃圾回收器把所有对象分类为三代，其依据是对象在多少次垃圾回收后幸存。 新建对象会被放在最年轻代（第 `0` 代）。 如果一个对象在一次垃圾回收后幸存，它会被移入下一个较老代。 由于第 `2` 代是最老代，这一代的对象在一次垃圾回收后仍会保留原样。 为了确定何时要运行，垃圾回收器会跟踪自上一次回收后对象分配和释放的数量。 当分配数量减去释放数量的结果值大于 _threshold0_ 时，垃圾回收就会开始。 初始时只有第 `0` 代会被检查。 如果自第 `1` 代被检查后第 `0` 代已被检查超过 _threshold1_ 次，则第 `1` 也会被检查。 对于第三代来说情况还会更复杂，请参阅 [Collecting the oldest generation](https://github.com/python/cpython/blob/ff0ef0a54bef26fc507fbf9b7a6009eb7d3f17f5/InternalDocs/garbage_collector.md#collecting-the-oldest-generation) 来了解详情。
-
-在自由线程构建中，在运行回收器之前还会检查进程内存使用量的增加。如果自上次回收以来内存使用量没有增加 10%，并且对象分配的净数量没有超过 40 倍 _threshold0_，则不会运行回收。
-
-请参阅 [垃圾回收器设计](https://github.com/python/cpython/blob/3.14/InternalDocs/garbage_collector.md) 了解详情。
-
-在 3.14 版本发生变更: _threshold2_ 将被忽略
-
-在 3.14.5 版本发生变更: _threshold2_ is restored to match Python 3.13 behavior.
-
-**gc.get\_count()**
-
-将当前回收计数以形为 `(count0, count1, count2)` 的元组返回。
-
-**gc.get\_threshold()**
-
-将当前回收阈值以形为 `(threshold0, threshold1, threshold2)` 的元组返回。
-
-**gc.get\_referrers(_\*objs_)**
-
-返回直接引用任意一个 _objs_ 的对象列表。这个函数只定位支持垃圾回收的容器；引用了其它对象但不支持垃圾回收的扩展类型不会被找到。
-
-需要注意的是，已经解除对 _objs_ 引用的对象，但仍存在于循环引用中未被回收时，仍然会被作为引用者出现在返回的列表当中。若要获取当前正在引用 _objs_ 的对象，需要调用 `collect()` 然后再调用 `get_referrers()`。
-
-警告
-
-在使用 `get_referrers()` 返回的对象时必须要小心，因为其中一些对象可能仍在构造中因此处于暂时的无效状态。不要把 `get_referrers()` 用于调试以外的其它目的。
-
-引发一个 审计事件 `gc.get_referrers` 并附带参数 `objs`。
-
-**gc.get\_referents(_\*objs_)**
-
-返回被任意一个参数中的对象直接引用的对象的列表。返回的被引用对象是被参数中的对象的 C 语言级别方法（若存在） `tp_traverse` 访问到的对象，可能不是所有的实际直接可达对象。只有支持垃圾回收的对象支持 `tp_traverse` 方法，并且此方法只会在需要访问涉及循环引用的对象时使用。因此，可以有以下例子：一个整数对其中一个参数是直接可达的，这个整数有可能出现或不出现在返回的结果列表当中。
-
-引发一个 审计事件 `gc.get_referents` 并附带参数 `objs`。
-
-**gc.is\_tracked(_obj_)**
-
-当对象正在被垃圾回收器监控时返回 `True`，否则返回 `False` 。一般来说，原子类的实例不会被监控，而非原子类（如容器、用户自定义的对象）会被监控。然而，会有一些特定类型的优化以便减少垃圾回收器在简单实例（如只含有原子性的键和值的字典）上的消耗:
+## 二、亲手看引用计数
 
 ```python
->>> gc.is_tracked(0)
-False
->>> gc.is_tracked("a")
-False
->>> gc.is_tracked([])
-True
->>> gc.is_tracked({})
-False
->>> gc.is_tracked({"a": 1})
-True
+import sys
+
+class Node:
+    pass
+
+a = Node()
+b = a
+print(sys.getrefcount(a))   # 3：a、b、以及「作为参数传给 getrefcount 的临时引用」
+print(sys.getrefcount(Node()))  # 2：临时对象 + 参数引用
 ```
 
-版本 3.1 中新增。
+第一个坑就在注释里：**传给 `getrefcount()` 本身会增加一次计数**，所以读数永远比实际多 1。第二个坑：容器持有元素，`d = {}` 是 1，`d["k"] = v` 后 `v` 的计数变 3（`v` 的局部名 + 字典槽位 + 参数）。
 
-**gc.is\_finalized(_obj_)**
-
-如果给定对象已被垃圾回收器终结则返回 `True`，否则返回 `False`。
+真实排查里，`getrefcount` 的用法是**对比**而不是看绝对值：
 
 ```python
->>> x = None
->>> class Lazarus:
-...     def __del__(self):
-...         global x
-...         x = self
-...
->>> lazarus = Lazarus()
->>> gc.is_finalized(lazarus)
-False
->>> del lazarus
->>> gc.is_finalized(x)
-True
+import gc, sys
+
+def refs_of(cls):
+    """返回当前内存中该类型的实例数量。"""
+    return sum(1 for obj in gc.get_objects() if type(obj) is cls)
+
+before = refs_of(Node)
+objs = [Node() for _ in range(1000)]
+print(refs_of(Node) - before)   # 1000
+del objs
+gc.collect()
+print(refs_of(Node) - before)   # 0 —— 如果这里不是 0，就是被什么东西持有了
 ```
 
-版本 3.9 中新增。
+`gc.get_objects()` 会返回上百万对象，遍历本身很吃内存。生产代码里不要用它做常规监控：改用 `weakref.WeakSet` 自己登记实例，或按代取 `gc.get_objects(0)`。
 
-**gc.freeze()**
+## 三、循环引用与 gc 模块
 
-冻结由垃圾回收器追踪的所有对象；将它们移至永久代并在所有未来的回收操作中忽略它们。
+### 环是怎么产生的、又为什么必须靠 gc
 
-如果一个进程将执行 `fork()` 而不执行 `exec()`，则在子进程中避免不必要的写入时拷贝将最大化内存共享并减少总体内存使用。 这需要同时在父进程的内存页中避免创建已释放的“空洞”并确保在子进程中的 GC 回收不会触及源自父进程的长寿对象的 `gc_refs` 计数器。 要同时达成这两个目标，请在父进程中尽早调用 `gc.disable()`，在 `fork()` 之前调用 `gc.freeze()`，并在子进程中尽早调用 `gc.enable()`。
+```python
+class TreeNode:
+    def __init__(self, name):
+        self.name = name
+        self.parent = None
+        self.children = []
 
-版本 3.7 中新增。
+    def add(self, child):
+        child.parent = self
+        self.children.append(child)
+        return child
 
-**gc.unfreeze()**
+root = TreeNode("root")
+root.add(TreeNode("a"))
+del root          # 此时 root 与 a 互相引用，计数都不为 0，但外部已无人可达
+```
 
-解冻永久代中的对象，并将它们放回到年老代中。
+`del root` 之后对象并没有释放——引用计数只能处理单向所有权，处理不了「两个对象互相抬着」。这类情况由 `gc` 判定为**不可达**后回收。
 
-版本 3.7 中新增。
+### 什么时候需要自己 `collect()`
 
-**gc.get\_freeze\_count()**
+大多数时候不需要——GC 有自动阈值。真正需要手写 `gc.collect()` 的场景只有三个：
 
-返回永久代中的对象数量。
+1. **长任务里阶段性释放**：处理完一个大批次，希望立刻把内存还给下一级分配器，而不是等阈值。
+2. **禁用自动 GC 期间的兜底**：见下面的性能小节。
+3. **测试里确认「能不能回收」**：`assert gc.collect() == 0` 是判断循环是否被打破的最省事的断言。
 
-版本 3.7 中新增。
+`gc.collect()` 的返回值就是**本轮发现的不可达对象数**——这个数字非零，说明确实有环被回收；长期非零说明你的代码到处在造环。
 
-提供以下变量仅供只读访问（你可以修改但不应该重绑定它们）：
+### gc 常用接口速查
 
-**gc.garbage**
+| 接口 | 作用 | 实战备注 |
+| --- | --- | --- |
+| `gc.get_count()` | 返回三代各自的计数 `(g0, g1, g2)` | 净增分配数超过 `threshold0` 就触发 0 代回收 |
+| `gc.get_threshold()` | 查看当前阈值 | 文档长期写 `(700, 10, 10)`；3.14 上实测返回 `(2000, 10, 10)`，以本机读数为准 |
+| `gc.set_threshold(a, b, c)` | 调阈值；`a=0` 即关闭自动回收 | 调大 `a` = 少做 GC、多占内存。注意 3.14.0~3.14.4 会忽略 `c`，3.14.5 起恢复生效 |
+| `gc.collect(gen=2)` | 回收 `gen` 及更年轻代，默认全量 | 返回回收掉的不可达对象数 |
+| `gc.disable()` / `gc.enable()` | 关闭/开启自动循环 GC | 引用计数照常工作，所以「关 GC 会泄漏」是误解；关 GC 只让**环**回收不掉 |
+| `gc.isenabled()` | 是否启用 | — |
+| `gc.freeze()`（3.7+） | 把当前所有受追踪对象移进「永久代」，后续回收不再扫描它们 | 官方推荐姿势：父进程早期 `disable()`、fork 前 `freeze()`、子进程早期 `enable()` |
+| `gc.unfreeze()` | 解冻，把永久代对象放回正常代 | — |
+| `gc.get_objects(generation=None)`（3.8 起可传代） | 取受追踪对象列表 | 一次全取会有上百万对象，务必传代参数或换更窄的手段 |
+| `gc.callbacks` | 回调列表，回收前后各调一次 | 用于把 GC 停顿打进监控指标，见下文示例 |
+| `gc.garbage` | 无法回收又无法复活的对象列表 | 正常情况下应始终为空；PEP 442（3.4）后带 `__del__` 的环已能回收 |
+| `gc.get_referrers(*objs)` / `gc.get_referents(*objs)` | 谁引用了它 / 它引用了谁 | 定位泄漏主力工具。官方警告：仅供调试，返回的对象可能仍在构造中；想只拿到活对象，先 `collect()` 再查 |
+| `gc.is_tracked(obj)` | 对象是否被 GC 追踪 | 标量返回 `False`，见下文「只有容器才被追踪」 |
 
-一个回收器发现不可达而又无法被释放的对象（不可回收对象）列表。从 Python 3.4 开始，该列表在大多数时候都应该是空的，除非使用了含有非 `NULL` `tp_del` 空位的 C 扩展类型的实例。
+### 把 GC 停顿打进日志
 
-如果设置了 `DEBUG_SAVEALL`，则所有不可访问对象将被添加至该列表而不会被释放。
+```python
+import gc, logging, time
 
-在 3.2 版本发生变更: 当 interpreter shutdown 即解释器关闭时，若此列表非空，会产生 `ResourceWarning` ，默认情况下此警告是静默的。如果设置了 `DEBUG_UNCOLLECTABLE`，所有无法被回收的对象会被打印。
+log = logging.getLogger(__name__)
+_t = {}
 
-在 3.4 版本发生变更: 根据 [**PEP 442**](https://peps.python.org/pep-0442/)，具有 `__del__()` 方法的对象不会再出现在 `gc.garbage` 中。
+def gc_hook(phase, info):
+    """gc.callbacks 回调：phase 为 "start" 或 "stop"，info 是 dict。"""
+    if phase == "start":
+        _t["t0"] = time.perf_counter()
+    else:
+        cost = (time.perf_counter() - _t.get("t0", 0)) * 1000
+        if cost > 5:      # 只关心 5 ms 以上的停顿
+            log.warning("gc pause %.1fms gen=%s collected=%s uncollectable=%s",
+                        cost, info["generation"], info["collected"],
+                        info["uncollectable"])
 
-**gc.callbacks**
+gc.callbacks.append(gc_hook)
+```
 
-在垃圾回收器开始前和完成后会被调用的一系列回调函数。这些回调函数在被调用时使用两个参数： _phase_ 和 _info_ 。
+`info` 这个 dict 在 3.14 上提供 `generation`、`collected`、`uncollectable` 三个键；`duration` 与 `candidates` 要到 3.15 才有，跨版本代码请用 `info.get("duration")` 读，或像上面这样自己掐表。回调按注册顺序被调用，其内部抛出的异常只会打到 stderr，不会中断回收。
 
-_phase_ 可为以下两值之一：
+早期资料里常见的 `callback(start: bool, stats: dict)` 布尔签名已不可依赖，写 `phase == "start"` 的字符串判断才是当前文档承诺的行为。
 
-> "start": 垃圾回收即将开始。
->
-> "stop": 垃圾回收已结束。
+### 只有容器才被追踪
 
-_info_ 是一个字典，提供了回调函数更多信息。已有定义的键有：
+GC 只追踪「可能持有引用」的类型（`list`、`dict`、`set`、自定义类实例等）。`gc.is_tracked(1)` 是 `False`——整数不是容器；`gc.is_tracked([])` 是 `True`。但有个反直觉优化：**只含非容器元素（且都不含 `__del__`）的 tuple 会被免追踪**：
 
-> "generation"（代）：正在被回收的最久远的一代。
->
-> "collected"（已回收的）：当 _phase_ 为 "stop" 时，被成功回收的对象的数目。
->
-> "uncollectable"（不可回收的）：当 _phase_ 为 "stop" 时，不能被回收并被放入 `garbage` 的对象的数目。
+```python
+import gc
+print(gc.is_tracked((1, 2, 3)))          # False：整个元组免追踪
+print(gc.is_tracked((1, 2, [])))         # True：内部有容器
+```
 
-应用程序可以把自己的回调函数加入此列表。主要的使用场景有：
+这个特性对海量记录处理有实际意义：**用 tuple 装一行数据比用 dict 少一份 GC 负担**。同理 `__slots__` 的类若字段全是标量，实例也更容易被优化掉。
 
-> 统计垃圾回收的数据，如：不同代的回收频率、回收所花费的时间。
->
-> 使应用程序可以识别和清理自身在 `garbage` 中的不可回收类型的对象。
+## 四、弱引用：把「不该拥有」的引用改成不计数
 
-版本 3.3 中新增。
+弱引用是**不增加引用计数**的引用，用来打断「我只是为了记住它，却把它钉在内存里」的关系。
 
-以下常量被用于 `set_debug()`：
+| 类型 | 用法 | 特点 | 典型场景 |
+| --- | --- | --- | --- |
+| `weakref.ref(obj[, cb])`（别名 `weakref`） | `r = ref(obj)`；取对象要 `r()`，已回收返回 `None` | 可作 dict 键；可哈希 | 观察者列表、缓存槽 |
+| `weakref.proxy(obj[, cb])` | `p = proxy(obj)`；像直接用对象一样 | 对象死了访问抛 `ReferenceError`；**不能**作 dict 键 | 透明代理、避免测试里对象被 fixture 钉住 |
+| `weakref.WeakKeyDictionary` | 键是弱引用 | 键对象死亡自动剔除 | 以对象为键挂额外数据（不污染对象本身） |
+| `weakref.WeakValueDictionary` | 值是弱引用 | 值死亡自动剔除 | 享元/对象池缓存 |
+| `weakref.WeakSet` | 元素是弱引用 | 同上 | 追踪存活实例数（本文第二节的 `refs_of` 就有它的轻量替代） |
+| `weakref.WeakMethod(m)` | 绑定的实例方法 | 实例死亡即失效 | 事件总线注册回调 |
+| `weakref.finalize(obj, func, *a, **k)` | 对象被回收时调用 `func` | 比 `__del__` 可靠，解释器退出时也会执行 | 关闭句柄、归还连接 |
 
-**gc.DEBUG\_STATS**
+哪些对象不能弱引用？`list`、`dict`、`set`、`frozenset`、`tuple`、`str`、`bytes`、`int`、`float`、`complex` 这些内置类型直接 `ref()` 会抛 `TypeError`。两条出路：① 写个薄子类 `class TrackedList(list): pass`——子类实例默认带 `__dict__` 和 `__weakref__`，可以弱引用；② 别弱引用容器本身，改为把容器放进一个自定义对象里再引用那个对象。反过来，带 `__slots__` 却没列出 `"__weakref__"` 的类同样不可弱引用——这正好和《dataclasses 与 NamedTuple》里 `weakref_slot=True` 的用途呼应。
 
-在回收期间打印统计信息。在调整回收频率时，这些信息会比较有用。
+### 用法一：观察者列表不再阻止回收
 
-**gc.DEBUG\_COLLECTABLE**
+```python
+import weakref
 
-当发现可回收对象时打印信息。
+class Bus:
+    def __init__(self):
+        self._subs = weakref.WeakKeyDictionary()   # 弱键：订阅者死了自动消失
 
-**gc.DEBUG\_UNCOLLECTABLE**
+    def subscribe(self, obj, handler):
+        self._subs[obj] = handler
 
-打印找到的不可回收对象的信息（指不能被回收器回收的不可达对象）。这些对象会被添加到 `garbage` 列表中。
+    def publish(self, event):
+        for obj, handler in list(self._subs.items()):
+            handler(obj, event)
 
-在 3.2 版本发生变更: 当 interpreter shutdown 时，即解释器关闭时，若 `garbage` 列表中存在对象，这些对象也会被打印输出。
 
-**gc.DEBUG\_SAVEALL**
+class Listener:
+    def on_event(self, owner, event):
+        print(f"{owner.name} 收到 {event}")
 
-设置后，所有回收器找到的不可达对象会被添加进 _garbage_ 而不是直接被释放。这在调试一个内存泄漏的程序时会很有用。
+    name = "listener"
 
-**gc.DEBUG\_LEAK**
 
-调试内存泄漏的程序时，使回收器打印信息的调试标识位。（等价于 `DEBUG_COLLECTABLE | DEBUG_UNCOLLECTABLE | DEBUG_SAVEALL`).
+bus = Bus()
+li = Listener()
+bus.subscribe(li, Listener.on_event)
+print(len(bus._subs))      # 1
+del li
+print(len(bus._subs))      # 0 —— Bus 没有把 Listener 钉住
+```
+
+如果用普通 `dict`，`Bus` 就强引用了所有订阅者，这是 GUI/事件框架里最经典的一类泄漏。
+
+### 用法二：用 finalize 替代 `__del__`
+
+```python
+import weakref
+
+class Resource:
+    def __init__(self, name):
+        self.name = name
+        # 注意：回调里绝不能引用 self，否则又把对象救活了
+        self._finalizer = weakref.finalize(
+            self, print, f"[close] {name} 释放")
+
+    def close(self):
+        self._finalizer()          # 显式关闭；重复调用不会二次触发
+
+
+r = Resource("db")
+r.close()                          # [close] db 释放
+del r                              # 不再有输出
+```
+
+`__del__` 的三个不可靠之处：析构顺序不确定、异常被吞掉只打印到 stderr、和循环引用一起出现时历史上曾完全无法回收（3.4 起 PEP 442 已能回收，但顺序仍不可指望）。需要「确定性地释放外部资源」，用**上下文管理器**（见《上下文管理器：contextlib 完全指南》）；兜底才用 `finalize`。
+
+## 五、定位内存到底被谁吃了
+
+### sys.getsizeof 的三层局限
+
+```python
+import sys
+print(sys.getsizeof({}))              # 64：空 dict 骨架
+print(sys.getsizeof({"k": 1}))        # 184（CPython 3.14 实测值）
+print(sys.getsizeof([1, 2, 3]))       # 88 —— 只算外层列表
+```
+
+局限：① 只测**浅层**大小，容器里的元素另算；② 不同实现/版本数字不同，别把它当业务指标；③ 共享对象（intern 后的字符串、小整数）会重复计入。要测深大小，自己写递归（用 `id` 集合去重，或用 `pympler.asizeof`）。
+
+### tracemalloc：官方主力工具
+
+`tracemalloc` 记录**每一次 Python 内存分配发生在哪个文件哪一行**，是定位泄漏最快的路。
+
+```bash
+# 方式一：启动时就开启，记录 5 层调用栈（-n 越大越准、越慢）
+python -X tracemalloc=5 myapp.py
+
+# 方式二：代码里按需开启
+python -c "import tracemalloc; tracemalloc.start(10)"
+```
+
+```python
+import tracemalloc
+
+tracemalloc.start(10)                       # 保留 10 层归属栈帧
+
+snapshot1 = tracemalloc.take_snapshot()
+big = [bytearray(1024) for _ in range(5000)]   # 模拟一次内存增长
+snapshot2 = tracemalloc.take_snapshot()
+
+# 1) 按「文件名+行号」看增长最多的 5 处
+for stat in snapshot2.compare_to(snapshot1, "lineno")[:5]:
+    print(stat)
+
+# 2) 看某个文件当前分配的总量与条数
+top = snapshot2.statistics("filename")
+print(top[0])
+
+# 3) 打印某行的完整调用栈
+stat = snapshot2.compare_to(snapshot1, "traceback")[0]
+for line in stat.traceback.format():
+    print(line)
+```
+
+`compare_to()` / `statistics()` 的聚合维度 `key_type` **只接受三个值**（传别的会 `ValueError: unknown key_type`）：
+
+| `key_type` | 聚合维度 | 什么时候用 |
+| --- | --- | --- |
+| `"filename"` | 按文件 | 先看是哪个模块在长；噪声最小 |
+| `"lineno"` | 按文件 + 行号 | 定位到具体分配语句，最常用 |
+| `"traceback"` | 按完整调用栈 | 同一行被多处调用、要区分调用来源；结果条数最多 |
+
+两点补充：`cumulative=True` 只能配合 `"filename"` 或 `"lineno"` 使用（表示把整条栈上的分配都算到最外层）；返回的元素是 `Statistic`（有 `size`/`count`/`traceback`）或 `StatisticDiff`（有 `size_diff`/`count_diff`/`size`/`count`），已按 `size` 从大到小排好序。
+
+配合 `StatisticDiff.size_diff` / `count_diff` 写断言，可以把它做成回归测试：
+
+```python
+import tracemalloc
+
+tracemalloc.start()
+snapshot1 = tracemalloc.take_snapshot()
+junk = [bytearray(2048) for _ in range(300)]      # 被测代码
+snapshot2 = tracemalloc.take_snapshot()
+
+diff = snapshot2.compare_to(snapshot1, "lineno")
+grow = sum(s.size_diff for s in diff if s.size_diff > 0)
+assert grow < 5_000_000, f"内存增长 {grow / 1e6:.1f}MB 超过阈值"
+print("增长在预算内", grow)
+del junk
+```
+
+两个限制：`tracemalloc` 只跟踪 **Python 层**分配（C 扩展里 `malloc` 的看不到，NumPy 大数组常常看不见！），且有明显性能开销，生产上按需短时开启。C 扩展占用的排查交给 `memray attach` 或 `py-spy`（见《性能分析：profile/cProfile 与 py-spy》）。
+
+### 谁持有了这个对象：get_referrers
+
+```python
+import gc, reprlib
+
+victim = big[0]
+for ref in gc.get_referrers(victim):
+    # 只看容器和帧对象，避免把本次循环的局部变量打印出来
+    if isinstance(ref, dict) and "__name__" in ref:
+        print("module:", ref["__name__"])
+    elif type(ref).__name__ == "frame":
+        print("frame:", ref.f_code.co_filename, ref.f_lineno)
+    else:
+        print(reprlib.repr(ref)[:120])
+```
+
+输出里最常看到三类「凶手」：模块级 dict/list（全局缓存）、`frame`（被异常 traceback 或正在运行的协程持有）、`cell`（闭包）。
+
+## 六、常见泄漏模式与对策
+
+| 模式 | 症状 | 怎么验证 | 修法 |
+| --- | --- | --- | --- |
+| 模块级缓存无界增长（`CACHE[key] = embedding`） | RSS 单调上升，`get_referrers` 指向某个 module dict | `len(CACHE)` 打点，或 gc 回调里输出对象数 | `functools.lru_cache(maxsize=…)`、`WeakValueDictionary`，或自己加 TTL 淘汰 |
+| `lru_cache` / `cached_property` 装饰实例方法 | 实例永不释放（缓存字典挂在类上并强引用 `self`） | 类计数用 `WeakSet` 观察存活实例数 | 缓存 key 用显式 `id`/字段元组；改 `WeakKeyDictionary`；或降级为普通属性 |
+| 事件监听器 / 回调只注册不注销 | 注册表越来越大，被监听对象无法回收 | 打印订阅表 `len()` | 用 `WeakKeyDictionary`/`WeakMethod`（上文示例），或提供 `unsubscribe` 并在上下文管理器 `finally` 中调用 |
+| 闭包/lambda 捕获大对象 | 返回的小函数带着整个外层作用域 | `fn.__closure__` 逐个 cell 检查 `cell_contents` | 只捕获需要的字段而不是整个对象；用完置 `None` |
+| 异常 traceback 持有帧局部变量 | 循环里 `except Exception as e: log(e)` 之后大对象仍在 | `gc.get_referrers` 出现 `frame`/`TracebackType` | 记录完就 `del e`（`__traceback__` 会随异常变量一起释放）；Python 3 里 `except ... as e` 在块尾自动删，但**把 `e` 存进全局就会泄漏** |
+| 循环引用 + `__del__` | 对象要等到全量 GC 才消失，甚至长期滞留 | `gc.collect()` 返回值、`len(gc.garbage)` | 拆环（父指向子改为弱引用 `WeakMethod`/`ref`），或改用 `weakref.finalize` |
+| `threading.local` 缓存请求上下文 | 线程池复用线程，数据永不清理 | 遍历线程本地字典统计条目 | 请求结束显式 `.reset()`/清空；不要往 thread-local 里放大对象 |
+| asyncio 任务被全局集合持有 | `asyncio.create_task()` 的结果存进 set 却从不 discard | tracemalloc 里 `Task`/`TimerHandle` 数量异常 | 用 `TaskGroup`（见《asyncio 并发限流与重试范式》）或 `add_done_callback(task_set.discard)` |
+| DataFrame/数组切片是视图 | 想留 3 列却留住了整张底表 | `df._mgr` 指向的大块内存 | 立刻 `.copy()` 或用 `df.query()` 后立即 `del` 原表 |
+| 日志 handler 反复 `addHandler` | 每次初始化 logger 都多一个 handler，输出翻倍且句柄泄漏 | `logging.getLogger(...).handlers` 长度 | 只在入口 `basicConfig`/`dictConfig` 一次；用 `logger.propagate` 而非重复挂 handler |
+| `atexit` / 全局单例开了不关 | 进程退出时资源才释放，长驻服务里等同泄漏 | `finalize` 注册数量 | 用上下文管理器包住生命周期（见《上下文管理器：contextlib 完全指南》） |
+
+## 七、GC 与性能：什么时候真该动它
+
+批处理脚本里最常见的一个提速手段，前提是**你确认程序不造环**：
+
+```python
+import gc
+
+def process(batch):
+    return len(batch)        # 你的批处理逻辑；确认内部不制造循环引用
+
+gc.disable()                    # 关掉自动循环 GC
+try:
+    for batch in range(20):     # 每批生成百万级短命小对象
+        data = [{"i": i, "s": str(i)} for i in range(batch * 50_000)]
+        process(data)
+finally:
+    gc.enable()
+    collected = gc.collect()    # 兜底：把关窗期间攒下的环收掉
+    print("补收不可达对象", collected)
+```
+
+收益来自避免「对象总数巨大时 0 代回收也要扫很多」。风险是环不回收了——所以上面的 `finally` 之外还要定期 `gc.collect()` 兜底，并用 tracemalloc 验证峰值。
+
+多进程（`multiprocessing` / `ProcessPoolExecutor`）用 fork 启动时，官方给出的组合姿势是：**父进程早期 `gc.disable()` → 每次 `fork()` 之前 `gc.freeze()` → 子进程早期 `gc.enable()`**。这样子进程的回收不会去碰父进程传来的长命对象的 `gc_refs` 计数，既避免复制页、又降低长驻 worker 的 GC 停顿。
+
+判断「是否 GC 拖慢」的量化手段就是第三节那段 `gc.callbacks` 打点：正常服务里 GC 停顿占比应在千分位；若超过 1%~2%，先减少活对象数（真正的解法），再考虑调阈值。
+
+## 八、一分钟自检清单
+
+1. `python -X tracemalloc=5` 跑两个业务周期，比较 snapshot —— 增长是不是集中在同几行？
+2. 对可疑对象 `gc.get_referrers()` —— 凶手是 module dict、frame 还是 cell？
+3. `gc.collect()` 返回值长期 > 0？说明代码到处造环，去拆环而不是加 `collect()`。
+4. `len(gc.garbage)` 应该恒为 0；不为 0 表示有 3.4 前语义的东西在堵（通常是 C 扩展对象）。
+5. 类实例数用 `WeakSet` 打点：`live = WeakSet(); live.add(obj)`，看长度是否随请求数单调上升。
 
 ---
 
-> **来源**：本文由 Python 官方文档三部分组成并完整翻译：① [引用计数](https://docs.python.org/zh-cn/3/c-api/refcounting.html)（C API 参考手册）；② [在 C API 中扩展和嵌入 Python —— 对象、类型和引用计数](https://docs.python.org/zh-cn/3/c-api/intro.html#objects-types-and-reference-counts) 一节；③ [gc —— 垃圾回收器接口](https://docs.python.org/zh-cn/3/library/gc.html)。作者 Python 软件基金会（PSF），许可 PSF 许可证第 2 版。抓取于 2026-09-13（Python 3.14 官方文档）。
+> **来源**：抓取于 2026-09-19。弱引用各类型与 `finalize` 语义译自 [weakref —— 非强引用对象](https://docs.python.org/zh-cn/3/library/weakref.html)（Python Software Foundation，PSF 许可证第 2 版）；分代回收、`gc.freeze()`、回调签名等接口说明译自 [gc —— 垃圾回收器接口](https://docs.python.org/zh-cn/3/library/gc.html)（作者与许可同上，Python 3.14）；`tracemalloc` 用法与 `key_type` 取值译自 [tracemalloc —— 用来跟踪 Python 内存分配的模块](https://docs.python.org/zh-cn/3/library/tracemalloc.html)（作者与许可同上）；`sys.getrefcount` 与 immortal object 说明另见 [sys](https://docs.python.org/zh-cn/3/library/sys.html) 与 [引用计数（C-API 手册）](https://docs.python.org/zh-cn/3/c-api/refcounting.html)（作者与许可同上）。本文全部示例、机制对照表、泄漏模式清单与排查步骤为本站编写；原 C-API 手册中 `Py_INCREF()` 等 C 层细节仅一句带过，需要写扩展的读者请直接阅读上述 C-API 原文。

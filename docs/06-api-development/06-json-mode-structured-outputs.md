@@ -5,7 +5,7 @@ author: OpenAI Cookbook（Introduction to Structured Outputs）、OpenAI（opena
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版；gpt-4o-2024-08-06 起支持 Structured Outputs，现行模型均可用
+versions: openai-python 2026-09 最新稳定版；Structured Outputs 自 gpt-4o-2024-08-06 起支持，现行模型均可用
 order: 6
 group: 工具与输出契约
 ---
@@ -32,7 +32,7 @@ from textwrap import dedent
 from openai import OpenAI
 client = OpenAI()
 
-MODEL = "gpt-4o-2024-08-06"  # gpt-4o-2024-08-06 起支持；现行模型均可
+MODEL = "gpt-5.5"  # 自 gpt-4o-2024-08-06 起支持，现行模型均可
 
 math_tutor_prompt = '''
     You are a helpful math tutor. You will be provided with a math problem,
@@ -120,7 +120,7 @@ def get_math_solution(question: str):
     completion = client.chat.completions.parse(
         model=MODEL,
         messages=[
-            {"role": "system", "content": dedent(math_tutor_prompt)},
+            {"role": "developer", "content": dedent(math_tutor_prompt)},
             {"role": "user", "content": question},
         ],
         response_format=MathReasoning,
@@ -139,22 +139,28 @@ SDK 文档说明的 `parse` 两个额外限制：
 - 若生成以 `finish_reason: length` 或 `content_filter` 结束，会抛出 `LengthFinishReasonError` / `ContentFilterFinishReasonError`；
 - 只接受严格（strict）函数工具。
 
-**Responses API 的对应写法**：JSON Mode 用 `text={"format": {"type": "json_object"}}`（openai-python README 的 Nested params 示例）：
+**Responses API 的对应写法**（现行主线）。JSON Mode 用 `text={"format": {"type": "json_object"}}`：
 
 ```python
 response = client.responses.create(
-    input=[
-        {
-            "role": "user",
-            "content": "How much ?",
-        }
-    ],
     model="gpt-5.5",
+    input=[{"role": "user", "content": "How much ?"}],
     text={"format": {"type": "json_object"}},
 )
 ```
 
-> 编者注：Responses API 同样提供 `client.responses.parse` 助手与 `text.format` 的 json_schema 选项，概念与 Chat Completions 一致；上述 `text={"format": ...}` 形式为 SDK README 原文示例。
+更强的写法是 `client.responses.parse`：同样吃 Pydantic 模型，产物直接落在 `response.output_parsed` 上，取文本仍可用 `output_text`：
+
+```python
+response = client.responses.parse(
+    model="gpt-5.5",
+    input=[{"role": "user", "content": "Give me a recipe for a chocolate pie."}],
+    text_format=Recipe,          # 与 Chat Completions 的 response_format 对应
+)
+print(response.output_parsed)    # 强类型对象
+```
+
+两侧的 `beta` 前缀都已消失：`client.chat.completions.parse` / `client.responses.parse` 是正式 API（历史 notebook 里仍能见到 `client.beta.chat.completions.parse`，属旧写法）。Structured Outputs 的能力范围是 **Chat Completions 与 Responses API 双支持**——旧文档所说的 "Chat Completions API and Assistants API" 已作废，Assistants API 整体废弃。
 
 ## 四、拒绝（Refusal）的处理
 
@@ -212,7 +218,7 @@ def get_article_summary(text: str):
         model=MODEL,
         temperature=0.2,
         messages=[
-            {"role": "system", "content": dedent(summarization_prompt)},
+            {"role": "developer", "content": dedent(summarization_prompt)},
             {"role": "user", "content": text}
         ],
         response_format=ArticleSummary,
@@ -299,4 +305,3 @@ def get_response(user_input, context):
 ---
 
 > **来源**：本文翻译自 [Introduction to Structured Outputs](https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Structured_Outputs_Intro.ipynb)（OpenAI Cookbook，MIT）与 [openai-python · Structured Outputs Parsing Helpers](https://raw.githubusercontent.com/openai/openai-python/main/helpers.md)（Apache 2.0），作者 OpenAI，许可 MIT / Apache 2.0。抓取于 2026-09-13。
-> 编者注：原文称 Structured Outputs 可用于 "Chat Completions API and Assistants API"——Assistants API 已废弃，现行为 **Chat Completions 与 Responses API 双支持**；Responses API 中同样的能力通过 `text.format` 参数（或 SDK `parse` 助手）使用。原文的 `client.beta.chat.completions.parse` 已转为正式 API `client.chat.completions.parse`（beta 前缀移除）。

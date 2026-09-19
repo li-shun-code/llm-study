@@ -1,7 +1,7 @@
 ---
 title: Git 进阶：rebase、cherry-pick 与冲突解决
 source_url: https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection
-author: Scott Chacon、Ben Straub（Pro Git 2nd Edition：7.1 Revision Selection、3.6 Rebasing、7.8 Advanced Merging、5.1 Distributed Workflows、5.3 Maintaining a Project 章节）
+author: Scott Chacon、Ben Straub（Pro Git 2nd Edition：7.1 Revision Selection、3.6 Rebasing、Git Tools Rewriting History、7.8 Advanced Merging、5.1 Distributed Workflows、5.3 Maintaining a Project 章节）
 license: CC BY-NC-SA 3.0
 fetched_at: 2026-09-13
 translated: true
@@ -70,7 +70,7 @@ a11bef0 Initial commit
 > 如果你真提交了一个与库中已有对象哈希相同的对象，Git 会看到数据库里已有它，认为早就写过，直接复用；之后再检出该对象时，你拿到的永远是第一个对象的数据。
 > 但你应当意识到这有多不可能：SHA-1 摘要长 20 字节（160 位），要让一次碰撞的概率达到 50%，需要约 2^80 个随机哈希的对象（碰撞概率公式 p = (n(n-1)/2) * (1/2^160)）。2^80 是 1.2×10^24——一百万亿亿，相当于地球全部沙粒数量的 1200 倍。
 > 举个例子感受一下：让全球 65 亿人都来编程，每一秒每个人都产出相当于整个 Linux 内核历史（650 万个 Git 对象）的代码并推进同一个巨大仓库，也要大约 2 年，这个仓库才有 50% 的概率出现一次 SHA-1 对象碰撞。因此，自然发生的 SHA-1 碰撞，比你全组程序员在同一晚被狼群在互不相关的事故中袭击致死还不可能。
-> 不过，花几千美元的算力确实可以人工合成两个同哈希的文件（2017 年 2 月的 https://shattered.io/ 已证明）。Git 正在转向以 SHA256 作为默认哈希算法——它对碰撞攻击的抵抗力强得多，并且已有代码帮助缓解此类攻击（虽然不能完全消除）。
+> 不过，花几千美元的算力确实可以人工合成两个同哈希的文件（2017 年 2 月的 https://shattered.io/ 已证明）。**（编者注：本段末尾"Git 正在转向以 SHA-256 作为默认哈希算法"是 Pro Git 成书时的判断，至今并未成立）**——按 git-init(1) 现在的说明，`--object-format` 的合法值是 `sha1` 与（需编译时启用）`sha256`，且 **`sha1` 仍是默认**，SHA-256 仓库与 SHA-1 仓库之间**不互通**，GitHub/GitLab 等主流托管平台也不接受 SHA-256 仓库，因此这场迁移长期停在"实验性"阶段。真正落地的是另一批防御：Git 自带**碰撞检测**的 SHA-1 实现（合成碰撞会被识别并报错）、`fsck.*` 与 `transfer.fsckObjects`/`receive.fsckObjects`（服务端拒绝可疑对象）、以及 2024 年起推进的 **reftable 引用存储**（`git init --ref-format=reftable`）——后者是为大仓库扩展性做的格式升级，与哈希替换是两件事。哈希替换的后续讨论如今主要围绕"混合格式（hash shelling）"与后量子签名，而非改默认值。
 
 ### 分支引用
 
@@ -362,6 +362,131 @@ $ git merge server
 $ git branch -d client
 $ git branch -d server
 ```
+
+### 交互式变基与改写历史（rebase -i）
+
+上面几种变基都是"把整条分支搬走"。日常更高频的需求是**整理自己的提交**：把 "fix typo"、"WIP"、"改回来了吗" 这类噪声提交压成几个能讲清楚的提交。干这事的工具是 `git rebase -i`（interactively），下面按 Pro Git《Git Tools — Rewriting History》一节的顺序走一遍，命令都可以直接照做。
+
+**先建立一条纪律**：以下所有操作都只适用于**还没被别人拉走的提交**（见下一节"变基的风险"）。动手前先给自己留退路：
+
+```bash
+git branch backup/before-rebase        # 一行成本，随时可回
+git rebase -i main                     # 出错时：git rebase --abort 直接放弃
+```
+
+#### 改写最近一个提交：`--amend`
+
+最简单的改写不需要 rebase。提交说明写错了、忘了 `git add` 某个文件、忘了加某个 co-author：
+
+```bash
+$ git commit --amend -m "fix: 修正重试次数未按指数退避的问题"
+$ git add forgotten_file.c && git commit --amend --no-edit
+```
+
+`--amend` 生成的是**一个全新提交**（父提交相同、快照可能相同，但 SHA 变了）。只要它还没推到远端或被别人拉走，这就是最安全的整理手段；已经推出去了就要 `git push --force-with-lease`（见下文）。
+
+#### 交互式变基的待办清单
+
+```bash
+$ git rebase -i HEAD~4
+```
+
+Git 会把这 4 个提交（**由旧到新**排列）写进临时文件，形如：
+
+```text
+pick a1b2c3d 新增订单状态机
+pick d4e5f6a 修一下编译错误
+pick 7f8a9b0 WIP 加日志
+pick c0d1e2f 回滚那条日志
+
+# 命令:
+# p, pick   = 使用本提交
+# r, reword = 使用本提交，但改写提交说明
+# e, edit   = 使用本提交，然后暂停以便修点什么
+# s, squash = 使用本提交，但折叠进上一个提交
+# f, fixup  = 同 squash，但丢弃本提交的说明
+# d, drop   = 丢弃这个提交
+#
+# 用行顺序决定提交顺序；对同一行可写多个命令，如 "fixup <SHA>"。
+# 以 # 开头的行会被忽略；exec <cmd> 或 x <cmd> 会在当前位置执行 shell 命令。
+```
+
+几件立刻有用的事：
+
+- **删掉一个提交**：把 `pick` 改成 `drop`（或直接删掉那一行）。历史上从未有过的东西被彻底抹去——不是 `git revert`，没有"撤销提交"留下来。
+- **改写提交说明**：改成 `reword`，Git 停在那一步弹出编辑器；只改文案、不动快照，是最安全的操作。
+- **压缩提交**：把 `d0e1f2a WIP 加日志` 与 `c0d1e2f 回滚那条日志` 合成一个干净提交——第一行保持 `pick`，后续行改成 `squash`（保留两条说明并让你合并）或 `fixup`（只留第一条）。**顺序很重要**：`squash` 会把本提交并进**它上面那一行**。
+- **顺手跑测试**：用 `exec` 行在任意位置插入命令，例如在压缩完之后：
+
+```text
+pick a1b2c3d 新增订单状态机
+fixup d4e5f6a 修一下编译错误
+exec mvn -q -DskipTests=false test
+drop  7f8a9b0 WIP 加日志
+```
+
+#### 拆提交与改内容：`edit`
+
+把"一个塞了五件事的大提交"拆开，靠 `edit` + `git reset HEAD^`：
+
+```bash
+$ git rebase -i HEAD~3      # 把要拆的那一行改成 edit
+$ git reset HEAD^           # 撤销暂存区：HEAD 回退一提交，工作区文件一个不少
+$ git add -p src/order.py   # 交互式逐块挑选，只把"状态机"这部分放进第一个提交
+$ git commit -m "feat: 新增订单状态机"
+$ git add src/logging.py && git commit -m "chore: 补充状态迁移日志"
+$ git rebase --continue
+```
+
+`git reset HEAD^`（等价 `--mixed`）是这里的关键招：**它只清暂存区，不动工作区**，于是你可以在同一份改动上重新切分提交。同理，想在旧提交里改几行代码，也是 `edit` → 改 → `git add` → `git commit --amend` → `git rebase --continue`。
+
+#### 自动压缩：`--autosquash` 与 `--fixup`
+
+与其事后手工挑行，不如在写"补丁提交"时就打好标记：
+
+```bash
+$ git commit --fixup=a1b2c3d        # 提交说明自动写成 "fixup! 原提交说明"
+$ git commit --squash=a1b2c3d       # "squash! ..."，说明会被合并进最终提交
+$ git rebase -i --autosquash main   # 清单里自动把 fixup!/squash! 排到目标提交下面
+```
+
+想让它成为默认，把 `rebase.autoSquash=true` 加进配置（`git config --global rebase.autoSquash true`），此后交互式变基自动带 `--autosquash`，仍可用 `--no-autosquash` 临时关掉。这套习惯能让"提 PR 前压缩提交"变成一条命令。
+
+#### 冲突、失败与后悔药
+
+- **压缩或换序时冲突了**：正常解决冲突 → `git add` → `git rebase --continue`；不想继续就 `git rebase --abort`，一切回到清单打开之前。
+- **换序几乎必然带来冲突**：把后面的提交挪到前面，可能改掉了后面的提交所依赖的行。经验法则：**只在相邻提交之间换序**。
+- **改砸了**（比如不小心 `drop` 了不该 drop 的）：只要没被 `gc` 回收，原提交还在对象库里，`git reflog` 找回来：
+
+```bash
+$ git reflog                     # 每行形如：1c36188 HEAD@{3}: rebase (finish): refs/heads/topic
+$ git reset --hard HEAD@{3}      # 回到那次变基之前的状态
+$ git reset --hard backup/before-rebase   # 或直接回到你自己打的备份分支
+```
+
+`reflog` 默认保留 90 天（可达的）与 30 天（不可达的）记录，别把这条退路当无限期保险。
+
+#### 压平整条分支：核选项
+
+有时你只想要"这一整个特性 = 一个提交"（例如长期分支合回主干前）：
+
+```bash
+$ git reset --soft $(git merge-base main HEAD)   # HEAD 回到分叉点，改动全部留在暂存区
+$ git commit -m "feat: 订单状态机（含迁移脚本与测试）"
+```
+
+`--soft` 保住暂存区，因此一次提交就能收下整个分支的成果。
+
+#### 推到远端：永远用 `--force-with-lease`
+
+改写历史后必须强推，但 `git push -f` 会**无条件覆盖**远端——如果同事在你变基期间往同一分支推了新提交，那些提交就被你抹了。用带前置检查的等价形式：
+
+```bash
+$ git push --force-with-lease           # 远端 ref 仍等于我本地记录的值才允许覆盖
+$ git push --force-with-lease=topic:$(git rev-parse origin/topic)   # 显式指定期望值
+```
+
+在团队里再配一条约定：**共享分支（`main`、长期集成分支）永不改写**；要整理，就在自己的特性分支上做完再合并。这条约定和 `git rebase -i` 一样重要——前者决定后者能不能安全使用。
 
 ### 变基的风险
 
@@ -1152,4 +1277,4 @@ $ git config --global rerere.enabled true
 
 ---
 
-> **来源**：本文翻译自《Pro Git》第 2 版（[git-scm.com/book/en/v2](https://git-scm.com/book/en/v2)）多个章节的合并译文：[7.1 Git Tools - Revision Selection](https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection)、[3.6 Git Branching - Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)、[7.8 Git Tools - Advanced Merging](https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging)、[5.1 Distributed Git - Distributed Workflows](https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows) 与 [5.3 Distributed Git - Maintaining a Project](https://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project)（cherry-pick、rerere 小节），作者 Scott Chacon、Ben Straub，许可 CC BY-NC-SA 3.0。抓取于 2026-09-13。
+> **来源**：本文翻译自《Pro Git》第 2 版（[git-scm.com/book/en/v2](https://git-scm.com/book/en/v2)）多个章节的合并译文：[7.1 Git Tools - Revision Selection](https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection)、[3.6 Git Branching - Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)、[Git Tools - Rewriting History](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History)（"交互式变基与改写历史"一节：`--amend`、`rebase -i` 待办清单、`edit`/`squash`/`fixup`/`drop`、`--autosquash`、拆分与合并提交、`reflog` 找回）、[7.8 Git Tools - Advanced Merging](https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging)、[5.1 Distributed Git - Distributed Workflows](https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows) 与 [5.3 Distributed Git - Maintaining a Project](https://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project)（cherry-pick、rerere 小节），作者 Scott Chacon、Ben Straub，许可 CC BY-NC-SA 3.0。`rebase.autoSquash`、`--force-with-lease`、`git init --object-format`/`--ref-format` 的现状与"SHA-1 仍是默认哈希"的判断另据 [git-config(1)](https://git-scm.com/docs/git-config)、[git-init(1)](https://git-scm.com/docs/git-init) 与 [git-push(1)](https://git-scm.com/docs/git-push) 手册页核实（GPL-2.0-with-GCC-exception）。抓取于 2026-09-13，2026-09-19 复核时效并按需补注。

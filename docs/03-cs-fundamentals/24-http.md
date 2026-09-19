@@ -175,8 +175,90 @@ Content-Type: text/html
 
 HTTP 是易用且可扩展的协议。客户端-服务器结构加上添加头部的能力，让 HTTP 得以伴随 Web 能力的扩展一路前行。虽然 HTTP/2 为提升性能把消息嵌入帧、增加了一些复杂性，但消息的基本结构自 HTTP/1.0 以来保持不变；会话流程依旧基础，使它可以被 HTTP 网络监视器直接观察与调试。
 
+
+## 实操：用 curl -v 读一次请求与响应
+
+HTTP 是最"可观测"的协议：一条 `curl -v` 就能看到正文讲的每一层——解析、连接、TLS、请求行、首部、状态行。`-v` 的输出走 **stderr**，所以要 `2>&1` 或 `--trace-ascii -` 才会与响应体混在一个流里。
+
+```bash
+curl -v https://api.github.com/zen
+```
+
+```text
+* Host api.github.com:443 was resolved.
+* IPv4: 140.82.112.6                        ← DNS 完成（对应《DNS》）
+*   Trying 140.82.112.6:443...
+* Connected to api.github.com (…) port 443  ← TCP 三次握手完成
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384   ← 对应《HTTPS 与 TLS》
+* using HTTP/2                              ← ALPN 协商出的版本
+> GET /zen HTTP/2                           ← “>” 是我们发出的请求行
+> Host: api.github.com
+> user-agent: curl/8.x.y
+> accept: */*
+< HTTP/2 200                                ← “<” 是服务器回的：状态行
+< content-type: text/plain; charset=utf-8
+< cache-control: public, max-age=60, private=…
+< x-ratelimit-remaining: 59
+< date: Sat, 19 Sep 2026 04:12:03 GMT
+* Connection #0 to host api.github.com left intact
+```
+
+三个习惯让 `-v` 更有用：
+
+1. **只看头，不要体**：`curl -sS -I https://example.com`（HEAD，注意它没有响应体，也不代表 GET 的行为）或 `curl -sS -D - -o /dev/null https://example.com`。
+2. **看时间线**：`-w` 模板能精确分出"慢在哪一层"，是排查 LLM API 首字延迟的第一步：
+
+```bash
+curl -o /dev/null -sS -w 'dns %{time_namelookup}s  tcp %{time_connect}s  tls %{time_appconnect}s  ttfb %{time_starttransfer}s  total %{time_total}s  http %{http_code}
+' https://example.com
+```
+
+`t0→time_connect` 是 DNS+握手，`→time_appconnect` 是 TLS，`→time_starttransfer` 就是"服务端处理 + 网络"，也就是俗称的 TTFB。
+
+3. **绕过 DNS 直指某个 IP**：`curl -v --resolve api.example.com:443:10.0.0.7 https://api.example.com/v1/models`（证书校验仍按域名走，等价于在 `/etc/hosts` 里加一行但不改系统）；要顺带验证 CDN 分节点，这招比 `dig` 更直接。
+
+### 常用开关与流式输出
+
+```bash
+curl -sS https://example.com                          # -s 静音进度、-S 仍报错：脚本里的正确组合
+curl -iL https://short.url                            # -i 带头输出，-L 跟随 3xx（不带 -L 只会看到 301 + Location）
+curl --compressed -o out.json https://example.com/big # 不加 --compressed 时Accept-Encoding没给，gzip响应会打成乱码
+curl -H 'Accept: application/json' -d @body.json -X POST https://example.com/api
+curl --max-time 20 --retry 3 --retry-all-errors https://example.com   # 超时与重试预算
+curl -x http://127.0.0.1:8080 https://example.com     # 走调试代理（mitmproxy/Fiddler/Charles）
+curl -v https://self-signed.badssl.com               # 复现证书错误，见下
+```
+
+流式（`text/event-stream`，本站《SSE 与 WebSocket》与 LLM 场景的主场）必须加 **`-N`（`--no-buffer`）**，否则 curl 会把输出攒在缓冲里，你看到的是"一次性吐完"，误判为服务端没在流：
+
+```bash
+curl -N -sS https://api.example.com/v1/chat/completions \
+  -H 'content-type: application/json' \
+  -H "authorization: Bearer $OPENAI_API_KEY" \
+  -d '{"model":"gpt-5.4-mini","messages":[{"role":"user","content":"讲个冷笑话"}],"stream":true,"max_completion_tokens":128}' \
+  | sed -n 's/^data: //p' | head -20
+```
+
+（真实密钥从环境变量读，别写进命令行历史或日志。）流式响应里每一行 `data: {…}` 是一条 SSE 事件、空行是事件分隔符，末尾的 `data: [DONE]` 表示结束——这与《HTTP 概述》正文"分块传输 `Transfer-Encoding: chunked`"是同一件事的两层。
+
+### 状态码与典型故障的读法
+
+| 现象 | 先看这一处 | 常见根因 |
+|---|---|---|
+| `curl: (60) SSL certificate problem: unable to get local issuer certificate` | 是证书链问题，**不是** `-k` 的理由 | 容器缺 `ca-certificates`；补 `apt install ca-certificates` 或挂宿主 CA 文件 |
+| `curl: (28) Operation timed out` | 有 `--max-time` 才有 28 | 上游慢/流被中断；LLM 长响应要设"首字超时 + 空闲超时"两级预算 |
+| 502 / 504 | 响应头里的 `server:`（网关是谁） | 502＝上游返回非法响应（进程没起/协议不匹配）；504＝网关等上游超时 |
+| 408 / 499 | 服务端日志 | 408 服务端等请求体超时；499 是 Nginx 私有的"客户端先挂了"（常见于流式请求被前端掐断） |
+| 401 vs 403 | 响应体与 `www-authenticate` | 401＝没带对凭据（含 `-H "authorization:"` 被重定向丢掉），403＝凭据有效但无权限 |
+| 302 之后变 307/308 | `-i` 看 Location | 重定向会丢 `Authorization` 与请求体（`--location-trusted` 能保留但要慎用） |
+| 明明支持 gzip 却拿到乱码 | 请求头 `accept-encoding` | 只加了 `-H 'accept-encoding: gzip'` 却没加 `--compressed`，curl 不会替你解压 |
+
+最后一个细节最容易被忽略：`>` 与 `<` 的行前缀就是"方向"，**排查跨层问题时先用 `-v` 确认请求真的发出去了、以及响应头里到底有没有你以为加上的那个头**（`-H "Content-Type:"` 是*删除*该头的写法，尾随冒号不是笔误）。这一条能省掉大量"代码里明明设置了"的争论。
+
+
 > 译注：对本站读者，HTTP 的一个"新面孔"用途值得点名——**LLM 应用的流式输出**：OpenAI/Anthropic 等兼容 API 的 `stream: true` 就是在一条 HTTP 响应上用 `Content-Type: text/event-stream`（SSE）逐段推送生成内容；底层正是本文讲的"持久 HTTP 连接 + TCP 可靠传输"。相关细节见本模块《SSE 与 WebSocket》与《TCP》。
 
 ---
 
-> **来源**：本文翻译自 [Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)，作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13。
+> **来源**：本文翻译自 [Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)，作者 MDN Web Docs 的 Mozilla 贡献者，许可 CC BY-SA 2.5。抓取于 2026-09-13；末尾“实操”一节据 [curl(1)](https://curl.se/docs/manpage.html)（curl 项目，MIT 衍生许可）与 curl 官方教程核实用法，示例输出中的 IP 与时间为示意值，由本站编写。

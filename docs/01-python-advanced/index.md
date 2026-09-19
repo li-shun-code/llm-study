@@ -31,8 +31,8 @@ isRoot: true
 
 **HTTP 客户端**
 
-- requests 快速开始与进阶用法
-- HTTPX：新一代 Python HTTP 客户端
+- HTTP 客户端：requests 用法与 requests / httpx 选型
+- HTTPX 实战：异步客户端、流式响应与重试
 
 **Web 服务与应用界面**
 

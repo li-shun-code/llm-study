@@ -5,7 +5,7 @@ author: OpenAI（openai-python README）、OpenAI Cookbook（responses_example.i
 license: Apache 2.0 / MIT
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版（HTTPX2 传输层）、示例模型 gpt-5.5 / gpt-4o-mini
+versions: openai-python 2026-09 最新稳定版（HTTPX2 传输层）；示例模型统一为 gpt-5.5
 order: 1
 group: 调用基础
 ---
@@ -72,7 +72,7 @@ Cookbook 的示例则演示了最裸的形态——只给 `input`：
 
 ```python
 response = client.responses.create(
-    model="gpt-4o-mini",
+    model="gpt-5.5",
     input="tell me a joke",
 )
 print(response.output[0].content[0].text)
@@ -146,85 +146,21 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-异步写法在 Web 服务（本模块第 16 篇的 FastAPI）与高并发批处理场景中是标配。
+异步写法在 Web 服务（见《用 FastAPI 封装 LLM 服务》）与高并发批处理场景中是标配。
 
 ## 六、Responses API 的差异化能力：有状态与托管工具
 
-Cookbook 的这篇示例解释了为什么 OpenAI 要推 Responses API——它为多轮交互、托管工具（hosted tools）与精细的上下文控制而生：
+Cookbook 的这篇示例解释了为什么 OpenAI 要推 Responses API——它为多轮交互、托管工具（hosted tools）与精细的上下文控制而生。这里只点出两条差异，代码留到各自的主篇完整展开：
 
-**1. API 侧保存会话状态。** 每个响应有 `id`，可随时取回，包含完整上下文：
-
-```python
-fetched_response = client.responses.retrieve(
-    response_id=response.id
-)
-
-print(fetched_response.output[0].content[0].text)
-```
-
-**2. 用 `previous_response_id` 续接对话。** 不用手动重发历史消息：
+- **API 侧保存会话状态**：每个响应都有 `id`，用 `client.responses.retrieve(response_id=...)` 随时取回（含完整上下文），续接对话只需传 `previous_response_id=response.id`，不必重发历史。取回 → 续接 → 分叉的完整可跑示例见《消息角色与多轮会话管理》——那篇以"谁来记住历史"为主线，本篇只让你知道有这条路。
+- **托管工具**：在 `tools` 里声明 `{"type": "web_search"}` 这类内置工具，服务端自行决定何时调用并代为执行，`output` 里交替出现 `web_search_call` 与带引用的 `message` 输出项。工具清单、参数（`search_context_size`、`filters`、`user_location`）与"图片 + 联网检索"的组合玩法见《Responses API 托管工具总览与 web_search》。
 
 ```python
-response_two = client.responses.create(
-    model="gpt-4o-mini",
-    input="tell me another",
-    previous_response_id=response.id
-)
-print(response_two.output[0].content[0].text)
-```
-
-输出：
-
-```text
-Why don't skeletons fight each other?
-They don't have the guts!
-```
-
-**3. 从任意节点"分叉"对话。** 让两条新对话共享同一个父响应：
-
-```python
-response_two_forked = client.responses.create(
-    model="gpt-4o-mini",
-    input="I didn't like that joke, tell me another and tell me the difference between the two jokes",
-    previous_response_id=response.id  # 从第一个响应分叉续接
-)
-```
-
-**4. 托管工具。** 传入 `web_search` 等工具类型，模型在服务端自动调用，无需你自己执行：
-
-```python
+# 一行声明即生效；参数与输出项解析见《Responses API 托管工具总览与 web_search》
 response = client.responses.create(
-    model="gpt-4o",  # 或其他支持该工具的模型
+    model="gpt-5.5",
     input="What's the latest news about AI?",
-    tools=[
-        {
-            "type": "web_search"
-        }
-    ]
-)
-```
-
-响应的 `output` 里会交替出现 `web_search_call`（搜索动作）与 `message`（带引用注释的回答）两种输出项。
-
-多模态输入也可以在一条请求里完成——图片 + 文本 + 工具的组合（`input_image` 内容块的用法详见《视觉理解 API：把图片喂给多模态模型》）：
-
-```python
-response_multimodal = client.responses.create(
-    model="gpt-4o",
-    input=[
-        {
-            "role": "user",
-            "content": [
-                {"type": "input_text", "text":
-                 "Come up with keywords related to the image, and search on the web using the search tool for any news related to the keywords"
-                 ", summarize the findings and cite the sources."},
-                {"type": "input_image", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/2880px-Cat_August_2010-4.jpg"}
-            ]
-        }
-    ],
-    tools=[
-        {"type": "web_search"}
-    ]
+    tools=[{"type": "web_search"}],
 )
 ```
 
@@ -235,7 +171,7 @@ Cookbook 对两种 API 的工作流差异总结得很到位：同样"看图 + �
 - 安装 `openai`，Key 走 `.env`（「Python 基础」方案），客户端默认读环境变量；
 - Responses API 是主接口：`client.responses.create(model, input)` + `response.output_text`；
 - Chat Completions 长期支持：`messages` 列表 + `choices[0].message.content`；
-- Responses API 额外提供 API 侧会话状态（`retrieve` / `previous_response_id`）与托管工具；
+- Responses API 额外提供 API 侧会话状态（`retrieve` / `previous_response_id` / `conversation`）与托管工具；
 - 异步用 `AsyncOpenAI`。
 
 下一篇我们把 `messages` / `input` 的角色体系与多轮会话管理讲透。

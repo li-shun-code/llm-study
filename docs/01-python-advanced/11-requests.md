@@ -1,5 +1,5 @@
 ---
-title: requests 快速开始与进阶用法
+title: HTTP 客户端：requests 用法与 requests / httpx 选型
 source_url: https://requests.readthedocs.io/en/latest/user/quickstart/
 author: Kenneth Reitz 与 PSF Requests 团队
 license: Apache 许可证 2.0
@@ -9,7 +9,61 @@ versions: requests 2.x（当前稳定版）
 order: 11
 group: HTTP 客户端
 ---
-*编者导读：本篇由 requests 官方文档《Quickstart（快速开始）》与《Advanced Usage（进阶用法）》两页完整翻译合并而成。*
+*编者导读：本篇由 requests 官方文档《Quickstart（快速开始）》与《Advanced Usage（进阶用法）》两页完整翻译合并而成，并新增「HTTP 客户端选型：requests 还是 httpx」一章——两篇 HTTP 客户端文章的分工是：**基础用法与选型看本篇，异步与流式/重试实战看《HTTPX 实战：异步客户端、流式响应与重试》**。*
+
+## HTTP 客户端选型：requests 还是 httpx
+
+先给结论，再给依据。
+
+### 选型结论
+
+| 你的情况 | 选它 | 理由 |
+| --- | --- | --- |
+| 脚本、爬虫、一次性批处理、同步 Web 框架（Flask/Django 同步视图） | **requests** | 生态最厚，`requests-oauthlib`、`requests-toolbelt`、各 SaaS SDK 遍地；没有异步心智负担 |
+| FastAPI / Starlette / 任何 `async def` 路径 | **httpx** | `AsyncClient` 与事件循环原生配合；同步库放进异步代码只能靠线程池兜 |
+| 需要 HTTP/2（多路复用、对端只支持 h2） | **httpx**（`http2=True` + `h2`） | requests 核心不支持 HTTP/2，第三方扩展路线分散且不成体系 |
+| 高并发对内网服务发压、需要精细连接池与超时预算 | **httpx** | `Limits(max_connections / max_keepalive_connections / keepalive_expiry)` 与四维 `Timeout` 是显式接口；requests 要靠 `HTTPAdapter` 参数拼 |
+| 需要 WebSocket（`ws://`/`wss://`） | **httpx**（配合 `httpx-ws`） | requests 无此能力 |
+| 团队已有大量 requests 代码、只是偶尔要异步 | **两者共存** | httpx 的顶层 API 有意做成与 requests 对齐，混用认知成本低；但同一进程别混用两套连接池 |
+| 需要「开箱即用重试 + 幂等」的高级中间件 | 都不够，用 `tenacity` 或 `urllib3.Retry` | 见迁移对照表最后一行「重试」 |
+
+一句话：**同步 requests、异步 httpx；要 HTTP/2 或 WebSocket 只有 httpx；两者都缺的重试/熔断能力请交给 `tenacity` 或传输层策略，而不是期待客户端自带。**
+
+### 三个常被误判的技术点
+
+- **连接池**：`requests` 也有连接池，但只有走 `Session` 才复用。裸调 `requests.get()` 每次新建连接，也没有 keep-alive 复用——这是「requests 慢」的第一大原因。httpx 同理：裸调 `httpx.get()` 每次新建 `Client`。**结论：只要发多于一个请求，就用会话/客户端实例。**
+- **HTTP/2**：`requests` 不支持；`httpx` 支持但**默认关闭**，需 `pip install "httpx[http2]"`（装 `h2`）后 `Client(http2=True)`。别以为装了 httpx 就在用 h2。
+- **超时**：`requests` 默认**无超时**（可能永久挂住），`httpx` 默认全操作 5 秒。把 requests 代码换到 httpx 后偶发 `ReadTimeout` 是正常现象，说明原来有请求在悄悄挂死。
+
+### requests → httpx 迁移对照表
+
+| 场景 | requests | httpx | 迁移提示 |
+| --- | --- | --- | --- |
+| 顶层快捷调用 | `requests.get(url, params=…, timeout=5)` | `httpx.get(url, params=…, timeout=5)` | 参数名基本一致 |
+| 会话/客户端 | `s = requests.Session()` | `c = httpx.Client()` | 二者都需 `close()`；`with` 语法一致 |
+| 异步客户端 | 无（用 `asyncio.to_thread` 或 `aiohttp`） | `httpx.AsyncClient()` | `async with`；方法全部加 `await` |
+| 基础认证 | `auth=("u", "p")` | `auth=("u", "p")` | 相同 |
+| OAuth1 / OAuth2 | `requests_oauthlib.OAuth1Session` / `OAuth2Session` | 无内置，需 `httpx-oauth` 等第三方或自定义 `Auth` | 迁移成本最高的一块，先确认有没有可用实现 |
+| 代理 | `proxies={"http": …, "https": …}`（字典） | `proxy="http://…"`（单个 URL）或 `mounts={"all://": httpx.HTTPTransport(proxy=…)}` | 结构完全不同，别指望改个键名 |
+| 显式传证书 | `cert=("/path/crt", "/path/key")` | `cert=("/path/crt", "/path/key")` | 一致 |
+| 自定义 CA | `verify="/path/ca.pem"` | `verify="/path/ca.pem"` | 一致；httpx 另支持 `SSLContext` 与 `verify=False` |
+| 流式读取 | `r.iter_lines()` / `r.iter_content()` | `r.iter_lines()` / `r.iter_bytes()`；异步为 `aiter_*` | `iter_content` → `iter_bytes` |
+| 原始未解码字节 | `r.raw`（`stream=True`） | `r.iter_raw()` | httpx 不暴露 urllib3 的 `raw` |
+| 条件读取 | 先 `stream=True` 再决定 `r.content` | `r.read()` 在 `client.stream()` 块内显式调用 | httpx 语义更清楚 |
+| 重定向开关 | `allow_redirects=False` | `follow_redirects=False` | **默认值相反**（requests 跟随，httpx 不跟随） |
+| 手动请求对象 | `Request(...).prepare()` → `PreparedRequest` | `client.build_request(...)` → `Request` | 中间件/签名场景要改写 |
+| 事件钩子 | `session.hooks["response"].append(fn)` | `event_hooks={"response": [fn]}`（构造参数） | 形状不同 |
+| 传输适配器 | `session.mount("http://", HTTPAdapter(...))` | `Client(transport=...)` 或 `mounts={"http://": ...}` | httpx 用 transport 概念替代 adapter |
+| 状态码异常 | `raise_for_status()` → `requests.HTTPError` | `raise_for_status()` → `httpx.HTTPStatusError` | `except` 要换名；httpx 另有共同基类 `HTTPError` |
+| HTTP 版本 | HTTP/1.1 | HTTP/1.1，可开 HTTP/2 | `http2=True` + `h2` |
+| WebSocket | 不支持 | `client.websocket_connect()`（`httpx-ws`） | — |
+| 重试 | 无（靠 `urllib3` 的 `Retry`，仅连接层） | 无（靠 `tenacity`；或 `HTTPTransport(retries=N)` 仅重试建连） | 两家的应用层重试都得外挂 |
+
+### 反过来：什么时候不该迁移
+
+如果你的代码是同步的、只用 `Session` + `retry=Retry(...)` 挂载在 `HTTPAdapter` 上，那迁移到 httpx 的净收益很小、风险却集中在认证与代理两块。判断标准很简单：**这次迁移解决的是哪个具体问题**——「要接进 async 服务」「要 HTTP/2」「要 WebSocket」才是理由；「httpx 更现代」不是。
+
+---
 
 ## 快速开始（Quickstart）
 
@@ -1347,8 +1401,8 @@ r = requests.get('https://github.com', timeout=None)
 
 ---
 
-> **来源**：本文由 requests 官方文档两页完整翻译合并而成：[Quickstart（快速开始）](https://requests.readthedocs.io/en/latest/user/quickstart/) 与 [Advanced Usage（进阶用法）](https://requests.readthedocs.io/en/latest/user/advanced/)，作者 Kenneth Reitz 与 PSF Requests 团队，许可 Apache 许可证 2.0。抓取于 2026-09-13。
+> **来源**：抓取于 2026-09-19。正文译自 requests 官方文档 [Quickstart（快速开始）](https://requests.readthedocs.io/en/latest/user/quickstart/) 与 [Advanced Usage（进阶用法）](https://requests.readthedocs.io/en/latest/user/advanced/)，作者 Kenneth Reitz 与 PSF Requests 团队，许可 Apache 许可证 2.0。「HTTP 客户端选型」一章（选型结论表、三个常被误判的技术点、requests → httpx 迁移对照表）由本站编写，其技术依据来自上述两页与 [HTTPX 官方文档](https://www.python-httpx.org/)（Tom Christie / Encode，BSD 三条款）的 [async](https://www.python-httpx.org/async/)、[clients](https://www.python-httpx.org/advanced/clients/)、[timeouts](https://www.python-httpx.org/advanced/timeouts/)、[resource-limits](https://www.python-httpx.org/advanced/resource-limits/)、[HTTP 2](https://www.python-httpx.org/http2/) 各页。未收录官方 Reasoning Why 与 API 参考两页，需要时读原文。
 
 ---
 
-> 编者注：requests 的"默认不超时"特性在 LLM 应用里是常见事故源——外网 API 调用请务必传 `timeout=(连接超时, 读取超时)` 元组；流式拉取大模型 token 建议改用 httpx 异步客户端（见下一篇与《FastAPI 进阶》一篇）。
+> 编者注：requests 的「默认不超时」特性在 LLM 应用里是常见事故源——外网 API 调用请务必传 `timeout=(连接超时, 读取超时)` 元组。异步流式拉取大模型 token 请改用 httpx 异步客户端，写法与重试边界见《HTTPX 实战：异步客户端、流式响应与重试》；把 LLM 服务对外提供接口的部分见《用 FastAPI 封装 LLM 服务》。

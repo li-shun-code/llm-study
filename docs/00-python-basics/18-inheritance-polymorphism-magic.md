@@ -179,7 +179,7 @@ Tortoise is running slowly...
 
 对修改封闭：不需要修改依赖`Animal`类型的`run_twice()`等函数。
 
-### 静态语言 vs 动态语言
+## 静态语言 vs 动态语言
 
 对于静态语言（例如Java）来说，如果需要传入`Animal`类型，则传入的对象必须是`Animal`类型或者它的子类，否则，将无法调用`run()`方法。
 
@@ -195,13 +195,13 @@ class Timer(object):
 
 Python的"file-like object"就是一种鸭子类型。对真正的文件对象，它有一个`read()`方法，返回其内容。但是，许多对象，只要有`read()`方法，都被视为"file-like object"。许多函数接收的参数就是"file-like object"，你不一定要传入真正的文件对象，完全可以传入任何实现了`read()`方法的对象。
 
-### 小结
+## 小结
 
 继承可以把父类的所有功能都直接拿过来，这样就不必从零做起，子类只需要新增自己特有的方法，也可以把父类不适合的方法覆盖重写。
 
 动态语言的鸭子类型特点决定了继承不像静态语言那样是必须的。
 
-### 参考源码
+## 参考源码
 
 [animals.py](https://liaoxuefeng.com/books/python/oop/extend/animals.py)
 
@@ -213,7 +213,7 @@ Python的"file-like object"就是一种鸭子类型。对真正的文件对象�
 
 除此之外，Python的class中还有许多这样有特殊用途的函数，可以帮助我们定制类。
 
-### __str__
+## __str__
 
 我们先定义一个`Student`类，打印一个实例：
 
@@ -264,7 +264,7 @@ class Student(object):
     __repr__ = __str__
 ```
 
-### __iter__
+## __iter__
 
 如果一个类想被用于`for ... in`循环，类似list或tuple那样，就必须实现一个`__iter__()`方法，该方法返回一个迭代对象，然后，Python的for循环就会不断调用该迭代对象的`__next__()`方法拿到循环的下一个值，直到遇到`StopIteration`错误时退出循环。
 
@@ -301,7 +301,7 @@ class Fib(object):
 75025
 ```
 
-### __getitem__
+## __getitem__
 
 Fib实例虽然能作用于for循环，看起来和list有点像，但是，把它当成list来使用还是不行，比如，取第5个元素：
 

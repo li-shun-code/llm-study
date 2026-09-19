@@ -3,12 +3,14 @@ title: Cursor 深入：Tab 补全、Agent 模式与调试/评审工作流
 source_url: https://cursor.com/docs/agent/overview
 author: Anysphere（Cursor 官方文档 Agent / Plan Mode / Debug Mode / Agent Review / Prompting / Tab）
 license: 署名翻译（官方文档版权归 Anysphere 所有，教学用途编译翻译并署名）
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: true
 order: 9
 group: Cursor 与其他工具
 ---
-上一篇讲 Cursor 的 Rules 时我们只碰了"怎么给 AI 立规矩"；本篇把 Cursor 的交互面本身讲完：Tab 补全怎么工作、Agent 模式的组件与工具、Plan/Debug 两个专用模式、Agent Review 评审，以及 @ 提及与上下文用量这些日常细节。有趣的是，你会看到前述的心智模型（智能体循环、上下文窗口）在这里一一对应地重现——两个工具在架构上已经收敛。
+《Cursor 入门与 Rules 规则系统》讲的是"怎么给 AI 立规矩"；本篇把 Cursor 的交互面本身讲完：Tab 补全怎么工作、Agent 模式的组件与工具、可选模型、Plan/Debug 两个专用模式、Agent Review 评审，以及 @ 提及与上下文用量这些日常细节。有趣的是，《心智模型：LLM 如何"看"你的代码》里那套东西（智能体循环、上下文窗口、压缩）在这里一一对应地重现——两个工具在架构上已经收敛。
+
+> 时效注记：本篇依据 2026-09 抓取、2026-09-19 复核的 Cursor 官方文档当前版本，模型名与套餐价格以 [Models & Pricing](https://cursor.com/docs/models-and-pricing) 为准。
 
 ## 一、Tab 补全（译自 Cursor 帮助文档 Tab 页）
 
@@ -25,11 +27,21 @@ Tab 是 Cursor 的 AI 自动补全：它根据你最近的编辑、周围代码�
 
 Agent 是 Cursor 里能独立完成复杂编码任务、跑终端命令、改代码的助手，`Cmd+I` 从侧边栏唤起。它由三个组件构成：
 
-1. **指令（Instructions）**：系统提示词与 Rules（上一篇的主角）
+1. **指令（Instructions）**：系统提示词与 Rules（《Cursor 入门与 Rules 规则系统》的主角）
 2. **工具（Tools）**：文件编辑、代码库搜索、终端执行等
 3. **模型（Model）**：你为任务挑选的智能体模型
 
 Cursor 为每个受支持的模型编排这三个组件、做模型特定的调优——新模型发布时你只管写软件。
+
+### 能选哪些模型（2026-09 核对）
+
+官方 Models & Pricing 页把用量分成两个池，直接决定你能选什么、花多少：
+
+- **Cursor Models 池**：自家模型，套餐内额度给得很宽松——**Cursor Grok 4.6**、**Grok 4.5**（官方注明由 Cursor 与 SpaceXAI 联合训练，各有 Fast 变体）与 **Composer 2.5**（$0.5 / $2.5 每百万 token 输入/输出，是全表最便宜的一档）。
+- **Other Models 池**：第三方模型，**按该模型自身的 API 价扣**。当前列表里的 Anthropic 系包括 Claude Opus 5（$5/$25）、Claude Sonnet 5（$2/$10，原生 1M 上下文，官方注明"换了分词器，同样的输入可能映射成更多 token"）、Claude Fable 5.1（$10/$50）、Claude Opus 4.8 / 4.7 / 4.6 与若干标为 Hidden by default 的旧版本；OpenAI 系包括 GPT-5.6 Sol / Terra / Luna、GPT-5.5、GPT-5.4 与 GPT-5.x Codex 线；Google 系为 Gemini 3.x Pro / Flash；另有 GLM 5.2 等。
+- **Auto 路由**：不指定模型时走 **Cursor Router**，三档 **Cost / Balance / Intelligence**，按你选的优化目标决定每次请求落到哪个模型，并按**实际落到模型的标价**计费。
+- **旧套餐口径**：官方价格表里反复出现 "Requires Max Mode on legacy request-based plans"——**按请求计费的旧口径已被"按 token 的用量池"取代**，读旧评测里"这次算几个请求"时要把这条换算过来。
+- **团队/企业附加费**：Teams 与 Enterprise 上直接选第三方模型、或 Auto 路由到第三方模型时，要在模型 API 价之外叠加 **Cursor Token Rate $0.25 / 百万 token**；自家的 Grok 与 Composer 免收。
 
 ### 工具清单
 
@@ -83,12 +95,12 @@ Agent Review 在 Cursor 内对本地改动跑一次专门的代码评审。三�
 ## 五、提示词工程细节：@ 提及、Custom Mode 与上下文用量（译自官方 Prompting Agents 页）
 
 - **@ 提及**：`@auth.ts` 挂文件、`@src/components/` 挂目录、`@Terminals` 挂终端输出、`@Chats` 引用历史对话、`@Commit (Diff of Working State)` / `@Branch (Diff with Main)` 挂 diff、`@Browser` 挂浏览器上下文。**知道相关文件时用 @；不确定时就不用**——Agent 会自己搜索。
-- **Custom Mode**：`/` 调出技能，Enter 只attach一次；按 Option/Alt+Enter 则把技能升格为"模式"——整个工作期间持续在上下文里，适合"描述怎么工作"而非"一次性任务"的技能（比如整段功能开发期间挂着 `/tdd`）。
+- **Custom Mode**：`/` 调出技能，Enter 只会挂载一次；按 Option/Alt+Enter 则把技能升格为"模式"——整个工作期间持续在上下文里，适合"描述怎么工作"而非"一次性任务"的技能（比如整段功能开发期间挂着 `/tdd`）。
 - **图片与语音**：拖拽或 Cmd+V 粘贴截图（UI 与视觉调试利器）；麦克风口述提示词。
-- **上下文用量环**：输入框旁的圆环显示上下文窗口的填充度，点开按类别拆分——系统提示词、工具定义、Rules、技能描述、MCP 说明、子智能体文档、被摘要的对话、当前对话。窗口将满时 Cursor 把较早对话压缩成摘要（与第 6 篇的 compaction 同构——两家的上下文经济学已经完全趋同）。
+- **上下文用量环**：输入框旁的圆环显示上下文窗口的填充度，点开按类别拆分——系统提示词、工具定义、Rules、技能描述、MCP 说明、子智能体文档、被摘要的对话、当前对话。窗口将满时 Cursor 把较早对话压缩成摘要（与《心智模型：LLM 如何"看"你的代码》里的 compaction 同构——两家的上下文经济学已经完全趋同）。
 
 ---
 
-> 下一篇预告：Cursor 的规则与模式都讲完了。接下来把镜头拉远——第 11 篇讲跨工具的"项目规范文件"标准 AGENTS.md 与 Claude Code 的 CLAUDE.md：无论你用哪家工具，这一层都是通用的。
+> 延伸阅读：把镜头拉远一层，跨工具的"项目规范文件"标准见《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》——无论你用哪家工具，这一层都是通用的；想让规矩变成"绕不过的闸门"，见《Claude Code Hooks：用确定性脚本守住智能体循环》（Cursor 的 `hooks.json` 事件集与它几乎一一对应）。
 
-> **来源**：本文各节分别译自 [Agent Overview](https://cursor.com/docs/agent/overview)、[Plan Mode](https://cursor.com/docs/agent/plan-mode)、[Debug Mode](https://cursor.com/docs/agent/debug-mode)、[Agent Review](https://cursor.com/docs/agent/agent-review)、[Prompting agents](https://cursor.com/docs/agent/prompting)（Cursor Docs，Anysphere）与 [Tab completion](https://cursor.com/help/ai-features/tab)（Cursor 帮助文档），2026-09 当前版。作者 Anysphere（Cursor 官方文档），许可署名翻译（官方文档版权归 Anysphere 所有，教学用途编译翻译并署名）。两处"译注"为本站编者补充并已标明。抓取于 2026-09-13。
+> **来源**：本文各节分别译自 [Agent Overview](https://cursor.com/docs/agent/overview)、[Plan Mode](https://cursor.com/docs/agent/plan-mode)、[Debug Mode](https://cursor.com/docs/agent/debug-mode)、[Agent Review](https://cursor.com/docs/agent/agent-review)、[Prompting agents](https://cursor.com/docs/agent/prompting)（Cursor Docs，Anysphere）与 [Tab completion](https://cursor.com/help/ai-features/tab)（Cursor 帮助文档）。"能选哪些模型"一节核自 [Models & Pricing](https://cursor.com/docs/models-and-pricing)（模型池与价格、Cursor Token Rate）与 [Cursor Router](https://cursor.com/docs/cursor-router)（Auto 三档），2026-09-19 复核。作者 Anysphere（Cursor 官方文档），许可署名翻译（官方文档版权归 Anysphere 所有，教学用途编译翻译并署名）。两处"译注"、模型清单归纳与延伸阅读为本站编者补充并已标明。工具交互部分抓取于 2026-09-13，模型与价格部分核对于 2026-09-19。

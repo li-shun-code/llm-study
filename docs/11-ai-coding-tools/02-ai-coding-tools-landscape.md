@@ -84,8 +84,33 @@ Codex 是 OpenAI 的编码智能体家族，当前包含：
 - **IDE 扩展**：进入 VS Code、Cursor、Windsurf 等编辑器。
 - **Codex App / `codex app`**：桌面应用形态；**Codex Web**（chatgpt.com/codex）：云端智能体。
 - **账号体系**：推荐用 ChatGPT 账号登录（Plus/Pro/Business/Edu/Enterprise 套餐内含用量），也可改用 API Key。
+- **模型**：仓库内提示词模板与模型指令文件当前覆盖 `gpt-5-codex`、`gpt-5.1-codex-max`、`gpt-5.2-codex` 这一条 Codex 专用线；各家通用列表见下一节。
+- **权限建模**：把"能不能"（`sandbox_mode`：`read-only` / `workspace-write` / `danger-full-access`）与"问不问"（`approval_policy`：`never` / `on-request` / `unless-trusted`）拆成两个正交维度，再加一个按 shell 控制符切分匹配的 execpolicy 规则引擎。
 
-Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完全开源核心的，且与 agents.md 规范（《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》）同源 OpenAI 系。
+Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完全开源核心的，且与 agents.md 规范（《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》）同源 OpenAI 系。深度用法见《Codex CLI 深度使用：OpenAI 终端智能体的三层权限、AGENTS.md 与自动化》。
+
+## 模型清单与订阅价格（2026-09 核实）
+
+选型时最先要问的两句是"**能跑哪些模型**"和"**我要付多少**"。下表按各家**当前官方文档 / 定价页**核对，价格不含税、随版本变动最快，请把它当成"去核对的索引"而不是"记住的数字"。
+
+**Claude Code（Anthropic）**。终端会话可用模型由 **provider + 账号类型**共同决定：别名 `opus` / `sonnet` / `haiku` / `fable` 在不同 provider 上解析到不同版本——`opus` 在 Anthropic API、Claude Platform on AWS、Amazon Bedrock、Google Cloud 的 Agent Platform 上是 **Opus 5**，在 Microsoft Foundry 上只到 **Opus 4.6**；`sonnet` 在 Anthropic API 上是 **Sonnet 5**，在 AWS 上是 Sonnet 4.6，其余云上是 Sonnet 4.5。当前在售的模型线是 **Fable 5.1 / Fable 5（面向长时自主任务的最强档）、Opus 5、Opus 4.8、Sonnet 5、Haiku 4.5**。会话默认模型按账号解析：Max、Team Premium、Enterprise 与 API 默认 **Opus 5**，Pro 与 Team Standard 默认 **Sonnet 5**，Foundry 默认 Sonnet 4.5。**版本有门槛**：Opus 5 要 Claude Code v2.1.219+、Sonnet 5 要 v2.1.197+、Opus 4.8 要 v2.1.154+。
+
+| 订阅/API | 价格 | 备注 |
+| --- | --- | --- |
+| Free | $0 | 不含 Claude Code |
+| Pro | $17/月（年付，$200 一次付清）或 $20/月（月付） | 默认 Sonnet 5 |
+| Max | $100/月起 | 可选 5× 或 20× Pro 用量；默认 Opus 5 |
+| Team 标准席 | $20/席位·月（年付）或 $25（月付） | |
+| Team Premium 席 | $100/席位·月（年付）或 $125（月付） | 5× 标准席用量 |
+| API 按 token | Opus 5 $5 / $25、Sonnet 5 $2 / $10、Haiku 4.5 $1 / $5（每百万 token 输入/输出）；Fable 5.1 $10 / $50 | 提示缓存读 $0.20–$0.50、写为标准输入价的 1.25× |
+
+**Cursor（Anysphere）**。支持 OpenAI、Anthropic、Google 等前沿模型，同时主推**自家模型池**：**Cursor Grok 4.6 / Grok 4.5**（与 SpaceXAI 联合训练）与 **Composer 2.5**。个人套餐 **Pro $20/月、Pro Plus $60/月、Ultra $200/月**，另有面向印度开发者的 Start（₹649/月）；**两个独立用量池**——"Cursor Models"池给得很宽松，"Other Models"池按所选模型的 API 价扣。团队 **Teams 标准席 $40/人·月、Premium 席 $120/人·月**（Agent 限额 5×）。**Auto 路由有三档：Cost / Balance / Intelligence**。企业注意：Teams/Enterprise 上用第三方模型要额外付 **Cursor Token Rate $0.25/百万 token**（自家 Grok、Composer 免收）。Anthropic 系模型在 Cursor 侧的价格与官方 API 一致（如 Claude Opus 5 $5/$25、Claude Sonnet 5 $2/$10、Claude Fable 5.1 $10/$50）。
+
+**GitHub Copilot（GitHub）**：个人 Free / Pro / Pro+ / Max 档位，学生、教师与开源维护者可免费获得高级功能；组织与企业用 Copilot Business / Enterprise。
+
+**Cline / Devin Desktop / Codex**：Cline 走 BYOK，付的是模型供应商的 API 价（或本地模型零边际成本），另有 Cline 计费与 ClinePass 订阅；Devin Desktop 绑定 Cognition 自家模型（SWE-1.5 等）；Codex CLI 用 ChatGPT 套餐额度或 API Key。
+
+> 编者注（已标明）：**"订阅包含用量"不等于"无限"**。三家（Claude、Cursor、Copilot）都在 2025–2026 年从"按请求数"转向"按 token 用量池 + 超额按需付费"，同一档位里选 Opus/Fable 还是 Haiku/Composer，能跑的时长可以差一个数量级——把预算花在哪一层，见《成本管理：Token 消耗、订阅选择与用量优化》。
 
 ## 横向对比
 
@@ -102,7 +127,7 @@ Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完
 | 多智能体 | Agent Teams/Workflows/Worktrees | Agents Window | 多请求并行（Spaces 管理上下文） | Kanban+worktrees | 单会话为主 | 并行任务 |
 | 深度绑定 | Anthropic 模型 | 多模型可选 | GitHub 全家桶 | 任意模型 | Cognition 模型（SWE-1.5 等） | OpenAI 模型 |
 
-> 表中"项目规范文件"一列会在第 11 篇（AGENTS.md/CLAUDE.md）展开；各工具的 Rules/Skills/MCP 扩展词汇正在快速趋同——学透一个，迁移成本很低。
+> 表中"项目规范文件"一列会在《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》里展开；各工具的 Rules/Skills/MCP 扩展词汇正在快速趋同——学透一个，迁移成本很低。
 
 ## 选型建议
 
@@ -114,8 +139,8 @@ Codex CLI 是三巨头 CLI（Claude Code、Codex CLI、Gemini CLI）中唯一完
 4. **预算敏感 / 想用国产开源模型 / 要求数据自持**：Cline 的 BYOK + 本地模型路径独一无二，且核心开源可审计。
 5. **团队规范统一**：优先采用 AGENTS.md 这类跨工具标准（《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》），避免规范文件被单一工具锁定。
 
-> 无论选哪把锤子，本模块其余篇章的工作流方法论——可验证的完成标准（《Claude Code 工作流与最佳实践》）、Git 存档与隔离（《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》）、Spec 驱动（《Spec 驱动开发（Spec-Driven Development）》）、上下文工程（《上下文工程（Context Engineering）》）——都是通用的。
+> 无论选哪把锤子，跨工具通用的方法论都在站内其它文章里：可验证的完成标准（《Claude Code 工作流与最佳实践》）、Git 存档与隔离（《Git in AI 工作流：commit 即存档、worktree 隔离与审查流》）、Spec 驱动（《Spec 驱动开发（Spec-Driven Development）》）、上下文管理（《上下文工程：为 AI Agent 管理稀缺的注意力》）。
 
 ---
 
-> **来源**：本文为编译稿，主体译自六家工具的官方文档（2026-09 当前版本）：[Claude Code Overview](https://code.claude.com/docs/en/overview)（Anthropic）、[Cursor Docs](https://cursor.com/docs)（Anysphere）、[What is GitHub Copilot?](https://docs.github.com/en/copilot/get-started/what-is-github-copilot)（GitHub）、[Cline Overview](https://docs.cline.bot/cline-overview)（Cline）、[Cascade / Devin Desktop](https://docs.windsurf.com/windsurf/cascade)（Cognition）、[Codex CLI](https://github.com/openai/codex)（OpenAI，Apache-2.0）。作者为各工具官方文档，许可署名编译（各官方文档版权归原厂所有，本文为教学用途的编译与翻译，逐节署名）。抓取于 2026-09-13。
+> **来源**：本文为编译稿，主体译自六家工具的官方文档：[Claude Code Overview](https://code.claude.com/docs/en/overview) 与 [Model configuration](https://code.claude.com/docs/en/model-config)（Anthropic）、[Cursor Docs：Models & Pricing](https://cursor.com/docs/models-and-pricing) 与 [Agent](https://cursor.com/docs/agent/overview)（Anysphere）、[What is GitHub Copilot?](https://docs.github.com/en/copilot/get-started/what-is-github-copilot)（GitHub）、[Cline Overview](https://docs.cline.bot/cline-overview)（Cline）、[Cascade / Devin Desktop](https://docs.windsurf.com/windsurf/cascade)（Cognition）、[Codex CLI](https://github.com/openai/codex)（OpenAI，Apache-2.0）；订阅与 API 价格另核自 [Claude Pricing](https://claude.com/pricing)（Anthropic）与 [Cursor Models & Pricing](https://cursor.com/docs/models-and-pricing)（Anysphere）。作者为各工具官方文档，许可署名编译（各官方文档版权归原厂所有，本文为教学用途的编译与翻译，逐节署名）。工具能力部分抓取于 2026-09-13，模型清单与价格部分核对于 2026-09-19。

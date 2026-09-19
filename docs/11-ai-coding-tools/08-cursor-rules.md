@@ -1,23 +1,29 @@
 ---
 title: Cursor 入门与 Rules 规则系统
-source_url: https://cursor.com/docs/context/rules
+source_url: https://cursor.com/docs/rules
 author: Anysphere（Cursor 官方文档）
 license: 署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: true
 order: 8
 group: Cursor 与其他工具
 ---
+Cursor 是当下"编辑器内智能体"这一形态的代表。它和终端智能体的差别不在能力，而在**约定的落点**：Claude Code 把项目约定写进 `CLAUDE.md`，Cursor 把它写进 `.cursor/rules` 下的 `.mdc` 文件——**带 frontmatter、能按 glob 精确挂作用域、能被 Agent 按描述自行判断相关性**。这套机制是 Cursor 最容易被低估的一块，也是团队用 AI 写代码时最省返工的一块。
+
+本篇主体翻译官方 Rules 一章；交互面（Tab、Agent 模式、Plan/Debug、Agent Review）见《Cursor 深入：Tab 补全、Agent 模式与调试/评审工作流》。
+
+> 时效注记：依据 2026-09 抓取、2026-09-19 复核的官方文档。原 `docs/context/rules` 路径已下线，现地址为 `docs/rules`。Cursor 的能力面已经扩到 Plugins / Rules / Skills / Subagents / Hooks / MCP 一整套自定义机制，与 Claude Code 的扩展词汇高度重合。
+
 ## Cursor 入门速览
 
-Cursor 是 AI 原生代码编辑器。按官方文档的当前结构，它的能力面大致分几块：
+按官方文档的当前结构，它的能力面大致分几块：
 
 - **Agent（智能体）**：编辑器内 Agent、Agents Window（多智能体窗口）、Agent Review（审查）、Plan Mode（计划模式）、Prompting（提示技巧）、Debugging（调试）、Design Mode（设计模式）。
 - **自定义（Customize）**：Plugins 插件、**Rules 规则**、Skills 技能、Subagents 子智能体、Hooks 钩子、MCP。
 - **云端智能体（Cloud Agents）**：云端跑任务与 Builds、Bugbot（PR 找虫）、Security Agents、PR 路由与审批、移动端。
 - **CLI 与 SDK**：命令行与编程接口。
 
-本文主体翻译其中最常用、也最能体现"项目级约定"思想的 **Rules** 一章。Cursor 之外的工具（Claude Code 的 CLAUDE.md、Cline 的 `.clinerules` 等）都在解决同一个问题——见《AGENTS.md/CLAUDE.md 项目规范文件》。
+这一章是全文重点，也是最能体现"项目级约定"思想的一块。Cursor 之外的工具（Claude Code 的 CLAUDE.md、Cline 的 `.clinerules` 等）都在解决同一个问题——见《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》。
 
 ## Rules：给 Agent 的系统级指令
 
@@ -284,10 +290,13 @@ Team 与 Enterprise 套餐可以在 Cursor 管理后台为整个组织创建并�
 
 团队规则与其他规则类型并存，且具有更高优先级，以保证组织级标准在所有项目中得到维持。它是在整个团队内统一编码标准、实践与工作流的有力手段——无需每个人单独配置。
 
-管理员在后台直接创建与管理规则；规则创建后自动对全体成员生效，并在后台可见。
+管理员在后台直接创建与管理规则；规则创建后自动对全体成员生效，并在后台可见。两条官方明确写出的细节值得单列：
 
-> 译注：把"反复纠正过的错误"沉淀为规则、把"示例文件引用而非内容复制"作为规则写法，与《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》 AGENTS.md 的官方建议、《Claude Code 工作流与最佳实践》 Claude Code 对 CLAUDE.md"像代码一样维护"的要求完全同构——项目规范文件的工程学是跨工具通用的。
+- **是否强制执行**：勾选 **Enforce this rule** 后该规则对全体成员**必选、成员无法在 Customize 里关掉**；不勾选时成员可以在 Customize → Team Rules 里自行停用。
+- **格式与优先级**：团队规则是**自由文本**，不使用项目规则那种目录结构；但它**同样支持 glob**（设了 `**/*.py` 就只在匹配文件进入上下文时生效，没设 glob 则每次对话都生效）。整体应用顺序是 **Team Rules → Project Rules → User Rules**，三者**合并**，冲突时**来源靠前的优先**。
+
+> 译注：把"反复纠正过的错误"沉淀为规则、把"示例文件引用而非内容复制"作为规则写法，与《AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件》里对 AGENTS.md 的官方建议、《Claude Code 工作流与最佳实践》里对 CLAUDE.md"像代码一样维护"的要求完全同构——项目规范文件的工程学是跨工具通用的。规则只解决"该怎么做"；要让某件事**一定发生**，得靠 hook，见《Claude Code Hooks：用确定性脚本守住智能体循环》。
 
 ---
 
-> **来源**：本文翻译自 [Rules - Cursor Docs](https://cursor.com/docs/context/rules)，作者 Anysphere（Cursor 官方文档），许可署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）。抓取于 2026-09-13。
+> **来源**：本文翻译自 [Rules - Cursor Docs](https://cursor.com/docs/rules)，作者 Anysphere（Cursor 官方文档），许可署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）。2026-09-19 按当前页面复核，补入 Team Rules 的强制执行、自由文本格式、glob 支持，以及 Team → Project → User 优先级四条；开头导语、"译注"与编者补充为本站原创并已标明。抓取于 2026-09-13，复核于 2026-09-19。

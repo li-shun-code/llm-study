@@ -144,7 +144,7 @@ async def read_users(commons: Annotated[dict, Depends(common_parameters)]):
 
 > **提示**
 >
-> 下一章会介绍除了函数之外，还有哪些“东西”可以用作依赖项。
+> 后文《类作为依赖项》一节会介绍除了函数之外，还有哪些“东西”可以用作依赖项。
 >
 
 接收到新的请求时，**FastAPI** 会负责：
@@ -2407,7 +2407,7 @@ async def main():
 
 ### 服务器发送事件（SSE）
 
-FastAPI 还对 Server-Sent Events（SSE）提供一等支持，它们与此非常相似，但有一些额外细节。你可以在下一章了解更多：[服务器发送事件（SSE）](https://fastapi.tiangolo.com/server-sent-events/)。🤓
+FastAPI 还对 Server-Sent Events（SSE）提供一等支持，它们与此非常相似，但有一些额外细节。官方另有一页专门讲 SSE：[服务器发送事件（SSE）](https://fastapi.tiangolo.com/server-sent-events/)，把上游 token 流式转发的完整实战见《用 FastAPI 封装 LLM 服务》。
 ---
 
 > **来源**：本文由 FastAPI 官方中文文档（MIT 许可证，作者 Sebastián Ramírez / tiangolo，社区中文翻译）以下页面完整编译而成：[依赖项](https://fastapi.tiangolo.com/zh/tutorial/dependencies/)、[类作为依赖项](https://fastapi.tiangolo.com/zh/tutorial/dependencies/classes-as-dependencies/)、[子依赖项](https://fastapi.tiangolo.com/zh/tutorial/dependencies/sub-dependencies/)、[全局依赖项](https://fastapi.tiangolo.com/zh/tutorial/dependencies/global-dependencies/)、[使用 yield 的依赖项](https://fastapi.tiangolo.com/zh/tutorial/dependencies/dependencies-with-yield/)、[高级中间件](https://fastapi.tiangolo.com/zh/advanced/middleware/)、[自定义响应 - HTML、流、文件等](https://fastapi.tiangolo.com/zh/advanced/custom-response/)、[流式数据](https://fastapi.tiangolo.com/zh/advanced/stream-data/)、[流式传输 JSON Lines](https://fastapi.tiangolo.com/zh/tutorial/stream-json-lines/)。示例代码取自官方仓库 `docs_src/` 对应文件。抓取于 2026-09-13。

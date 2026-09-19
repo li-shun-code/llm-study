@@ -5,7 +5,7 @@ author: OpenAI Cookbook（Comparing Speech-to-Text Methods、Steering Text-to-Sp
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-versions: gpt-4o-transcribe（转写）、tts-1-hd / gpt-4o-audio-preview（合成）、gpt-realtime-2（Realtime）；openai-agents VoicePipeline beta
+versions: gpt-4o-transcribe / gpt-4o-mini-transcribe（转写）、tts-1 与 tts-1-hd（传统合成）、gpt-4o-mini-tts 与 gpt-4o-audio-preview（可用提示词指挥）、gpt-realtime-2（Realtime）
 order: 13
 group: 多模态与向量能力
 ---
@@ -107,7 +107,7 @@ His tummy rumbled with excitement as he raced to the kitchen. Mama Lion had made
 
 speech_file_path = "./sounds/default_tts.mp3"
 response = client.audio.speech.create(
-    model="tts-1-hd",
+    model="tts-1-hd",            # 传统档：tts-1 / tts-1-hd，只选音色不选语气
     voice="alloy",   # alloy 等预置音色
     input=tts_text,
 )
@@ -131,7 +131,7 @@ completion = client.chat.completions.create(
     audio={"voice": "alloy", "format": "mp3"},
     messages=[
         {
-            "role": "system",
+            "role": "developer",  # 现行角色名（旧文档写 system，语义等价）
             "content": "You are a helpful assistant that can generate audio from text. Speak in a British accent and enunciate like you're talking to a child.",
         },
         {
@@ -202,12 +202,12 @@ async for event in connection:
 ## 四、本篇小结
 
 - ASR 三档：文件阻塞式（最简单）→ 文件流式 → Realtime WebSocket（300–800ms，仅原始 PCM、会话 30 分钟上限）；
-- 模型侧 `gpt-4o-transcribe` 负责转写；`tts-1-hd` 传统合成；`gpt-4o-audio-preview` 用提示词指挥口音语气；`gpt-realtime-2` 走 Realtime；
+- 模型分档别混：转写 `gpt-4o-transcribe`（快档 `gpt-4o-mini-transcribe`）；合成传统档 `tts-1`/`tts-1-hd`、可指挥档 `gpt-4o-mini-tts`；要音频输入 + 音频输出用 `gpt-4o-audio-preview`；实时对话走 `gpt-realtime-2`；
 - TTS 输出是 base64 编码的音频字节，解码后写文件即可；
 - Realtime 的错误是事件不是异常，必须手动处理；
 - 一句话选型：录好的音频用文件转写；实时字幕/语音对话上 Realtime。
 
-至此，文本、图像、语音三类模态的 API 都过了一遍。第 07 篇回到工程主线：错误处理、重试与限流。
+至此，文本、图像、语音三类模态的 API 都过了一遍。工程主线请回看《错误处理、重试与限流》。
 
 ---
 

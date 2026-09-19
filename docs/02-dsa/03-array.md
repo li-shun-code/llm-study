@@ -13,7 +13,7 @@ group: 线性结构
 
 <u>数组（array）</u>是一种线性数据结构，其将相同类型的元素存储在连续的内存空间中。我们将元素在数组中的位置称为该元素的<u>索引（index）</u>。下图展示了数组的主要概念和存储方式。
 
-![数组定义与存储方式](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.assets/array_definition.png)
+![数组定义与存储方式](assets/carray_and_linkedlist__array__array_definition.png)
 
 ### 数组常用操作
 
@@ -34,29 +34,57 @@ nums: list[int] = [1, 3, 2, 5, 4]
 
 数组元素被存储在连续的内存空间中，这意味着计算数组元素的内存地址非常容易。给定数组内存地址（首元素内存地址）和某个元素的索引，我们可以使用下图所示的公式计算得到该元素的内存地址，从而直接访问该元素。
 
-![数组元素的内存地址计算](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.assets/array_memory_location_calculation.png)
+![数组元素的内存地址计算](assets/carray_and_linkedlist__array__array_memory_location_calculation.png)
 
 观察上图，我们发现数组首个元素的索引为 0 ，这似乎有些反直觉，因为从 1 开始计数会更自然。但从地址计算公式的角度看，**索引本质上是内存地址的偏移量**。首个元素的地址偏移量是 0 ，因此它的索引为 0 是合理的。
 
 在数组中访问元素非常高效，我们可以在 O(1) 时间内随机访问数组中的任意一个元素。
+
+```python
+def random_access(nums: list[int]) -> int:
+    """随机访问元素"""
+    # 在区间 [0, len(nums)-1] 中随机抽取一个数字
+    random_index = random.randint(0, len(nums) - 1)
+    # 获取并返回随机元素
+    random_num = nums[random_index]
+    return random_num
+```
 
 
 #### 插入元素
 
 数组元素在内存中是“紧挨着的”，它们之间没有空间再存放任何数据。如下图所示，如果想在数组中间插入一个元素，则需要将该元素之后的所有元素都向后移动一位，之后再把元素赋值给该索引。
 
-![数组插入元素示例](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.assets/array_insert_element.png)
+![数组插入元素示例](assets/carray_and_linkedlist__array__array_insert_element.png)
 
-值得注意的是，由于数组的长度是固定的，因此插入一个元素必定会导致数组尾部元素“丢失”。我们将这个问题的解决方案留在“列表”章节中讨论。
+值得注意的是，由于数组的长度是固定的，因此插入一个元素必定会导致数组尾部元素“丢失”。我们把解决方案留到《数组》一文末尾的“动态数组”一节讨论。
+
+```python
+def insert(nums: list[int], num: int, index: int):
+    """在数组的索引 index 处插入元素 num"""
+    # 把索引 index 以及之后的所有元素向后移动一位
+    for i in range(len(nums) - 1, index, -1):
+        nums[i] = nums[i - 1]
+    # 将 num 赋给 index 处的元素
+    nums[index] = num
+```
 
 
 #### 删除元素
 
 同理，如下图所示，若想删除索引 i 处的元素，则需要把索引 i 之后的元素都向前移动一位。
 
-![数组删除元素示例](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.assets/array_remove_element.png)
+![数组删除元素示例](assets/carray_and_linkedlist__array__array_remove_element.png)
 
 请注意，删除元素完成后，原先末尾的元素变得“无意义”了，所以我们无须特意去修改它。
+
+```python
+def remove(nums: list[int], index: int):
+    """删除索引 index 处的元素"""
+    # 把索引 index 之后的所有元素向前移动一位
+    for i in range(index, len(nums) - 1):
+        nums[i] = nums[i + 1]
+```
 
 
 总的来看，数组的插入与删除操作有以下缺点。
@@ -69,6 +97,22 @@ nums: list[int] = [1, 3, 2, 5, 4]
 
 在大多数编程语言中，我们既可以通过索引遍历数组，也可以直接遍历获取数组中的每个元素：
 
+```python
+def traverse(nums: list[int]):
+    """遍历数组"""
+    count = 0
+    # 通过索引遍历数组
+    for i in range(len(nums)):
+        count += nums[i]
+    # 直接遍历数组元素
+    for num in nums:
+        count += num
+    # 同时遍历数据索引和元素
+    for i, num in enumerate(nums):
+        count += nums[i]
+        count += num
+```
+
 
 #### 查找元素
 
@@ -76,12 +120,33 @@ nums: list[int] = [1, 3, 2, 5, 4]
 
 因为数组是线性数据结构，所以上述查找操作被称为“线性查找”。
 
+```python
+def find(nums: list[int], target: int) -> int:
+    """在数组中查找指定元素"""
+    for i in range(len(nums)):
+        if nums[i] == target:
+            return i
+    return -1
+```
+
 
 #### 扩容数组
 
 在复杂的系统环境中，程序难以保证数组之后的内存空间是可用的，从而无法安全地扩展数组容量。因此在大多数编程语言中，**数组的长度是不可变的**。
 
 如果我们希望扩容数组，则需重新建立一个更大的数组，然后把原数组元素依次复制到新数组。这是一个 O(n) 的操作，在数组很大的情况下非常耗时。代码如下所示：
+
+```python
+def extend(nums: list[int], enlarge: int) -> list[int]:
+    """扩展数组长度"""
+    # 初始化一个扩展长度后的数组
+    res = [0] * (len(nums) + enlarge)
+    # 将原数组中的所有元素复制到新数组
+    for i in range(len(nums)):
+        res[i] = nums[i]
+    # 返回扩展后的新数组
+    return res
+```
 
 
 ### 数组的优点与局限性
@@ -134,7 +199,7 @@ nums: list[int] = [1, 3, 2, 5, 4]
 - **硬盘难以被内存取代**。首先，内存中的数据在断电后会丢失，因此它不适合长期存储数据；其次，内存的成本是硬盘的几十倍，这使得它难以在消费者市场普及。
 - **缓存的大容量和高速度难以兼得**。随着 L1、L2、L3 缓存的容量逐步增大，其物理尺寸会变大，与 CPU 核心之间的物理距离会变远，从而导致数据传输时间增加，元素访问延迟变高。在当前技术下，多层级的缓存结构是容量、速度和成本之间的最佳平衡点。
 
-![计算机存储系统](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/ram_and_cache.assets/storage_pyramid.png)
+![计算机存储系统](assets/carray_and_linkedlist__ram_and_cache__storage_pyramid.png)
 
 > **【提示】**
 > 计算机的存储层次结构体现了速度、容量和成本三者之间的精妙平衡。实际上，这种权衡普遍存在于所有工业领域，它要求我们在不同的优势和限制之间找到最佳平衡点。
@@ -143,7 +208,7 @@ nums: list[int] = [1, 3, 2, 5, 4]
 
 如下图所示，在程序运行时，数据会从硬盘中被读取到内存中，供 CPU 计算使用。缓存可以看作 CPU 的一部分，**它通过智能地从内存加载数据**，给 CPU 提供高速的数据读取，从而显著提升程序的执行效率，减少对较慢的内存的依赖。
 
-![硬盘、内存和缓存之间的数据流通](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/ram_and_cache.assets/computer_storage_devices.png)
+![硬盘、内存和缓存之间的数据流通](assets/carray_and_linkedlist__ram_and_cache__computer_storage_devices.png)
 
 ### 数据结构的内存效率
 
@@ -183,5 +248,5 @@ nums: list[int] = [1, 3, 2, 5, 4]
 ---
 
 > **来源**：本文转载自 [数组](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[内存与缓存](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/ram_and_cache.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[内存与缓存](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/ram_and_cache.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

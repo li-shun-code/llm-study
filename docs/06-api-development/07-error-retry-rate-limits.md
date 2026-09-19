@@ -5,7 +5,7 @@ author: OpenAI Cookbook（How to handle rate limits）、OpenAI（openai-python 
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-versions: openai-python 2026-09 最新稳定版（默认重试 2 次、默认超时 10 分钟）
+versions: openai-python 2026-09 最新稳定版（示例模型 gpt-5.5 / gpt-5.4-mini；参数用 max_completion_tokens；默认重试 2 次、默认超时 10 分钟）
 order: 7
 group: 可靠性、安全与成本
 ---
@@ -32,9 +32,9 @@ requests per min. Limit: 20.000000 / min. Current: 24.000000 / min. ...
 # 在循环里密集请求
 for _ in range(100):
     client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5.5",
         messages=[{"role": "user", "content": "Hello"}],
-        max_tokens=10,
+        max_completion_tokens=10,
     )
 ```
 
@@ -69,7 +69,7 @@ client = OpenAI()
 
 try:
     client.fine_tuning.jobs.create(
-        model="gpt-4o",
+        model="gpt-5.4-mini",
         training_file="file-abc123",
     )
 except openai.APIConnectionError as e:
@@ -210,7 +210,7 @@ def completions_with_backoff(**kwargs):
 
 退避三要素：指数增长（第一次快速重试，后续越来越慢）、随机抖动（防止重试风暴）、上限（放弃并上报）。
 
-## 五、更多策略：降级模型、精确 max_tokens、主动限速、合并请求
+## 五、更多策略：降级模型、精确 max_completion_tokens、主动限速、合并请求
 
 **1. 降级到备用模型（fallback）**：主模型被限流时切到次级模型保住可用性。原文提醒：备用模型的准确率、延迟、成本可能差异显著，且部分模型**共享限额**；上线前要用评测验证降级方案不影响质量：
 
@@ -223,10 +223,10 @@ def completions_with_fallback(fallback_model, **kwargs):
         return client.chat.completions.create(**kwargs)
 
 
-completions_with_fallback(fallback_model="gpt-4o", model="gpt-4o-mini", messages=[{"role": "user", "content": "Once upon a time,"}])
+completions_with_fallback(model="gpt-5.5", fallback_model="gpt-5.4-mini", messages=[{"role": "user", "content": "Once upon a time,"}])
 ```
 
-**2. `max_tokens` 贴近预期输出长度**：限流用量按"max_tokens 与输入估算 token 的较大者"计算——设得过高会提前撞限（`max_tokens` 的对应概念在 Responses API 中为 `max_output_tokens`，见前述的参数对照）。
+**2. `max_completion_tokens` 贴近预期输出长度**：限流用量按"输出上限与输入估算 token 的较大者"预扣，设得过高会提前撞限。注意参数名：`max_tokens` 已被官方标记为**弃用**（openai-python 的类型定义原文："This value is now deprecated in favor of `max_completion_tokens`"），推理类模型更是只认 `max_completion_tokens`；Responses API 一侧的对应参数叫 `max_output_tokens`。
 
 **3. 批处理场景：按限额倒数主动加延迟**。与其"撞限→退避→再撞限"，不如算好节奏（每分钟 20 个请求就每次隔 3–6 秒），贴近限额上限又不浪费重试：
 
@@ -244,7 +244,7 @@ delay = 60.0 / rate_limit_per_minute
 
 delayed_completion(
     delay_in_seconds=delay,
-    model="gpt-4o-mini",
+    model="gpt-5.5",
     messages=[{"role": "user", "content": "Once upon a time,"}]
 )
 ```
@@ -277,8 +277,8 @@ messages = [
 ]
 
 # 一次请求生成全部故事，并用结构化输出约束格式
-response = client.beta.chat.completions.parse(
-    model="gpt-4o-mini",
+response = client.chat.completions.parse(
+    model="gpt-5.5",
     messages=messages,
     response_format=StoryResponse,
 )
@@ -286,7 +286,6 @@ response = client.beta.chat.completions.parse(
 print(response.choices[0].message.content)
 ```
 
-> 编者注：`parse` 现已去掉 `beta` 前缀（`client.chat.completions.parse`）；原文此处的 `beta.` 写法保留自抓取时的 notebook。
 > 合并请求的注意点（原文）：单请求 token 上限可能截断；任务会互相等凑批；返回顺序不保证与输入一致。
 
 **5. 官方并行处理脚本**：Cookbook 提供 [api_request_parallel_processor.py](https://github.com/openai/openai-cookbook/blob/main/examples/api_request_parallel_processor.py)——从文件流式读任务避免撑爆内存、并发请求、同时限制请求与 token 用量、失败重试、记录错误。大规模离线处理可直接复用。
@@ -296,7 +295,7 @@ print(response.choices[0].message.content)
 - 异常分三类抓：`APIConnectionError`（网络）、`RateLimitError`（429）、其他 `APIStatusError`；记录 `request_id` 便于排障；
 - SDK 默认重试 2 次（连接/408/409/429/5xx）、默认超时 10 分钟，均可配置；流式不自动重试；
 - 自管重试的公式：指数退避 + 随机抖动 + 重试上限；
-- 系统性策略：降级模型、`max_tokens` 贴身设置、按限额倒数主动限速、合并请求省 RPM、大规模离线用并行脚本（或下一篇的 Batch API）。
+- 系统性策略：降级模型、`max_completion_tokens` 贴身设置、按限额倒数主动限速、合并请求省 RPM、大规模离线用并行脚本（或下一篇的 Batch API）。
 
 ---
 

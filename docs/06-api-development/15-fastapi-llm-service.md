@@ -93,7 +93,7 @@ $ curl -X POST http://127.0.0.1:8000/chat \
 {"reply":"SSE（Server-Sent Events）是服务器通过 HTTP 向浏览器单向持续推送事件的机制，常用于 LLM 的流式输出。"}
 ```
 
-到这里已经能体会到 FastAPI 与 LLM 的契合：**Pydantic 校验入参**（第 06 篇结构化输出的同款技术）、**async 天然匹配 SDK 的异步客户端**（`AsyncOpenAI`）、**OpenAPI 文档白送**。
+到这里已经能体会到 FastAPI 与 LLM 的契合：**Pydantic 校验入参**（《JSON Mode 与结构化输出（Structured Outputs）》的同款技术）、**async 天然匹配 SDK 的异步客户端**（`AsyncOpenAI`）、**OpenAPI 文档白送**。
 
 ## 三、流式接口：StreamingResponse + yield
 
@@ -121,7 +121,7 @@ async def stream_story() -> AsyncIterable[str]:
 - 返回类型注解（`AsyncIterable[str]`）非必需——不涉及 Pydantic 序列化，注解只是给编辑器看的；
 - 也可以 `yield` 字节（`AsyncIterable[bytes]`）。
 
-**本站补充**：接到 LLM 上，把第 03 篇的 SDK 流式循环"翻译"成 HTTP 流——SDK 每产出一个事件就 `yield` 一段：
+**本站补充**：接到 LLM 上，把《流式输出（SSE）》里的 SDK 流式循环"翻译"成 HTTP 流——SDK 每产出一个事件就 `yield` 一段：
 
 ```python
 from collections.abc import AsyncIterable
@@ -152,7 +152,7 @@ async def chat_stream(req: ChatRequest) -> AsyncIterable[str]:
             yield delta
 ```
 
-> 本站提示：流式接口对接时要与客户端约定分块格式（纯文本流、按行分隔、还是标准 SSE 的 `data:` 帧）；另外第 03 篇讲过**流不可自动重试**，服务端应处理好客户端中途断开的情况。
+> 本站提示：流式接口对接时要与客户端约定分块格式（纯文本流、按行分隔、还是标准 SSE 的 `data:` 帧）；另外《流式输出（SSE）》讲过**流不可自动重试**，服务端应处理好客户端中途断开的情况。
 
 ## 四、长大了就拆模块：APIRouter
 
@@ -192,8 +192,8 @@ router = APIRouter(
 
 ## 五、下一步
 
-- 参数校验、`HTTPException`、统一错误处理：见「Python 进阶与框架」的 FastAPI 篇与第 07 篇错误处理的组合；
-- 把本篇的 `/chat` 接口做成第 17 篇命令行聊天机器人的后端；
+- 参数校验、`HTTPException`、统一错误处理：见「Python 进阶与框架」的 FastAPI 篇与《错误处理、重试与限流》的组合；
+- 把本篇的 `/chat` 接口做成《实战：命令行聊天机器人》的后端；
 - 生产部署（容器化）在「微调与部署」展开。
 
 ## 六、本篇小结

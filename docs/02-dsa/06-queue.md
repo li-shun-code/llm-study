@@ -15,7 +15,7 @@ group: 线性结构
 
 如下图所示，我们将队列头部称为“队首”，尾部称为“队尾”，将把元素加入队尾的操作称为“入队”，删除队首元素的操作称为“出队”。
 
-![队列的先入先出规则](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/queue.assets/queue_operations.png)
+![队列的先入先出规则](assets/cstack_and_queue__queue__queue_operations.png)
 
 ### 队列常用操作
 
@@ -72,6 +72,62 @@ is_empty: bool = len(que) == 0
 
 以下是用链表实现队列的代码：
 
+```python
+class LinkedListQueue:
+    """基于链表实现的队列"""
+
+    def __init__(self):
+        """构造方法"""
+        self._front: ListNode | None = None  # 头节点 front
+        self._rear: ListNode | None = None  # 尾节点 rear
+        self._size: int = 0
+
+    def size(self) -> int:
+        """获取队列的长度"""
+        return self._size
+
+    def is_empty(self) -> bool:
+        """判断队列是否为空"""
+        return self._size == 0
+
+    def push(self, num: int):
+        """入队"""
+        # 在尾节点后添加 num
+        node = ListNode(num)
+        # 如果队列为空，则令头、尾节点都指向该节点
+        if self._front is None:
+            self._front = node
+            self._rear = node
+        # 如果队列不为空，则将该节点添加到尾节点后
+        else:
+            self._rear.next = node
+            self._rear = node
+        self._size += 1
+
+    def pop(self) -> int:
+        """出队"""
+        num = self.peek()
+        # 删除头节点
+        self._front = self._front.next
+        self._size -= 1
+        return num
+
+    def peek(self) -> int:
+        """访问队首元素"""
+        if self.is_empty():
+            raise IndexError("队列为空")
+        return self._front.val
+
+    def to_list(self) -> list[int]:
+        """转化为列表用于打印"""
+        queue = []
+        temp = self._front
+        while temp:
+            queue.append(temp.val)
+            temp = temp.next
+        return queue
+```
+
 
 #### 基于数组的实现
 
@@ -90,6 +146,63 @@ is_empty: bool = len(que) == 0
 
 对于环形数组，我们需要让 `front` 或 `rear` 在越过数组尾部时，直接回到数组头部继续遍历。这种周期性规律可以通过“取余操作”来实现，代码如下所示：
 
+```python
+class ArrayQueue:
+    """基于环形数组实现的队列"""
+
+    def __init__(self, size: int):
+        """构造方法"""
+        self._nums: list[int] = [0] * size  # 用于存储队列元素的数组
+        self._front: int = 0  # 队首指针，指向队首元素
+        self._size: int = 0  # 队列长度
+
+    def capacity(self) -> int:
+        """获取队列的容量"""
+        return len(self._nums)
+
+    def size(self) -> int:
+        """获取队列的长度"""
+        return self._size
+
+    def is_empty(self) -> bool:
+        """判断队列是否为空"""
+        return self._size == 0
+
+    def push(self, num: int):
+        """入队"""
+        if self._size == self.capacity():
+            raise IndexError("队列已满")
+        # 计算队尾指针，指向队尾索引 + 1
+        # 通过取余操作实现 rear 越过数组尾部后回到头部
+        rear: int = (self._front + self._size) % self.capacity()
+        # 将 num 添加至队尾
+        self._nums[rear] = num
+        self._size += 1
+
+    def pop(self) -> int:
+        """出队"""
+        num: int = self.peek()
+        # 队首指针向后移动一位，若越过尾部，则返回到数组头部
+        self._front = (self._front + 1) % self.capacity()
+        self._size -= 1
+        return num
+
+    def peek(self) -> int:
+        """访问队首元素"""
+        if self.is_empty():
+            raise IndexError("队列为空")
+        return self._nums[self._front]
+
+    def to_list(self) -> list[int]:
+        """返回列表用于打印"""
+        res = [0] * self.size()
+        j: int = self._front
+        for i in range(self.size()):
+            res[i] = self._nums[(j % self.capacity())]
+            j += 1
+        return res
+```
+
 
 以上实现的队列仍然具有局限性：其长度不可变。然而，这个问题不难解决，我们可以将数组替换为动态数组，从而引入扩容机制。有兴趣的读者可以尝试自行实现。
 
@@ -105,7 +218,7 @@ is_empty: bool = len(que) == 0
 
 在队列中，我们仅能删除头部元素或在尾部添加元素。如下图所示，<u>双向队列（double-ended queue）</u>提供了更高的灵活性，允许在头部和尾部执行元素的添加或删除操作。
 
-![双向队列的操作](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/deque.assets/deque_operations.png)
+![双向队列的操作](assets/cstack_and_queue__deque__deque_operations.png)
 
 ### 双向队列常用操作
 
@@ -169,12 +282,202 @@ is_empty: bool = len(deq) == 0
 
 实现代码如下所示：
 
+```python
+class LinkedListDeque:
+    """基于双向链表实现的双向队列"""
+
+    def __init__(self):
+        """构造方法"""
+        self._front: ListNode | None = None  # 头节点 front
+        self._rear: ListNode | None = None  # 尾节点 rear
+        self._size: int = 0  # 双向队列的长度
+
+    def size(self) -> int:
+        """获取双向队列的长度"""
+        return self._size
+
+    def is_empty(self) -> bool:
+        """判断双向队列是否为空"""
+        return self._size == 0
+
+    def push(self, num: int, is_front: bool):
+        """入队操作"""
+        node = ListNode(num)
+        # 若链表为空，则令 front 和 rear 都指向 node
+        if self.is_empty():
+            self._front = self._rear = node
+        # 队首入队操作
+        elif is_front:
+            # 将 node 添加至链表头部
+            self._front.prev = node
+            node.next = self._front
+            self._front = node  # 更新头节点
+        # 队尾入队操作
+        else:
+            # 将 node 添加至链表尾部
+            self._rear.next = node
+            node.prev = self._rear
+            self._rear = node  # 更新尾节点
+        self._size += 1  # 更新队列长度
+
+    def push_first(self, num: int):
+        """队首入队"""
+        self.push(num, True)
+
+    def push_last(self, num: int):
+        """队尾入队"""
+        self.push(num, False)
+
+    def pop(self, is_front: bool) -> int:
+        """出队操作"""
+        if self.is_empty():
+            raise IndexError("双向队列为空")
+        # 队首出队操作
+        if is_front:
+            val: int = self._front.val  # 暂存头节点值
+            # 删除头节点
+            fnext: ListNode | None = self._front.next
+            if fnext is not None:
+                fnext.prev = None
+                self._front.next = None
+            self._front = fnext  # 更新头节点
+        # 队尾出队操作
+        else:
+            val: int = self._rear.val  # 暂存尾节点值
+            # 删除尾节点
+            rprev: ListNode | None = self._rear.prev
+            if rprev is not None:
+                rprev.next = None
+                self._rear.prev = None
+            self._rear = rprev  # 更新尾节点
+        self._size -= 1  # 更新队列长度
+        return val
+
+    def pop_first(self) -> int:
+        """队首出队"""
+        return self.pop(True)
+
+    def pop_last(self) -> int:
+        """队尾出队"""
+        return self.pop(False)
+
+    def peek_first(self) -> int:
+        """访问队首元素"""
+        if self.is_empty():
+            raise IndexError("双向队列为空")
+        return self._front.val
+
+    def peek_last(self) -> int:
+        """访问队尾元素"""
+        if self.is_empty():
+            raise IndexError("双向队列为空")
+        return self._rear.val
+
+    def to_array(self) -> list[int]:
+        """返回数组用于打印"""
+        node = self._front
+        res = [0] * self.size()
+        for i in range(self.size()):
+            res[i] = node.val
+            node = node.next
+        return res
+```
+
 
 #### 基于数组的实现
 
 如下图所示，与基于数组实现队列类似，我们也可以使用环形数组来实现双向队列。
 
 在队列的实现基础上，仅需增加“队首入队”和“队尾出队”的方法：
+
+```python
+class ArrayDeque:
+    """基于环形数组实现的双向队列"""
+
+    def __init__(self, capacity: int):
+        """构造方法"""
+        self._nums: list[int] = [0] * capacity
+        self._front: int = 0
+        self._size: int = 0
+
+    def capacity(self) -> int:
+        """获取双向队列的容量"""
+        return len(self._nums)
+
+    def size(self) -> int:
+        """获取双向队列的长度"""
+        return self._size
+
+    def is_empty(self) -> bool:
+        """判断双向队列是否为空"""
+        return self._size == 0
+
+    def index(self, i: int) -> int:
+        """计算环形数组索引"""
+        # 通过取余操作实现数组首尾相连
+        # 当 i 越过数组尾部后，回到头部
+        # 当 i 越过数组头部后，回到尾部
+        return (i + self.capacity()) % self.capacity()
+
+    def push_first(self, num: int):
+        """队首入队"""
+        if self._size == self.capacity():
+            print("双向队列已满")
+            return
+        # 队首指针向左移动一位
+        # 通过取余操作实现 front 越过数组头部后回到尾部
+        self._front = self.index(self._front - 1)
+        # 将 num 添加至队首
+        self._nums[self._front] = num
+        self._size += 1
+
+    def push_last(self, num: int):
+        """队尾入队"""
+        if self._size == self.capacity():
+            print("双向队列已满")
+            return
+        # 计算队尾指针，指向队尾索引 + 1
+        rear = self.index(self._front + self._size)
+        # 将 num 添加至队尾
+        self._nums[rear] = num
+        self._size += 1
+
+    def pop_first(self) -> int:
+        """队首出队"""
+        num = self.peek_first()
+        # 队首指针向后移动一位
+        self._front = self.index(self._front + 1)
+        self._size -= 1
+        return num
+
+    def pop_last(self) -> int:
+        """队尾出队"""
+        num = self.peek_last()
+        self._size -= 1
+        return num
+
+    def peek_first(self) -> int:
+        """访问队首元素"""
+        if self.is_empty():
+            raise IndexError("双向队列为空")
+        return self._nums[self._front]
+
+    def peek_last(self) -> int:
+        """访问队尾元素"""
+        if self.is_empty():
+            raise IndexError("双向队列为空")
+        # 计算尾元素索引
+        last = self.index(self._front + self._size - 1)
+        return self._nums[last]
+
+    def to_array(self) -> list[int]:
+        """返回数组用于打印"""
+        # 仅转换有效长度范围内的列表元素
+        res = []
+        for i in range(self._size):
+            res.append(self._nums[self.index(self._front + i)])
+        return res
+```
 
 
 ### 双向队列应用
@@ -186,5 +489,5 @@ is_empty: bool = len(deq) == 0
 ---
 
 > **来源**：本文转载自 [队列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/queue.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[双向队列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/deque.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[双向队列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/deque.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

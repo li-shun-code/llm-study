@@ -9,6 +9,10 @@ versions: FastAPI 最新稳定版（Python 3.10+）
 order: 13
 group: Web 服务与应用界面
 ---
+## 本篇定位
+
+本模块只讲 **FastAPI 框架本身**：路由与路径操作、依赖注入、中间件、响应类型与流式传输。把模型 API 包装成对外服务的那套东西——OpenAI 兼容端点、SSE 转发上游 token、并发排队与超时预算、鉴权之后的限流——属于应用场景，完整实战见《用 FastAPI 封装 LLM 服务》，本篇不重复。
+
 ## 最简单的 FastAPI 文件
 
 ```python
@@ -55,7 +59,7 @@ $ uv run fastapi dev
 3. **创建一个路径操作**：
    - 「路径」指 URL 中从第一个 `/` 起的后半部分，也常被称为「端点」或「路由」；
    - 「操作」指一种 HTTP「方法」：通常 `POST` 创建数据、`GET` 读取数据、`PUT` 更新数据、`DELETE` 删除数据；
-   - `@app.get("/")` 是一个**路径操作装饰器**——它告诉 FastAPI 这个函数负责处理对路径 `/` 的 `GET` 请求（这就是上一篇讲过的装饰器的实际应用）。
+   - `@app.get("/")` 是一个**路径操作装饰器**——它告诉 FastAPI 这个函数负责处理对路径 `/` 的 `GET` 请求（这正是《装饰器实战：从手写第一个装饰器到 functools 速查》里「接收函数、返回新函数」的一个真实应用）。
 4. **定义路径操作函数**：`async def root()` 中的函数体由 FastAPI 负责"什么时候调用"——你可以用 `def` 或 `async def` 定义（详见官方《并发与 async/await》文档：函数内需要 await 异步库时用 `async def`，否则用普通 `def` 让 FastAPI 把它放到线程池里跑，避免阻塞事件循环）。
 5. **返回内容**：返回一个 `dict`，FastAPI 会自动将其转换为 JSON 并发送。
 
@@ -139,7 +143,7 @@ $ curl -H "X-API-Key: sk-demo" "http://127.0.0.1:8000/v1/chat?prompt=hi"
 - 路径操作函数的参数声明 `Depends(verify_api_key)` 后，这个鉴权函数会在你的业务代码**之前**执行，抛出 `HTTPException` 即中断请求；
 - 多个接口共享同一鉴权逻辑时，可把依赖声明到路由组或全局（`dependencies=[Depends(verify_api_key)]`），这正是"依赖注入"的价值：**横切逻辑与业务逻辑解耦**。
 
-请求体校验则直接使用上一篇的 Pydantic 模型：在函数参数中声明 `body: ChatRequest`，FastAPI 自动完成 JSON 解析、校验与文档生成——两个库组合得天衣无缝。
+请求体校验则直接使用《Pydantic 模型（Models）：数据校验的核心》里的模型：在函数参数中声明 `body: ChatRequest`，FastAPI 自动完成 JSON 解析、校验与文档生成——两个库组合得天衣无缝。
 
 ## 延伸阅读
 

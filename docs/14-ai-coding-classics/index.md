@@ -18,7 +18,10 @@ isRoot: true
 
 **中文社区实践**
 
-- Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、经验心法与拼好码
-- AI 编程开发指南精选：鱼皮 ai-guide 的核心心法与 Claude Code 配置哲学
+- Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、实操要点与拼好码
+
+**官方最佳实践**
+
+- 驾驭 Claude Code：CLAUDE.md、rules、skills、hooks 与子智能体的使用时机（Anthropic 官方博客全文翻译）
 
 > 本模块文章全部抓取/翻译自网络公开资料，每篇文末均附署名块标注原文出处与许可。

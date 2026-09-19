@@ -16,7 +16,7 @@ group: 图
 
 **广度优先遍历是一种由近及远的遍历方式，从某个节点出发，始终优先访问距离最近的顶点，并一层层向外扩张**。如下图所示，从左上角顶点出发，首先遍历该顶点的所有邻接顶点，然后遍历下一个顶点的所有邻接顶点，以此类推，直至所有顶点访问完毕。
 
-![图的广度优先遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_traversal.assets/graph_bfs.png)
+![图的广度优先遍历](assets/cgraph__graph_traversal__graph_bfs.png)
 
 ### 算法实现
 
@@ -27,6 +27,30 @@ BFS 通常借助队列来实现，代码如下所示。队列具有“先入先�
 3. 循环步骤 `2.` ，直到所有顶点被访问完毕后结束。
 
 为了防止重复遍历顶点，我们需要借助一个哈希集合 `visited` 来记录哪些节点已被访问。
+
+```python
+def graph_bfs(graph: GraphAdjList, start_vet: Vertex) -> list[Vertex]:
+    """广度优先遍历"""
+    # 使用邻接表来表示图，以便获取指定顶点的所有邻接顶点
+    # 顶点遍历序列
+    res = []
+    # 哈希集合，用于记录已被访问过的顶点
+    visited = set[Vertex]([start_vet])
+    # 队列用于实现 BFS
+    que = deque[Vertex]([start_vet])
+    # 以顶点 vet 为起点，循环直至访问完所有顶点
+    while len(que) > 0:
+        vet = que.popleft()  # 队首顶点出队
+        res.append(vet)  # 记录访问顶点
+        # 遍历该顶点的所有邻接顶点
+        for adj_vet in graph.adj_list[vet]:
+            if adj_vet in visited:
+                continue  # 跳过已被访问的顶点
+            que.append(adj_vet)  # 只入队未访问的顶点
+            visited.add(adj_vet)  # 标记该顶点已被访问
+    # 返回顶点遍历序列
+    return res
+```
 
 > **【提示】**
 > 哈希集合可以看作一个只存储 `key` 而不存储 `value` 的哈希表，它可以在 O(1) 时间复杂度下进行 `key` 的增删查改操作。根据 `key` 的唯一性，哈希集合通常用于数据去重等场景。
@@ -47,11 +71,37 @@ BFS 通常借助队列来实现，代码如下所示。队列具有“先入先�
 
 **深度优先遍历是一种优先走到底、无路可走再回头的遍历方式**。如下图所示，从左上角顶点出发，访问当前顶点的某个邻接顶点，直到走到尽头时返回，再继续走到尽头并返回，以此类推，直至所有顶点遍历完成。
 
-![图的深度优先遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_traversal.assets/graph_dfs.png)
+![图的深度优先遍历](assets/cgraph__graph_traversal__graph_dfs.png)
 
 ### 算法实现
 
 这种“走到尽头再返回”的算法范式通常基于递归来实现。与广度优先遍历类似，在深度优先遍历中，我们也需要借助一个哈希集合 `visited` 来记录已被访问的顶点，以避免重复访问顶点。
+
+```python
+def dfs(graph: GraphAdjList, visited: set[Vertex], res: list[Vertex], vet: Vertex):
+    """深度优先遍历辅助函数"""
+    res.append(vet)  # 记录访问顶点
+    visited.add(vet)  # 标记该顶点已被访问
+    # 遍历该顶点的所有邻接顶点
+    for adjVet in graph.adj_list[vet]:
+        if adjVet in visited:
+            continue  # 跳过已被访问的顶点
+        # 递归访问邻接顶点
+        dfs(graph, visited, res, adjVet)
+
+
+
+
+def graph_dfs(graph: GraphAdjList, start_vet: Vertex) -> list[Vertex]:
+    """深度优先遍历"""
+    # 使用邻接表来表示图，以便获取指定顶点的所有邻接顶点
+    # 顶点遍历序列
+    res = []
+    # 哈希集合，用于记录已被访问过的顶点
+    visited = set[Vertex]()
+    dfs(graph, visited, res, start_vet)
+    return res
+```
 
 
 深度优先遍历的算法流程如下图所示。

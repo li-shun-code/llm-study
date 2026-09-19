@@ -15,7 +15,7 @@ group: 哈希与字符串结构
 
 如下图所示，给定 n 个学生，每个学生都有“姓名”和“学号”两项数据。假如我们希望实现“输入一个学号，返回对应的姓名”的查询功能，则可以采用下图所示的哈希表来实现。
 
-![哈希表的抽象表示](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.assets/hash_table_lookup.png)
+![哈希表的抽象表示](assets/chashing__hash_map__hash_table_lookup.png)
 
 除哈希表外，数组和链表也可以实现查询功能，它们的效率对比如下表所示。
 
@@ -98,9 +98,74 @@ index = hash(key) % capacity
 
 设数组长度 `capacity = 100`、哈希算法 `hash(key) = key` ，易得哈希函数为 `key % 100` 。下图以 `key` 学号和 `value` 姓名为例，展示了哈希函数的工作原理。
 
-![哈希函数工作原理](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.assets/hash_function.png)
+![哈希函数工作原理](assets/chashing__hash_map__hash_function.png)
 
 以下代码实现了一个简单哈希表。其中，我们将 `key` 和 `value` 封装成一个类 `Pair` ，以表示键值对。
+
+```python
+class ArrayHashMap:
+    """基于数组实现的哈希表"""
+
+    def __init__(self):
+        """构造方法"""
+        # 初始化数组，包含 100 个桶
+        self.buckets: list[Pair | None] = [None] * 100
+
+    def hash_func(self, key: int) -> int:
+        """哈希函数"""
+        index = key % 100
+        return index
+
+    def get(self, key: int) -> str | None:
+        """查询操作"""
+        index: int = self.hash_func(key)
+        pair: Pair = self.buckets[index]
+        if pair is None:
+            return None
+        return pair.val
+
+    def put(self, key: int, val: str):
+        """添加和更新操作"""
+        pair = Pair(key, val)
+        index: int = self.hash_func(key)
+        self.buckets[index] = pair
+
+    def remove(self, key: int):
+        """删除操作"""
+        index: int = self.hash_func(key)
+        # 置为 None ，代表删除
+        self.buckets[index] = None
+
+    def entry_set(self) -> list[Pair]:
+        """获取所有键值对"""
+        result: list[Pair] = []
+        for pair in self.buckets:
+            if pair is not None:
+                result.append(pair)
+        return result
+
+    def key_set(self) -> list[int]:
+        """获取所有键"""
+        result = []
+        for pair in self.buckets:
+            if pair is not None:
+                result.append(pair.key)
+        return result
+
+    def value_set(self) -> list[str]:
+        """获取所有值"""
+        result = []
+        for pair in self.buckets:
+            if pair is not None:
+                result.append(pair.val)
+        return result
+
+    def print(self):
+        """打印哈希表"""
+        for pair in self.buckets:
+            if pair is not None:
+                print(pair.key, "->", pair.val)
+```
 
 
 ### 哈希冲突与扩容
@@ -116,13 +181,13 @@ index = hash(key) % capacity
 
 如下图所示，两个学号指向了同一个姓名，这显然是不对的。我们将这种多个输入对应同一输出的情况称为<u>哈希冲突（hash collision）</u>。
 
-![哈希冲突示例](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.assets/hash_collision.png)
+![哈希冲突示例](assets/chashing__hash_map__hash_collision.png)
 
 容易想到，哈希表容量 n 越大，多个 `key` 被分配到同一个桶中的概率就越低，冲突就越少。因此，**我们可以通过扩容哈希表来减少哈希冲突**。
 
 如下图所示，扩容前键值对 `(136, A)` 和 `(236, D)` 发生冲突，扩容后冲突消失。
 
-![哈希表扩容](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.assets/hash_table_reshash.png)
+![哈希表扩容](assets/chashing__hash_map__hash_table_reshash.png)
 
 类似于数组扩容，哈希表扩容需将所有键值对从原哈希表迁移至新哈希表，非常耗时；并且由于哈希表容量 `capacity` 改变，我们需要通过哈希函数来重新计算所有键值对的存储位置，这进一步增加了扩容过程的计算开销。为此，编程语言通常会预留足够大的哈希表容量，防止频繁扩容。
 
@@ -144,7 +209,7 @@ index = hash(key) % capacity
 
 在原始哈希表中，每个桶仅能存储一个键值对。<u>链式地址（separate chaining）</u>将单个元素转换为链表，将键值对作为链表节点，将所有发生冲突的键值对都存储在同一链表中。下图展示了一个链式地址哈希表的例子。
 
-![链式地址哈希表](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_collision.assets/hash_table_chaining.png)
+![链式地址哈希表](assets/chashing__hash_collision__hash_table_chaining.png)
 
 基于链式地址实现的哈希表的操作方法发生了以下变化。
 
@@ -161,6 +226,87 @@ index = hash(key) % capacity
 
 - 使用列表（动态数组）代替链表，从而简化代码。在这种设定下，哈希表（数组）包含多个桶，每个桶都是一个列表。
 - 以下实现包含哈希表扩容方法。当负载因子超过 (2)/(3) 时，我们将哈希表扩容至原先的 2 倍。
+
+```python
+class HashMapChaining:
+    """链式地址哈希表"""
+
+    def __init__(self):
+        """构造方法"""
+        self.size = 0  # 键值对数量
+        self.capacity = 4  # 哈希表容量
+        self.load_thres = 2.0 / 3.0  # 触发扩容的负载因子阈值
+        self.extend_ratio = 2  # 扩容倍数
+        self.buckets = [[] for _ in range(self.capacity)]  # 桶数组
+
+    def hash_func(self, key: int) -> int:
+        """哈希函数"""
+        return key % self.capacity
+
+    def load_factor(self) -> float:
+        """负载因子"""
+        return self.size / self.capacity
+
+    def get(self, key: int) -> str | None:
+        """查询操作"""
+        index = self.hash_func(key)
+        bucket = self.buckets[index]
+        # 遍历桶，若找到 key ，则返回对应 val
+        for pair in bucket:
+            if pair.key == key:
+                return pair.val
+        # 若未找到 key ，则返回 None
+        return None
+
+    def put(self, key: int, val: str):
+        """添加操作"""
+        # 当负载因子超过阈值时，执行扩容
+        if self.load_factor() > self.load_thres:
+            self.extend()
+        index = self.hash_func(key)
+        bucket = self.buckets[index]
+        # 遍历桶，若遇到指定 key ，则更新对应 val 并返回
+        for pair in bucket:
+            if pair.key == key:
+                pair.val = val
+                return
+        # 若无该 key ，则将键值对添加至尾部
+        pair = Pair(key, val)
+        bucket.append(pair)
+        self.size += 1
+
+    def remove(self, key: int):
+        """删除操作"""
+        index = self.hash_func(key)
+        bucket = self.buckets[index]
+        # 遍历桶，从中删除键值对
+        for pair in bucket:
+            if pair.key == key:
+                bucket.remove(pair)
+                self.size -= 1
+                break
+
+    def extend(self):
+        """扩容哈希表"""
+        # 暂存原哈希表
+        buckets = self.buckets
+        # 初始化扩容后的新哈希表
+        self.capacity *= self.extend_ratio
+        self.buckets = [[] for _ in range(self.capacity)]
+        self.size = 0
+        # 将键值对从原哈希表搬运至新哈希表
+        for bucket in buckets:
+            for pair in bucket:
+                self.put(pair.key, pair.val)
+
+    def print(self):
+        """打印哈希表"""
+        for bucket in self.buckets:
+            res = []
+            for pair in bucket:
+                res.append(str(pair.key) + " -> " + pair.val)
+            print(res)
+```
 
 
 值得注意的是，当链表很长时，查询效率 O(n) 很差。**此时可以将链表转换为“AVL 树”或“红黑树”**，从而将查询操作的时间复杂度优化至 O(log n) 。
@@ -180,13 +326,13 @@ index = hash(key) % capacity
 
 下图展示了开放寻址（线性探测）哈希表的键值对分布。根据此哈希函数，最后两位相同的 `key` 都会被映射到相同的桶。而通过线性探测，它们被依次存储在该桶以及之下的桶中。
 
-![开放寻址（线性探测）哈希表的键值对分布](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_collision.assets/hash_table_linear_probing.png)
+![开放寻址（线性探测）哈希表的键值对分布](assets/chashing__hash_collision__hash_table_linear_probing.png)
 
 然而，**线性探测容易产生“聚集现象”**。具体来说，数组中连续被占用的位置越长，这些连续位置发生哈希冲突的可能性越大，从而进一步促使该位置的聚堆生长，形成恶性循环，最终导致增删查改操作效率劣化。
 
 值得注意的是，**我们不能在开放寻址哈希表中直接删除元素**。这是因为删除元素会在数组内产生一个空桶 `None` ，而当查询元素时，线性探测到该空桶就会返回，因此在该空桶之下的元素都无法再被访问到，程序可能误判这些元素不存在，如下图所示。
 
-![在开放寻址中删除元素导致的查询问题](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_collision.assets/hash_table_open_addressing_deletion.png)
+![在开放寻址中删除元素导致的查询问题](assets/chashing__hash_collision__hash_table_open_addressing_deletion.png)
 
 为了解决该问题，我们可以采用<u>懒删除（lazy deletion）</u>机制：它不直接从哈希表中移除元素，**而是利用一个常量 `TOMBSTONE` 来标记这个桶**。在该机制下，`None` 和 `TOMBSTONE` 都代表空桶，都可以放置键值对。但不同的是，线性探测到 `TOMBSTONE` 时应该继续遍历，因为其之下可能还存在键值对。
 
@@ -195,6 +341,107 @@ index = hash(key) % capacity
 为此，考虑在线性探测中记录遇到的首个 `TOMBSTONE` 的索引，并将搜索到的目标元素与该 `TOMBSTONE` 交换位置。这样做的好处是当每次查询或添加元素时，元素会被移动至距离理想位置（探测起始点）更近的桶，从而优化查询效率。
 
 以下代码实现了一个包含懒删除的开放寻址（线性探测）哈希表。为了更加充分地使用哈希表的空间，我们将哈希表看作一个“环形数组”，当越过数组尾部时，回到头部继续遍历。
+
+```python
+class HashMapOpenAddressing:
+    """开放寻址哈希表"""
+
+    def __init__(self):
+        """构造方法"""
+        self.size = 0  # 键值对数量
+        self.capacity = 4  # 哈希表容量
+        self.load_thres = 2.0 / 3.0  # 触发扩容的负载因子阈值
+        self.extend_ratio = 2  # 扩容倍数
+        self.buckets: list[Pair | None] = [None] * self.capacity  # 桶数组
+        self.TOMBSTONE = Pair(-1, "-1")  # 删除标记
+
+    def hash_func(self, key: int) -> int:
+        """哈希函数"""
+        return key % self.capacity
+
+    def load_factor(self) -> float:
+        """负载因子"""
+        return self.size / self.capacity
+
+    def find_bucket(self, key: int) -> int:
+        """搜索 key 对应的桶索引"""
+        index = self.hash_func(key)
+        first_tombstone = -1
+        # 线性探测，当遇到空桶时跳出
+        while self.buckets[index] is not None:
+            # 若遇到 key ，返回对应的桶索引
+            if self.buckets[index].key == key:
+                # 若之前遇到了删除标记，则将键值对移动至该索引处
+                if first_tombstone != -1:
+                    self.buckets[first_tombstone] = self.buckets[index]
+                    self.buckets[index] = self.TOMBSTONE
+                    return first_tombstone  # 返回移动后的桶索引
+                return index  # 返回桶索引
+            # 记录遇到的首个删除标记
+            if first_tombstone == -1 and self.buckets[index] is self.TOMBSTONE:
+                first_tombstone = index
+            # 计算桶索引，越过尾部则返回头部
+            index = (index + 1) % self.capacity
+        # 若 key 不存在，则返回添加点的索引
+        return index if first_tombstone == -1 else first_tombstone
+
+    def get(self, key: int) -> str:
+        """查询操作"""
+        # 搜索 key 对应的桶索引
+        index = self.find_bucket(key)
+        # 若找到键值对，则返回对应 val
+        if self.buckets[index] not in [None, self.TOMBSTONE]:
+            return self.buckets[index].val
+        # 若键值对不存在，则返回 None
+        return None
+
+    def put(self, key: int, val: str):
+        """添加操作"""
+        # 当负载因子超过阈值时，执行扩容
+        if self.load_factor() > self.load_thres:
+            self.extend()
+        # 搜索 key 对应的桶索引
+        index = self.find_bucket(key)
+        # 若找到键值对，则覆盖 val 并返回
+        if self.buckets[index] not in [None, self.TOMBSTONE]:
+            self.buckets[index].val = val
+            return
+        # 若键值对不存在，则添加该键值对
+        self.buckets[index] = Pair(key, val)
+        self.size += 1
+
+    def remove(self, key: int):
+        """删除操作"""
+        # 搜索 key 对应的桶索引
+        index = self.find_bucket(key)
+        # 若找到键值对，则用删除标记覆盖它
+        if self.buckets[index] not in [None, self.TOMBSTONE]:
+            self.buckets[index] = self.TOMBSTONE
+            self.size -= 1
+
+    def extend(self):
+        """扩容哈希表"""
+        # 暂存原哈希表
+        buckets_tmp = self.buckets
+        # 初始化扩容后的新哈希表
+        self.capacity *= self.extend_ratio
+        self.buckets = [None] * self.capacity
+        self.size = 0
+        # 将键值对从原哈希表搬运至新哈希表
+        for pair in buckets_tmp:
+            if pair not in [None, self.TOMBSTONE]:
+                self.put(pair.key, pair.val)
+
+    def print(self):
+        """打印哈希表"""
+        for pair in self.buckets:
+            if pair is None:
+                print("None")
+            elif pair is self.TOMBSTONE:
+                print("TOMBSTONE")
+            else:
+                print(pair.key, "->", pair.val)
+```
 
 
 #### 平方探测
@@ -234,5 +481,5 @@ index = hash(key) % capacity
 ---
 
 > **来源**：本文转载自 [哈希表](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[哈希冲突](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_collision.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[哈希冲突](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_collision.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

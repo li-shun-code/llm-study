@@ -23,10 +23,20 @@ group: 复杂度与递归
 
 以下函数基于 `for` 循环实现了求和 1 + 2 + … + n ，求和结果使用变量 `res` 记录。需要注意的是，Python 中 `range(a, b)` 对应的区间是“左闭右开”的，对应的遍历范围为 a, a + 1, …, b-1 ：
 
+```python
+def for_loop(n: int) -> int:
+    """for 循环"""
+    res = 0
+    # 循环求和 1, 2, ..., n-1, n
+    for i in range(1, n + 1):
+        res += i
+    return res
+```
+
 
 下图是该求和函数的流程框图。
 
-![求和函数的流程框图](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.assets/iteration.png)
+![求和函数的流程框图](assets/ccomputational_complexity__iteration_and_recursion__iteration.png)
 
 此求和函数的操作数量与输入数据大小 n 成正比，或者说成“线性关系”。实际上，**时间复杂度描述的就是这个“线性关系”**。相关内容将会在下一节中详细介绍。
 
@@ -36,10 +46,36 @@ group: 复杂度与递归
 
 下面我们用 `while` 循环来实现求和 1 + 2 + … + n ：
 
+```python
+def while_loop(n: int) -> int:
+    """while 循环"""
+    res = 0
+    i = 1  # 初始化条件变量
+    # 循环求和 1, 2, ..., n-1, n
+    while i <= n:
+        res += i
+        i += 1  # 更新条件变量
+    return res
+```
+
 
 **`while` 循环比 `for` 循环的自由度更高**。在 `while` 循环中，我们可以自由地设计条件变量的初始化和更新步骤。
 
 例如在以下代码中，条件变量 i 每轮进行两次更新，这种情况就不太方便用 `for` 循环实现：
+
+```python
+def while_loop_ii(n: int) -> int:
+    """while 循环（两次更新）"""
+    res = 0
+    i = 1  # 初始化条件变量
+    # 循环求和 1, 4, 10, ...
+    while i <= n:
+        res += i
+        # 更新条件变量
+        i += 1
+        i *= 2
+    return res
+```
 
 
 总的来说，**`for` 循环的代码更加紧凑，`while` 循环更加灵活**，两者都可以实现迭代结构。选择使用哪一个应该根据特定问题的需求来决定。
@@ -48,10 +84,22 @@ group: 复杂度与递归
 
 我们可以在一个循环结构内嵌套另一个循环结构，下面以 `for` 循环为例：
 
+```python
+def nested_for_loop(n: int) -> str:
+    """双层 for 循环"""
+    res = ""
+    # 循环 i = 1, 2, ..., n-1, n
+    for i in range(1, n + 1):
+        # 循环 j = 1, 2, ..., n-1, n
+        for j in range(1, n + 1):
+            res += f"({i}, {j}), "
+    return res
+```
+
 
 下图是该嵌套循环的流程框图。
 
-![嵌套循环的流程框图](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.assets/nested_iteration.png)
+![嵌套循环的流程框图](assets/ccomputational_complexity__iteration_and_recursion__nested_iteration.png)
 
 在这种情况下，函数的操作数量与 n² 成正比，或者说算法运行时间和输入数据大小 n 成“平方关系”。
 
@@ -72,10 +120,22 @@ group: 复杂度与递归
 
 观察以下代码，我们只需调用函数 `recur(n)`  ，就可以完成 1 + 2 + … + n 的计算：
 
+```python
+def recur(n: int) -> int:
+    """递归"""
+    # 终止条件
+    if n == 1:
+        return 1
+    # 递：递归调用
+    res = recur(n - 1)
+    # 归：返回结果
+    return n + res
+```
+
 
 下图展示了该函数的递归过程。
 
-![求和函数的递归过程](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.assets/recursion_sum.png)
+![求和函数的递归过程](assets/ccomputational_complexity__iteration_and_recursion__recursion_sum.png)
 
 虽然从计算角度看，迭代与递归可以得到相同的结果，**但它们代表了两种完全不同的思考和解决问题的范式**。
 
@@ -96,7 +156,7 @@ group: 复杂度与递归
 
 如下图所示，在触发终止条件前，同时存在 n 个未返回的递归函数，**递归深度为 n** 。
 
-![递归调用深度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.assets/recursion_sum_depth.png)
+![递归调用深度](assets/ccomputational_complexity__iteration_and_recursion__recursion_sum_depth.png)
 
 在实际中，编程语言允许的递归深度通常是有限的，过深的递归可能导致栈溢出错误。
 
@@ -109,13 +169,23 @@ group: 复杂度与递归
 
 以计算 1 + 2 + … + n 为例，我们可以将结果变量 `res` 设为函数参数，从而实现尾递归：
 
+```python
+def tail_recur(n, res):
+    """尾递归"""
+    # 终止条件
+    if n == 0:
+        return res
+    # 尾递归调用
+    return tail_recur(n - 1, res + n)
+```
+
 
 尾递归的执行过程如下图所示。对比普通递归和尾递归，两者的求和操作的执行点是不同的。
 
 - **普通递归**：求和操作是在“归”的过程中执行的，每层返回后都要再执行一次求和操作。
 - **尾递归**：求和操作是在“递”的过程中执行的，“归”的过程只需层层返回。
 
-![尾递归过程](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.assets/tail_recursion_sum.png)
+![尾递归过程](assets/ccomputational_complexity__iteration_and_recursion__tail_recursion_sum.png)
 
 > **【提示】**
 > 请注意，许多编译器或解释器并不支持尾递归优化。例如，Python 默认不支持尾递归优化，因此即使函数是尾递归形式，仍然可能会遇到栈溢出问题。
@@ -134,10 +204,22 @@ group: 复杂度与递归
 
 按照递推关系进行递归调用，将前两个数字作为终止条件，便可写出递归代码。调用 `fib(n)` 即可得到斐波那契数列的第 n 个数字：
 
+```python
+def fib(n: int) -> int:
+    """斐波那契数列：递归"""
+    # 终止条件 f(1) = 0, f(2) = 1
+    if n == 1 or n == 2:
+        return n - 1
+    # 递归调用 f(n) = f(n-1) + f(n-2)
+    res = fib(n - 1) + fib(n - 2)
+    # 返回结果 f(n)
+    return res
+```
+
 
 观察以上代码，我们在函数内递归调用了两个函数，**这意味着从一个调用产生了两个调用分支**。如下图所示，这样不断递归调用下去，最终将产生一棵层数为 n 的<u>递归树（recursion tree）</u>。
 
-![斐波那契数列的递归树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.assets/recursion_tree.png)
+![斐波那契数列的递归树](assets/ccomputational_complexity__iteration_and_recursion__recursion_tree.png)
 
 从本质上看，递归体现了“将问题分解为更小子问题”的思维范式，这种分治策略至关重要。
 
@@ -158,7 +240,7 @@ group: 复杂度与递归
 | 适用问题 | 适用于简单循环任务，代码直观、可读性好 | 适用于子问题分解，如树、图、分治、回溯等，代码结构简洁、清晰 |
 
 > **【提示】**
-> 如果感觉以下内容理解困难，可以在读完“栈”章节后再来复习。
+> 如果感觉以下内容理解困难，可以先读完《栈》再回来复习。
 
 那么，迭代和递归具有什么内在联系呢？以上述递归函数为例，求和操作在递归的“归”阶段进行。这意味着最初被调用的函数实际上是最后完成其求和操作的，**这种工作机制与栈的“先入后出”原则异曲同工**。
 
@@ -168,6 +250,24 @@ group: 复杂度与递归
 2. **归**：当函数完成执行并返回时，对应的栈帧会被从“调用栈”上移除，恢复之前函数的执行环境。
 
 因此，**我们可以使用一个显式的栈来模拟调用栈的行为**，从而将递归转化为迭代形式：
+
+```python
+def for_loop_recur(n: int) -> int:
+    """使用迭代模拟递归"""
+    # 使用一个显式的栈来模拟系统调用栈
+    stack = []
+    res = 0
+    # 递：递归调用
+    for i in range(n, 0, -1):
+        # 通过“入栈操作”模拟“递”
+        stack.append(i)
+    # 归：返回结果
+    while stack:
+        # 通过“出栈操作”模拟“归”
+        res += stack.pop()
+    # res = 1+2+3+...+n
+    return res
+```
 
 
 观察以上代码，当递归转化为迭代后，代码变得更加复杂了。尽管迭代和递归在很多情况下可以互相转化，但不一定值得这样做，有以下两点原因。
@@ -190,7 +290,7 @@ group: 复杂度与递归
 1. **分**：递归地将原数组（原问题）划分为两个子数组（子问题），直到子数组只剩一个元素（最小子问题）。
 2. **治**：从底至顶地将有序的子数组（子问题的解）进行合并，从而得到有序的原数组（原问题的解）。
 
-![归并排序的分治策略](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_divide_and_conquer/divide_and_conquer.assets/divide_and_conquer_merge_sort.png)
+![归并排序的分治策略](assets/cdivide_and_conquer__divide_and_conquer__divide_and_conquer_merge_sort.png)
 
 ### 如何判断分治问题
 
@@ -216,14 +316,14 @@ group: 复杂度与递归
 
 以“冒泡排序”为例，其处理一个长度为 n 的数组需要 O(n²) 时间。假设我们按照下图所示的方式，将数组从中点处分为两个子数组，则划分需要 O(n) 时间，排序每个子数组需要 O((n / 2)²) 时间，合并两个子数组需要 O(n) 时间，总体时间复杂度为：
 
-**O(n + ((n)/(2))² × 2 + n) = O((n²)/(2) + 2n)**
+**O(n + (n/2)² × 2 + n) = O(n²/2 + 2n)**
 
 
-![划分数组前后的冒泡排序](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_divide_and_conquer/divide_and_conquer.assets/divide_and_conquer_bubble_sort.png)
+![划分数组前后的冒泡排序](assets/cdivide_and_conquer__divide_and_conquer__divide_and_conquer_bubble_sort.png)
 
 接下来，我们计算以下不等式，其左边和右边分别为划分前和划分后的操作总数：
 
-**n² > (n²)/(2) + 2n ; n² - (n²)/(2) - 2n > 0 ; n(n - 4) > 0**
+**n² > n²/2 + 2n，即 n² - n²/2 - 2n = n(n - 4)/2 > 0**
 
 
 **这意味着当 n > 4 时，划分后的操作数量更少，排序效率应该更高**。请注意，划分后的时间复杂度仍然是平方阶 O(n²) ，只是复杂度中的常数项变小了。
@@ -240,7 +340,7 @@ group: 复杂度与递归
 
 比如在下图所示的“桶排序”中，我们将海量的数据平均分配到各个桶中，则可将所有桶的排序任务分散到各个计算单元，完成后再合并结果。
 
-![桶排序的并行计算](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_divide_and_conquer/divide_and_conquer.assets/divide_and_conquer_parallel_computing.png)
+![桶排序的并行计算](assets/cdivide_and_conquer__divide_and_conquer__divide_and_conquer_parallel_computing.png)
 
 ### 分治常见应用
 
@@ -267,5 +367,5 @@ group: 复杂度与递归
 ---
 
 > **来源**：本文转载自 [迭代与递归](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[分治算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_divide_and_conquer/divide_and_conquer.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[分治算法](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_divide_and_conquer/divide_and_conquer.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

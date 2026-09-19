@@ -8,7 +8,7 @@ translated: true
 order: 4
 group: 概念、工具全景与评测
 ---
-上一篇你完成了第一次 AI 结对，但有一个问题值得在任何进阶工作流之前回答：当你按下回车，AI 到底"看"到了什么？它并不是打开了你的编辑器——它看到的是一个叫**上下文窗口**的 token 序列。本篇主体翻译 Claude Code 官方文档《How Claude Code works》（智能体循环与访问边界）与《Explore the context window》（上下文构成），并在文末补一节分词（tokenization）对编码的影响。建立这套心智模型，后面前述的工作流、前述的上下文工程才有着力点。
+装好工具、跑通第一次结对之后，有一个问题值得在任何进阶工作流之前回答：当你按下回车，AI 到底"看"到了什么？它并不是打开了你的编辑器——它看到的是一个叫**上下文窗口**的 token 序列。本篇主体翻译 Claude Code 官方文档 How Claude Code works（智能体循环与访问边界）与 Explore the context window（上下文构成），并在文末补一节分词（tokenization）对编码的影响。建立这套心智模型，后面的工作流、权限、成本与上下文工程各篇才有着力点。
 
 ## 一、智能体循环（The agentic loop）
 
@@ -38,7 +38,7 @@ Claude Code 使用 Claude 模型理解代码与推理任务。Claude 能读任�
 | **Web** | 搜索网页、抓文档、查错误信息 |
 | **代码智能** | 编辑后看到类型错误与警告、跳转定义、找引用（需代码智能插件） |
 
-比如你说"fix the failing tests"，Claude 可能：跑测试看哪些失败 → 读错误输出 → 搜相关源文件 → 读文件理解代码 → 编辑修复 → 再跑测试验证。每次工具调用都给它新的信息， inform下一步——这就是智能体循环的运转方式。
+比如你说"fix the failing tests"，Claude 可能：跑测试看哪些失败 → 读错误输出 → 搜相关源文件 → 读文件理解代码 → 编辑修复 → 再跑测试验证。每次工具调用都给它新的信息、由这些信息决定下一步做什么——这就是智能体循环的运转方式。
 
 ## 二、Claude 能访问什么
 
@@ -98,6 +98,6 @@ Claude 的上下文窗口容纳：对话历史、文件内容、命令输出、C
 
 ---
 
-> 下一篇预告：心智模型建立完毕。接下来进入单工具深入——第 7 篇翻译 Anthropic 官方的《Claude Code 最佳实践》，把"探索→计划→实现→提交"的完整工作流第一次讲透。
+> 延伸阅读：心智模型建立完毕后进入单工具深入——《Claude Code 工作流与最佳实践》译出 Anthropic 官方的最佳实践，把"探索→计划→实现→提交"的完整工作流讲透；《环境搭建：Claude Code 与 Cursor 的安装与配置矩阵》解决"装到哪一步、配置读哪一层"。
 
 > **来源**：本文第一至四、六节翻译自 [How Claude Code works](https://code.claude.com/docs/en/how-claude-code-works) 与 [Explore the context window](https://code.claude.com/docs/en/context-window)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；第五节"分词"为本站编者补充并已标明。抓取于 2026-09-13。

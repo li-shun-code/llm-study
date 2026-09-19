@@ -18,11 +18,31 @@ group: 树与堆
 
 层序遍历本质上属于<u>广度优先遍历（breadth-first traversal）</u>，也称<u>广度优先搜索（breadth-first search, BFS）</u>，它体现了一种“一圈一圈向外扩展”的逐层遍历方式。
 
-![二叉树的层序遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree_traversal.assets/binary_tree_bfs.png)
+![二叉树的层序遍历](assets/ctree__binary_tree_traversal__binary_tree_bfs.png)
 
 ### 代码实现
 
+> 以下代码中的 `TreeNode` 类定义见《树与二叉树》。
+
 广度优先遍历通常借助“队列”来实现。队列遵循“先进先出”的规则，而广度优先遍历则遵循“逐层推进”的规则，两者背后的思想是一致的。实现代码如下：
+
+```python
+def level_order(root: TreeNode | None) -> list[int]:
+    """层序遍历"""
+    # 初始化队列，加入根节点
+    queue: deque[TreeNode] = deque()
+    queue.append(root)
+    # 初始化一个列表，用于保存遍历序列
+    res = []
+    while queue:
+        node: TreeNode = queue.popleft()  # 队列出队
+        res.append(node.val)  # 保存节点值
+        if node.left is not None:
+            queue.append(node.left)  # 左子节点入队
+        if node.right is not None:
+            queue.append(node.right)  # 右子节点入队
+    return res
+```
 
 
 ### 复杂度分析
@@ -36,11 +56,22 @@ group: 树与堆
 
 下图展示了对二叉树进行深度优先遍历的工作原理。**深度优先遍历就像是绕着整棵二叉树的外围“走”一圈**，在每个节点都会遇到三个位置，分别对应前序遍历、中序遍历和后序遍历。
 
-![二叉搜索树的前序、中序、后序遍历](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree_traversal.assets/binary_tree_dfs.png)
+![二叉搜索树的前序、中序、后序遍历](assets/ctree__binary_tree_traversal__binary_tree_dfs.png)
 
 ### 代码实现
 
 深度优先搜索通常基于递归实现：
+
+```python
+def post_order(root: TreeNode | None):
+    """后序遍历"""
+    if root is None:
+        return
+    # 访问优先级：左子树 -> 右子树 -> 根节点
+    post_order(root=root.left)
+    post_order(root=root.right)
+    res.append(root.val)
+```
 
 
 > **【提示】**

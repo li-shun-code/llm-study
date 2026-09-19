@@ -83,9 +83,9 @@ if __name__ == "__main__":
 
 对照知识点（均来自前面各篇）：
 
-- `stream=True` + `delta.content` + 拼接：**第 03 篇**流式输出的标准循环（Cookbook 原文即用 `collected_messages` 收集、过滤 `None`、`''.join` 成全文）；
-- `role: "developer"` 系统指令与历史回填：**第 02 篇**消息角色；
-- 历史越滚越长，`usage.prompt_tokens` 会持续增长——观察并考虑裁剪策略（**第 09 篇**）。
+- `stream=True` + `delta.content` + 拼接：**《流式输出（SSE）》**的标准循环（Cookbook 原文即用 `collected_messages` 收集、过滤 `None`、`''.join` 成全文）；
+- `role: "developer"` 系统指令与历史回填：**《消息角色与多轮会话管理》**的角色体系；
+- 历史越滚越长，`usage.prompt_tokens` 会持续增长——观察并考虑裁剪策略（**《成本与 Token 优化：Prompt Caching 与 Batch API》**）。
 
 ## 三、版本二：Responses API + `previous_response_id`
 

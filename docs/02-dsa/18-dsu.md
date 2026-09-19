@@ -1,1091 +1,280 @@
 ---
-title: 并查集
-source_url: https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/dsu.md
-author: OI Wiki 项目
-license: CC BY-SA 4.0
-fetched_at: 2026-09-13
+title: 并查集与等价类归并
+source_url: https://raw.githubusercontent.com/TheAlgorithms/Python/master/data_structures/disjoint_set/disjoint_set.py
+author: 本站整理；参考 TheAlgorithms/Python、OI Wiki《并查集》
+license: MIT（TheAlgorithms/Python）；CC BY-SA 4.0（OI Wiki 定义与配图）
+fetched_at: 2026-09-19
 translated: false
+versions: Python 3.12（标准库，无第三方依赖）
 order: 18
 group: 图
 ---
-*本文完整转载自 [OI Wiki · 并查集](https://oi-wiki.org/ds/dsu/)，原文 raw markdown 取自 [OI-wiki/OI-wiki 仓库 docs/ds/dsu.md](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/dsu.md)，作者 OI Wiki 项目（本篇署名作者：HeRaNO、JuicyMio、Xeonacid、sailordiary、ouuan、Pig-Eat-Earth），许可 CC BY-SA 4.0。原文为中文，本站仅做格式转换：mkdocs 示例/提示引用块转为正文标题或加粗标注，多语言代码页改为 **C++ / Python** 标注，代码片段引用以内联真实代码替换，图片与站内链接改为绝对地址，LaTeX 公式转为 Unicode 可读文本。*
+> **难度**：★★☆。代码只有二十行，但它是“动态连通性”这一整类问题的钥匙。
+> **适合**：要做社区划分、近似去重、实体对齐、等价类归并的读者。
+> **前置**：《图》《哈希表》。本篇只用邻接关系和字典，不需要《图的遍历（DFS/BFS）》的知识，但两者常可互换，文中会对比。
 
-![并查集示意图](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/images/disjoint-set.svg)
+## 为什么需要并查集
 
-## 引入
+有一类问题反复出现在工程里：**给一堆元素，不断告知“这两个元素属于同一类”，随时询问“这两个是不是同一类”**。
 
-并查集是一种用于管理元素所属集合的数据结构，实现为一个森林，其中每棵树表示一个集合，树中的节点表示对应集合中的元素．
+- 社交网络：好友关系传递（A 和 B 同群、B 和 C 同群 ⇒ A 和 C 同群），要把用户划成社区。
+- 文档去重：两两比对相似度过阈值就合并，最后每组留一个代表。
+- 实体对齐：同一个人在不同系统里有手机号、邮箱、OpenID，要把它们归并为一个实体。
+- 账号打通 / 风控：同一设备、同一支付方式关联出的账号簇。
+- 图片/传感器聚类：把距离小于阈值的点归并成簇。
+- 无向图连通分量、Kruskal 最小生成树、棋盘格连块判断。
 
-顾名思义，并查集支持两种操作：
+用《图的遍历》里的 BFS/DFS 也能求连通分量，但每次新增一条边，所有已算好的分量都可能变化，得重新遍历一遍，代价 O(V + E) 。**并查集（disjoint set / union-find）把“合并”和“查询”都做到近乎常数时间**，专门解决这种“动态增量式”的归并问题。
 
-- 合并（Unite）：合并两个元素所属集合（合并对应的树）．
-- 查询（Find）：查询某个元素所属集合（查询对应的树的根节点），这可以用于判断两个元素是否属于同一集合．
+代价是它有明确的能力边界：**只支持合并，不支持拆分**。
 
-并查集在经过修改后可以支持单个元素的删除、移动或维护树上的边权．使用动态开点线段树还可以实现 [可持久化并查集](https://oi-wiki.org/ds/persistent-seg/)．
+## 定义与直观图
 
-> **Warning**：并查集无法以较低复杂度实现集合的分离．
+并查集维护一组互不相交的集合，每个集合用“树”来表示，**树根就是这个集合的代表元素（find 的结果）**。它提供两个操作：
 
-## 初始化
+- `find(x)` ：返回 x 所在集合的根，用来判断归属。
+- `union(x, y)` ：把两个集合合并——做法是让一棵树的根指向另一棵树的根。
 
-初始时，每个元素都位于一个单独的集合，表示为一棵只有根节点的树．方便起见，我们将根节点的父亲设为自己．
+![并查集：若干棵不相关的树](assets/oi_ds__disjoint-set.svg)
 
-**实现（C++）**
+查询 `find(6)` 时沿父指针一路向上直到根节点，路径上的 6 → 4 → 2 → 1 都要走一遍：
 
-```cpp
-struct dsu {
-  vector<size_t> pa;
+![并查集查询：沿父指针上溯到根](assets/oi_ds__disjoint-set-find.svg)
 
-  explicit dsu(size_t size) : pa(size) { iota(pa.begin(), pa.end(), 0); }
-};
-```
+合并时把一棵树的根挂到另一棵树的根下面：
 
-**实现（Python）**
+![并查集合并](assets/oi_ds__disjoint-set-merge.svg)
+
+如果每次合并都随机地挂，树可能退化成一条链，`find` 就退化为 O(n) ：
+
+**1 - 2 - 3 - 4 - 5 - … - n**
+
+因此需要两个优化。
+
+1. **按大小（或按秩）合并**：始终让小树挂到大树上，树高就被控制在 O(log n) 以内。
+2. **路径压缩**：`find` 走过路径上所有节点的父指针，直接改指向根。以后再查这些点就是 O(1) 。
+
+![路径压缩后所有节点直连根](assets/oi_ds__disjoint-set-compress.svg)
+
+两个优化一起用，n 个元素、m 次操作的均摊代价是 O(m · α(n)) ，其中 α 是反 Ackermann 函数——在 n 大到宇宙原子数的范围内，α(n) ≤ 5 ，工程上可以直接当常数看待。
+
+## Python 实现
+
+### 通用版：字典父指针（支持任意可哈希元素、支持增量）
+
+这是工程里最好用的形态：不必预先知道元素个数，随时 `add` 。
 
 ```python
-class Dsu:
-    def __init__(self, size):
-        self.pa = list(range(size))
+class DisjointSet:
+    """并查集：按大小合并 + 路径压缩（迭代实现，不会爆栈）"""
+
+    def __init__(self):
+        self.parent: dict[object, object] = {}  # 元素 -> 父元素
+        self.size: dict[object, int] = {}       # 根元素 -> 集合大小
+
+    def add(self, x) -> None:
+        """加入一个新元素；已存在则忽略"""
+        if x not in self.parent:
+            self.parent[x] = x
+            self.size[x] = 1
+
+    def find(self, x):
+        """返回 x 所在集合的根；不存在则顺手创建"""
+        if x not in self.parent:
+            self.add(x)
+            return x
+        # 第一遍：找到根
+        root = x
+        while self.parent[root] != root:
+            root = self.parent[root]
+        # 第二遍：路径压缩，把沿途节点直接挂到根上
+        while self.parent[x] != root:
+            self.parent[x], x = root, self.parent[x]
+        return root
+
+    def union(self, x, y) -> bool:
+        """合并两个集合；若本就在同一集合返回 False（Kruskal、去重时很有用）"""
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False
+        # 按大小合并：小挂大
+        if self.size[rx] < self.size[ry]:
+            rx, ry = ry, rx
+        self.parent[ry] = rx
+        self.size[rx] += self.size[ry]
+        del self.size[ry]
+        return True
+
+    def connected(self, x, y) -> bool:
+        return self.find(x) == self.find(y)
+
+    def components(self) -> dict[object, list]:
+        """按根分组，返回 {代表元: [成员, ...]}"""
+        groups: dict[object, list] = {}
+        for x in self.parent:
+            groups.setdefault(self.find(x), []).append(x)
+        return groups
 ```
 
-## 查询
-
-我们需要沿着树向上移动，直至找到根节点．
-
-![并查集查询示意图](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/images/disjoint-set-find.svg)
-
-**实现（C++）**
-
-```cpp
-size_t dsu::find(size_t x) { return pa[x] == x ? x : find(pa[x]); }
-```
-
-**实现（Python）**
+代码里有一处刻意的取舍：**`find` 用迭代而非递归**。竞赛与教材的递归写法只有两行：
 
 ```python
 def find(self, x):
-    return x if self.pa[x] == x else self.find(self.pa[x])
+    if self.parent[x] != x:
+        self.parent[x] = self.find(self.parent[x])  # 路径压缩
+    return self.parent[x]
 ```
 
-### 路径压缩
+它同样正确、更简洁，但在一条长度为数十万的链上会直接 `RecursionError`（Python 默认递归上限 1000 ，即使用 `sys.setrecursionlimit` 抬高也容易段错误）。**生产代码请用迭代版**；面试白板可以用递归版，但要能说出这个差别。
 
-查询过程中经过的每个元素都属于该集合，我们可以将其直接连到根节点以加快后续查询．
+### 紧凑版：数组下标（元素是 0..n-1）
 
-![路径压缩示意图](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/images/disjoint-set-compress.svg)
-
-**实现（C++）**
-
-```cpp
-size_t dsu::find(size_t x) { return pa[x] == x ? x : pa[x] = find(pa[x]); }
-```
-
-**实现（Python）**
+元素是整数且数量已知时，用列表比字典快 3~5 倍（省掉哈希开销），适合内层循环极多的场景：
 
 ```python
-def find(self, x):
-    if self.pa[x] != x:
-        self.pa[x] = self.find(self.pa[x])
-    return self.pa[x]
-```
-
-## 合并
-
-要合并两棵树，我们只需要将一棵树的根节点连到另一棵树的根节点．
-
-![并查集合并示意图](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/images/disjoint-set-merge.svg)
-
-**实现（C++）**
-
-```cpp
-void dsu::unite(size_t x, size_t y) { pa[find(x)] = find(y); }
-```
-
-**实现（Python）**
-
-```python
-def unite(self, x, y):
-    self.pa[self.find(x)] = self.find(y)
-```
-
-### 启发式合并
-
-合并时，选择哪棵树的根节点作为新树的根节点会影响未来操作的复杂度．我们可以将节点较少或深度较小的树连到另一棵，以免发生退化．
-
-**具体复杂度讨论**：由于需要我们支持的只有集合的合并、查询操作，当我们需要将两个集合合二为一时，无论将哪一个集合连接到另一个集合的下面，都能得到正确的结果．但不同的连接方法存在时间复杂度的差异．具体来说，如果我们将一棵点数与深度都较小的集合树连接到一棵更大的集合树下，显然相比于另一种连接方案，接下来执行查找操作的用时更小（也会带来更优的最坏时间复杂度）．
-
-当然，我们不总能遇到恰好如上所述的集合——点数与深度都更小．鉴于点数与深度这两个特征都很容易维护，我们常常从中择一，作为估价函数．而无论选择哪一个，时间复杂度都为 O(mα(m,n))，具体的证明可参见 References 中引用的论文．
-
-在算法竞赛的实际代码中，即便不使用启发式合并，代码也往往能够在规定时间内完成任务．在 Tarjan 的论文[^tarjan1984worst]中，证明了不使用启发式合并、只使用路径压缩的最坏时间复杂度是 O(m log n)．在姚期智的论文[^yao1985expected]中，证明了不使用启发式合并、只使用路径压缩，在平均情况下，时间复杂度依然是 O(mα(m,n))．
-
-如果只使用启发式合并，而不使用路径压缩，时间复杂度为 O(m log n)．由于路径压缩单次合并可能造成大量修改，有时路径压缩并不适合使用．例如，在可持久化并查集、线段树分治 + 并查集中，一般使用只启发式合并的并查集．
-
-按节点数合并的参考实现：（注意需要调整初始化方法）
-
-**实现（C++）**
-
-```cpp
-struct dsu {
-  vector<size_t> pa, size;
-
-  explicit dsu(size_t size_) : pa(size_), size(size_, 1) {
-    iota(pa.begin(), pa.end(), 0);
-  }
-
-  void unite(size_t x, size_t y) {
-    x = find(x), y = find(y);
-    if (x == y) return;
-    if (size[x] < size[y]) swap(x, y);
-    pa[y] = x;
-    size[x] += size[y];
-  }
-};
-```
-
-**实现（Python）**
-
-```python
-class Dsu:
-    def __init__(self, size):
-        self.pa = list(range(size))
-        self.size = [1] * size
-
-    def unite(self, x, y):
-        x, y = self.find(x), self.find(y)
-        if x == y:
-            return
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-        self.pa[y] = x
-        self.size[x] += self.size[y]
-```
-
-## 参考实现
-
-带有路径压缩、按节点数合并的并查集的完整实现如下所示：
-
-**模板题 [Luogu P3367【模板】并查集](https://www.luogu.com.cn/problem/P3367) 参考实现（C++）**
-
-```cpp
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-struct DSU {
-  std::vector<size_t> pa, size;
-
-  explicit DSU(size_t size_) : pa(size_), size(size_, 1) {
-    std::iota(pa.begin(), pa.end(), 0);
-  }
-
-  size_t find(size_t x) { return pa[x] == x ? x : pa[x] = find(pa[x]); }
-
-  void unite(size_t x, size_t y) {
-    x = find(x), y = find(y);
-    if (x == y) return;
-    if (size[x] < size[y]) std::swap(x, y);
-    pa[y] = x;
-    size[x] += size[y];
-  }
-};
-
-int main() {
-  int n, m;
-  std::cin >> n >> m;
-  DSU dsu(n + 1);
-  for (; m; --m) {
-    int z, x, y;
-    std::cin >> z >> x >> y;
-    if (z == 1) {
-      dsu.unite(x, y);
-    } else {
-      std::cout << (dsu.find(x) == dsu.find(y) ? 'Y' : 'N') << '\n';
-    }
-  }
-  return 0;
-}
-```
-
-**模板题 [Luogu P3367【模板】并查集](https://www.luogu.com.cn/problem/P3367) 参考实现（Python）**
-
-```python
-class Dsu:
-    def __init__(self, size):
-        self.pa = list(range(size))
-        self.size = [1] * size
-
-    def find(self, x):
-        if self.pa[x] != x:
-            self.pa[x] = self.find(self.pa[x])
-        return self.pa[x]
-
-    def unite(self, x, y):
-        x, y = self.find(x), self.find(y)
-        if x == y:
-            return
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-        self.pa[y] = x
-        self.size[x] += self.size[y]
-
-
-if __name__ == "__main__":
-    n, m = map(int, input().split())
-    dsu = Dsu(n + 1)
-    for _ in range(m):
-        z, x, y = map(int, input().split())
-        if z == 1:
-            dsu.unite(x, y)
-        else:
-            print("Y" if dsu.find(x) == dsu.find(y) else "N")
-```
-
-## 复杂度
-
-同时使用路径压缩和启发式合并之后，并查集的每个操作平均时间仅为 O(α(n))．其中，α 为阿克曼函数的反函数，增长极其缓慢．也就是说，并查集单次操作的平均运行时间可以认为是一个很小的常数．时间复杂度的证明在 [这个页面](https://oi-wiki.org/ds/dsu-complexity/) 中．
-
-**反 Ackermann 函数**：[Ackermann 函数](https://en.wikipedia.org/wiki/Ackermann_function) A(m, n) 的定义是这样的：
-
-```plain
-A(m, n) =
-  n + 1               （若 m = 0）
-  A(m - 1, 1)         （若 m > 0 且 n = 0）
-  A(m - 1, A(m, n-1)) （其他情况）
-```
-
-而反 Ackermann 函数 α(n) 的定义是 Ackermann 函数的反函数，即为最大的整数 m 使得 A(m, m) ⩽ n．
-
-并查集的空间复杂度显然为 O(n)．
-
-## 拓展操作
-
-在普通的并查集的基础上，还可以做一系列修改使之支持更多的操作或维护更复杂的信息．
-
-### 带删除并查集
-
-普通的并查集无法支持删除操作，是因为删除一个节点的时候，不可避免地会将以它为根的子树上所有节点都删除．为了解决这一问题，在带删除操作的并查集中，可以通过建立虚点的方法保证所有实际存储数据的节点总是叶子节点．为此，需要在初始化时，就为每个数据节点都建立一个虚点，并将数据节点的父节点设置为该虚点．由于每次合并两个集合时，都只会将两个集合的树根连接，所以，从始至终只有虚点会有子节点．这就保证了删除一个节点时，不会误删其他节点．
-
-注意，删除单个节点后，需要重新为该节点建立一个虚点作为其父节点；否则，无法正确执行后续的合并和删除操作．
-
-**模板题 [SPOJ JMFILTER - Junk-Mail Filter](https://www.spoj.com/problems/JMFILTER/) 参考实现（C++）**
-
-```cpp
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-struct DSU {
-  size_t id;
-  std::vector<size_t> pa, size;
-
-  explicit DSU(size_t size_, size_t m)
-      : id(size_ * 2), pa(size_ * 2 + m), size(size_ * 2 + m, 1) {
-    // size 的前半段其实没有使用，只是为了让下标计算更简单
-    std::iota(pa.begin(), pa.begin() + size_,
-              size_);  // 令 i 指向虚点 i + size_
-    std::iota(pa.begin() + size_, pa.end(), size_);  // 所有虚点指向它自身
-  }
-
-  size_t find(size_t x) { return pa[x] == x ? x : pa[x] = find(pa[x]); }
-
-  void unite(size_t x, size_t y) {
-    x = find(x), y = find(y);
-    if (x == y) return;
-    if (size[x] < size[y]) std::swap(x, y);
-    pa[y] = x;
-    size[x] += size[y];
-  }
-
-  void erase(size_t x) {
-    size_t y = find(x);
-    --size[y];
-    pa[x] = id++;
-  }
-};
-
-int main() {
-  int n, m, case_id = 0;
-  while ((std::cin >> n >> m), n) {
-    DSU dsu(n, m);
-    for (; m; --m) {
-      char ch;
-      std::cin >> ch;
-      if (ch == 'M') {
-        int x, y;
-        std::cin >> x >> y;
-        dsu.unite(x, y);
-      } else if (ch == 'S') {
-        int x;
-        std::cin >> x;
-        dsu.erase(x);
-      }
-    }
-    int res = 0;
-    for (int i = n; i < dsu.id; ++i) {
-      if (dsu.size[i] && i == dsu.find(i)) {
-        ++res;
-      }
-    }
-    std::cout << "Case #" << (++case_id) << ": " << res << '\n';
-  }
-  return 0;
-}
-```
-
-**模板题 [SPOJ JMFILTER - Junk-Mail Filter](https://www.spoj.com/problems/JMFILTER/) 参考实现（Python）**
-
-```python
-# 此代码仅作示意，因超时无法通过原题
-class Dsu:
-    def __init__(self, size, m):
-        self.id = size * 2
-        # 令 i 指向虚点 i + size_，所有虚点指向它自身
-        self.pa = list(range(size, size * 2)) + list(range(size, size * 2 + m))
-        # size 的前半段其实没有使用，只是为了让下标计算更简单
-        self.size = [1] * (size * 2 + m)
-
-    def find(self, x):
-        if self.pa[x] != x:
-            self.pa[x] = self.find(self.pa[x])
-        return self.pa[x]
-
-    def unite(self, x, y):
-        x, y = self.find(x), self.find(y)
-        if x == y:
-            return
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-        self.pa[y] = x
-        self.size[x] += self.size[y]
-
-    def erase(self, x):
-        y = self.find(x)
-        self.size[y] -= 1
-        self.pa[x] = self.id
-        self.id += 1
-
-
-if __name__ == "__main__":
-    case_id = 0
-    while True:
-        n, m = map(int, input().split())
-        if not n:
-            break
-        dsu = Dsu(n, m)
-        for _ in range(m):
-            op = input().split()
-            if op[0] == "M":
-                x = int(op[1])
-                y = int(op[2])
-                dsu.unite(x, y)
-            elif op[0] == "S":
-                x = int(op[1])
-                dsu.erase(x)
-        res = 0
-        for i in range(n, dsu.id):
-            if dsu.size[i] and i == dsu.find(i):
-                res += 1
-        case_id += 1
-        print(f"Case #{case_id}: {res}")
-        input()
-```
-
-类似的方法还可以用于实现在集合间移动单个元素．实现细节详见例题．
-
-### 带权并查集
-
-我们还可以在并查集的边上定义某种权值和这种权值在路径压缩时产生的运算，从而解决更多的问题．比如对于经典的「NOI2001」食物链，我们可以在边权上维护模 3 意义下的加法群．对于这类维护模意义下边权且模数很小的问题，还可以通过将并查集的单个点拆分为多个状态的方式来解决．这种特殊情形下的技巧，也称为「种类并查集」或「拓展域并查集」．后文会通过例题来说明这些做法．
-
-为了维护并查集中的边权，需要将边权下放到子节点中存储．因此，每个节点存储的都是它到它的父节点之间的边权．只有当一个节点的父节点发生变化时，才需要相应地调整边权．一般情形中，这可能发生在路径压缩和合并两个节点时．例如，如果边权是当前节点与父节点之间的距离，那么，在路径压缩时，每次将当前节点的父节点替换为根节点，都需要将父节点到根节点的距离加到当前节点存储的边权上；类似地，在合并两个节点所在集合时，需要计算两个根节点之间新连接的边的权值．
-
-**模板题 [Library Checker - Unionfind with Potential](https://judge.yosupo.jp/problem/unionfind_with_potential) 参考实现（C++）**
-
-```cpp
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-constexpr int M = 998244353;
-
-struct DSU {
-  std::vector<size_t> pa, size, dist;
-
-  explicit DSU(size_t size_) : pa(size_), size(size_, 1), dist(size_) {
-    std::iota(pa.begin(), pa.end(), 0);
-  }
-
-  size_t find(size_t x) {
-    if (pa[x] == x) return x;
-    size_t y = find(pa[x]);
-    (dist[x] += dist[pa[x]]) %= M;
-    return pa[x] = y;
-  }
-
-  bool unite(size_t x, size_t y, int d) {
-    find(x), find(y);
-    (d += M - dist[y]) %= M;
-    (d += dist[x]) %= M;
-    x = pa[x], y = pa[y];
-    if (x == y) return d == 0;
-    if (size[x] < size[y]) {
-      std::swap(x, y);
-      d = (M - d) % M;
-    }
-    pa[y] = x;
-    size[x] += size[y];
-    dist[y] = d;
-    return true;
-  }
-
-  int check(size_t x, size_t y) {
-    find(x), find(y);
-    if (pa[x] != pa[y]) return -1;
-    return (dist[y] - dist[x] + M) % M;
-  }
-};
-
-int main() {
-  int n, m;
-  std::cin >> n >> m;
-  DSU dsu(n);
-  for (; m; --m) {
-    int op;
-    std::cin >> op;
-    if (op) {
-      int u, v;
-      std::cin >> u >> v;
-      std::cout << dsu.check(u, v) << '\n';
-    } else {
-      int u, v, x;
-      std::cin >> u >> v >> x;
-      std::cout << dsu.unite(u, v, x) << '\n';
-    }
-  }
-  return 0;
-}
-```
-
-**模板题 [Library Checker - Unionfind with Potential](https://judge.yosupo.jp/problem/unionfind_with_potential) 参考实现（Python）**
-
-```python
-M = 998244353
-
-
-class DSU:
-    def __init__(self, size: int):
-        self.pa = list(range(size))
-        self.size = [1] * size
-        self.dist = [0] * size
+class DisjointSetArray:
+    """并查集（0..n-1 元素，数组实现）"""
+
+    def __init__(self, n: int):
+        self.parent = list(range(n))
+        self.size = [1] * n
+        self.count = n  # 当前连通分量数量
 
     def find(self, x: int) -> int:
-        if self.pa[x] == x:
-            return x
-        y = self.find(self.pa[x])
-        self.dist[x] = (self.dist[x] + self.dist[self.pa[x]]) % M
-        self.pa[x] = y
-        return y
+        while self.parent[x] != x:
+            # 路径减半（path halving）：一步一跳地往爷爷挂，单次遍历即可完成压缩
+            self.parent[x] = self.parent[self.parent[x]]
+            x = self.parent[x]
+        return x
 
-    def unite(self, x, y, d: int) -> bool:
-        self.find(x)
-        self.find(y)
-        d = (d + M - self.dist[y]) % M
-        d = (d + self.dist[x]) % M
-        x, y = self.pa[x], self.pa[y]
-        if x == y:
-            return d == 0
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-            d = (M - d) % M
-        self.pa[y] = x
-        self.size[x] += self.size[y]
-        self.dist[y] = d
+    def union(self, x: int, y: int) -> bool:
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False
+        if self.size[rx] < self.size[ry]:
+            rx, ry = ry, rx
+        self.parent[ry] = rx
+        self.size[rx] += self.size[ry]
+        self.count -= 1
         return True
-
-    def check(self, x: int, y: int) -> int:
-        self.find(x)
-        self.find(y)
-        if self.pa[x] != self.pa[y]:
-            return -1
-        return (self.dist[y] - self.dist[x] + M) % M
-
-
-if __name__ == "__main__":
-    n, m = map(int, input().split())
-    dsu = DSU(n)
-    for _ in range(m):
-        op, *rest = map(int, input().split())
-        if op:
-            u, v = rest
-            print(dsu.check(u, v))
-        else:
-            u, v, x = rest
-            print(int(dsu.unite(u, v, x)))
 ```
 
-## 例题
+`count` 字段常被忽略却非常实用：判断“所有元素是否已归为一类”只需 `count == 1` ，不必遍历。
 
-算法竞赛中，直接考察并查集的题目大多都需要针对题目设计特殊的结构．
+## 应用一：社交网络社区划分
 
-**例题 [UVa11987 Almost Union-Find](https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=229&page=show_problem&problem=3138)**：实现类似并查集的数据结构，支持以下操作：
-
-1. 合并两个元素所属集合．
-2. 将单个元素移动到另一个元素所在的集合．
-3. 查询某个元素所属集合的大小及元素和．
-
-解答：这道题目中，操作 1 和操作 3 都容易处理，难点在于操作 2．假定要将元素 x 移动到元素 y 所在的集合．在普通的并查集中，直接将元素 x 的父亲设为元素 y 所在集合的根节点是不行的，因为这样会将元素 x 所在子树的元素都一起移动．针对这个问题，解决方法就是保证元素 x 没有子节点．为此，在建立并查集时为每个元素 x 都建立一个虚点 x̃，并将元素 x 的父亲指向对应的虚点 x̃．这样，在合并两个集合的时候，因为总是将一个树根连接到另一个树根，而树根又全部是虚点，所以，只有虚点会有子节点，而所有实际存储元素的点都没有子节点．此时，要移动元素，就容易实现得多．
-
-**参考实现（C++）**
-
-```cpp
-#include <cassert>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-using namespace std;
-
-struct dsu {
-  vector<size_t> pa, size, sum;
-
-  explicit dsu(size_t size_)
-      : pa(size_ * 2), size(size_ * 2, 1), sum(size_ * 2) {
-    // size 与 sum 的前半段其实没有使用，只是为了让下标计算更简单
-    iota(pa.begin(), pa.begin() + size_, size_);
-    iota(pa.begin() + size_, pa.end(), size_);
-    iota(sum.begin() + size_, sum.end(), 0);
-  }
-
-  void unite(size_t x, size_t y) {
-    x = find(x), y = find(y);
-    if (x == y) return;
-    if (size[x] < size[y]) swap(x, y);
-    pa[y] = x;
-    size[x] += size[y];
-    sum[x] += sum[y];
-  }
-
-  void move(size_t x, size_t y) {
-    auto fx = find(x), fy = find(y);
-    if (fx == fy) return;
-    pa[x] = fy;
-    --size[fx], ++size[fy];
-    sum[fx] -= x, sum[fy] += x;
-  }
-
-  size_t find(size_t x) { return pa[x] == x ? x : pa[x] = find(pa[x]); }
-};
-
-int main() {
-  size_t n, m, op, x, y;
-  while (cin >> n >> m) {
-    dsu dsu(n + 1);  // 元素范围是 1..n
-    while (m--) {
-      cin >> op;
-      switch (op) {
-        case 1:
-          cin >> x >> y;
-          dsu.unite(x, y);
-          break;
-        case 2:
-          cin >> x >> y;
-          dsu.move(x, y);
-          break;
-        case 3:
-          cin >> x;
-          x = dsu.find(x);
-          cout << dsu.size[x] << ' ' << dsu.sum[x] << '\n';
-          break;
-        default:
-          assert(false);  // not reachable
-      }
-    }
-  }
-  return 0;
-}
-```
-
-**参考实现（Python）**
+给定好友关系对，划分社区并输出规模分布：
 
 ```python
-class Dsu:
-    def __init__(self, size):
-        # size 与 sum 的前半段其实没有使用，只是为了让下标计算更简单
-        self.pa = list(range(size, size * 2)) * 2
-        self.size = [1] * size * 2
-        self.sum = list(range(size)) * 2
-
-    def unite(self, x, y):
-        x, y = self.find(x), self.find(y)
-        if x == y:
-            return
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-        self.pa[y] = x
-        self.size[x] += self.size[y]
-        self.sum[x] += self.sum[y]
-
-    def move(self, x, y):
-        fx, fy = self.find(x), self.find(y)
-        if fx == fy:
-            return
-        self.pa[x] = fy
-        self.size[fx] -= 1
-        self.size[fy] += 1
-        self.sum[fx] -= x
-        self.sum[fy] += x
-
-    def find(self, x):
-        if self.pa[x] != x:
-            self.pa[x] = self.find(self.pa[x])
-        return self.pa[x]
+def detect_communities(edges: list[tuple[str, str]]) -> list[list[str]]:
+    ds = DisjointSet()
+    for a, b in edges:
+        ds.union(a, b)  # union 内部会自动 add，省去预扫描
+    groups = ds.components()
+    # 按社区规模从大到小排，便于观察“长尾”
+    return sorted(groups.values(), key=len, reverse=True)
 
 
-if __name__ == "__main__":
-    while True:
-        try:
-            n, m = map(int, input().split())
-            dsu = Dsu(n + 1)  # 元素范围是 1..n
-            for _ in range(m):
-                op_x_y = list(map(int, input().split()))
-                op = op_x_y[0]
-                if op == 1:
-                    dsu.unite(op_x_y[1], op_x_y[2])
-                elif op == 2:
-                    dsu.move(op_x_y[1], op_x_y[2])
-                elif op == 3:
-                    x = dsu.find(op_x_y[1])
-                    print(dsu.size[x], dsu.sum[x])
-        except EOFError:
-            break
+edges = [("u1", "u2"), ("u2", "u3"), ("u4", "u5"), ("u3", "u6"), ("u1", "u6")]
+print(detect_communities(edges))
+# [['u1', 'u2', 'u3', 'u6'], ['u4', 'u5']]  # 两个社区，成员顺序即 parent 的插入顺序
 ```
 
-**例题 [Luogu P2024「NOI2011」食物链](https://www.luogu.com.cn/problem/P2024)**：动物王国中有三类动物 A,B,C，这三类动物的食物链构成了有趣的环形．A 吃 B，B 吃 C，C 吃 A．
+社区划分完成后，常见的下游需求都能靠 `size` 字典 O(1) 回答：最大社区规模、某个用户所在社区的大小、社区数量。这正是“朋友圈可见范围”“推荐种子人群”这类逻辑的底层结构。
 
-现有 N 个动物，以 1∼N 编号．每个动物都是 A,B,C 中的一种，但是我们并不知道它到底是哪一种．
+同一份数据用 BFS 也能做，但要先把所有边建成邻接表、再逐点起搜索；**边是流式到达、且要随时回答归属问题时，并查集明显更合适**。反过来，如果还要求“两点之间的具体路径”，并查集就无能为力了（它只记父指针，不记图），那要用图的遍历。
 
-有人用两种说法对这 N 个动物所构成的食物链关系进行描述：
+## 应用二：文档与向量的近似去重
 
-- 第一种说法是 `1 X Y`，表示 X 和 Y 是同类．
-- 第二种说法是 `2 X Y`，表示 X 吃 Y．
-
-此人对 N 个动物，用上述两种说法，一句接一句地说出 K 句话，这 K 句话有的是真的，有的是假的．当一句话满足下列三条之一时，这句话就是假话，否则就是真话．
-
-- 当前的话与前面的某些真的话冲突，就是假话；
-- 当前的话中 X 或 Y 比 N 大，就是假话；
-- 当前的话表示 X 吃 X，就是假话．
-
-你的任务是根据给定的 N 和 K 句话，输出假话的总数．
-
-**解答一**：考虑用带权并查集维护食物链信息．如果 x 和 y 是同类，那么 x ≡ y (mod 3)；如果 x 吃 y，那么 x − y ≡ 1 (mod 3)．这样就将本题转化为前文的模板题．
-
-具体地，对于每一句话，除去那些 x>n 或 y>n 的显然的假话外，需要判断 x 和 y 是否已经连接：如果已经连接，计算两者的模意义下的距离，并与这句话声称的信息进行比较；否则，将两者按照这句话提供的信息连接．除了显然的情形外，一句话是假话，当且仅当提到的两个节点已经连接，且对应的距离与这句话声称的信息矛盾．
-
-**参考实现一（C++）**
-
-```cpp
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-constexpr int M = 3;
-
-struct DSU {
-  std::vector<size_t> pa, size, dist;
-
-  explicit DSU(size_t size_) : pa(size_), size(size_, 1), dist(size_) {
-    std::iota(pa.begin(), pa.end(), 0);
-  }
-
-  size_t find(size_t x) {
-    if (pa[x] == x) return x;
-    size_t y = find(pa[x]);
-    (dist[x] += dist[pa[x]]) %= M;
-    return pa[x] = y;
-  }
-
-  bool unite(size_t x, size_t y, int d) {
-    find(x), find(y);
-    (d += M - dist[y]) %= M;
-    (d += dist[x]) %= M;
-    x = pa[x], y = pa[y];
-    if (x == y) return d == 0;
-    if (size[x] < size[y]) {
-      std::swap(x, y);
-      d = (M - d) % M;
-    }
-    pa[y] = x;
-    size[x] += size[y];
-    dist[y] = d;
-    return true;
-  }
-};
-
-int main() {
-  int n, m;
-  std::cin >> n >> m;
-  DSU dsu(n + 1);
-  int res = 0;
-  for (; m; --m) {
-    int op, x, y;
-    std::cin >> op >> x >> y;
-    if (x > n || y > n)
-      ++res;
-    else
-      res += !dsu.unite(x, y, op == 1 ? 0 : 1);
-  }
-  std::cout << res << std::endl;
-  return 0;
-}
-```
-
-**参考实现一（Python）**
+RAG 语料清洗里最典型的用法：两两（或近邻对）相似度超过阈值就视为重复，最后每组保留一个代表。
 
 ```python
-M = 3
+def deduplicate(items: list[str], vectors: list[list[float]], threshold: float = 0.92) -> list[int]:
+    """把近似重复的元素归并，返回每组保留下来的下标（组内下标最小者作为代表）"""
+    n = len(items)
+    ds = DisjointSetArray(n)
+    # 真实场景这里应换成近邻检索（见《向量相似度与 HNSW 近邻图》），
+    # 两两比对的 O(n^2) 只适合几千条以内的小规模校对
+    for i in range(n):
+        for j in range(i + 1, n):
+            if cosine(vectors[i], vectors[j]) >= threshold:
+                ds.union(i, j)
+    reps: dict[int, int] = {}
+    for i in range(n):
+        root = ds.find(i)
+        if root not in reps:
+            reps[root] = i  # 组内下标最小者作为代表，结果可复现
+    return sorted(reps.values())
 
 
-class DSU:
-    def __init__(self, size: int):
-        self.pa = list(range(size))
-        self.size = [1] * size
-        self.dist = [0] * size
-
-    def find(self, x: int) -> int:
-        if self.pa[x] == x:
-            return x
-        y = self.find(self.pa[x])
-        self.dist[x] = (self.dist[x] + self.dist[self.pa[x]]) % M
-        self.pa[x] = y
-        return y
-
-    def unite(self, x, y, d: int) -> bool:
-        self.find(x)
-        self.find(y)
-        d = (d + M - self.dist[y]) % M
-        d = (d + self.dist[x]) % M
-        x, y = self.pa[x], self.pa[y]
-        if x == y:
-            return d == 0
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-            d = (M - d) % M
-        self.pa[y] = x
-        self.size[x] += self.size[y]
-        self.dist[y] = d
-        return True
-
-
-if __name__ == "__main__":
-    n, m = map(int, input().split())
-    dsu = DSU(n + 1)
-    res = 0
-    for _ in range(m):
-        op, x, y = map(int, input().split())
-        if x > n or y > n:
-            res += 1
-        else:
-            res += not dsu.unite(x, y, 0 if op == 1 else 1)
-    print(res)
+def cosine(a: list[float], b: list[float]) -> float:
+    dot = sum(x * y for x, y in zip(a, b))
+    na = sum(x * x for x in a) ** 0.5
+    nb = sum(x * x for x in b) ** 0.5
+    return dot / (na * nb) if na and nb else 0.0
 ```
 
-**解答二**：将一种生物 x 拆分为三种状态．在具体实现中，我们可以直接将不同的状态当作不同的元素：
+**必须理解“传递性风险”**：并查集会把 A~B、B~C 归为同组，哪怕 A 与 C 的相似度只有 0.7 。阈值定得越松，簇的“链式漂移”越严重，最后可能出现一篇完全不相关的文档被当成重复删掉。工程上的缓解办法有三条：把阈值调高、用互近邻（A 是 B 的 top-k 且 B 也是 A 的 top-k）而不是单向量近邻来生成边、或改用不依赖传递性的聚类（如单轮 K-Medoids）。
 
-- 与 x 处于同一集合的状态与 x 属于同一物种；
-- 与 x+n 处于同一集合的状态能被 x 吃；
-- 与 x+2n 处于同一集合的能吃 x．
+## 应用三：实体对齐与账号合并
 
-于是，对于一句话：
-
-- `1 x y` 为假话当且仅当：
-    1. x>N 或 y>N；
-    2. y 与 x+n 或 x+2n 中的一个处于同一集合内．
-- `2 x y` 为假话当且仅当：
-    1. x>N 或 y>N；
-    2. y 与 x 或 x+2n 中的一个处于同一集合内．
-- 若为真话，合并对应状态．
-
-**参考实现二（C++）**
-
-```cpp
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-struct DSU {
-  std::vector<size_t> pa, size;
-
-  explicit DSU(size_t size_) : pa(size_), size(size_, 1) {
-    std::iota(pa.begin(), pa.end(), 0);
-  }
-
-  size_t find(size_t x) { return pa[x] == x ? x : pa[x] = find(pa[x]); }
-
-  void unite(size_t x, size_t y) {
-    x = find(x), y = find(y);
-    if (x == y) return;
-    if (size[x] < size[y]) std::swap(x, y);
-    pa[y] = x;
-    size[x] += size[y];
-  }
-};
-
-int main() {
-  int n, m;
-  std::cin >> n >> m;
-  DSU dsu(n * 3 + 1);
-  int res = 0;
-  for (; m; --m) {
-    int op, x, y;
-    std::cin >> op >> x >> y;
-    if (x > n || y > n)
-      ++res;
-    else if (op == 1) {
-      if (dsu.find(x) == dsu.find(y + n) ||
-          dsu.find(x) == dsu.find(y + (n << 1))) {
-        ++res;
-      } else {
-        dsu.unite(x, y);
-        dsu.unite(x + n, y + n);
-        dsu.unite(x + n * 2, y + n * 2);
-      }
-    } else {
-      if (dsu.find(x) == dsu.find(y) || dsu.find(x) == dsu.find(y + n)) {
-        ++res;
-      } else {
-        dsu.unite(x, y + n * 2);
-        dsu.unite(x + n, y);
-        dsu.unite(x + n * 2, y + n);
-      }
-    }
-  }
-  std::cout << res << std::endl;
-  return 0;
-}
-```
-
-**参考实现二（Python）**
+“手机号 138… ←→ 邮箱 a@x.com ←→ OpenID wx_1” 三条映射来自三个系统，业务上要输出统一实体 ID：
 
 ```python
-class Dsu:
-    def __init__(self, size):
-        self.pa = list(range(size))
-        self.size = [1] * size
-
-    def find(self, x):
-        if self.pa[x] != x:
-            self.pa[x] = self.find(self.pa[x])
-        return self.pa[x]
-
-    def unite(self, x, y):
-        x, y = self.find(x), self.find(y)
-        if x == y:
-            return
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-        self.pa[y] = x
-        self.size[x] += self.size[y]
+def resolve_entities(records: list[list[str]]) -> dict[str, str]:
+    """records：每条是一组“已确认等价”的标识符。返回 标识符 -> 统一实体名"""
+    ds = DisjointSet()
+    for group in records:
+        for a, b in zip(group, group[1:]):  # 链式两两合并即可
+            ds.union(a, b)
+    entity_of: dict[str, str] = {}
+    for ident in ds.parent:
+        entity_of[ident] = ds.find(ident)  # 用根作为统一实体 ID
+    return entity_of
 
 
-if __name__ == "__main__":
-    n, m = map(int, input().split())
-    dsu = Dsu(n * 3 + 1)
-    res = 0
-    for _ in range(m):
-        op, x, y = map(int, input().split())
-        if x > n or y > n:
-            res += 1
-        elif op == 1:
-            if dsu.find(x) == dsu.find(y + n) or dsu.find(x) == dsu.find(y + (n << 1)):
-                res += 1
-            else:
-                dsu.unite(x, y)
-                dsu.unite(x + n, y + n)
-                dsu.unite(x + n * 2, y + n * 2)
-        else:
-            if dsu.find(x) == dsu.find(y) or dsu.find(x) == dsu.find(y + n):
-                res += 1
-            else:
-                dsu.unite(x, y + n * 2)
-                dsu.unite(x + n, y)
-                dsu.unite(x + n * 2, y + n)
-    print(res)
+print(resolve_entities([["138", "a@x.com"], ["a@x.com", "wx_1"], ["999", "b@y.com"]]))
+# {'138': '138', 'a@x.com': '138', 'wx_1': '138', '999': '999', 'b@y.com': '999'}
 ```
 
-**例题 [ABC396E Min of Restricted Sum](https://atcoder.jp/contests/abc396/tasks/abc396_e)**：给定整数 N, M 和长度为 M 的整数序列 X=(X₁,X₂,…,X_M)、Y=(Y₁,Y₂,…,Y_M)、Z=(Z₁,Z₂,…,Z_M)．其中，保证 X 和 Y 的所有元素均在 1 至 N 的范围内．
+选根作为实体 ID 有个隐患：**根会随合并顺序变化**。若需要稳定 ID（写入数据库后不能变），应改为“取组内字典序最小者”并在合并时固定它，或者用另一层 `root -> 稳定 ID` 的映射表。
 
-定义长度为 N 的非负整数序列 A=(A₁,A₂,…,A_N) 为 **好的整数序列**，当且仅当满足以下条件：
+## 应用四：Kruskal 最小生成树
 
-- 对于所有满足 1 ≤ i ≤ M 的整数 i，有 A(Xᵢ) ⊕ A(Yᵢ) = Zᵢ，其中 ⊕ 表示异或运算．
-
-请判断是否存在这样的好的整数序列．若存在，请找出使得元素总和 Σ Aᵢ 最小的好的整数序列，并输出该序列．
-
-**解答**：异或就是单个二进制位上的「相同」或「不同」关系．那么，将 Aᵢ 的所有二进制位拆开，异或关系就能用带权并查集（或种类并查集）维护了．同一个连通块内的元素一定对应着 A 中不同数字的同一个数位．统计答案时，同一连通块的元素通常分为两组，两组之间取值应当不同，只需要取其中较大的一组赋值为 0，另一组赋值为 1 即可保证总权值最小．
-
-**参考实现（C++）**
-
-```cpp
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-constexpr int M = 2;
-
-struct DSU {
-  std::vector<size_t> pa, size, dist;
-
-  explicit DSU(size_t size_) : pa(size_), size(size_, 1), dist(size_) {
-    std::iota(pa.begin(), pa.end(), 0);
-  }
-
-  size_t find(size_t x) {
-    if (pa[x] == x) return x;
-    size_t y = find(pa[x]);
-    (dist[x] += dist[pa[x]]) %= M;
-    return pa[x] = y;
-  }
-
-  bool unite(size_t x, size_t y, int d) {
-    find(x), find(y);
-    (d += M - dist[y]) %= M;
-    (d += dist[x]) %= M;
-    x = pa[x], y = pa[y];
-    if (x == y) return d == 0;
-    if (size[x] < size[y]) {
-      std::swap(x, y);
-      d = (M - d) % M;
-    }
-    pa[y] = x;
-    size[x] += size[y];
-    dist[y] = d;
-    return true;
-  }
-};
-
-int main() {
-  int n, m;
-  std::cin >> n >> m;
-  DSU dsu((n + 1) << 5);
-  for (; m; --m) {
-    int x, y, z;
-    std::cin >> x >> y >> z;
-    for (int i = 0; i < 31; ++i) {
-      if (!dsu.unite((x << 5) | i, (y << 5) | i, (z >> i) & 1)) {
-        std::cout << -1 << std::endl;
-        return 0;
-      }
-    }
-  }
-  std::vector<int> a(n + 1), cnt((n + 1) << 5);
-  for (int i = 1; i < ((n + 1) << 5); ++i) {
-    dsu.find(i);
-    if (dsu.dist[i]) ++cnt[dsu.pa[i]];
-  }
-  for (int i = 1; i <= n; ++i) {
-    for (int j = 0; j < 31; ++j) {
-      int x = (i << 5) | j, y = dsu.pa[x];
-      if ((cnt[y] > dsu.size[y] / 2) ^ dsu.dist[x]) {
-        a[i] |= 1 << j;
-      }
-    }
-  }
-  for (int i = 1; i <= n; ++i) std::cout << a[i] << ' ';
-  std::cout << std::endl;
-  return 0;
-}
-```
-
-**参考实现（Python）**
+并查集是 Kruskal 算法的核心：按边权升序处理，若边的两端不在同一集合就选入，否则跳过（会成环）。
 
 ```python
-M = 2
-
-
-class DSU:
-    def __init__(self, size: int):
-        self.pa = list(range(size))
-        self.size = [1] * size
-        self.dist = [0] * size
-
-    def find(self, x: int) -> int:
-        if self.pa[x] == x:
-            return x
-        y = self.find(self.pa[x])
-        self.dist[x] = (self.dist[x] + self.dist[self.pa[x]]) % M
-        self.pa[x] = y
-        return y
-
-    def unite(self, x, y, d: int) -> bool:
-        self.find(x)
-        self.find(y)
-        d = (d + M - self.dist[y]) % M
-        d = (d + self.dist[x]) % M
-        x, y = self.pa[x], self.pa[y]
-        if x == y:
-            return d == 0
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-            d = (M - d) % M
-        self.pa[y] = x
-        self.size[x] += self.size[y]
-        self.dist[y] = d
-        return True
-
-
-if __name__ == "__main__":
-    n, m = map(int, input().split())
-    dsu = DSU((n + 1) << 5)
-    for _ in range(m):
-        x, y, z = map(int, input().split())
-        for i in range(31):
-            if not dsu.unite((x << 5) | i, (y << 5) | i, (z >> i) & 1):
-                print(-1)
-                exit()
-
-    a = [0] * (n + 1)
-    cnt = [0] * ((n + 1) << 5)
-
-    for i in range(1, (n + 1) << 5):
-        dsu.find(i)
-        if dsu.dist[i]:
-            cnt[dsu.pa[i]] += 1
-
-    for i in range(1, n + 1):
-        for j in range(31):
-            x = (i << 5) | j
-            y = dsu.pa[x]
-            if (cnt[y] > dsu.size[y] // 2) ^ dsu.dist[x]:
-                a[i] |= 1 << j
-
-    print(" ".join(map(str, a[1:])))
+def kruskal(edges: list[tuple[float, str, str]], n: int) -> list[tuple[str, str]]:
+    ds = DisjointSet()
+    res = []
+    for w, u, v in sorted(edges):  # 按权重升序
+        if ds.union(u, v):         # union 返回 False 表示已连通，会成环
+            res.append((u, v))
+            if len(res) == n - 1:  # n 个顶点的生成树只需 n-1 条边
+                break
+    return res
 ```
 
-## 习题
+`union` 返回布尔值这个小设计，在这里省掉了一次额外的 `connected` 判断。
 
-- [「NOI2015」程序自动分析](https://uoj.ac/problem/127)
-- [「JSOI2008」星球大战](https://www.luogu.com.cn/problem/P1197)
-- [「NOIP2023」三值逻辑](https://www.luogu.com.cn/problem/P9869)
-- [「NOI2002」银河英雄传说](https://www.luogu.com.cn/problem/P1196)
+## 常见坑
 
-## 其他应用
+1. **只支持合并，不支持删除**。要“断开”只能整份重建，或用“可撤销并查集”（记录每次修改的栈，按 LIFO 顺序回滚，思路同《回溯算法（面试选学）》的尝试与回退）。
+2. **路径压缩与“按权并查集”不兼容**。竞赛里用 `d[x]` 记录 x 到根的带权距离、查询两顶点差值的那套写法，一旦加路径压缩就要极其小心地维护增量。日常工程几乎不需要它，本站不再展开。
+3. **忘记 `add` 导致 KeyError**。字典版可以在 `find` 里顺手创建，但会静默改变集合规模；严格些应显式 `add` 或让 `find` 抛错。
+4. **递归 find 爆栈**。见前文，生产环境一律用迭代版或 `path halving` 。
+5. **把“连通”当成“相似”**。并查集聚合的是等价关系（自反、对称、传递），而相似度不满足传递性，这是去重场景误删的根源。
+6. **大规模时内存**。字典版每个元素约 200 字节（两个 dict 表项 + 字符串对象），千万级元素请换数组版 + 把字符串映射成整型 ID（`dict[str, int]` 建一次索引即可）。
+7. **多线程下不安全**。`parent`/`size` 的更新不是原子的；并发场景要么加锁，要么按分片（sharding）拆成多个独立并查集。
 
-[最小生成树算法](https://oi-wiki.org/graph/mst/) 中的 Kruskal 和 [最近公共祖先](https://oi-wiki.org/graph/lca/) 中的 Tarjan 算法是基于并查集的算法．
+## 延伸阅读
 
-相关专题见 [并查集应用](https://oi-wiki.org/topic/dsu-app/)．
-
-## 参考资料与拓展阅读
-
-1. [知乎回答：是否在并查集中真的有二分路径压缩优化？](https://www.zhihu.com/question/28410263/answer/40966441)
-2. Gabow, H. N., & Tarjan, R. E. (1985). A Linear-Time Algorithm for a Special Case of Disjoint Set Union. JOURNAL OF COMPUTER AND SYSTEM SCIENCES, 30, 209-221.[PDF](https://dl.acm.org/doi/pdf/10.1145/800061.808753)
-3. [CSDN：扩展域并查集 & 带权并查集](https://blog.csdn.net/qqqqqwerttwtwe/article/details/145440100)
-
-[^tarjan1984worst]: Tarjan, R. E., & Van Leeuwen, J. (1984). Worst-case analysis of set union algorithms. Journal of the ACM (JACM), 31(2), 245-281.[ResearchGate PDF](https://www.researchgate.net/profile/Jan_Van_Leeuwen2/publication/220430653_Worst-case_Analysis_of_Set_Union_Algorithms/links/0a85e53cd28bfdf5eb000000/Worst-case-Analysis-of-Set-Union-Algorithms.pdf)
-
-[^yao1985expected]: Yao, A. C. (1985). On the expected performance of path compression algorithms.[SIAM Journal on Computing, 14(1), 129-133.](https://epubs.siam.org/doi/abs/10.1137/0214010?journalCode=smjcat)
+- TheAlgorithms/Python 的 `data_structures/disjoint_set/` 目录（MIT 许可），含字典版与数组版实现，可作为对照阅读。
+- 《布隆过滤器与集合去重》：与并查集互补——布隆过滤器判断“可能见过”，并查集归并“确认等价”。
+- 《向量相似度与 HNSW 近邻图》：为大规模去重高效地生成候选边，取代 O(n²) 两两比对。
+- 《拓扑排序与依赖调度》：并查集处理无向图的连通性，拓扑排序处理有向无环图的顺序，两者是图算法的一对基石。
+- OI Wiki《并查集》，含带权并查集、可持久化并查集与“启发式合并”等进阶内容（竞赛向）。
 
 ---
 
-> **来源**：本文转载自 [OI Wiki · 并查集](https://oi-wiki.org/ds/dsu/)，原文 raw markdown 取自 [OI-wiki/OI-wiki 仓库 docs/ds/dsu.md](https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/dsu.md)，作者 OI Wiki 项目（本篇署名作者：HeRaNO、JuicyMio、Xeonacid、sailordiary、ouuan、Pig-Eat-Earth），许可 CC BY-SA 4.0。抓取于 2026-09-13。原文代码为 C++ 与 Python 双语；文中的参考实现代码片段（dsu_0 至 dsu_6 的 .cpp/.py）均已内联收录。
+> **来源**：抓取于 2026-09-19。概念定义与四张示意图取自 [OI Wiki《并查集》](https://oi-wiki.org/ds/dsu/)（OI Wiki 项目，CC BY-SA 4.0，图片已下载至本模块 `assets/` 目录）；接口设计参考 TheAlgorithms/Python 的 `data_structures/disjoint_set/disjoint_set.py`（MIT 许可）。原文（OI Wiki 页面）的 C++ 实现、带权并查集与可持久化并查集、以及洛谷 / BZOJ 习题未收录，正文中的社区划分、近似去重、实体对齐、Kruskal 四个应用与全部 Python 代码为本站编写，已在 Python 3.12 下运行验证。

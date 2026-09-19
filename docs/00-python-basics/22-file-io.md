@@ -12,7 +12,7 @@ group: 文件与数据格式
 
 读写文件前，我们先必须了解一下，在磁盘上读写文件的功能都是由操作系统提供的，现代操作系统不允许普通的程序直接操作磁盘，所以，读写文件就是请求操作系统打开一个文件对象（通常称为文件描述符），然后，通过操作系统提供的接口从这个文件对象中读取数据（读文件），或者把数据写入这个文件对象（写文件）。
 
-### 读文件
+## 读文件
 
 要以读文件的模式打开一个文件对象，使用Python内置的`open()`函数，传入文件名和标示符：
 
@@ -73,13 +73,13 @@ for line in f.readlines():
     print(line.strip()) # 把末尾的'\n'删掉
 ```
 
-### file-like Object
+## file-like Object
 
 像`open()`函数返回的这种有个`read()`方法的对象，在Python中统称为file-like Object。除了file外，还可以是内存的字节流，网络流，自定义流等等。file-like Object不要求从特定类继承，只要写个`read()`方法就行。
 
 `StringIO`就是在内存中创建的file-like Object，常用作临时缓冲。
 
-### 二进制文件
+## 二进制文件
 
 前面讲的默认都是读取文本文件，并且是UTF-8编码的文本文件。要读取二进制文件，比如图片、视频等等，用`'rb'`模式打开文件即可：
 
@@ -89,7 +89,7 @@ for line in f.readlines():
 b'\xff\xd8\xff\xe1\x00\x18Exif\x00\x00...' # 十六进制表示的字节
 ```
 
-### 字符编码
+## 字符编码
 
 要读取非UTF-8编码的文本文件，需要给`open()`函数传入`encoding`参数，例如，读取GBK编码的文件：
 
@@ -105,7 +105,7 @@ b'\xff\xd8\xff\xe1\x00\x18Exif\x00\x00...' # 十六进制表示的字节
 >>> f = open('/Users/michael/gbk.txt', 'r', encoding='gbk', errors='ignore')
 ```
 
-### 写文件
+## 写文件
 
 写文件和读文件是一样的，唯一区别是调用`open()`函数时，传入标识符`'w'`或者`'wb'`表示写文本文件或写二进制文件：
 
@@ -128,7 +128,7 @@ with open('/Users/michael/test.txt', 'w') as f:
 
 所有模式的定义及含义可以参考Python的[官方文档](https://docs.python.org/3/library/functions.html#open)。
 
-### 小结
+## 小结
 
 在Python中，文件读写是通过`open()`函数打开的文件对象完成的。使用`with`语句操作文件IO是个好习惯。
 

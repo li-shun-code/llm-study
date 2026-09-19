@@ -1,742 +1,296 @@
 ---
-title: 句子窗口与父子块检索（small-to-big）
-source_url: https://github.com/run-llama/llama_index/blob/main/docs/examples/node_postprocessor/MetadataReplacementDemo.ipynb
-author: LlamaIndex 团队（run-llama/llama_index 官方示例）
+title: 句子窗口与父子块检索：用小块召回、大块作答
+source_url: https://docs.llamaindex.ai/en/stable/examples/node_postprocessor/MetadataReplacementDemo/
+author: LlamaIndex 团队（run-llama/llama_index 官方示例）；Jerry Liu（LlamaIndex）
 license: MIT
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: true
-versions: run-llama/llama_index main 分支（2026-09-13 抓取）
+versions: llama-index 0.12.x / LlamaIndex 官方示例（SentenceWindowNodeParser、MetadataReplacementPostProcessor、AutoMergingRetriever）；实验代码为零依赖 Python 3.10+
 order: 5
 group: 摄取层：解析、分块与嵌入
 ---
-两个同属"small-to-big"思想的官方示例 notebook 完整翻译：句子窗口检索（用小粒度做检索、把周边窗口送给 LLM）与自动合并检索（父子层级块，命中多个子块时上卷合并到父块）。
 
-## 其一：元数据替换 + 节点句子窗口
+## 为什么需要它：分块尺寸是一笔两头的债
 
-以下为官方示例 [MetadataReplacementDemo.ipynb](https://github.com/run-llama/llama_index/blob/main/docs/examples/node_postprocessor/MetadataReplacementDemo.ipynb) 的完整翻译。
+《文档分块策略》里已经说明：块是检索的基本单位，也是送给 LLM 的上下文单位。这两个用途对尺寸的要求正好相反：
 
-本 notebook 用 `SentenceWindowNodeParser` 把文档解析成"每节点一个句子"。每个节点还带一个"窗口"，包含该节点句子两侧的句子。
+- **检索希望块小**：一个块只讲一件事，向量才是"纯"的。段落级大块的向量是好几个主题的加权平均，查询很难命中。
+- **作答希望块大**：只把"回风温度超过 27℃ 触发 P2 告警"这一句给模型，它拿不到前一句的条件与后一句的处置动作，答出来就是半句话。
 
-随后，在检索之后、把检索到的句子传给 LLM 之前，用 `MetadataReplacementNodePostProcessor` 把单句替换为包含周边句子的窗口。
+句子窗口（Sentence Window Retrieval）与父子块（Parent-Child / small-to-big）是同一思想的两种实现：**用"小单元"去匹配，用"大单元"去作答**。两者在 LlamaIndex、LangChain、LlamaIndex 的 AutoMerging 里都有现成组件，但把它们当黑盒用会踩坑（尤其是重复计费与窗口边界），所以本篇先用一份零依赖实现把它跑通，再对照框架组件。
 
-这对大型文档/索引最有用，因为它有助于检索更细粒度的细节。
+## 一、两种结构的差别
 
-默认情况下，句子窗口是原句子两侧各 5 个句子。
+| 维度 | 句子窗口 | 父子块（small-to-big） |
+| --- | --- | --- |
+| 索引单元 | 单句 | 子块（如 256 token 的段落片段） |
+| 作答单元 | 命中句 ± n 句拼出的窗口 | 子块所属的父块（如整节 / 整页） |
+| 元数据存哪 | 每个节点带 `window` 字段（窗口原文） | 子块只存 `parent_id`，父块正文放文档存储，不进向量索引 |
+| 粒度自适应 | 无，窗口是固定句数 | 有，命中同父的多个子块可合并回更大父块（AutoMerging） |
+| 典型副作用 | 相邻查询命中重叠窗口 → 上下文重复 | 父块过大 → 退化成大块检索的稀释问题 |
+| 适合场景 | 手册、FAQ、条款类（句子即事实） | 长文档、论文、跨段推理（事实分散在数段） |
 
-本例不使用 chunk size 设置，而是遵循窗口设置。
+LlamaIndex 里的对应组件：
 
-```python
-%pip install llama-index-embeddings-openai
-%pip install llama-index-embeddings-huggingface
-%pip install llama-index-llms-openai
+- 句子窗口：`SentenceWindowNodeParser(window_size=3)` + `MetadataReplacementPostProcessor(target_metadata_key="window")`。前者的每个节点保留 `original_content`（单句，参与嵌入）与 `window`（±3 句，参与作答）；后者在检索**之后、生成之前**把节点正文换成 `window`。
+- 父子块：`MarkdownNodeParser` / `SemanticSplitterNodeParser` 生成叶子块，`storage_context.docstore` 存父块，检索命中叶子后用 `AutoMergingRetriever` 按"同父命中数 / 父块子块数"的比值决定是否上卷到父块。
+
+## 二、一份能跑通的实现
+
+下面的脚本只用标准库，把「句子窗口」与「父子块」两种检索都实现了，并用同一份中文运维手册、同一个查询把三种结果并排打出来：纯句子、句子窗口、父块。你可以把它当作最小可运行的对照实验，也可以直接改造成生产代码——**换成真实嵌入只需要替换 `score()` 这一个函数**。
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate   # 无需任何第三方包
 ```
 
+### 1. 语料与切分
+
 ```python
-%load_ext autoreload
-%autoreload 2
+import math
+import re
+from collections import Counter
+
+DOC = """# 机房环境告警处置手册
+
+## 1 温湿度
+机房温度告警的默认阈值是回风温度 27℃，连续 5 分钟超过即触发 P2 告警。湿度低于 20% 时静电风险上升，需要开启加湿设备。处置动作是先确认冷通道封闭是否完整，再检查该列机柜的空调送风温度设定值。
+当同列三个以上机柜同时越限，应判定为制冷回路异常而不是负载异常，此时要立刻检查冷机群控是否有一台处于本地模式。历史上该类误判导致过两次超温降频。
+
+## 2 功率与负载
+机柜功率密度超过 8kW 时建议改用行级空调或冷通道封闭。双路供电的 A/B 路必须来自不同变压器母线，否则市电闪断时两路会同时失电。负载率超过 90% 的机柜需要在下一个变更窗口内完成迁移，迁移工单一式两份，分别由机房值班长与网络组确认。
+
+## 3 网络与链路
+交换机端口出现 CRC 错误计数增长时，优先排查光模块衰减与跳线弯折。若伴随端口 flush 日志，可能是链路抖动引发 STP 重算。BGP 邻居长期停在 Active 状态一般是 TCP 179 不通或 AS 号配置错误。
+"""
+
+SENT_SPLIT = re.compile(r"(?<=[。！？；])\s*")
+
+
+def split_sentences(text):
+    """按中文句末标点切句；顺手剥掉 Markdown 标题标记，标题转成段落名。"""
+    out = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if line.startswith("#"):
+            out.append(("heading", re.sub(r"^#+\s*", "", line)))
+            continue
+        for s in SENT_SPLIT.split(line):
+            if s.strip():
+                out.append(("sentence", s.strip()))
+    return out
+
+
+items = split_sentences(DOC)
+sentences = [t for kind, t in items if kind == "sentence"]
 ```
 
-### 设置
+### 2. 父子块：子块进索引，父块进文档存储
 
-如果你在 Colab 上打开本 notebook，可能需要安装 LlamaIndex 🦙。
+父块取"章节（`## 标题` 到下一个 `##`）"，子块取单句。关键点是：**子块的正文不进最终上下文，只带一个 `parent_id`**。
 
 ```python
-!pip install llama-index
+def build_parent_child(items):
+    parents, children = {}, []
+    section = "前言"
+    for kind, text in items:
+        if kind == "heading" and not text.startswith("#"):
+            section = text
+            parents.setdefault(section, {"title": section, "text": []})
+        elif kind == "sentence":
+            parents.setdefault(section, {"title": section, "text": []})
+            parents[section]["text"].append(text)
+            children.append({"child_id": f"{section}#{len(children)}",
+                             "parent_id": section, "text": text})
+    for p in parents.values():
+        p["text"] = " ".join(p["text"])
+    return parents, children
+
+
+PARENTS, CHILDREN = build_parent_child(items)
 ```
 
-```python
-import os
-import openai
-```
+### 3. 打分函数：可替换的最小接口
 
 ```python
-os.environ["OPENAI_API_KEY"] = "sk-..."
+def tokenize(s):
+    """无分词器场景下的兜底切分：英文按词 + 中文单字/双字。"""
+    s = s.lower()
+    words = re.findall(r"[a-z0-9_.:/-]+", s)
+    cjk = re.findall(r"[一-鿿]", s)
+    bigrams = ["".join(pair) for pair in zip(cjk, cjk[1:])]
+    return words + cjk + bigrams
+
+
+class LexicalScorer:
+    """BM25 风格的轻量打分器。生产中把这一层换成嵌入相似度即可，其余代码不动。"""
+
+    def __init__(self, docs, k1=1.5, b=0.75):
+        self.toks = [Counter(tokenize(d)) for d in docs]
+        self.df = Counter(t for c in self.toks for t in c)
+        self.n = len(docs)
+        self.avg = sum(sum(c.values()) for c in self.toks) / self.n
+        self.k1, self.b = k1, b
+
+    def score(self, query):
+        q = Counter(tokenize(query))
+        out = []
+        for c in self.toks:
+            s, dl = 0.0, sum(c.values()) or 1
+            for t in q:
+                if t not in c:
+                    continue
+                idf = math.log(1 + (self.n - self.df[t] + 0.5) / (self.df[t] + 0.5))
+                s += idf * c[t] * (self.k1 + 1) / (
+                    c[t] + self.k1 * (1 - self.b + self.b * dl / self.avg))
+            out.append(s)
+        return out
+
+
+def top_hits(scorer, query, k):
+    scores = scorer.score(query)
+    idx = sorted(range(len(scores)), key=lambda i: -scores[i])
+    return [(i, scores[i]) for i in idx[:k] if scores[i] > 0]
 ```
 
+`LexicalScorer` 与 `top_hits` 就是这条管线的"可替换接口"：把 `score()` 换成嵌入余弦（或任何 reranker 的打分），句子窗口与父子块逻辑一行都不用改。
+
+### 4. 三种检索结果并排比
+
 ```python
-from llama_index.llms.openai import OpenAI
-from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+def sentence_only(query, k=2):
+    sc = LexicalScorer(sentences)
+    return [sentences[i] for i, _ in top_hits(sc, query, k)]
+
+
+def sentence_window(query, k=2, window=1):
+    """命中句 ± window 句；相邻窗口合并，避免同一句被塞两遍。"""
+    sc = LexicalScorer(sentences)
+    keep = set()
+    for i, _ in top_hits(sc, query, k):
+        keep.update(range(max(0, i - window), min(len(sentences), i + window + 1)))
+    return [sentences[i] for i in sorted(keep)]
+
+
+def parent_child(query, k=2):
+    """子块（句）召回 → 回父块（章节）作答，父块去重。"""
+    sc = LexicalScorer([c["text"] for c in CHILDREN])
+    parents, seen = [], set()
+    for i, _ in top_hits(sc, query, k):
+        pid = CHILDREN[i]["parent_id"]
+        if pid not in seen:
+            seen.add(pid)
+            parents.append(PARENTS[pid]["text"])
+    return parents
+
+
+def render(title, blocks):
+    print(f"\n【{title}】字符数 {sum(len(b) for b in blocks)}")
+    for b in blocks:
+        print("  -", b)
+
+
+if __name__ == "__main__":
+    q = "机柜负载率超过九成要怎么办"
+    print(f"查询：{q}")
+    render("① 纯句子（小块，上下文不足）", sentence_only(q))
+    render("② 句子窗口 window=1", sentence_window(q))
+    render("③ 父子块（父块=章节）", parent_child(q))
+    render("④ 句子窗口 window=3（窗口过大，混入无关内容）", sentence_window(q, window=3))
+```
+
+### 5. 真实运行输出
+
+```text
+查询：机柜负载率超过九成要怎么办
+
+【① 纯句子（小块，上下文不足）】字符数 82
+  - 负载率超过 90% 的机柜需要在下一个变更窗口内完成迁移，迁移工单一式两份，分别由机房值班长与网络组确认。
+  - 机柜功率密度超过 8kW 时建议改用行级空调或冷通道封闭。
+
+【② 句子窗口 window=1】字符数 172
+  - 历史上该类误判导致过两次超温降频。
+  - 机柜功率密度超过 8kW 时建议改用行级空调或冷通道封闭。
+  - 双路供电的 A/B 路必须来自不同变压器母线，否则市电闪断时两路会同时失电。
+  - 负载率超过 90% 的机柜需要在下一个变更窗口内完成迁移，迁移工单一式两份，分别由机房值班长与网络组确认。
+  - 交换机端口出现 CRC 错误计数增长时，优先排查光模块衰减与跳线弯折。
+
+【③ 父子块（父块=章节）】字符数 122
+  - 机柜功率密度超过 8kW 时建议改用行级空调或冷通道封闭。 双路供电的 A/B 路必须来自不同变压器母线，否则市电闪断时两路会同时失电。 负载率超过 90% 的机柜需要在下一个变更窗口内完成迁移，迁移工单一式两份，分别由机房值班长与网络组确认。
+
+【④ 句子窗口 window=3（窗口过大，混入无关内容）】字符数 340
+  - 处置动作是先确认冷通道封闭是否完整，再检查该列机柜的空调送风温度设定值。
+  - 当同列三个以上机柜同时越限，应判定为制冷回路异常而不是负载异常，……
+  - ……（命中 2 句各带 ±3 句，共 9 句，几乎覆盖全文）
+```
+
+（④ 的输出为节省篇幅做了省略，其余为原样输出。）
+
+结果把取舍摆得很清楚：
+
+- ① 只给了动作，没给"8kW/双路"这些前提，模型答不全；
+- ② `window=1` 从"温湿度"章节尾巴多带进一句"历史上该类误判导致过两次超温降频"，又从"网络与链路"带进一句 CRC——因为**句子是线性排列的，窗口只看位置不看语义归属**；
+- ③ 父块按章节边界扩展，拿到的是同一个语义单元内的全部内容，长度只有 122 字且句句相关。
+
+结论不是"父子块更好"，而是：**句序相邻 ≠ 语义相邻时，优先用带结构边界的父块**（Markdown 标题、页、条款号）；只有文档本身没有结构（聊天记录、工单流水）时，句子窗口才更自然。
+
+## 三、对照 LlamaIndex 的等价实现
+
+```python
+# pip install "llama-index>=0.12" llama-index-embeddings-huggingface llama-index-llms-openai
+from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.core.node_parser import SentenceWindowNodeParser
-from llama_index.core.node_parser import SentenceSplitter
-
-# create the sentence window node parser w/ default settings
-node_parser = SentenceWindowNodeParser.from_defaults(
-    window_size=3,
-    window_metadata_key="window",
-    original_text_metadata_key="original_text",
-)
-
-# base node parser is a sentence splitter
-text_splitter = SentenceSplitter()
-
-llm = OpenAI(model="gpt-3.5-turbo", temperature=0.1)
-embed_model = HuggingFaceEmbedding(
-    model_name="sentence-transformers/all-mpnet-base-v2", max_length=512
-)
-
-from llama_index.core import Settings
-
-Settings.llm = llm
-Settings.embed_model = embed_model
-Settings.text_splitter = text_splitter
-```
-
-## 加载数据，构建索引
-
-本节加载数据并构建向量索引。
-
-### 加载数据
-
-这里我们用最新 IPCC 气候报告的第 3 章构建索引。
-
-```python
-!curl https://www.ipcc.ch/report/ar6/wg2/downloads/report/IPCC_AR6_WGII_Chapter03.pdf --output IPCC_AR6_WGII_Chapter03.pdf
-```
-
-```python
-from llama_index.core import SimpleDirectoryReader
-
-documents = SimpleDirectoryReader(
-    input_files=["./IPCC_AR6_WGII_Chapter03.pdf"]
-).load_data()
-```
-
-### 抽取节点
-
-我们抽出将要存入 VectorIndex 的节点集合。这既包括用句子窗口解析器得到的节点，也包括用标准解析器抽取的"基础"节点。
-
-```python
-nodes = node_parser.get_nodes_from_documents(documents)
-```
-
-```python
-base_nodes = text_splitter.get_nodes_from_documents(documents)
-```
-
-### 构建索引
-
-我们同时构建句子索引与"基础"索引（默认 chunk size）。
-
-```python
-from llama_index.core import VectorStoreIndex
-
-sentence_index = VectorStoreIndex(nodes)
-```
-
-```python
-base_index = VectorStoreIndex(base_nodes)
-```
-
-## 查询
-
-### 使用 MetadataReplacementPostProcessor
-
-现在用 `MetadataReplacementPostProcessor` 把每个节点中的句子替换为其周边上下文。
-
-```python
 from llama_index.core.postprocessor import MetadataReplacementPostProcessor
 
-query_engine = sentence_index.as_query_engine(
-    similarity_top_k=2,
-    # the target key defaults to `window` to match the node_parser's default
-    node_postprocessors=[
-        MetadataReplacementPostProcessor(target_metadata_key="window")
-    ],
-)
-window_response = query_engine.query(
-    "What are the concerns surrounding the AMOC?"
-)
-print(window_response)
+parser = SentenceWindowNodeParser.from_defaults(window_size=3)
+nodes = parser.get_nodes_from_documents(docs)          # 每个节点：original_content + window
+index = VectorStoreIndex(nodes, storage_context=StorageContext.from_defaults())
+
+retriever = index.as_retriever(similarity_top_k=2)      # 用单句去匹配
+postprocessor = MetadataReplacementPostProcessor(target_metadata_key="window")
+
+nodes = retriever.retrieve("机柜负载率超过九成要怎么办")
+nodes = postprocessor.postprocess_nodes(nodes, query_str="机柜负载率超过九成要怎么办")
+# 此刻 node.get_content() 已是 ±3 句窗口；嵌入检索用的是单句
 ```
 
-我们还可以查看每个节点被检索到的原始句子，以及实际送给 LLM 的句子窗口。
-
-```python
-window = window_response.source_nodes[0].node.metadata["window"]
-sentence = window_response.source_nodes[0].node.metadata["original_text"]
-
-print(f"Window: {window}")
-print("------------------")
-print(f"Original Sentence: {sentence}")
-```
-
-### 与普通 VectorStoreIndex 对比
-
-```python
-query_engine = base_index.as_query_engine(similarity_top_k=2)
-vector_response = query_engine.query(
-    "What are the concerns surrounding the AMOC?"
-)
-print(vector_response)
-```
-
-好吧，效果不行。把 top k 调大试试！与句子窗口索引相比，这会更慢、消耗更多 token。
-
-```python
-query_engine = base_index.as_query_engine(similarity_top_k=5)
-vector_response = query_engine.query(
-    "What are the concerns surrounding the AMOC?"
-)
-print(vector_response)
-```
-
-## 分析
-
-`SentenceWindowNodeParser` + `MetadataReplacementNodePostProcessor` 的组合显然是赢家。为什么？
-
-句子级别的嵌入似乎能捕捉更细粒度的细节，比如 `AMOC` 这个词。
-
-我们还可以比较每个索引检索到的块！
-
-```python
-for source_node in window_response.source_nodes:
-    print(source_node.node.metadata["original_text"])
-    print("--------")
-```
-
-可以看到，句子窗口索引轻松检索到了两个讨论 AMOC 的节点。注意：嵌入完全基于原始句子，但 LLM 最终读到的还包括周边上下文！
-
-现在来剖析朴素向量索引为什么失败。
-
-```python
-for node in vector_response.source_nodes:
-    print("AMOC mentioned?", "AMOC" in node.node.text)
-    print("--------")
-```
-
-索引 [2] 的源节点提到了 AMOC，那这段文本到底长什么样？
-
-```python
-print(vector_response.source_nodes[2].node.text)
-```
-
-AMOC 确实被讨论了，但遗憾地位于中间块。对 LLM 而言，检索上下文中间的文本经常被忽略或作用有限。最近的论文["Lost in the Middle"](https://arxiv.org/abs/2307.03172)讨论了这一现象。
-
-## [可选] 评估
-
-我们更严格地评估句子窗口检索器与基础检索器相比的效果。
-
-我们定义/加载一个评估基准数据集，然后在其上运行不同的评估。
-
-**警告**：这可能很**昂贵**，用 GPT-4 时尤其如此。请谨慎行事，并把样本量调到符合你的预算。
-
-```python
-from llama_index.core.evaluation import DatasetGenerator, QueryResponseDataset
-
-from llama_index.llms.openai import OpenAI
-import nest_asyncio
-import random
-
-nest_asyncio.apply()
-```
-
-```python
-len(base_nodes)
-```
-
-```python
-num_nodes_eval = 30
-# there are 428 nodes total. Take the first 200 to generate questions (the back half of the doc is all references)
-sample_eval_nodes = random.sample(base_nodes[:200], num_nodes_eval)
-# NOTE: run this if the dataset isn't already saved
-# generate questions from the largest chunks (1024)
-dataset_generator = DatasetGenerator(
-    sample_eval_nodes,
-    llm=OpenAI(model="gpt-4"),
-    show_progress=True,
-    num_questions_per_chunk=2,
-)
-```
-
-```python
-eval_dataset = await dataset_generator.agenerate_dataset_from_nodes()
-```
-
-```python
-eval_dataset.save_json("data/ipcc_eval_qr_dataset.json")
-```
-
-```python
-# optional
-eval_dataset = QueryResponseDataset.from_json("data/ipcc_eval_qr_dataset.json")
-```
-
-### 比较结果
-
-```python
-import asyncio
-import nest_asyncio
-
-nest_asyncio.apply()
-```
-
-```python
-from llama_index.core.evaluation import (
-    CorrectnessEvaluator,
-    SemanticSimilarityEvaluator,
-    RelevancyEvaluator,
-    FaithfulnessEvaluator,
-    PairwiseComparisonEvaluator,
-)
-
-
-from collections import defaultdict
-import pandas as pd
-
-# NOTE: can uncomment other evaluators
-evaluator_c = CorrectnessEvaluator(llm=OpenAI(model="gpt-4"))
-evaluator_s = SemanticSimilarityEvaluator()
-evaluator_r = RelevancyEvaluator(llm=OpenAI(model="gpt-4"))
-evaluator_f = FaithfulnessEvaluator(llm=OpenAI(model="gpt-4"))
-# pairwise_evaluator = PairwiseComparisonEvaluator(llm=OpenAI(model="gpt-4"))
-```
-
-```python
-from llama_index.core.evaluation.eval_utils import (
-    get_responses,
-    get_results_df,
-)
-from llama_index.core.evaluation import BatchEvalRunner
-
-max_samples = 30
-
-eval_qs = eval_dataset.questions
-ref_response_strs = [r for (_, r) in eval_dataset.qr_pairs]
-
-# resetup base query engine and sentence window query engine
-# base query engine
-base_query_engine = base_index.as_query_engine(similarity_top_k=2)
-# sentence window query engine
-query_engine = sentence_index.as_query_engine(
-    similarity_top_k=2,
-    # the target key defaults to `window` to match the node_parser's default
-    node_postprocessors=[
-        MetadataReplacementPostProcessor(target_metadata_key="window")
-    ],
-)
-```
-
-```python
-import numpy as np
-
-base_pred_responses = get_responses(
-    eval_qs[:max_samples], base_query_engine, show_progress=True
-)
-pred_responses = get_responses(
-    eval_qs[:max_samples], query_engine, show_progress=True
-)
-
-pred_response_strs = [str(p) for p in pred_responses]
-base_pred_response_strs = [str(p) for p in base_pred_responses]
-```
-
-```python
-evaluator_dict = {
-    "correctness": evaluator_c,
-    "faithfulness": evaluator_f,
-    "relevancy": evaluator_r,
-    "semantic_similarity": evaluator_s,
-}
-batch_runner = BatchEvalRunner(evaluator_dict, workers=2, show_progress=True)
-```
-
-对忠实度/语义相似度运行评估。
-
-```python
-eval_results = await batch_runner.aevaluate_responses(
-    queries=eval_qs[:max_samples],
-    responses=pred_responses[:max_samples],
-    reference=ref_response_strs[:max_samples],
-)
-```
-
-```python
-base_eval_results = await batch_runner.aevaluate_responses(
-    queries=eval_qs[:max_samples],
-    responses=base_pred_responses[:max_samples],
-    reference=ref_response_strs[:max_samples],
-)
-```
-
-```python
-results_df = get_results_df(
-    [eval_results, base_eval_results],
-    ["Sentence Window Retriever", "Base Retriever"],
-    ["correctness", "relevancy", "faithfulness", "semantic_similarity"],
-)
-display(results_df)
-```
-
-## 其二：AutoMergingRetriever（自动合并检索器）
-
-以下为官方示例 [auto_merging_retriever.ipynb](https://github.com/run-llama/llama_index/blob/main/docs/examples/retrievers/auto_merging_retriever.ipynb) 的完整翻译。
-
-本 notebook 展示 `AutoMergingRetriever`：它查看一组叶子节点，并递归地把"引用同一父节点且超过给定阈值的叶子节点子集"合并起来。这让我们得以把可能零散的较小上下文整合成一个更大的、可能有助于综合（synthesis）的上下文。
-
-你可以在一组文档上自行定义这个层级，也可以使用我们全新的文本解析器：`HierarchicalNodeParser`，它接受一组候选文档，输出自粗到细的完整节点层级。
-
-```python
-%pip install llama-index-llms-openai
-%pip install llama-index-readers-file pymupdf
-```
-
-```python
-%load_ext autoreload
-%autoreload 2
-```
-
-如果你在 Colab 上打开本 notebook，可能需要安装 LlamaIndex 🦙。
-
-```python
-!pip install llama-index
-```
-
-## 加载数据
-
-先加载 Llama 2 论文：https://arxiv.org/pdf/2307.09288.pdf 。这是我们的测试数据。
-
-```python
-!mkdir -p 'data/'
-!wget --user-agent "Mozilla" "https://arxiv.org/pdf/2307.09288.pdf" -O "data/llama2.pdf"
-```
-
-```python
-from pathlib import Path
-
-from llama_index.readers.file import PDFReader
-from llama_index.readers.file import PyMuPDFReader
-```
-
-```python
-loader = PyMuPDFReader()
-# docs0 = loader.load_data(file=Path("./data/llama2.pdf"))
-docs0 = loader.load(file_path=Path("./data/llama2.pdf"))
-```
-
-默认情况下，PDF 阅读器为每一页创建一个单独的 doc。为了本 notebook 的演示，我们把各 doc 拼接成一个 doc。这有助于更好地展示稍后把块"缝合"在一起的自动合并能力。
-
-```python
-from llama_index.core import Document
-
-doc_text = "\n\n".join([d.get_content() for d in docs0])
-docs = [Document(text=doc_text)]
-```
-
-## 从文本解析块层级，载入存储
-
-本节使用 `HierarchicalNodeParser`。它输出一个节点层级：从更大 chunk size 的顶层节点，到更小 chunk size 的子节点，每个子节点都有一个更大 chunk size 的父节点。
-
-默认层级是：
-
-- 第 1 级：chunk size 2048
-- 第 2 级：chunk size 512
-- 第 3 级：chunk size 128
-
-然后把这些节点载入存储。叶子节点被索引进向量库并通过它检索——它们是首先被相似度搜索直接检索到的节点。其余节点从 docstore 取回。
-
-```python
-from llama_index.core.node_parser import (
-    HierarchicalNodeParser,
-    SentenceSplitter,
-)
-```
-
-```python
-node_parser = HierarchicalNodeParser.from_defaults()
-```
-
-```python
-nodes = node_parser.get_nodes_from_documents(docs)
-```
-
-```python
-len(nodes)
-```
-
-这里导入一个简单的辅助函数，用于从节点列表中取出"叶子"节点——它们没有自己的子节点。
-
-```python
-from llama_index.core.node_parser import get_leaf_nodes, get_root_nodes
-```
-
-```python
-leaf_nodes = get_leaf_nodes(nodes)
-```
-
-```python
-len(leaf_nodes)
-```
-
-```python
-root_nodes = get_root_nodes(nodes)
-```
-
-### 载入存储
-
-我们定义一个 docstore，把所有节点装载进去。然后定义一个只含叶子层节点的 `VectorStoreIndex`。
-
-```python
-# define storage context
-from llama_index.core.storage.docstore import SimpleDocumentStore
-from llama_index.core import StorageContext
-from llama_index.llms.openai import OpenAI
-
-docstore = SimpleDocumentStore()
-
-# insert nodes into docstore
-docstore.add_documents(nodes)
-
-# define storage context (will include vector store by default too)
-storage_context = StorageContext.from_defaults(docstore=docstore)
-
-llm = OpenAI(model="gpt-3.5-turbo")
-```
-
-```python
-## Load index into vector index
-from llama_index.core import VectorStoreIndex
-
-base_index = VectorStoreIndex(
-    leaf_nodes,
-    storage_context=storage_context,
-)
-```
-
-## 定义检索器
+父子块（自动合并）版本：
 
 ```python
 from llama_index.core.retrievers import AutoMergingRetriever
-```
+from llama_index.core.node_parser import MarkdownNodeParser
+from llama_index.core.storage.docstore import SimpleDocumentStore
 
-```python
-base_retriever = base_index.as_retriever(similarity_top_k=6)
-retriever = AutoMergingRetriever(base_retriever, storage_context, verbose=True)
-```
-
-```python
-# query_str = "What were some lessons learned from red-teaming?"
-# query_str = "Can you tell me about the key concepts for safety finetuning"
-query_str = (
-    "What could be the potential outcomes of adjusting the amount of safety"
-    " data used in the RLHF stage?"
-)
-
-nodes = retriever.retrieve(query_str)
-base_nodes = base_retriever.retrieve(query_str)
-```
-
-```python
-len(nodes)
-```
-
-```python
-len(base_nodes)
-```
-
-```python
-from llama_index.core.response.notebook_utils import display_source_node
-
-for node in nodes:
-    display_source_node(node, source_length=10000)
-```
-
-```python
-for node in base_nodes:
-    display_source_node(node, source_length=10000)
-```
-
-## 接入查询引擎
-
-```python
-from llama_index.core.query_engine import RetrieverQueryEngine
-```
-
-```python
-query_engine = RetrieverQueryEngine.from_args(retriever)
-base_query_engine = RetrieverQueryEngine.from_args(base_retriever)
-```
-
-```python
-response = query_engine.query(query_str)
-```
-
-```python
-print(str(response))
-```
-
-```python
-base_response = base_query_engine.query(query_str)
-```
-
-```python
-print(str(base_response))
-```
-
-## 评估
-
-我们以更量化的方式评估层级检索器与基线检索器相比的效果。
-
-**警告**：这可能很**昂贵**，用 GPT-4 时尤其如此。请谨慎行事，并把样本量调到符合你的预算。
-
-```python
-from llama_index.core.evaluation import DatasetGenerator, QueryResponseDataset
-from llama_index.llms.openai import OpenAI
-import nest_asyncio
-
-nest_asyncio.apply()
-```
-
-```python
-# NOTE: run this if the dataset isn't already saved
-# Note: we only generate from the first 20 nodes, since the rest are references
-eval_llm = OpenAI(model="gpt-4")
-dataset_generator = DatasetGenerator(
-    root_nodes[:20],
-    llm=eval_llm,
-    show_progress=True,
-    num_questions_per_chunk=3,
+# 叶子块 = 句子/小段，父块 = 章节；transformations 会建立 ref 关系
+docstore = SimpleDocumentStore()
+retriever = AutoMergingRetriever(
+    vector_retriever=index.as_retriever(similarity_top_k=6),
+    docstore=docstore,
+    simple_ratio_thres=0.4,      # 同父命中比例超过 40% 就上卷到父块
 )
 ```
 
-```python
-eval_dataset = await dataset_generator.agenerate_dataset_from_nodes(num=60)
-```
+`simple_ratio_thres` 是这个组件唯一的旋钮，也是它最容易配错的地方：设太低（0.1）几乎总是上卷，等价于放弃小块检索；设太高（0.8）则永远只给叶子块，与本文 ① 的"上下文不足"问题一样。**用《检索层 IR 指标专篇：recall@k、MRR 与 nDCG》的脚本量一次**再定值。
 
-```python
-eval_dataset.save_json("data/llama2_eval_qr_dataset.json")
-```
+## 常见坑
 
-```python
-# optional
-eval_dataset = QueryResponseDataset.from_json(
-    "data/llama2_eval_qr_dataset.json"
-)
-```
+1. **重复计费**：k=4 个命中句各带 ±3 句窗口，重叠部分会被拼 4 遍。必须做窗口合并（本文 `sentence_window` 用 `set`）或按 `window` 文本去重；LlamaIndex 的 `MetadataReplacementPostProcessor` **不去重**，需要自己加一步。
+2. **句子切分把表格/代码切断**：中文按 `。！？；` 切，遇到 Markdown 表格行、代码块、编号列表（`1.`）会切出无语义碎片。正确做法是先按块级元素保护（代码围栏、表格、公式），只在正文段落里切句。
+3. **父块太大退化成大块检索**：父块取"整页/整篇"就白做了。经验起点：父块 500-1500 token，子块 1-3 句。
+4. **窗口越宽越不对**：`window_size` 从 2-3 起步做网格搜索，超过 5 句后 nDCG 往往不升反降，因为无关句挤掉了相关句在重排里的位置。
+5. **父块正文进了向量索引**：这样父子块都参与召回，同一个内容出现两次且分数互抢。索引里只放子块，父块只在 docstore/关系库里。
+6. **引用与溯源丢失**：换成窗口/父块后，送给模型的文本不再是命中的那个节点，引用编号会指错。要在节点里同时保留 `child_id` 与 `source/page` 元数据，展示引用时用 `child_id`。
+7. **嵌入模型截断窗口**：窗口只用于**作答**；如果哪天你把窗口也送去嵌入，注意模型的有效长度与"长文本衰减"（见《Embedding 模型选型》）。
+8. **忘了把窗口拼进 prompt 的预算**：多查询/子查询分解时每个子查询都带窗口，上下文很容易爆。给"送入 LLM 的总字符数"设硬上限，超了先砍窗口再砍命中文档数。
 
-### 比较结果
+## 延伸阅读
 
-我们在每个检索器上运行评估：correctness（正确性）、semantic similarity（语义相似度）、relevance（相关性）、faithfulness（忠实度）。
-
-```python
-import asyncio
-import nest_asyncio
-
-nest_asyncio.apply()
-```
-
-```python
-from llama_index.core.evaluation import (
-    CorrectnessEvaluator,
-    SemanticSimilarityEvaluator,
-    RelevancyEvaluator,
-    FaithfulnessEvaluator,
-    PairwiseComparisonEvaluator,
-)
-
-
-from collections import defaultdict
-import pandas as pd
-
-# NOTE: can uncomment other evaluators
-evaluator_c = CorrectnessEvaluator(llm=eval_llm)
-evaluator_s = SemanticSimilarityEvaluator(llm=eval_llm)
-evaluator_r = RelevancyEvaluator(llm=eval_llm)
-evaluator_f = FaithfulnessEvaluator(llm=eval_llm)
-# pairwise_evaluator = PairwiseComparisonEvaluator(llm=eval_llm)
-```
-
-```python
-from llama_index.core.evaluation.eval_utils import (
-    get_responses,
-    get_results_df,
-)
-from llama_index.core.evaluation import BatchEvalRunner
-```
-
-```python
-eval_qs = eval_dataset.questions
-qr_pairs = eval_dataset.qr_pairs
-ref_response_strs = [r for (_, r) in qr_pairs]
-```
-
-```python
-pred_responses = get_responses(eval_qs, query_engine, show_progress=True)
-```
-
-```python
-base_pred_responses = get_responses(
-    eval_qs, base_query_engine, show_progress=True
-)
-```
-
-```python
-import numpy as np
-
-pred_response_strs = [str(p) for p in pred_responses]
-base_pred_response_strs = [str(p) for p in base_pred_responses]
-```
-
-```python
-evaluator_dict = {
-    "correctness": evaluator_c,
-    "faithfulness": evaluator_f,
-    "relevancy": evaluator_r,
-    "semantic_similarity": evaluator_s,
-}
-batch_runner = BatchEvalRunner(evaluator_dict, workers=2, show_progress=True)
-```
-
-```python
-eval_results = await batch_runner.aevaluate_responses(
-    eval_qs, responses=pred_responses, reference=ref_response_strs
-)
-```
-
-```python
-base_eval_results = await batch_runner.aevaluate_responses(
-    eval_qs, responses=base_pred_responses, reference=ref_response_strs
-)
-```
-
-```python
-results_df = get_results_df(
-    [eval_results, base_eval_results],
-    ["Auto Merging Retriever", "Base Retriever"],
-    ["correctness", "relevancy", "faithfulness", "semantic_similarity"],
-)
-display(results_df)
-```
-
-**分析**：结果大致相同。
-
-我们再用成对评估（pairwise evals）看看 GPT-4 更偏好哪个答案。
-
-```python
-batch_runner = BatchEvalRunner(
-    {"pairwise": pairwise_evaluator}, workers=10, show_progress=True
-)
-```
-
-```python
-pairwise_eval_results = await batch_runner.aevaluate_response_strs(
-    eval_qs,
-    response_strs=pred_response_strs,
-    reference=base_pred_response_strs,
-)
-pairwise_score = np.array(
-    [r.score for r in pairwise_eval_results["pairwise"]]
-).mean()
-```
-
-```python
-pairwise_score
-```
-
-**分析**：成对比较得分衡量的是"候选答案（使用自动合并检索器）相比基线答案（使用基础检索器）被偏好的时间百分比"。这里我们看到两者大致持平。
+- LlamaIndex 官方示例：[Metadata Replacement + Node Sentence Window](https://docs.llamaindex.ai/en/stable/examples/node_postprocessor/MetadataReplacementDemo/)、[AutoMergingRetriever](https://docs.llamaindex.ai/en/stable/examples/retrievers/automerging_retriever/)。
+- LangChain 侧的等价组件是 `ParentDocumentRetriever`（`ids` 存元数据、`get_relevant_documents` 后按 id 回查父文档）与 `DocumentContextWindow` 风格的手工实现。
+- 窗口/父块尺寸的量化调法见本站《检索层 IR 指标专篇》《RAG 评估实战：用 RAGAS 量化检索与生成质量》；分块本身的方法见《文档分块策略：从固定切分到上下文检索（Contextual Retrieval）》。
 
 ---
 
-> **来源**：本文翻译自 run-llama/llama_index 官方仓库（MIT）两个示例 notebook：[Metadata Replacement + Node Sentence Window](https://github.com/run-llama/llama_index/blob/main/docs/examples/node_postprocessor/MetadataReplacementDemo.ipynb) 与 [Auto Merging Retriever](https://github.com/run-llama/llama_index/blob/main/docs/examples/retrievers/auto_merging_retriever.ipynb)，作者 LlamaIndex 团队。抓取于 2026-09-13。
-> 完整性说明：两个 notebook 的全部 markdown 与代码单元格均已收录；代码逐格保留，仅说明文字与代码内注释翻译为中文，代码逻辑未做任何改写（`display`/魔法命令按原样保留）。
-> 选型背景：任务候选来源 NirDiamant/RAG_Techniques 的 sentence-window / auto-merging notebook 经核实在该仓库中并不存在（全仓库文件树已核对），故按"LlamaIndex 文档对应页"路径改用官方示例 notebook（同为 raw GitHub 来源、MIT 许可）。
+> **来源**：抓取于 2026-09-19。概念与组件对照引自 [LlamaIndex 官方文档示例](https://docs.llamaindex.ai/en/stable/examples/node_postprocessor/MetadataReplacementDemo/)（run-llama/llama_index，MIT 许可），原示例为 Jupyter Notebook（含 `%pip`、`display()` 与 Colab 专有代码），本文按其 API 重写为可本地运行的等价实现。
+> **编者注**：第二节的切分、句子窗口、父子块代码与全部输出均为本机（macOS，Python 3.14，仅标准库）实跑结果；语料为本站编写的中文运维手册样例，不含真实生产数据。LlamaIndex 代码段按其 0.12.x 公开 API 书写，需 `pip install llama-index` 后运行。

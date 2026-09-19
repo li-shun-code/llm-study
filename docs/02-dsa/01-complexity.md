@@ -50,7 +50,7 @@ group: 复杂度与递归
 - 它可以体现不同数据量下的算法效率，尤其是在大数据量下的算法性能。
 
 > **【提示】**
-> 如果你仍对复杂度的概念感到困惑，无须担心，我们会在后续章节中详细介绍。
+> 如果你仍对复杂度的概念感到困惑，无须担心，本站后续文章里会反复用到它。
 
 复杂度分析为我们提供了一把评估算法效率的“标尺”，使我们可以衡量执行某个算法所需的时间和空间资源，对比不同算法之间的效率。
 
@@ -115,7 +115,7 @@ def algorithm_C(n: int):
 - 算法 `B` 中的打印操作需要循环 n 次，算法运行时间随着 n 增大呈线性增长。此算法的时间复杂度被称为“线性阶”。
 - 算法 `C` 中的打印操作需要循环 1000000 次，虽然运行时间很长，但它与输入数据大小 n 无关。因此 `C` 的时间复杂度和 `A` 相同，仍为“常数阶”。
 
-![算法 A、B 和 C 的时间增长趋势](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/time_complexity_simple_example.png)
+![算法 A、B 和 C 的时间增长趋势](assets/ccomputational_complexity__time_complexity__time_complexity_simple_example.png)
 
 相较于直接统计算法的运行时间，时间复杂度分析有哪些特点呢？
 
@@ -154,7 +154,7 @@ T(n) 是一次函数，说明其运行时间的增长趋势是线性的，因此
 
 如下图所示，计算渐近上界就是寻找一个函数 f(n) ，使得当 n 趋向于无穷大时，T(n) 和 f(n) 处于相同的增长级别，仅相差一个常数系数 c。
 
-![函数的渐近上界](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/asymptotic_upper_bound.png)
+![函数的渐近上界](assets/ccomputational_complexity__time_complexity__asymptotic_upper_bound.png)
 
 ### 推算方法
 
@@ -188,7 +188,7 @@ def algorithm(n: int):
 
 以下公式展示了使用上述技巧前后的统计结果，两者推算出的时间复杂度都为 O(n²) 。
 
-**T(n) = 2n(n + 1) + (5n + 1) + 2 完整统计 (-.-|||) ; = 2n² + 7n + 3 ; T(n) = n² + n 偷懒统计 (o.O)**
+**完整统计：T(n) = 2n(n + 1) + (5n + 1) + 2 = 2n² + 7n + 3；偷懒统计：T(n) = n² + n**
 
 
 #### 第二步：判断渐近上界
@@ -211,10 +211,10 @@ def algorithm(n: int):
 
 设输入数据大小为 n ，常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。
 
-**O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ) < O(n!) ; 常数阶 < 对数阶 < 线性阶 < 线性对数阶 < 平方阶 < 指数阶 < 阶乘阶**
+**O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ) < O(n!)，即常数阶 < 对数阶 < 线性阶 < 线性对数阶 < 平方阶 < 指数阶 < 阶乘阶**
 
 
-![常见的时间复杂度类型](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/time_complexity_common_types.png)
+![常见的时间复杂度类型](assets/ccomputational_complexity__time_complexity__time_complexity_common_types.png)
 
 #### 常数阶 O(1)
 
@@ -222,13 +222,42 @@ def algorithm(n: int):
 
 在以下函数中，尽管操作数量 `size` 可能很大，但由于其与输入数据大小 n 无关，因此时间复杂度仍为 O(1) ：
 
+```python
+def constant(n: int) -> int:
+    """常数阶"""
+    count = 0
+    size = 100000
+    for _ in range(size):
+        count += 1
+    return count
+```
+
 
 #### 线性阶 O(n)
 
 线性阶的操作数量相对于输入数据大小 n 以线性级别增长。线性阶通常出现在单层循环中：
 
+```python
+def linear(n: int) -> int:
+    """线性阶"""
+    count = 0
+    for _ in range(n):
+        count += 1
+    return count
+```
+
 
 遍历数组和遍历链表等操作的时间复杂度均为 O(n) ，其中 n 为数组或链表的长度：
+
+```python
+def array_traversal(nums: list[int]) -> int:
+    """线性阶（遍历数组）"""
+    count = 0
+    # 循环次数与数组长度成正比
+    for num in nums:
+        count += 1
+    return count
+```
 
 
 值得注意的是，**输入数据大小 n 需根据输入数据的类型来具体确定**。比如在第一个示例中，变量 n 为输入数据大小；在第二个示例中，数组长度 n 为数据大小。
@@ -237,12 +266,40 @@ def algorithm(n: int):
 
 平方阶的操作数量相对于输入数据大小 n 以平方级别增长。平方阶通常出现在嵌套循环中，外层循环和内层循环的时间复杂度都为 O(n) ，因此总体的时间复杂度为 O(n²) ：
 
+```python
+def quadratic(n: int) -> int:
+    """平方阶"""
+    count = 0
+    # 循环次数与数据大小 n 成平方关系
+    for i in range(n):
+        for j in range(n):
+            count += 1
+    return count
+```
+
 
 下图对比了常数阶、线性阶和平方阶三种时间复杂度。
 
-![常数阶、线性阶和平方阶的时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/time_complexity_constant_linear_quadratic.png)
+![常数阶、线性阶和平方阶的时间复杂度](assets/ccomputational_complexity__time_complexity__time_complexity_constant_linear_quadratic.png)
 
-以冒泡排序为例，外层循环执行 n - 1 次，内层循环执行 n-1、n-2、…、2、1 次，平均为 n / 2 次，因此时间复杂度为 O((n - 1) n / 2) = O(n²) ：
+以冒泡排序为例，外层循环执行 n - 1 次，内层循环执行 n-1、n-2、…、2、1 次，平均为 n / 2 次，因此时间复杂度为 O((n - 1) × n / 2) = O(n²) ：
+
+```python
+def bubble_sort(nums: list[int]) -> int:
+    """平方阶（冒泡排序）"""
+    count = 0  # 计数器
+    # 外循环：未排序区间为 [0, i]
+    for i in range(len(nums) - 1, 0, -1):
+        # 内循环：将未排序区间 [0, i] 中的最大元素交换至该区间的最右端
+        for j in range(i):
+            if nums[j] > nums[j + 1]:
+                # 交换 nums[j] 与 nums[j + 1]
+                tmp: int = nums[j]
+                nums[j] = nums[j + 1]
+                nums[j + 1] = tmp
+                count += 3  # 元素交换包含 3 个单元操作
+    return count
+```
 
 
 #### 指数阶 O(2ⁿ)
@@ -251,10 +308,32 @@ def algorithm(n: int):
 
 下图和以下代码模拟了细胞分裂的过程，时间复杂度为 O(2ⁿ) 。请注意，输入 n 表示分裂轮数，返回值 `count` 表示总分裂次数。
 
+```python
+def exponential(n: int) -> int:
+    """指数阶（循环实现）"""
+    count = 0
+    base = 1
+    # 细胞每轮一分为二，形成数列 1, 2, 4, 8, ..., 2^(n-1)
+    for _ in range(n):
+        for _ in range(base):
+            count += 1
+        base *= 2
+    # count = 1 + 2 + 4 + 8 + .. + 2^(n-1) = 2^n - 1
+    return count
+```
 
-![指数阶的时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/time_complexity_exponential.png)
+
+![指数阶的时间复杂度](assets/ccomputational_complexity__time_complexity__time_complexity_exponential.png)
 
 在实际算法中，指数阶常出现于递归函数中。例如在以下代码中，其递归地一分为二，经过 n 次分裂后停止：
+
+```python
+def exp_recur(n: int) -> int:
+    """指数阶（递归实现）"""
+    if n == 1:
+        return 1
+    return exp_recur(n - 1) + exp_recur(n - 1) + 1
+```
 
 
 指数阶增长非常迅速，在穷举法（暴力搜索、回溯等）中比较常见。对于数据规模较大的问题，指数阶是不可接受的，通常需要使用动态规划或贪心算法等来解决。
@@ -265,10 +344,28 @@ def algorithm(n: int):
 
 下图和以下代码模拟了“每轮缩减到一半”的过程，时间复杂度为 O(log₂ n) ，简记为 O(log n) ：
 
+```python
+def logarithmic(n: int) -> int:
+    """对数阶（循环实现）"""
+    count = 0
+    while n > 1:
+        n = n / 2
+        count += 1
+    return count
+```
 
-![对数阶的时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/time_complexity_logarithmic.png)
+
+![对数阶的时间复杂度](assets/ccomputational_complexity__time_complexity__time_complexity_logarithmic.png)
 
 与指数阶类似，对数阶也常出现于递归函数中。以下代码形成了一棵高度为 log₂ n 的递归树：
+
+```python
+def log_recur(n: int) -> int:
+    """对数阶（递归实现）"""
+    if n <= 1:
+        return 0
+    return log_recur(n / 2) + 1
+```
 
 
 对数阶常出现于基于分治策略的算法中，体现了“一分为多”和“化繁为简”的算法思想。它增长缓慢，是仅次于常数阶的理想的时间复杂度。
@@ -285,10 +382,23 @@ def algorithm(n: int):
 
 线性对数阶常出现于嵌套循环中，两层循环的时间复杂度分别为 O(log n) 和 O(n) 。相关代码如下：
 
+```python
+def linear_log_recur(n: int) -> int:
+    """线性对数阶"""
+    if n <= 1:
+        return 1
+    # 一分为二，子问题的规模减小一半
+    count = linear_log_recur(n // 2) + linear_log_recur(n // 2)
+    # 当前子问题包含 n 个操作
+    for _ in range(n):
+        count += 1
+    return count
+```
+
 
 下图展示了线性对数阶的生成方式。二叉树的每一层的操作总数都为 n ，树共有 log₂ n + 1 层，因此时间复杂度为 O(n log n) 。
 
-![线性对数阶的时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/time_complexity_logarithmic_linear.png)
+![线性对数阶的时间复杂度](assets/ccomputational_complexity__time_complexity__time_complexity_logarithmic_linear.png)
 
 主流排序算法的时间复杂度通常为 O(n log n) ，例如快速排序、归并排序、堆排序等。
 
@@ -301,8 +411,20 @@ def algorithm(n: int):
 
 阶乘通常使用递归实现。如下图和以下代码所示，第一层分裂出 n 个，第二层分裂出 n - 1 个，以此类推，直至第 n 层时停止分裂：
 
+```python
+def factorial_recur(n: int) -> int:
+    """阶乘阶（递归实现）"""
+    if n == 0:
+        return 1
+    count = 0
+    # 从 1 个分裂出 n 个
+    for _ in range(n):
+        count += factorial_recur(n - 1)
+    return count
+```
 
-![阶乘阶的时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.assets/time_complexity_factorial.png)
+
+![阶乘阶的时间复杂度](assets/ccomputational_complexity__time_complexity__time_complexity_factorial.png)
 
 请注意，因为当 n ≥ 4 时恒有 n! > 2ⁿ ，所以阶乘阶比指数阶增长得更快，在 n 较大时也是不可接受的。
 
@@ -314,6 +436,17 @@ def algorithm(n: int):
 - 当 `nums = [1, ?, ?, ...]` ，即当首个元素为 1 时，无论数组多长都不需要继续遍历，**达到最佳时间复杂度 Ω(1)** 。
 
 “最差时间复杂度”对应函数渐近上界，使用大 O 记号表示。相应地，“最佳时间复杂度”对应函数渐近下界，用 Ω 记号表示：
+
+```python
+def find_one(nums: list[int]) -> int:
+    """查找数组 nums 中数字 1 所在索引"""
+    for i in range(len(nums)):
+        # 当元素 1 在数组头部时，达到最佳时间复杂度 O(1)
+        # 当元素 1 在数组尾部时，达到最差时间复杂度 O(n)
+        if nums[i] == 1:
+            return i
+    return -1
+```
 
 
 值得说明的是，我们在实际中很少使用最佳时间复杂度，因为通常只有在很小概率下才能达到，可能会带来一定的误导性。**而最差时间复杂度更为实用，因为它给出了一个效率安全值**，让我们可以放心地使用算法。
@@ -350,7 +483,7 @@ def algorithm(n: int):
 
 在分析一段程序的空间复杂度时，**我们通常统计暂存数据、栈帧空间和输出数据三部分**，如下图所示。
 
-![算法使用的相关空间](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.assets/space_types.png)
+![算法使用的相关空间](assets/ccomputational_complexity__space_complexity__space_types.png)
 
 相关代码如下：
 
@@ -424,10 +557,10 @@ def recur(n: int):
 
 设输入数据大小为 n ，下图展示了常见的空间复杂度类型（从低到高排列）。
 
-**O(1) < O(log n) < O(n) < O(n²) < O(2ⁿ) ; 常数阶 < 对数阶 < 线性阶 < 平方阶 < 指数阶**
+**O(1) < O(log n) < O(n) < O(n²) < O(2ⁿ)，即常数阶 < 对数阶 < 线性阶 < 平方阶 < 指数阶**
 
 
-![常见的空间复杂度类型](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.assets/space_complexity_common_types.png)
+![常见的空间复杂度类型](assets/ccomputational_complexity__space_complexity__space_complexity_common_types.png)
 
 #### 常数阶 O(1)
 
@@ -435,39 +568,110 @@ def recur(n: int):
 
 需要注意的是，在循环中初始化变量或调用函数而占用的内存，在进入下一循环后就会被释放，因此不会累积占用空间，空间复杂度仍为 O(1) ：
 
+```python
+def function() -> int:
+    """函数"""
+    # 执行某些操作
+    return 0
+
+
+
+
+def constant(n: int):
+    """常数阶"""
+    # 常量、变量、对象占用 O(1) 空间
+    a = 0
+    nums = [0] * 10000
+    node = ListNode(0)
+    # 循环中的变量占用 O(1) 空间
+    for _ in range(n):
+        c = 0
+    # 循环中的函数占用 O(1) 空间
+    for _ in range(n):
+        function()
+```
+
 
 #### 线性阶 O(n)
 
 线性阶常见于元素数量与 n 成正比的数组、链表、栈、队列等：
 
+```python
+def linear(n: int):
+    """线性阶"""
+    # 长度为 n 的列表占用 O(n) 空间
+    nums = [0] * n
+    # 长度为 n 的哈希表占用 O(n) 空间
+    hmap = dict[int, str]()
+    for i in range(n):
+        hmap[i] = str(i)
+```
+
 
 如下图所示，此函数的递归深度为 n ，即同时存在 n 个未返回的 `linear_recur()` 函数，使用 O(n) 大小的栈帧空间：
 
+```python
+def linear_recur(n: int):
+    """线性阶（递归实现）"""
+    print("递归 n =", n)
+    if n == 1:
+        return
+    linear_recur(n - 1)
+```
 
-![递归函数产生的线性阶空间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.assets/space_complexity_recursive_linear.png)
+
+![递归函数产生的线性阶空间复杂度](assets/ccomputational_complexity__space_complexity__space_complexity_recursive_linear.png)
 
 #### 平方阶 O(n²)
 
 平方阶常见于矩阵和图，元素数量与 n 成平方关系：
 
+```python
+def quadratic(n: int):
+    """平方阶"""
+    # 二维列表占用 O(n^2) 空间
+    num_matrix = [[0] * n for _ in range(n)]
+```
+
 
 如下图所示，该函数的递归深度为 n ，在每个递归函数中都初始化了一个数组，长度分别为 n、n-1、…、2、1 ，平均长度为 n / 2 ，因此总体占用 O(n²) 空间：
 
+```python
+def quadratic_recur(n: int) -> int:
+    """平方阶（递归实现）"""
+    if n <= 0:
+        return 0
+    # 数组 nums 长度为 n, n-1, ..., 2, 1
+    nums = [0] * n
+    return quadratic_recur(n - 1)
+```
 
-![递归函数产生的平方阶空间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.assets/space_complexity_recursive_quadratic.png)
+
+![递归函数产生的平方阶空间复杂度](assets/ccomputational_complexity__space_complexity__space_complexity_recursive_quadratic.png)
 
 #### 指数阶 O(2ⁿ)
 
 指数阶常见于二叉树。观察下图，层数为 n 的“满二叉树”的节点数量为 2ⁿ - 1 ，占用 O(2ⁿ) 空间：
 
+```python
+def build_tree(n: int) -> TreeNode | None:
+    """指数阶（建立满二叉树）"""
+    if n == 0:
+        return None
+    root = TreeNode(0)
+    root.left = build_tree(n - 1)
+    root.right = build_tree(n - 1)
+    return root
+```
 
-![满二叉树产生的指数阶空间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.assets/space_complexity_exponential.png)
+
+![满二叉树产生的指数阶空间复杂度](assets/ccomputational_complexity__space_complexity__space_complexity_exponential.png)
 
 #### 对数阶 O(log n)
 
 对数阶常见于分治算法。例如归并排序，输入长度为 n 的数组，每轮递归将数组从中点处划分为两半，形成高度为 log n 的递归树，使用 O(log n) 栈帧空间。
 
-再例如将数字转化为字符串，输入一个正整数 n ，它的位数为 lfloor log_(10) n rfloor + 1 ，即对应字符串长度为 lfloor log_(10) n rfloor + 1 ，因此空间复杂度为 O(log_(10) n + 1) = O(log n) 。
+再例如将数字转化为字符串，输入一个正整数 n ，它的位数为 ⌊log₁₀ n⌋ + 1 ，即对应字符串长度为 ⌊log₁₀ n⌋ + 1 ，因此空间复杂度为 O(log₁₀ n + 1) = O(log n) 。
 
 ### 权衡时间与空间
 
@@ -480,5 +684,5 @@ def recur(n: int):
 ---
 
 > **来源**：本文转载自 [算法效率评估](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/performance_evaluation.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。
-> 本文整合原书多个小节，其余章节：[时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.md)、[空间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.md)。图片已改写为 GitHub raw 绝对链接。
+> 本文整合原书多个小节，其余章节：[时间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.md)、[空间复杂度](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/space_complexity.md)。图片已下载到本模块 `assets/` 目录并以相对路径引用。
 > 原文中指向仓库完整代码的引用块已省略，完整可运行 Python 代码见 [hello-algo/codes/python](https://github.com/krahets/hello-algo/tree/main/codes/python)。

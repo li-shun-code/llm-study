@@ -1,53 +1,254 @@
 ---
-title: collections 容器数据类型（Counter/deque/defaultdict/OrderedDict）
+title: collections 常用容器：Counter、defaultdict 与 deque
 source_url: https://docs.python.org/zh-cn/3/library/collections.html
 author: Python Software Foundation
 license: PSF 许可证第 2 版（转载署名）
-fetched_at: 2026-09-13
-translated: false
+fetched_at: 2026-09-19
+translated: true
 versions: Python 3.14 文档
 order: 14
 group: 容器与推导式
 ---
-这个模块实现了一些专门化的容器，提供了对 Python 的通用内建容器 [`dict`](https://docs.python.org/zh-cn/3/library/stdtypes.html)、[`list`](https://docs.python.org/zh-cn/3/library/stdtypes.html)、[`set`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 和 [`tuple`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 的补充。
+`collections` 模块补的是内置容器的三个短板：**计数**、**按键分组**、**两端进出**。对应三个类：`Counter`、`defaultdict`、`deque`。它们都不是新发明——`Counter` 是字典的子类、`defaultdict` 也是字典、`deque` 是列表的加强版——所以学会本篇的三件事，你就有了处理统计类代码的完整套路。
 
-`namedtuple()`
+官方文档里还有 `namedtuple`、`OrderedDict`、`ChainMap`、`UserDict/UserList/UserString`，日常用得少，统一放进文末折叠的「参考」段；本篇只讲高频三件。
 
-一个工厂函数，用来创建元组的子类，子类的字段是有名称的。
+## 目标场景
 
-`deque`
+| 你想做的事 | 用哪个 |
+| --- | --- |
+| 统计词频 / token 分布 / 标签出现次数，取 Top-K | `Counter` |
+| 按键把一堆记录分组、给每个键累积一个列表 | `defaultdict` |
+| 队列（先进先出）、滑动窗口、只保留最近 N 条 | `deque` |
+| 只需要「键不存在时给个默认值」 | 先试 `dict.setdefault()` / `dict.get()` |
 
-类似列表的容器，但 append 和 pop 在其两端的速度都很快。
+## Counter：把「手动累加」变成一行
 
-`ChainMap`
+不用 `Counter` 的写法大家都写过：
 
-类似字典的类，用于创建包含多个映射的单个视图。
+```python
+words = "rag agent rag prompt agent rag".split()
+counts = {}
+for w in words:
+    counts[w] = counts.get(w, 0) + 1
+print(counts)          # {'rag': 3, 'agent': 2, 'prompt': 1}
+```
 
-`Counter`
+换成 `Counter`：
 
-用于计数 [hashable](https://docs.python.org/zh-cn/3/glossary.html) 对象的字典子类
+```python
+from collections import Counter
 
-`OrderedDict`
+words = "rag agent rag prompt agent rag".split()
+counts = Counter(words)
+print(counts)                        # Counter({'rag': 3, 'agent': 2, 'prompt': 1})
+print(counts["missing"])             # 0 —— 缺失的键返回 0 而不是抛 KeyError
+print(counts.most_common(2))         # [('rag', 3), ('agent', 2)] —— Top-K
+print(sum(counts.values()))          # 6 —— 总数
+print(dict(counts))                  # 转回普通字典
+```
 
-字典的子类，能记住条目被添加进去的顺序。
+`most_common(n)` 是这一族里最省代码的方法：**不传参数就是全排序**，传 `n` 只取前 n 个（内部用堆，比先全排序再切片更快）。取 Top-K 召回结果、找最常失败的错误码，都是它。
 
-`defaultdict`
+`Counter` 的构造方式很灵活：
 
-字典的子类，通过调用用户指定的工厂函数，为键提供默认值。
+```python
+from collections import Counter
 
-`UserDict`
+print(Counter(a=3, b=1))                  # 关键字参数 -> Counter({'a': 3, 'b': 1})
+print(Counter(["a", "a", "b"]))           # 可迭代对象 -> Counter({'a': 2, 'b': 1})
+print(Counter({"a": 1, "b": 2}))          # 映射 -> Counter({'b': 2, 'a': 1})
+print(Counter("abracadabra"))             # 'a': 5, 'b': 2, 'r': 2, 'c': 1, 'd': 1
+```
 
-封装了字典对象，简化了字典子类化
+它还支持多重集运算——注意运算是**按计数值**做的，不是按键集合：
 
-`UserList`
+```python
+from collections import Counter
 
-封装了列表对象，简化了列表子类化
+a = Counter(apples=4, pears=6)
+b = Counter(apples=6, pears=8)
+print(a + b)          # Counter({'pears': 14, 'apples': 10})
+print(a - b)          # Counter() —— 运算符版会丢掉结果 <= 0 的键
+print(a | b)          # 每个键取较大值：Counter({'pears': 8, 'apples': 6})
+print(a & b)          # 每个键取较小值：Counter({'pears': 6, 'apples': 4})
+```
 
-`UserString`
+想保留差值的正负号（比如做「增减量」分析），用原地方法 `subtract()`：
 
-封装了字符串对象，简化了字符串子类化
+```python
+from collections import Counter
 
-## `ChainMap` 对象
+a = Counter(apples=4, pears=6)
+b = Counter(apples=6, pears=8)
+a.subtract(b)
+print(a)              # Counter({'apples': -2, 'pears': -2}) —— 负数与零都留着
+```
+
+`total()` 给出所有计数之和（Python 3.10 起），`elements()` 按计数把元素重复展开（计数为零或负的键不会出现），`subtract()` 做原地递减。
+
+## defaultdict：分组不用先建键
+
+普通字典分组的痛点是「第一个键要特殊处理」：
+
+```python
+pairs = [("fruit", "apple"), ("veg", "carrot"), ("fruit", "banana")]
+
+groups = {}
+for key, value in pairs:
+    if key not in groups:
+        groups[key] = []
+    groups[key].append(value)
+```
+
+`defaultdict` 在读取不存在的键时，调用你给的**工厂函数**造一个默认值并写回字典：
+
+```python
+from collections import defaultdict
+
+pairs = [("fruit", "apple"), ("veg", "carrot"), ("fruit", "banana")]
+groups = defaultdict(list)           # list() 是工厂：无参数可调用
+for key, value in pairs:
+    groups[key].append(value)
+print(dict(groups))                  # {'fruit': ['apple', 'banana'], 'veg': ['carrot']}
+```
+
+工厂函数必须是**不接受参数**的可调用对象，常见四件套：`list`、`set`、`dict`、`int`（`int()` 返回 0，正好当计数器）。需要带初始值时用 `lambda`：`defaultdict(lambda: {"hits": 0})`。
+
+`defaultdict` 是 `dict` 的子类，所有字典方法照常用；它比普通字典多两个看点：
+
+- `default_factory` 属性保存着工厂函数，可读写。
+- `__missing__` 方法定义了默认值如何产生；不重写它，只重写 `__missing__` 就能得到「读取时有默认值、但不会把默认值写进字典」的行为。
+
+```python
+from collections import defaultdict
+
+counts = defaultdict(int)
+counts["a"] += 1
+print(counts, counts.default_factory)     # defaultdict(<class 'int'>, {'a': 1}) <class 'int'>
+
+print(counts["b"])                        # 0 —— 而且 'b' 已经被写进字典！
+print(list(counts))                       # ['a', 'b']
+```
+
+**这里藏着一个坑**：一次读取就会新增一个键。用 `defaultdict` 统计完再遍历，会看到一堆值为 0 的空条目；需要避免时先用普通 `dict.get()`，或者统计完做一次 `{k: v for k, v in d.items() if v}` 过滤。
+
+## deque：两端都是 O(1)
+
+`list` 在头部 `insert(0, x)` 或 `pop(0)` 要把全部元素搬一次，`deque`（double-ended queue，读作 "deck"）两端进出都是 O(1)，且线程安全：
+
+```python
+from collections import deque
+
+q = deque(["Eric", "John", "Michael"])
+q.append("Terry")            # 右进
+q.appendleft("Graham")       # 左进
+print(q.popleft())           # Graham —— 左出
+print(q.pop())               # Michael —— 右出
+print(q)                     # deque(['Eric', 'John', 'Terry'])
+```
+
+`maxlen` 是它最好用的特性：一旦设定，超出长度后**另一端自动丢弃**，天然就是「最近 N 条」的环形缓冲：
+
+```python
+from collections import deque
+
+recent = deque(maxlen=3)
+for line in ["log-1", "log-2", "log-3", "log-4", "log-5"]:
+    recent.append(line)
+print(recent)                # deque(['log-3', 'log-4', 'log-5'], maxlen=3)
+```
+
+记录「最近若干轮对话」、维护滑动窗口、限制重试历史，都用这个写法，不需要自己 `if len(...) > n: pop(0)`。
+
+`rotate(n)` 把整条队列循环移位，负数反向：
+
+```python
+from collections import deque
+
+d = deque("abcdefg", maxlen=5)
+print(d)                     # deque(['c', 'd', 'e', 'f', 'g'], maxlen=5) —— 超长的前两项被挤掉
+d.rotate(1)                  # 右移一位：'g' 转到最前
+print(d)                     # deque(['g', 'c', 'd', 'e', 'f'], maxlen=5)
+d.rotate(2)                  # 再右移两位
+print(d)                     # deque(['e', 'f', 'g', 'c', 'd'], maxlen=5)
+```
+
+索引读写也支持（`d[0]`、`d[1] = 'x'`），但**按下标访问是 O(n)**——它是队列，不是随机访问容器；要频繁中间插入删除，用列表；要频繁两端进出，用 `deque`。`index(value)` 找位置找不到会抛 `ValueError`。
+
+## 三件之外的四个类（一句话版）
+
+- **`namedtuple`**：给元组的字段起名字（`Point(x=1, y=2)`、`point.x`）。轻量、不可变、可哈希；需要默认值、方法或可变时用 `dataclasses.dataclass`。基础用法见《元组与序列解包》，进阶见《namedtuple 与 dataclass》。
+- **`OrderedDict`**：Python 3.7 起普通 `dict` 已保持插入顺序，它剩下的独特价值是 `move_to_end(key)`、`popitem(last=False)`（FIFO 弹出）以及**顺序参与相等比较**（普通 `dict` 比较忽略顺序）。实现 LRU 缓存时仍然合适。
+- **`ChainMap`**：把多个字典逻辑上叠成一层视图，查找从前往后第一个命中的键即返回。典型用途是「默认值 → 配置文件 → 环境变量」的覆盖链，比先合并再查更省内存（合并是 O(n)，`ChainMap` 是 O(1) 建、O(d) 查）。注意 `a | b` 与 `ChainMap(a, b)` 顺序相反：后者「a 优先」。
+- **`UserDict` / `UserList` / `UserString`**：写自定义容器时继承它们比继承内置类型省事，真实数据放在 `.data` 属性里。日常读写代码用不到。
+
+## 常见坑
+
+**1. `defaultdict` 的读取会写入。** 见上文，`counts["nope"]` 凭空多一个键。判存在用 `in`，别顺手 `print(d[k])`。
+
+**2. `Counter` 的两种减法语义不同。** 运算符 `a - b` 会把结果中**计数不大于零**的键直接丢掉（`Counter(apples=4) - Counter(apples=6)` 得到 `Counter()`）；方法 `a.subtract(b)` 才保留负数与零。做「差值分析」用 `subtract()`，做「还剩下什么」用 `-`，混用的后果是条目凭空消失。
+
+**3. 拿 `deque` 当列表随机访问。** `d[1000]` 是 O(n)，比列表慢得多；`in` 检测也是线性的。
+
+**4. `maxlen` 与 `appendleft` 的组合会丢右端。** 设了 `maxlen` 之后一端满了会从**另一端**挤出元素，容易误以为「数据在」。日志缓冲场景通常正是你要的，但别忘了它会静默丢弃。
+
+**5. 工厂函数带参数。** `defaultdict(list)` 合法，`defaultdict(dict.fromkeys)` 或 `defaultdict(set([1]))` 这类会在读取时炸掉——工厂必须能无参调用。需要参数就包一层 `lambda`。
+
+**6. 忘了它们就是字典/列表。** `Counter`、`defaultdict` 都是 `dict` 子类，`json.dumps` 前可以直接用；但 `deque` **不能**直接被 `json.dumps` 序列化，要先 `list(dq)`。`Counter` 的 `repr` 也不是 `dict` 字面值，日志里落盘前先转 `dict`。
+
+## 最小项目：统计一批模型输出的错误分布
+
+把三个容器串起来用，是这个模块最真实的形态：
+
+```python
+import json
+from collections import Counter, defaultdict, deque
+
+raw_logs = """
+{"code": "timeout", "model": "gpt-5-mini", "ms": 1200}
+{"code": "ok", "model": "gpt-5-mini", "ms": 210}
+{"code": "timeout", "model": "gpt-5", "ms": 1500}
+{"code": "content_filter", "model": "gpt-5-mini", "ms": 90}
+{"code": "ok", "model": "gpt-5", "ms": 330}
+{"code": "timeout", "model": "gpt-5-mini", "ms": 1100}
+"""
+
+records = [json.loads(line) for line in raw_logs.strip().splitlines()]
+
+code_counts = Counter(r["code"] for r in records)
+by_model = defaultdict(list)
+for r in records:
+    by_model[r["model"]].append(r["ms"])
+
+latency_window = deque(maxlen=3)          # 最近 3 次的耗时，用于滑动平均
+for r in records:
+    latency_window.append(r["ms"])
+
+print("出现最多的两类:", code_counts.most_common(2))
+# 出现最多的两类: [('timeout', 3), ('ok', 2)]
+print("按模型分组:", {m: sum(v) / len(v) for m, v in by_model.items()})
+# 按模型分组: {'gpt-5-mini': 650.0, 'gpt-5': 915.0}
+print("最近 3 次平均耗时:", sum(latency_window) / len(latency_window))
+# 最近 3 次平均耗时: 506.6666666666667 —— 即最后三条日志
+```
+
+三行核心逻辑各自对应一类需求：`Counter` 出分布、`defaultdict` 出分组、`deque(maxlen)` 出滑动窗口。这三件事在 RAG 评估、调用监控、日志采样脚本里几乎每天都会重写一遍。
+
+## 延伸阅读
+
+- `collections` 模块与官方示例：<https://docs.python.org/zh-cn/3/library/collections.html#collections-examples>
+- 官方教程 5.1.2 用列表实现队列（`deque` 的动机）：<https://docs.python.org/zh-cn/3/tutorial/datastructures.html#using-lists-as-queues>
+- 站内相邻文章：《字典：键值映射与 JSON》《列表：增删改查与切片》《元组与序列解包》《迭代与解包技巧》《namedtuple 与 dataclass》
+
+## 参考：collections 完整文档（译自官方库文档）
+
+下面保留官方模块页的全容器参考（含 `ChainMap`、`namedtuple`、`OrderedDict`、`User*` 类与官方 recipes 示例），按容器分节，需要查方法签名与参数时展开。
+
+<details>
+<summary>展开：collections 全部容器类型的参考文档</summary>
+
+### `ChainMap` 对象
 
 `ChainMap` 类将多个映射迅速地链到一起，这样它们就可以作为一个单元处理。这通常比创建一个新字典再重复地使用 [`update()`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 要快得多。
 
@@ -106,7 +307,7 @@ parents
 -   一个 [极简的只读版 Chainmap](https://code.activestate.com/recipes/305268/).
     
 
-### `ChainMap` 例子和方法
+#### `ChainMap` 例子和方法
 
 这一节提供了多个使用链映射的案例。
 
@@ -183,7 +384,7 @@ class DeepChainMap(ChainMap):
 DeepChainMap({'zebra': 'black', 'snake': 'red'}, {}, {'lion': 'orange'})
 ```
 
-## `Counter` 对象
+### `Counter` 对象
 
 一个计数器工具，为的是可以方便快速地计数。例如:
 
@@ -374,7 +575,7 @@ Counter({'b': 4})
     ```
     
 
-## `deque` 对象
+### `deque` 对象
 
 *class* `collections.deque([iterable[, maxlen]])`
 
@@ -420,11 +621,11 @@ Deque 队列是对栈或 queue 队列的泛化（该名称的发音为 "deck"，
 
 `index(value[, start[, stop]])`
 
-Return the position of _value_ in the deque (at or after index _start_ and before index _stop_). Returns the first match or raises [`ValueError`](https://docs.python.org/zh-cn/3/library/exceptions.html) if not found.
+返回 _value_ 在 deque 中的位置（在索引 _start_ 处或之后、在索引 _stop_ 之前）。返回第一个匹配项；找不到则引发 [`ValueError`](https://docs.python.org/zh-cn/3/library/exceptions.html)。
 
 `insert(index, value, /)`
 
-Insert _value_ into the deque at position _index_.
+将 _value_ 插入 deque 的 _index_ 位置。
 
 如果插入会导致一个限长 deque 超出长度 _maxlen_ 的话，就引发一个 [`IndexError`](https://docs.python.org/zh-cn/3/library/exceptions.html)。
 
@@ -515,7 +716,7 @@ IndexError: pop from an empty deque
 deque(['c', 'b', 'a'])
 ```
 
-### `deque` 用法
+#### `deque` 用法
 
 这一节展示了deque的多种用法。
 
@@ -544,7 +745,7 @@ def moving_average(iterable, n=3):
         yield s / n
 ```
 
-A [round-robin scheduler](https://en.wikipedia.org/wiki/Round-robin_scheduling) can be implemented with input iterators stored in a `deque`. Values are yielded from the active iterator in position zero. If that iterator is [exhausted](https://docs.python.org/zh-cn/3/glossary.html), it can be removed with `popleft()`; otherwise, it can be cycled back to the end with the `rotate()` method:
+把若干输入迭代器存进 `deque`，就能实现一个[轮转调度器](https://en.wikipedia.org/wiki/Round-robin_scheduling)。位置 0 上的活动迭代器会持续产出值；若它已[耗尽](https://docs.python.org/zh-cn/3/glossary.html)，用 `popleft()` 移除；否则用 `rotate()` 把它转回队尾，从而轮到下一个：
 
 ```plain
 def roundrobin(*iterables):
@@ -571,7 +772,7 @@ def delete_nth(d, n):
 
 要实现 `deque` 切片， 使用一个类似的方法，应用 `rotate()` 将目标元素放到左边。通过 `popleft()` 移去老的条目（entries），通过 `extend()` 添加新的条目， 然后反向 rotate。基于这种方法的微小变化，很容易实现 Forth 风格的栈操作，诸如 `dup`, `drop`, `swap`, `over`, `pick`, `rot`, 和 `roll` 。
 
-## `defaultdict` 对象
+### `defaultdict` 对象
 
 *class* `collections.defaultdict(_default_factory=None_, /, **kwargs)`
 
@@ -583,7 +784,7 @@ def delete_nth(d, n):
 
 本对象包含一个名为 `default_factory` 的属性，构造时，第一个参数用于为该属性提供初始值，默认为 `None`。所有其他参数（包括关键字参数）都相当于传递给 [`dict`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 的构造函数。
 
-`defaultdict`s are [generic](https://docs.python.org/zh-cn/3/library/typing.html) over two types, signifying (respectively) the types of the dictionary's keys and values.
+`defaultdict` 对两个类型参数是[泛型](https://docs.python.org/zh-cn/3/library/typing.html)，分别表示字典键与值的类型。
 
 `defaultdict` 对象除了支持标准 [`dict`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 的操作，还支持以下方法作为扩展：
 
@@ -605,7 +806,7 @@ default_factory
 
 本属性由 `__missing__()` 方法来调用。如果构造对象时提供了第一个参数，则本属性会被初始化成那个参数，如果未提供第一个参数，则本属性为 `None`。
 
-### `defaultdict` 例子
+#### `defaultdict` 例子
 
 使用 [`list`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 作为 `default_factory`，很轻松地将（键-值对组成的）序列转换为（键-列表组成的）字典：
 
@@ -668,7 +869,7 @@ default_factory
 [('blue', {2, 4}), ('red', {1, 3})]
 ```
 
-## `namedtuple()` 命名元组的工厂函数
+### `namedtuple()` 命名元组的工厂函数
 
 命名元组赋予每个位置一个含义，提供可读性和自文档性。它们可以用于任何普通元组，并添加了通过名字获取值的能力，通过索引值也是可以的。
 
@@ -852,7 +1053,7 @@ Point: x=14.000  y= 0.714  hypot=14.018
 -   [`dataclasses`](https://docs.python.org/zh-cn/3/library/dataclasses.html) 模块提供了一个装饰器和一些函数，用于自动将生成的特殊方法添加到用户定义的类中。
     
 
-## `OrderedDict` 对象
+### `OrderedDict` 对象
 
 有序词典就像常规词典一样，但有一些与排序操作相关的额外功能。由于内置的 [`dict`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 类获得了记住插入顺序的能力（在 Python 3.7 中保证了这种新行为），它们变得不那么重要了。
 
@@ -915,7 +1116,7 @@ Point: x=14.000  y= 0.714  hypot=14.018
 
 `OrderedDict` 对象和其他 [`Mapping`](https://docs.python.org/zh-cn/3/library/collections.abc.html) 对象之间的相等性检测像常规字典那样对顺序不敏感。 这允许 `OrderedDict` 对象在任何可使用字典的地方被替代。
 
-### `OrderedDict` 例子和用法
+#### `OrderedDict` 例子和用法
 
 创建记住键值 _最后_ 插入顺序的有序字典变体很简单。 如果新条目覆盖现有条目，则原始插入位置将更改并移至末尾:
 
@@ -928,7 +1129,7 @@ class LastUpdatedOrderedDict(OrderedDict):
         self.move_to_end(key)
 ```
 
-An `OrderedDict` would also be useful for implementing variants of [`@functools.lru_cache`](https://docs.python.org/zh-cn/3/library/functools.html):
+`OrderedDict` 也适合用来实现 [`@functools.lru_cache`](https://docs.python.org/zh-cn/3/library/functools.html) 的变体：
 
 ```python
 from collections import OrderedDict
@@ -992,7 +1193,7 @@ class MultiHitLRUCache:
         return result
 ```
 
-## `UserDict` 对象
+### `UserDict` 对象
 
 `UserDict` 类是用作字典对象的外包装。对这个类的需求已部分由直接创建 [`dict`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 的子类的功能所替代；不过，这个类处理起来更容易，因为底层的字典可以作为属性来访问。
 
@@ -1002,15 +1203,15 @@ class MultiHitLRUCache:
 
 *class* `collections.UserDict(iterable, /, **kwargs)`
 
-Class that simulates a dictionary. The instance's contents are kept in a regular dictionary, which is accessible via the `data` attribute of `UserDict` instances. If arguments are provided, they are used to initialize `data`, like a regular dictionary.
+模拟字典行为的类。实例内容保存在一个普通字典中，可通过 `UserDict` 实例的 `data` 属性访问。若提供参数，则像普通字典那样用它初始化 `data`。
 
-In addition to supporting the methods and operations of mappings, `UserDict` instances provide the following attribute:
+除了支持映射类型的方法与操作之外，`UserDict` 实例还提供以下属性：
 
 data
 
 一个真实的字典，用于保存 `UserDict` 类的内容。
 
-## `UserList` 对象
+### `UserList` 对象
 
 这个类封装了列表对象。它是一个有用的基础类，对于你想自定义的类似列表的类，可以继承和覆盖现有的方法，也可以添加新的方法。这样我们可以对列表添加新的行为。
 
@@ -1030,7 +1231,7 @@ data
 
 如果一个派生类不希望遵从这个要求，所有的特殊方法就必须重写；请参照源代码了解哪些方法需要提供。
 
-## `UserString` 对象
+### `UserString` 对象
 
 `UserString` 类是用作字符串对象的外包装。对这个类的需求已部分由直接创建 [`str`](https://docs.python.org/zh-cn/3/library/stdtypes.html) 的子类的功能所替代；不过，这个类处理起来更容易，因为底层的字符串可以作为属性来访问。
 
@@ -1047,3 +1248,10 @@ data
 ---
 
 > **来源**：本文转载自 [collections --- 容器数据类型 - Python 3 官方文档（中文）](https://docs.python.org/zh-cn/3/library/collections.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。原文为官方中文译文，本站仅做格式转换。
+
+
+</details>
+
+---
+
+> **来源**：抓取于 2026-09-19。折叠段「参考」译自 [collections — 容器数据类型 — Python 标准库（中文）](https://docs.python.org/zh-cn/3/library/collections.html)（Python Software Foundation，PSF 许可证第 2 版），原为官方中文译文的整页收录，本篇将其调整为附录并把未译的英文段落补译为中文；教程式主体、选型表、常见坑与错误分布统计示例为本站编者注。

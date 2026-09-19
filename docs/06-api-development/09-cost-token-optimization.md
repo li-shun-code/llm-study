@@ -18,7 +18,7 @@ group: 可靠性、安全与成本
 
 Cookbook 原文要点：
 
-- 提示词超过 **1024 个 token** 即自动启用缓存，**无需改动请求**；长提示词（>10,000 token）延迟最多可降 **80%**；
+- 提示词超过 **1024 个 token** 即自动启用缓存，**无需改动请求**；长提示词（>10,000 token）延迟最多可降 **80%**；要更可控就用 `prompt_cache_key` + 显式断点（见第二节）；
 - 机制：请求到达时，系统检查提示词的**开头部分（前缀 prefix）**是否已缓存——命中（cache hit）则复用缓存前缀；未命中则全量处理，并顺带把前缀存入缓存；
 - 缓存按**组织（organization）**隔离，只有同组织成员能共享缓存；过程不存数据，符合零数据保留（zero data retention）资格。
 
@@ -48,13 +48,13 @@ tools = [
 
 # 大段系统提示词（静态内容放最前）+ 首条用户消息
 messages = [
-    {"role": "system", "content": ("You are a professional, empathetic, and efficient customer support assistant. ...")},
+    {"role": "developer", "content": ("You are a professional, empathetic, and efficient customer support assistant. ...")},
     {"role": "user", "content": ("Hi, I placed an order three days ago and haven't received any updates ...")},
 ]
 
 def completion_run(messages, tools):
     completion = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5.5",
         tools=tools,
         messages=messages,
         tool_choice="required"
@@ -77,7 +77,69 @@ run2 = completion_run(messages, tools)
 - **保持稳定的使用节奏**：不常使用的提示词会被自动逐出缓存，防止 cache 失效要持续使用；
 - **监控关键指标**：缓存命中率、延迟、缓存 token 占比——用数据调优缓存策略。
 
-## 二、Batch API：异步任务五折处理
+## 二、显式缓存键与提示词版本化：2026 年的写法
+
+上一节的自动缓存（前缀 ≥1024 token 即生效，无需改请求）是**零配置**的那一半；生产上还需要可控的那一半。现行 Responses API 提供三个字段（参数说明取自 openai-python 的类型定义）：
+
+```python
+response = client.responses.create(
+    model="gpt-5.5",
+    instructions=SYSTEM_PROMPT,          # 静态：所有用户共用
+    input=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "input_text",
+                    "text": KB_ARTICLE,   # 大段知识库：放在动态内容之前
+                    # 显式断点：标记"可复用前缀到此结束"（每个请求最多写 4 个断点）
+                    "prompt_cache_breakpoint": {"mode": "explicit"},
+                },
+                {"type": "input_text", "text": user_question},   # 动态内容留在最后
+            ],
+        }
+    ],
+    prompt_cache_key=f"tenant_{tenant_id}",   # 缓存分片键（取代旧的 user 字段）
+    prompt_cache_options={"ttl": "30m"},      # gpt-5.6 起支持；ttl 是当前唯一取值（30 分钟）
+)
+```
+
+- **`prompt_cache_key`**：给同一批请求打同一个键，OpenAI 用它来优化命中。**它是"路由提示"，不是权限边界**——不同租户的私有内容不要指望它隔离，该拆项目/前缀就拆。SDK 文档明确它取代了旧的 `user` 字段。
+- **`prompt_cache_options` + `prompt_cache_breakpoint`**：默认由 OpenAI 自动选一个**隐式断点**；置 `mode="explicit"` 后隐式断点关闭，完全由你标。匹配时会考虑会话里最近 80 个断点、没有内容块回看上限。适合"多段可复用前缀"的场景（系统提示词 + 工具定义 + 检索到的长文档）。
+- **`prompt_cache_retention`** 已标注 **Deprecated**（改用 `prompt_cache_options.ttl`）。旧值 `in_memory` / `24h` 表达的是**最长**保留、与 `ttl`（最短存活）互不影响；`gpt-5.5`/`gpt-5.5-pro` 及之后的模型只支持 `24h`；开了 ZDR（零数据保留）的组织在未指定时默认 `in_memory`。读到旧教程里 `prompt_cache_retention="24h"` 的写法，先确认你的组织策略再照抄。
+- **提示词版本化到调用侧**：`prompt=` 参数可以引用平台上保存的**提示模板**及其变量（"版本 prompts in code"），配合观测字段 `gen_ai.prompt.name` / `gen_ai.prompt.version`，就能把"这版提示词命中率/单价/质量"直接聚合出来——提示词管理从"文件里改字符串"变成"有版本、可回滚的对象"。写法与埋点见《生产可观测性：OpenTelemetry GenAI 语义约定与调用侧埋点》。
+
+## 三、分层路由与输出裁剪：另外两个省钱开关
+
+缓存和 Batch 解决"同样的话别重复算"，还有两件事管"这次该花多少"。
+
+### 1. 按任务分层选模型（模型阶梯）
+
+本站示例统一用的模型档位，正好构成一条阶梯：**分类/抽取/改写走轻量档，生成与工具编排走通用档，多步推理才上旗舰**。gpt-6-astra 一类旗舰模型还额外要求工具调用走 Responses API、不支持自定义 `temperature`，把它用在"判断这条工单是不是投诉"上是纯浪费。
+
+单价数字不要在文章里抄——它一年改好几次。**做法是把你自己的价格表落成数据**：控制台定价页取数 → 存进一张 `model_pricing(model, currency, input_per_mtok, output_per_mtok, cached_input_per_mtok)` 表 → 代码里按 `usage` 乘算。落库与窗口统计见《PostgreSQL 窗口函数与 CTE：按天按模型算 token 与延迟》。
+
+```python
+PRICING = {  # 示例结构，数值请从官方定价页取你自己的快照
+    "gpt-5.5":     {"in": 0.0, "out": 0.0, "cached_in": 0.0},
+    "gpt-5.4-mini": {"in": 0.0, "out": 0.0, "cached_in": 0.0},
+}
+
+def estimate_cost(model: str, usage) -> float:
+    price = PRICING[model]
+    cached = getattr(usage.input_tokens_details, "cached_tokens", 0) or 0
+    billable_in = usage.input_tokens - cached
+    return (billable_in * price["in"] + cached * price["cached_in"] + usage.output_tokens * price["out"]) / 1_000_000
+```
+
+### 2. 裁剪输出：上限、 verbosity、推理力度三管齐下
+
+- **`max_output_tokens`（Responses）/ `max_completion_tokens`（Chat Completions）给实数**：别留默认。注意限流侧也是按"输入 token 与输出上限的较大者"预扣的（《错误处理、重试与限流》），上限虚高同时抬成本与撞限概率。
+- **`text={"verbosity": "low"}`**：现行模型支持"回答啰嗦程度"这一维；对列表式、抽取式任务降到 `low` 常能省掉 30% 以上输出 token。
+- **`reasoning={"effort": "low"}`**：推理模型的思考 token 也计费（观测上体现为 `gen_ai.usage.reasoning.output_tokens`）。任务不复杂就别给 `high`；需要更细的控制请看 `reasoning.summary` 与模型侧档位（《推理模型时代的提示原则》方向）。
+- **结构化输出限定字段**：让模型只返回你要的字段（strict schema），比"请简短回答"可靠得多（《JSON Mode 与结构化输出（Structured Outputs）》）。
+
+## 四、Batch API：异步任务五折处理
 
 Batch API 的定位（Cookbook 原文）：**为异步批处理作业提供更低价格与更高限额**；作业 24 小时内完成（通常更快）。
 
@@ -114,7 +176,7 @@ for index, row in df.iterrows():
         "url": "/v1/chat/completions",
         "body": {
             # 与普通 Chat Completions 调用中的内容一致
-            "model": "gpt-4o-mini",
+            "model": "gpt-5.4-mini",
             "temperature": 0.1,
             "response_format": {
                 "type": "json_object"
@@ -204,7 +266,7 @@ RESULT: {
 
 Cookbook 的收尾建议：批处理 API 与 Chat Completions 端点参数一致、支持绝大多数模型；**凡是不要求实时完成的负载，都值得转成批处理作业**，可显著降低成本。
 
-## 三、一张决策图
+## 五、一张决策图
 
 **表：两种成本优化机制选型**
 
@@ -216,7 +278,7 @@ Cookbook 的收尾建议：批处理 API 与 Chat Completions 端点参数一致
 | 典型场景 | 多轮聊天、Agent 工具定义、带代码库上下文的助手 | 数据集打标、摘要翻译、反馈分析 |
 | 两者可叠加 | 同一批处理请求内部当然也可以有重复前缀（如相同系统提示词） | ✓ |
 
-## 四、本篇小结
+## 六、本篇小结
 
 - Prompt Caching 自动生效（>1024 token），按前缀匹配——**把不变的放开头**，用 `usage.prompt_tokens_details.cached_tokens` 验证命中率；
 - 换前缀（哪怕只换第一张图）就前功尽弃；工具定义与顺序也要保持一致；

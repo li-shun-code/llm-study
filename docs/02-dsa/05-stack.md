@@ -14,7 +14,7 @@ group: 线性结构
 
 如下图所示，我们把堆叠元素的顶部称为“栈顶”，底部称为“栈底”。将把元素添加到栈顶的操作叫作“入栈”，删除栈顶元素的操作叫作“出栈”。
 
-![栈的先入后出规则](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/stack.assets/stack_operations.png)
+![栈的先入后出规则](assets/cstack_and_queue__stack__stack_operations.png)
 
 ## 栈的常用操作
 
@@ -72,12 +72,97 @@ is_empty: bool = len(stack) == 0
 
 以下是基于链表实现栈的示例代码：
 
+```python
+class LinkedListStack:
+    """基于链表实现的栈"""
+
+    def __init__(self):
+        """构造方法"""
+        self._peek: ListNode | None = None
+        self._size: int = 0
+
+    def size(self) -> int:
+        """获取栈的长度"""
+        return self._size
+
+    def is_empty(self) -> bool:
+        """判断栈是否为空"""
+        return self._size == 0
+
+    def push(self, val: int):
+        """入栈"""
+        node = ListNode(val)
+        node.next = self._peek
+        self._peek = node
+        self._size += 1
+
+    def pop(self) -> int:
+        """出栈"""
+        num = self.peek()
+        self._peek = self._peek.next
+        self._size -= 1
+        return num
+
+    def peek(self) -> int:
+        """访问栈顶元素"""
+        if self.is_empty():
+            raise IndexError("栈为空")
+        return self._peek.val
+
+    def to_list(self) -> list[int]:
+        """转化为列表用于打印"""
+        arr = []
+        node = self._peek
+        while node:
+            arr.append(node.val)
+            node = node.next
+        arr.reverse()
+        return arr
+```
+
 
 ### 基于数组的实现
 
 使用数组实现栈时，我们可以将数组的尾部作为栈顶。如下图所示，入栈与出栈操作分别对应在数组尾部添加元素与删除元素，时间复杂度都为 O(1) 。
 
 由于入栈的元素可能会源源不断地增加，因此我们可以使用动态数组，这样就无须自行处理数组扩容问题。以下为示例代码：
+
+```python
+class ArrayStack:
+    """基于数组实现的栈"""
+
+    def __init__(self):
+        """构造方法"""
+        self._stack: list[int] = []
+
+    def size(self) -> int:
+        """获取栈的长度"""
+        return len(self._stack)
+
+    def is_empty(self) -> bool:
+        """判断栈是否为空"""
+        return self.size() == 0
+
+    def push(self, item: int):
+        """入栈"""
+        self._stack.append(item)
+
+    def pop(self) -> int:
+        """出栈"""
+        if self.is_empty():
+            raise IndexError("栈为空")
+        return self._stack.pop()
+
+    def peek(self) -> int:
+        """访问栈顶元素"""
+        if self.is_empty():
+            raise IndexError("栈为空")
+        return self._stack[-1]
+
+    def to_list(self) -> list[int]:
+        """返回列表用于打印"""
+        return self._stack
+```
 
 
 ## 两种实现对比

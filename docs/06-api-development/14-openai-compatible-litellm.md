@@ -25,7 +25,27 @@ client = OpenAI(
 # 之后 chat.completions.create(...) 的写法完全一致
 ```
 
-「Python 基础」的"环境变量与 API Key 管理"同样适用：`base_url` 与 `api_key` 都从 `.env` 读，一行环境变量切换厂商。本站附录的 AI 学习助手（AiAssistant 组件）就是按"自配 OpenAI 兼容端点"设计的。
+**本站约定：任何 Key 都不写进代码。** 把端点与密钥放进 `.env`（并加进 `.gitignore`），运行时用 `os.environ` 读——「Python 基础」的《环境变量与 API Key 管理》与 openai-python README 推荐的是同一套做法。本站附录的 AI 学习助手（AiAssistant 组件）也按"自配 OpenAI 兼容端点"设计：
+
+```text
+# .env（不要提交进版本库）
+OPENAI_API_KEY="sk-..."
+OPENAI_BASE_URL="https://your-provider.example.com/v1"
+```
+
+```python
+import os
+from dotenv import load_dotenv   # pip install python-dotenv
+from openai import OpenAI
+
+load_dotenv()                     # 读取当前目录的 .env 并注入环境
+
+client = OpenAI(
+    base_url=os.environ["OPENAI_BASE_URL"],   # 换成厂商的兼容端点
+    api_key=os.environ["OPENAI_API_KEY"],     # 厂商的 Key，来自环境变量
+)
+# 之后 chat.completions.create(...) / responses.create(...) 的写法完全一致
+```
 
 **路线 2：统一路由库 LiteLLM。** [LiteLLM](https://docs.litellm.ai) 是开源库，用**同一个 `completion()` 接口**调用 100+ 家模型（OpenAI、Anthropic、Vertex AI、Bedrock 等），并内置重试/回退（fallback）、Router 负载均衡与可自托管的 LLM 网关（Proxy，含虚拟密钥、成本追踪与管理 UI）。当你要在**运行时动态切换厂商**、做多供应商容灾时，它比手改 `base_url` 更顺手。
 
@@ -37,83 +57,63 @@ client = OpenAI(
 uv add litellm
 ```
 
-核心规则：**模型名 = `提供商前缀/模型名`**。各家的第一个调用：
+核心规则：**模型名 = `提供商前缀/模型名`**。LiteLLM 默认**从环境变量读密钥**——这正好与本站约定一致：把下面这些键写进 `.env`，用 `load_dotenv()` 注入，代码里不出现任何密钥字面量。
 
-```python
-# OpenAI
-from litellm import completion
-import os
-
-os.environ["OPENAI_API_KEY"] = "your-api-key"
-response = completion(
-    model="openai/gpt-5.6-terra",
-    messages=[{"role": "user", "content": "Hello, how are you?"}]
-)
-print(response.choices[0].message.content)
+```text
+# .env
+OPENAI_API_KEY="sk-..."
+ANTHROPIC_API_KEY="sk-ant-..."
+AWS_ACCESS_KEY_ID="..."
+AWS_SECRET_ACCESS_KEY="..."
+AWS_REGION_NAME="us-east-1"
+VERTEXAI_PROJECT="your-project-id"      # 或先执行 gcloud auth application-default login
+VERTEXAI_LOCATION="us-central1"
 ```
 
 ```python
-# Anthropic
+from dotenv import load_dotenv
 from litellm import completion
-import os
 
-os.environ["ANTHROPIC_API_KEY"] = "your-api-key"
-response = completion(
-    model="anthropic/claude-sonnet-5",
-    messages=[{"role": "user", "content": "Hello, how are you?"}]
-)
+load_dotenv()   # 一次性把 .env 注入环境；之后各 provider 自己去读
+
+for model in [
+    "openai/gpt-5.6-terra",                        # 走 OPENAI_API_KEY
+    "anthropic/claude-sonnet-5",                   # 走 ANTHROPIC_API_KEY
+    "bedrock/us.anthropic.claude-sonnet-5",        # 走 AWS_* 三项
+    "vertex_ai/gemini-3.1-pro-preview",            # 走 VERTEXAI_* 或 ADC
+]:
+    response = completion(
+        model=model,
+        messages=[{"role": "user", "content": "Hello, how are you?"}],
+    )
+    print(model, "->", response.choices[0].message.content[:60])
 ```
 
-```python
-# Vertex AI（gemini）
-from litellm import completion
-import os
-
-# 认证：先执行 gcloud auth application-default login
-os.environ["VERTEXAI_PROJECT"] = "your-project-id"
-os.environ["VERTEXAI_LOCATION"] = "us-central1"
-response = completion(
-    model="vertex_ai/gemini-3.1-pro-preview",
-    messages=[{"role": "user", "content": "Hello, how are you?"}]
-)
-```
+本地部署（Ollama）不需要密钥，只要指对 `api_base`：
 
 ```python
-# Bedrock
-from litellm import completion
-import os
-
-os.environ["AWS_ACCESS_KEY_ID"] = "your-key"
-os.environ["AWS_SECRET_ACCESS_KEY"] = "your-secret"
-os.environ["AWS_REGION_NAME"] = "us-east-1"
-response = completion(
-    model="bedrock/us.anthropic.claude-sonnet-5",
-    messages=[{"role": "user", "content": "Hello, how are you?"}]
-)
-```
-
-```python
-# Ollama（本地部署）
-from litellm import completion
-
 response = completion(
     model="ollama/llama3",
     messages=[{"role": "user", "content": "Hello, how are you?"}],
-    api_base="http://localhost:11434"
+    api_base="http://localhost:11434",
 )
 ```
 
-```python
-# Azure OpenAI
-from litellm import completion
-import os
+Azure 一条要注意时效：微软自 2025-08 起推 **v1 端点**（`https://<资源名>.openai.azure.com/openai/v1/`），**v1 GA 不再要求传带日期的 `api-version`**——`AZURE_API_VERSION="2024-02-01"` 这类写法属于旧的按日期版本化路线，新代码不要照抄（详见《模型版本与弃用管理》的 Azure 一节）。两种写法：
 
-os.environ["AZURE_API_KEY"] = "your-key"
-os.environ["AZURE_API_BASE"] = "https://your-resource.openai.azure.com"
-os.environ["AZURE_API_VERSION"] = "2024-02-01"
+```text
+# .env —— 推荐：v1 端点，不填 api-version
+AZURE_API_KEY="..."
+AZURE_API_BASE="https://your-resource.openai.azure.com/openai/v1/"
+
+# 只有仍需走旧的日期化 API 时才配这一行，且要用当前 GA/preview 版本
+# AZURE_API_VERSION="2025-04-01-preview"
+```
+
+```python
 response = completion(
-    model="azure/your-deployment-name",
-    messages=[{"role": "user", "content": "Hello, how are you?"}]
+    model="azure/your-deployment-name",   # Azure 上是"部署名"，不一定是模型名
+    messages=[{"role": "user", "content": "Hello, how are you?"}],
 )
 ```
 
@@ -145,7 +145,7 @@ response = completion(
 
 ## 三、参数：OpenAI 参数即通用参数
 
-`completion()` 的输入参数就是你在第 01–06 篇学过的那套 OpenAI 参数（`messages`、`max_tokens`、`temperature` 等），LiteLLM 负责**翻译**到各家的原生参数；多模态内容块同样按 OpenAI 格式书写（官方 Input Params 文档示例）：
+（LiteLLM Input Params 文档中 `max_tokens` 已标注 deprecated，推荐 `max_completion_tokens`。）`completion()` 的输入参数就是你在《第一个 API 调用》到《JSON Mode 与结构化输出》那几篇学过的那套 OpenAI 参数（`messages`、`max_completion_tokens`、`temperature` 等），LiteLLM 负责**翻译**到各家的原生参数；多模态内容块同样按 OpenAI 格式书写（官方 Input Params 文档示例）：
 
 ```python
 # 文本
@@ -178,14 +178,12 @@ for part in response:
 LiteLLM 还提供把分块列表**重建成完整响应**的助手：
 
 ```python
-from litellm import completion
+import litellm
 
 messages = [{"role": "user", "content": "Hey, how's it going?"}]
-response = completion(model="gpt-5.6-luna", messages=messages, stream=True)
-chunks = []
-for chunk in response:
-    chunks.append(chunk)
-print(litellm.stream_chunk_builder(chunks, messages=messages))
+response = litellm.completion(model="gpt-5.6-luna", messages=messages, stream=True)
+chunks = list(response)                      # 把分块收全
+print(litellm.stream_chunk_builder(chunks, messages=messages))   # 重建成一个完整响应对象
 ```
 
 异步版本叫 `acompletion`（与 `AsyncOpenAI` 对应），支持异步迭代流：
@@ -211,20 +209,66 @@ async def completion_call():
 asyncio.run(completion_call())
 ```
 
-## 五、进阶方向
+## 五、Router 与 fallback：多部署路由的最小可跑版
 
-- **Router 与 fallback**：同一逻辑名挂多个部署，按限流/错误自动切换（第 07 篇的"降级模型"策略的库级实现）；
+上面所有例子都只挂一个部署。真到生产，你要的是"同一个逻辑模型名，后面挂多个供应商 + 自动切换"。LiteLLM 的 `Router` 就是干这个的（官方 routing 文档）：
+
+```python
+from dotenv import load_dotenv
+from litellm import Router
+
+load_dotenv()
+
+router = Router(
+    model_list=[
+        {
+            "model_name": "chat-default",          # 对外的逻辑名，业务代码只认它
+            "litellm_params": {"model": "openai/gpt-5.5", "api_key": None},  # None → 读环境变量
+            "model_info": {"rpm": 400, "tpm": 160_000},                       # 该部署的限额
+        },
+        {
+            "model_name": "chat-default",
+            "litellm_params": {"model": "anthropic/claude-sonnet-5", "api_key": None},
+            "model_info": {"rpm": 300},
+        },
+    ],
+    routing_strategy="latency-based-routing",      # 还有 usage-based / simple-shuffle 等
+    num_retries=2,
+    context_window_fallbacks=[{"chat-default": ["openai/gpt-5.4-mini"]}],   # 超窗时降级
+    allowed_fails=3,                               # 冷却阈值：连续失败几次就把该部署摘掉
+    cooldown_time=30,
+)
+
+response = router.completion(
+    model="chat-default",
+    messages=[{"role": "user", "content": "用两句话解释令牌桶"}],
+    max_completion_tokens=128,
+)
+print(response.choices[0].message.content)
+print("实际用的模型：", response.model)   # 与请求名不同 = 发生了切换/降级
+```
+
+三点注意：
+
+1. **`api_key=None` 不是笔误**：显式让 SDK 去读环境变量，避免把密钥写进 `model_list`（本站约定）；
+2. **降级要评估质量**。`response.model` 与请求的 `model_name` 不一致时，输出质量、延迟、单价都变了，上线前用评估集验证（《RAG 评估实战：用 RAGAS 量化检索与生成质量》的方法同样适用）；
+3. **Router 管的是"选哪个部署"，不是"发多快"**。并发节流仍要自己做，见《并发请求限流：信号量、令牌桶与超时预算》。
+
+## 六、进阶方向
+
+- **Router 与 fallback**：同一逻辑名挂多个部署，按限流/错误自动切换（《错误处理、重试与限流》里"降级模型"策略的库级实现）；
 - **LLM Gateway（Proxy）**：以容器方式自托管网关，应用拿虚拟密钥（virtual keys）访问模型，网关统一记账、限流、观测——团队共享模型访问的常见架构；
 - **成本核算**：配合 `completion_cost` 等辅助能力把前述的成本意识落到账单层面。
 
-## 六、本篇小结
+## 七、本篇小结
 
 - OpenAI Chat Completions 格式是事实标准：换厂商 = 换 `base_url` + `api_key`；
 - LiteLLM 用 `completion(model="provider/model")` 统一 100+ 模型，响应保持 OpenAI 格式，参数自动翻译；
 - 流式（`stream=True`）、异步（`acompletion`）、多模态内容块都与 OpenAI SDK 习惯一致；
-- 多供应商容灾、网关化管理是它相对裸 SDK 的核心增量。
+- 多供应商容灾、网关化管理是它相对裸 SDK 的核心增量；`Router` 用 `model_name` + fallback 列表实现"一个名字、多个部署"；
+- 密钥一律走 `.env` + `os.environ`，LiteLLM 与 openai-python 都默认读环境变量，没有例外。
 
-第 15 篇换到编排层：LangChain 1.0 快速入门。
+下一篇《用 FastAPI 封装 LLM 服务》把"调模型"变成"提供接口"；LangChain / Agents SDK 级别的编排已收在「AI 智能体」模块的《LangChain 快速入门（1.0 · create_agent）》与《OpenAI Agents SDK：轻量多智能体框架入门》。
 
 ---
 

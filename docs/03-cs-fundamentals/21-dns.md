@@ -203,8 +203,74 @@ DNS 记录类型还有[很多](https://en.wikipedia.org/wiki/List_of_DNS_record_
 - 人们为什么会用动态 DNS？
 - TTL 是干什么用的？
 
+
+## 实操：用 dig 把一次解析拆开看
+
+`dig` 是 DNS 的 X 光机：它绕过本机缓存策略之外的所有环节，直接问名字服务器并打印原始报文。安装：Debian/Ubuntu `apt install dnsutils`、RHEL/Alma `dnf install bind-utils`、Arch `pacman -S bind-tools`、macOS 自带。
+
+先看最小输出，再看全量：
+
+```bash
+dig +short api.example.com                      # 只要答案（脚本里好用）
+dig api.example.com                             # 完整报文：问题段/应答段/权威段/附加段
+dig +noall +answer example.com AAAA            # 只保留应答行
+dig -x 93.184.216.34                            # 反向解析（PTR）
+```
+
+完整输出里四行最要紧：
+
+```text
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 24503
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+;; QUESTION SECTION:
+;example.com.                   IN      A
+;; ANSWER SECTION:
+example.com.            300     IN      A       93.184.216.34
+```
+
+- **`status`**：`NOERROR` 成功、`NXDOMAIN` 域名不存在（负缓存按 SOA 的 minimum 生效）、`SERVFAIL` 上游炸了或 **DNSSEC 校验失败**、`REFUSED` 服务器拒绝替你递归。
+- **flags**：`qr` 是应答、`rd` 请求递归、`ra` 服务器愿意递归；**只有 `qr aa`（authoritative answer）时你看到的才是权威服务器直接给的记录**，否则是被缓存服务器代答的。
+- **`300`** 是**剩余 TTL**，不是原始 TTL：同一个域名反复查，这个数字只会往下走。
+- 末尾的 **`Query time: 4 msec`** 是判断"解析慢不慢"的直接依据。
+
+查各类记录，对应《DNS》正文的记录类型：
+
+```bash
+dig +noall +answer example.com NS            # 谁权威
+dig +noall +answer example.com MX            # 邮件
+dig +noall +answer example.com TXT          # 域名归属验证、SPF/DMARC
+dig +noall +answer example.com SOA          # serial/refresh/retry/expire/minimum
+dig +noall +answer _https._tcp.example.com SRV
+dig +noall +answer example.com CAA          # 允许哪些 CA 签发证书
+```
+
+看**委派链**（谁把球传给谁）用 `+trace`，它从根服务器开始一级一级问，正是正文"一次查询实例"的现场复现：
+
+```bash
+dig +trace +nodnssec example.com          # 根 → gTLD .com → 权威服务器
+dig +dnssec example.com                   # 看 RRSIG/DNSKEY（正文"安全扩展"部分）
+dig example.com @1.1.1.1 +tcp             # 换服务器、换传输层（UDP 被限速/截断时用）
+dig +subnet=10.0.0.0/24 example.com @8.8.8.8   # EDNS Client Subnet：验证 CDN 按客户端网段返回不同 IP
+```
+
+### dig 与"浏览器/程序看到的"为什么不一致
+
+`dig` 直接问 resolv.conf 里的名字服务器，**不读 `/etc/hosts`、不走 mDNS、不受 nsswitch 顺序影响**，所以它和真实程序行为可能差很远。逐层验证的正确工具是：
+
+```bash
+getent ahosts example.com            # 走 glibc/nsswitch（等价于 getaddrinfo）：hosts 文件优先
+cat /etc/nsswitch.conf | grep hosts  # 看顺序（files 在前还是 dns 在前）
+resolvectl query example.com         # systemd-resolved 环境：显示走哪个 DNS 服务器与哪个缓存
+resolvectl statistics                # 命中/未命中计数，判断"缓存是否在工作"
+dscacheutil -q host -a name example.com   # macOS
+ipconfig /displaydns                 # Windows（含本地缓存条目与剩余 TTL）
+```
+
+典型排障场景：容器里 `curl` 慢但 `ping` 快 → 十有八九是 **IPv6 AAAA 查询超时**（`dig AAAA` 看 SERVFAIL 与耗时）或 Docker 内置 DNS（127.0.0.11）转发上游不通；反过来"能 dig 出来却连不上"往往是 `/etc/hosts` 覆盖或 glibc 缓存（`nscd`/`sssd`）在作怪，用 `getent` 一条命令就能分清是谁的答案。
+
+
 > 译注：回到本模块的视角——你在代码里写 `api.openai.com`，`getaddrinfo()` 先问本地缓存、再问递归解析器、最后沿"根 → .com → 权威服务器"逐级问路拿到 IP，然后才轮到 TCP 三次握手、TLS 握手与 HTTP 请求。DNS 是每一次 API 调用静默的第一步；理解它，也就理解了为什么"解析慢/缓存失效"会让你的服务莫名变慢。
 
 ---
 
-> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/domain-name-system-dns.html) 第 31 章 "Domain Name System (DNS)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13。
+> **来源**：本文翻译自 [Beej's Guide to Network Concepts](https://beej.us/guide/bgnet0/html/split/domain-name-system-dns.html) 第 31 章 "Domain Name System (DNS)"，作者 Brian "Beej Jorgensen" Hall，许可 CC BY-NC-ND 3.0（作者在许可中明确允许对本指南进行忠实翻译，但要求转载指南全文；本译文为署名学习用途的翻译，特此说明并致谢）。抓取于 2026-09-13；末尾“实操”一节据 [dig(1)](https://man7.org/linux/man-pages/man1/dig.1.html)（ISC BIND / GPL-2.0-or-later 收录于 Linux man-pages）与 [resolvectl(1)](https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html) 核实用法，由本站编写。

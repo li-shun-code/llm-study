@@ -13,7 +13,7 @@ group: 树与堆
 1. 对于根节点，左子树中所有节点的值 < 根节点的值 < 右子树中所有节点的值。
 2. 任意节点的左、右子树也是二叉搜索树，即同样满足条件 `1.` 。
 
-![二叉搜索树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.assets/binary_search_tree.png)
+![二叉搜索树](assets/ctree__binary_search_tree__binary_search_tree.png)
 
 ## 二叉搜索树的操作
 
@@ -29,6 +29,111 @@ group: 树与堆
 
 二叉搜索树的查找操作与二分查找算法的工作原理一致，都是每轮排除一半情况。循环次数最多为二叉树的高度，当二叉树平衡时，使用 O(log n) 时间。示例代码如下：
 
+> 本文各代码块均为 `BinarySearchTree` 类的方法；`TreeNode` 类定义见《树与二叉树》。
+
+```python
+class BinarySearchTree:
+    """二叉搜索树"""
+
+    def __init__(self):
+        """构造方法"""
+        self._root = None  # 初始化空树
+
+    def get_root(self) -> TreeNode | None:
+        """获取二叉树根节点"""
+        return self._root
+```
+
+```python
+    def search(self, num: int) -> TreeNode | None:
+        """查找节点"""
+        cur = self._root
+        # 循环查找，越过叶节点后跳出
+        while cur is not None:
+            # 目标节点在 cur 的右子树中
+            if cur.val < num:
+                cur = cur.right
+            # 目标节点在 cur 的左子树中
+            elif cur.val > num:
+                cur = cur.left
+            # 找到目标节点，跳出循环
+            else:
+                break
+        return cur
+
+    def insert(self, num: int):
+        """插入节点"""
+        # 若树为空，则初始化根节点
+        if self._root is None:
+            self._root = TreeNode(num)
+            return
+        # 循环查找，越过叶节点后跳出
+        cur, pre = self._root, None
+        while cur is not None:
+            # 找到重复节点，直接返回
+            if cur.val == num:
+                return
+            pre = cur
+            # 插入位置在 cur 的右子树中
+            if cur.val < num:
+                cur = cur.right
+            # 插入位置在 cur 的左子树中
+            else:
+                cur = cur.left
+        # 插入节点
+        node = TreeNode(num)
+        if pre.val < num:
+            pre.right = node
+        else:
+            pre.left = node
+
+    def remove(self, num: int):
+        """删除节点"""
+        # 若树为空，直接提前返回
+        if self._root is None:
+            return
+        # 循环查找，越过叶节点后跳出
+        cur, pre = self._root, None
+        while cur is not None:
+            # 找到待删除节点，跳出循环
+            if cur.val == num:
+                break
+            pre = cur
+            # 待删除节点在 cur 的右子树中
+            if cur.val < num:
+                cur = cur.right
+            # 待删除节点在 cur 的左子树中
+            else:
+                cur = cur.left
+        # 若无待删除节点，则直接返回
+        if cur is None:
+            return
+
+        # 子节点数量 = 0 or 1
+        if cur.left is None or cur.right is None:
+            # 当子节点数量 = 0 / 1 时， child = null / 该子节点
+            child = cur.left or cur.right
+            # 删除节点 cur
+            if cur != self._root:
+                if pre.left == cur:
+                    pre.left = child
+                else:
+                    pre.right = child
+            else:
+                # 若删除节点为根节点，则重新指定根节点
+                self._root = child
+        # 子节点数量 = 2
+        else:
+            # 获取中序遍历中 cur 的下一个节点
+            tmp: TreeNode = cur.right
+            while tmp.left is not None:
+                tmp = tmp.left
+            # 递归删除节点 tmp
+            self.remove(tmp.val)
+            # 用 tmp 覆盖 cur
+            cur.val = tmp.val
+```
+
 
 ### 插入节点
 
@@ -37,12 +142,86 @@ group: 树与堆
 1. **查找插入位置**：与查找操作相似，从根节点出发，根据当前节点值和 `num` 的大小关系循环向下搜索，直到越过叶节点（遍历至 `None` ）时跳出循环。
 2. **在该位置插入节点**：初始化节点 `num` ，将该节点置于 `None` 的位置。
 
-![在二叉搜索树中插入节点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.assets/bst_insert.png)
+![在二叉搜索树中插入节点](assets/ctree__binary_search_tree__bst_insert.png)
 
 在代码实现中，需要注意以下两点。
 
 - 二叉搜索树不允许存在重复节点，否则将违反其定义。因此，若待插入节点在树中已存在，则不执行插入，直接返回。
-- 为了实现插入节点，我们需要借助节点 `pre` 保存上一轮循环的节点。这样在遍历至 `None` 时，我们可以获取到其父节点，从而完成节点插入操作。
+- 为了实现插入节点，我们需要借助节点 `pre` 保存前一轮循环的节点。这样在遍历至 `None` 时，我们可以获取到其父节点，从而完成节点插入操作。
+
+```python
+    def insert(self, num: int):
+        """插入节点"""
+        # 若树为空，则初始化根节点
+        if self._root is None:
+            self._root = TreeNode(num)
+            return
+        # 循环查找，越过叶节点后跳出
+        cur, pre = self._root, None
+        while cur is not None:
+            # 找到重复节点，直接返回
+            if cur.val == num:
+                return
+            pre = cur
+            # 插入位置在 cur 的右子树中
+            if cur.val < num:
+                cur = cur.right
+            # 插入位置在 cur 的左子树中
+            else:
+                cur = cur.left
+        # 插入节点
+        node = TreeNode(num)
+        if pre.val < num:
+            pre.right = node
+        else:
+            pre.left = node
+
+    def remove(self, num: int):
+        """删除节点"""
+        # 若树为空，直接提前返回
+        if self._root is None:
+            return
+        # 循环查找，越过叶节点后跳出
+        cur, pre = self._root, None
+        while cur is not None:
+            # 找到待删除节点，跳出循环
+            if cur.val == num:
+                break
+            pre = cur
+            # 待删除节点在 cur 的右子树中
+            if cur.val < num:
+                cur = cur.right
+            # 待删除节点在 cur 的左子树中
+            else:
+                cur = cur.left
+        # 若无待删除节点，则直接返回
+        if cur is None:
+            return
+
+        # 子节点数量 = 0 or 1
+        if cur.left is None or cur.right is None:
+            # 当子节点数量 = 0 / 1 时， child = null / 该子节点
+            child = cur.left or cur.right
+            # 删除节点 cur
+            if cur != self._root:
+                if pre.left == cur:
+                    pre.left = child
+                else:
+                    pre.right = child
+            else:
+                # 若删除节点为根节点，则重新指定根节点
+                self._root = child
+        # 子节点数量 = 2
+        else:
+            # 获取中序遍历中 cur 的下一个节点
+            tmp: TreeNode = cur.right
+            while tmp.left is not None:
+                tmp = tmp.left
+            # 递归删除节点 tmp
+            self.remove(tmp.val)
+            # 用 tmp 覆盖 cur
+            cur.val = tmp.val
+```
 
 
 与查找节点相同，插入节点使用 O(log n) 时间。
@@ -53,11 +232,11 @@ group: 树与堆
 
 如下图所示，当待删除节点的度为 0 时，表示该节点是叶节点，可以直接删除。
 
-![在二叉搜索树中删除节点（度为 0 ）](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.assets/bst_remove_case1.png)
+![在二叉搜索树中删除节点（度为 0 ）](assets/ctree__binary_search_tree__bst_remove_case1.png)
 
 如下图所示，当待删除节点的度为 1 时，将待删除节点替换为其子节点即可。
 
-![在二叉搜索树中删除节点（度为 1 ）](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.assets/bst_remove_case2.png)
+![在二叉搜索树中删除节点（度为 1 ）](assets/ctree__binary_search_tree__bst_remove_case2.png)
 
 当待删除节点的度为 2 时，我们无法直接删除它，而需要使用一个节点替换该节点。由于要保持二叉搜索树“左子树 < 根节点 < 右子树”的性质，**因此这个节点可以是右子树的最小节点或左子树的最大节点**。
 
@@ -68,6 +247,54 @@ group: 树与堆
 
 删除节点操作同样使用 O(log n) 时间，其中查找待删除节点需要 O(log n) 时间，获取中序遍历后继节点需要 O(log n) 时间。示例代码如下：
 
+```python
+    def remove(self, num: int):
+        """删除节点"""
+        # 若树为空，直接提前返回
+        if self._root is None:
+            return
+        # 循环查找，越过叶节点后跳出
+        cur, pre = self._root, None
+        while cur is not None:
+            # 找到待删除节点，跳出循环
+            if cur.val == num:
+                break
+            pre = cur
+            # 待删除节点在 cur 的右子树中
+            if cur.val < num:
+                cur = cur.right
+            # 待删除节点在 cur 的左子树中
+            else:
+                cur = cur.left
+        # 若无待删除节点，则直接返回
+        if cur is None:
+            return
+
+        # 子节点数量 = 0 or 1
+        if cur.left is None or cur.right is None:
+            # 当子节点数量 = 0 / 1 时， child = null / 该子节点
+            child = cur.left or cur.right
+            # 删除节点 cur
+            if cur != self._root:
+                if pre.left == cur:
+                    pre.left = child
+                else:
+                    pre.right = child
+            else:
+                # 若删除节点为根节点，则重新指定根节点
+                self._root = child
+        # 子节点数量 = 2
+        else:
+            # 获取中序遍历中 cur 的下一个节点
+            tmp: TreeNode = cur.right
+            while tmp.left is not None:
+                tmp = tmp.left
+            # 递归删除节点 tmp
+            self.remove(tmp.val)
+            # 用 tmp 覆盖 cur
+            cur.val = tmp.val
+```
+
 
 ### 中序遍历有序
 
@@ -77,7 +304,7 @@ group: 树与堆
 
 利用中序遍历升序的性质，我们在二叉搜索树中获取有序数据仅需 O(n) 时间，无须进行额外的排序操作，非常高效。
 
-![二叉搜索树的中序遍历序列](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.assets/bst_inorder_traversal.png)
+![二叉搜索树的中序遍历序列](assets/ctree__binary_search_tree__bst_inorder_traversal.png)
 
 ## 二叉搜索树的效率
 
@@ -95,7 +322,7 @@ group: 树与堆
 
 然而，如果我们在二叉搜索树中不断地插入和删除节点，可能导致二叉树退化为下图所示的链表，这时各种操作的时间复杂度也会退化为 O(n) 。
 
-![二叉搜索树退化](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.assets/bst_degradation.png)
+![二叉搜索树退化](assets/ctree__binary_search_tree__bst_degradation.png)
 
 ## 二叉搜索树常见应用
 

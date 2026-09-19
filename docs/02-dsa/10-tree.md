@@ -24,7 +24,7 @@ class TreeNode:
 
 **在二叉树中，除叶节点外，其他所有节点都包含子节点和非空子树**。如下图所示，如果将“节点 2”视为父节点，则其左子节点和右子节点分别是“节点 4”和“节点 5”，左子树是“节点 4 及其以下节点形成的树”，右子树是“节点 5 及其以下节点形成的树”。
 
-![父节点、子节点、子树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/binary_tree_definition.png)
+![父节点、子节点、子树](assets/ctree__binary_tree__binary_tree_definition.png)
 
 ## 二叉树常见术语
 
@@ -39,7 +39,7 @@ class TreeNode:
 - 节点的<u>深度（depth）</u>：从根节点到该节点所经过的边的数量。
 - 节点的<u>高度（height）</u>：从距离该节点最远的叶节点到该节点所经过的边的数量。
 
-![二叉树的常用术语](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/binary_tree_terminology.png)
+![二叉树的常用术语](assets/ctree__binary_tree__binary_tree_terminology.png)
 
 > **【提示】**
 > 请注意，我们通常将“高度”和“深度”定义为“经过的边的数量”，但有些题目或教材可能会将其定义为“经过的节点的数量”。在这种情况下，高度和深度都需要加 1 。
@@ -72,7 +72,7 @@ n2.right = n5
 
 与链表类似，在二叉树中插入与删除节点可以通过修改指针来实现。下图给出了一个示例。
 
-![在二叉树中插入与删除节点](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/binary_tree_add_remove.png)
+![在二叉树中插入与删除节点](assets/ctree__binary_tree__binary_tree_add_remove.png)
 
 
 ```python title="binary_tree.py"
@@ -99,25 +99,25 @@ n1.left = n2
 > **【提示】**
 > 请注意，在中文社区中，完美二叉树常被称为<u>满二叉树</u>。
 
-![完美二叉树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/perfect_binary_tree.png)
+![完美二叉树](assets/ctree__binary_tree__perfect_binary_tree.png)
 
 ### 完全二叉树
 
 如下图所示，<u>完全二叉树（complete binary tree）</u>仅允许最底层的节点不完全填满，且最底层的节点必须从左至右依次连续填充。请注意，完美二叉树也是一棵完全二叉树。
 
-![完全二叉树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/complete_binary_tree.png)
+![完全二叉树](assets/ctree__binary_tree__complete_binary_tree.png)
 
 ### 完满二叉树
 
 如下图所示，<u>完满二叉树（full binary tree）</u>除了叶节点之外，其余所有节点都有两个子节点。
 
-![完满二叉树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/full_binary_tree.png)
+![完满二叉树](assets/ctree__binary_tree__full_binary_tree.png)
 
 ### 平衡二叉树
 
 如下图所示，<u>平衡二叉树（balanced binary tree）</u>中任意节点的左子树和右子树的高度之差的绝对值不超过 1 。
 
-![平衡二叉树](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/balanced_binary_tree.png)
+![平衡二叉树](assets/ctree__binary_tree__balanced_binary_tree.png)
 
 ## 二叉树的退化
 
@@ -126,7 +126,7 @@ n1.left = n2
 - 完美二叉树是理想情况，可以充分发挥二叉树“分治”的优势。
 - 链表则是另一个极端，各项操作都变为线性操作，时间复杂度退化至 O(n) 。
 
-![二叉树的最佳结构与最差结构](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.assets/binary_tree_best_worst_cases.png)
+![二叉树的最佳结构与最差结构](assets/ctree__binary_tree__binary_tree_best_worst_cases.png)
 
 如下表所示，在最佳结构和最差结构下，二叉树的叶节点数量、节点总数、高度等达到极大值或极小值。
 

@@ -1,17 +1,273 @@
 ---
-title: pathlib 面向对象的文件系统路径
+title: pathlib 常用路径操作
 source_url: https://docs.python.org/zh-cn/3/library/pathlib.html
 author: Python Software Foundation
 license: PSF 许可证第 2 版（转载署名）
-fetched_at: 2026-09-13
-translated: false
+fetched_at: 2026-09-19
+translated: true
 versions: Python 3.14 文档
 order: 23
 group: 文件与数据格式
 ---
+`pathlib` 把「路径」从字符串变成了对象：不再手写 `os.path.join(os.path.dirname(x), ...)`，而是 `p.parent / "out" / p.with_suffix(".json")`。它跨平台（同一段代码在 Windows 与 Unix 上都能得到正确的分隔符），并且能直接 `open()`、`read_text()`、`glob()`——路径对象本身就是通向文件的句柄。
+
+官方模块页有上千行参考内容，日常只会用到其中十几个操作。本篇按任务分组讲清最常用的十五个操作，完整的类与方法参考放在文末折叠段。前置：《文件 IO》。
+
+## 拿到 Path 对象：一切的起点
+
+```python
+from pathlib import Path
+
+p = Path("data/a.txt")             # 相对路径
+q = Path("/var/log/app.log")       # 绝对路径
+r = Path.home() / "notes"          # 用户主目录，等价 os.path.expanduser("~/notes")
+c = Path.cwd()                     # 当前工作目录
+```
+
+模块级函数 `Path()` 会按当前系统返回 `PosixPath` 或 `WindowsPath`。**不确定用哪个类时，就用 `Path`**。只想处理路径字符串而不碰文件系统时用 `PurePath`（例如在 Linux 上解析 Windows 路径：`PureWindowsPath("C:/Users/x/doc.txt")`）。
+
+## 拆解与拼装
+
+```python
+from pathlib import Path
+
+p = Path("data/archive/a.txt")
+
+print(p.name)          # a.txt         最终成分
+print(p.stem)          # a             去掉后缀的名字
+print(p.suffix)        # .txt          后缀（多个点只算最后一个：'a.tar.gz' 的 suffix 是 '.gz'）
+print(Path("data/a.tar.gz").suffixes)   # ['.tar', '.gz'] 需要全部后缀时用它
+print(p.parent)        # data/archive  上一级目录
+print(p.parts)         # ('data', 'archive', 'a.txt')  逐段拆开，可迭代
+print(p.is_absolute()) # False
+```
+
+拼装用 `/` 运算符（不是字符串相加）：
+
+```python
+from pathlib import Path
+
+base = Path("data")
+target = base / "archive" / "a.txt"        # data/archive/a.txt
+print(base / Path("sub/x.log"))            # data/sub/x.log
+print(target.with_name("b.log"))           # 换掉文件名：data/archive/b.log
+print(target.with_suffix(".csv"))          # 换掉后缀：data/archive/a.csv
+print(target.with_stem("report"))          # 换掉名字主体：data/archive/report.txt（3.9+）
+```
+
+若右侧是字符串形式的绝对路径，`/` 会**丢弃左侧**（与 `os.path.join()` 同规则）：`Path("data") / "/tmp/x" == Path("/tmp/x")`。这是拼接用户传入路径时的隐患，先 `is_absolute()` 判断。
+
+其他常用变形：
+
+```python
+from pathlib import Path
+
+print(Path("data/./a//b").as_posix())        # data/a/b      多余斜杠与 '.' 被消除
+print(Path("../data/a.txt").resolve())        # 变成绝对路径并跟随符号链接
+print(Path("data/archive/a.txt").relative_to("data"))   # archive/a.txt —— 求相对路径
+```
+
+`PurePath.normalize()`（3.11+）可以在不访问文件系统的前提下折叠 `..` 与 `.`；`resolve()` 则会真的去解析符号链接，两者别混用。
+
+## 查询：存在、类型、大小、时间
+
+```python
+from pathlib import Path
+
+Path("data").mkdir(exist_ok=True)
+Path("data/a.txt").write_text("x\n", encoding="utf-8")
+p = Path("data/a.txt")
+
+print(p.exists())        # 是否存在（文件或目录都行）
+print(p.is_file())       # 是常规文件
+print(p.is_dir())        # 是目录
+print(p.is_symlink())    # 是符号链接（即使已断链也为真）
+
+st = p.stat()
+print(st.st_size)                       # 字节数
+print(st.st_mtime)                       # 修改时间（POSIX 时间戳）
+print(oct(st.st_mode)[-3:])             # 权限位，例如 644
+```
+
+`exists()`/`is_file()`/`is_dir()` 都会跟随符号链接；传 `follow_symlinks=False` 可以只看链接本身。要「一次系统调用拿到多项信息」用 `p.stat()`；只想问不关心细节时用上面几个布尔方法更清楚。
+
+比较新旧、判断是否需要重跑缓存，标准写法是：
+
+```python
+from pathlib import Path
+
+
+def needs_rebuild(source: Path, output: Path) -> bool:
+    if not output.exists():
+        return True
+    return source.stat().st_mtime > output.stat().st_mtime
+```
+
+## 读写文件
+
+路径对象自己就能开关文件，不必再 `open(str(p))`：
+
+```python
+from pathlib import Path
+
+Path("data").mkdir(exist_ok=True)
+p = Path("data/a.txt")
+
+p.write_text("第一行\n第二行\n", encoding="utf-8")     # 一次性覆盖写入
+print(p.read_text(encoding="utf-8"), end="")           # 一次性读成字符串
+
+with p.open("r", encoding="utf-8") as f:                # 逐行读，适合大文件
+    for line in f:
+        print(">", line, end="")
+
+with p.open("a", encoding="utf-8") as f:                # 追加写入
+    f.write("第三行\n")
+
+raw = p.read_bytes()                                    # 二进制读（图片、pickle）
+print(len(raw), "字节")
+p.write_bytes(b"\x00\x01")                              # 二进制写
+```
+
+**永远显式写 `encoding="utf-8"`。** 不传时用的是平台默认编码，同一份脚本在 Windows（常为 cp936/gbk）和 Linux（常为 utf-8）上行为不同，是中文文本最常见的乱码来源，详见《文件 IO》。
+
+需要 JSON、CSV 之类的格式，用 `with p.open(...)` 交给对应模块处理（见《JSON 与时间日期》）。
+
+## 遍历与匹配
+
+```python
+from pathlib import Path
+
+base = Path("data")                    # 上一步的目录里有 a.txt、b.md
+for child in sorted(base.iterdir()):   # 只列一层
+    print(child.name, child.is_dir())
+
+for path in sorted(base.glob("*.txt")):        # 一层内按模式匹配
+    print(path)
+
+for path in sorted(base.rglob("*.md")):        # 递归匹配所有层级
+    print(path)
+
+for path in sorted(base.glob("**/*.json")):    # ** 表示任意层级，等价 rglob("*.json")
+    print(path)
+```
+
+需要「同时知道目录、子目录、文件」时用 `walk()`（3.12 起，语义同 `os.walk()`，但产出的是 `Path`）：
+
+```python
+from pathlib import Path
+
+for dirpath, dirnames, filenames in Path(".").walk():
+    print(f"{dirpath} 有 {len(filenames)} 个文件")
+    dirnames[:] = [d for d in dirnames if d != "__pycache__"]   # 原地改可跳过子树
+```
+
+判断单个路径是否匹配模式用 `match()`（从**右侧**开始比对，`p.match("*.txt")` 只看文件名），或更严格的 `full_match()`（3.13+，必须整条路径匹配）：
+
+```python
+from pathlib import Path
+
+p = Path("data/report.txt")
+print(p.match("*.txt"), p.match("data/*.txt"), p.full_match("data/*.txt"))
+# True True True
+```
+
+`glob()` 与 `rglob()` 的区别只是后者等价于 `glob("**/" + pattern)`。它们都不跟随指向目录的符号链接（3.13 起可用 `recurse_symlinks=True` 打开）。
+
+## 创建、复制、移动、删除
+
+```python
+from pathlib import Path
+
+Path("data/reports").mkdir(parents=True, exist_ok=True)   # 递归建目录，已存在不报错
+Path("data/reports/empty.md").touch(exist_ok=True)        # 建空文件（或只更新时间）
+
+src = Path("data/reports/empty.md")
+dst = Path("data/archive/empty.md")
+dst.parent.mkdir(parents=True, exist_ok=True)
+
+copied = src.copy(dst)          # 3.14 起提供 copy / copy_into / move / move_into
+print(copied, copied.exists(), src.exists())      # data/archive/empty.md True True
+
+src.move(Path("data/reports/moved.md"))           # 移动后原路径就不存在了
+print(src.exists())                               # False
+
+dst.unlink(missing_ok=True)                       # 删除文件，不存在也不报错
+# dst.parent.rmdir()   只能删空目录；非空目录用 shutil.rmtree()
+```
+
+要点：
+
+- 建目录一定写 `parents=True, exist_ok=True`，否则路径缺层或多跑一次都会抛异常。
+- `unlink()` 删文件、`rmdir()` 删**空**目录；递归删除请用 `shutil.rmtree()`，pathlib 有意不提供「一键删树」，因为太危险。
+- `copy()`/`move()`（3.14+）替代了以前手写 `shutil.copy2()` 的样板；更早的版本上仍应直接用 `shutil`。改名或原子替换用 `replace(dst)`，目标已存在时会被覆盖。
+- 符号链接用 `symlink_to(target)`；Windows 上可能需要管理员权限或开发者模式。
+
+## 常见坑
+
+**1. 忘记编码。** `read_text()`/`write_text()` 不传 `encoding` 时依赖平台默认值，跨机器必然出问题。
+
+**2. `mkdir()` 不带 `exist_ok`。** 第二次运行就抛 `FileNotFoundError`（缺父目录）或 `FileExistsError`（目录已在）。
+
+**3. 把 Path 当字符串用。** 需要字符串时（`subprocess.run` 的某些参数、`requests` 的 URL、拼进 SQL）用 `str(p)` 或 `os.fspath(p)`。反过来，`open()`、`shutil.*` 等大多数接口都直接接受 `PathLike`，不必手动转。
+
+**4. `p / user_input` 是注入面。** 用户传入 `/etc/passwd` 这样的绝对路径会让前面的基底全部失效；对外部输入要先校验（例如要求 `is_relative_to(base)`，3.9+）。
+
+**5. `glob` 的顺序不保证。** 不同文件系统返回的目录顺序不同，跨机器结果会漂移。需要稳定输出就 `sorted(p.glob(...))`。
+
+**6. `with_suffix()` 会覆盖已有后缀。** `Path("a.tar.gz").with_suffix(".zip")` 得到 `a.tar.zip`，不是 `a.zip`。多后缀文件名请自己拼：`p.with_name(p.name.rsplit(".", 1)[0] + ".zip")`。
+
+**7. 混淆 `resolve()` 与 `absolute()`。** 前者跟随符号链接、要求路径可解析（3.6+ 可用 `strict=False` 容忍不存在），后者只做字符串级拼接。做「两个路径是否同一文件」的比较应当用 `resolve()`，或更可靠地比较 `stat()` 的 `st_dev`/`st_ino`。
+
+**8. 忘记 pathlib 不做路径规范化。** `Path("a/../b")` 的 `parts` 仍是 `('a', '..', 'b')`，`..` 不会被提前折叠（因为 `a` 可能是符号链接）。需要纯字面折叠用 `normalize()`。
+
+## 最小项目：给整个目录做扩展名统计并落地报告
+
+```python
+from datetime import datetime, timezone
+from collections import Counter
+from pathlib import Path
+
+root = Path("data")
+root.mkdir(exist_ok=True)
+(root / "a.txt").write_text("1\n", encoding="utf-8")
+(root / "b.md").write_text("2\n", encoding="utf-8")
+(root / "c.txt").write_text("333\n", encoding="utf-8")
+
+summary = Counter()
+for path in sorted(root.rglob("*")):
+    if path.is_file():
+        key = path.suffix.lower() or "(无后缀)"
+        summary[key] += 1
+
+report_lines = [
+    f"# 目录统计：{root.resolve()}",
+    f"生成时间：{datetime.now(timezone.utc).isoformat(timespec='seconds')}",
+    "",
+    *[f"- {ext}: {n} 个文件" for ext, n in summary.most_common()],
+]
+
+out = root / "report.md"
+out.write_text("\n".join(report_lines) + "\n", encoding="utf-8")
+print(out.read_text(encoding="utf-8"))
+```
+
+这个脚本用到了本篇的全部三类操作：遍历（`rglob`）、查询（`is_file`、`suffix`）、读写（`write_text`/`read_text`）。把它改成统计行数、找最大文件、批量转换编码，都只是替换循环体里的一两行。
+
+## 延伸阅读
+
+- 模块页完整参考：<https://docs.python.org/zh-cn/3/library/pathlib.html>
+- `os.path` 与 `shutil`：<https://docs.python.org/zh-cn/3/library/os.path.html>、<https://docs.python.org/zh-cn/3/library/shutil.html>
+- 站内相邻文章：《文件 IO》《JSON 与时间日期》《collections 常用容器：Counter、defaultdict 与 deque》《环境与依赖管理》
+
+## 参考：pathlib 完整文档（译自官方库文档）
+
+下面是官方模块页的完整参考（纯路径 / 具体路径 / 模式语言 / 与 `os.path` 的对照表），保留全部方法签名与说明，需要查参数时展开。
+
+<details>
+<summary>展开：pathlib 类层次与全部方法参考</summary>
+
 该模块提供表示文件系统路径的类，其语义适用于不同的操作系统。路径类被分为提供纯计算操作而没有 I/O 的 纯路径，以及从纯路径继承而来但提供 I/O 操作的 具体路径。
 
-![继承关系图显示了 pathlib 中所有可用的类。 最基础的类是 PurePath，它有三个直接子类： PurePosixPath, PureWindowsPath 和 Path。 在这四个类之外，还有两个使用多重继承的类： PosixPath 子类 PurePosixPath 和 Path，以及 WindowsPath 子类 PureWindowsPath 和 Path。](https://docs.python.org/zh-cn/3/_images/pathlib-inheritance.png)
 
 如果以前从未用过此模块，或不确定哪个类适合完成任务，那要用的可能就是 `Path`。它在运行代码的平台上实例化为 具体路径。
 
@@ -30,7 +286,7 @@ group: 文件与数据格式
 
 对于底层的路径字符串操作，你也可以使用 [`os.path`](https://docs.python.org/zh-cn/3/library/os.path.html) 模块。
 
-## 基础使用
+### 基础使用
 
 导入主类:
 
@@ -84,13 +340,13 @@ False
 '#!/bin/bash\\n'
 ```
 
-## 异常
+### 异常
 
 _exception_ pathlib.UnsupportedOperation
 
 一个继承自 [`NotImplementedError`](https://docs.python.org/zh-cn/3/library/exceptions.html) 的异常，当在路径对象上调用不受支持的操作时它将被引发。
 
-## 纯路径
+### 纯路径
 
 纯路径对象提供了不实际访问文件系统的路径处理操作。有三种方式来访问这些类，也是不同的风格：
 
@@ -178,7 +434,7 @@ _pathsegments_ 参数的指定和 `PurePath` 相同。
 
 无论你正运行什么系统，你都可以实例化这些类，因为它们提供的操作不做任何系统调用。
 
-### 通用性质
+#### 通用性质
 
 路径是不可变并且 [可哈希的](https://docs.python.org/zh-cn/3/glossary.html)。 相同风格的路径可以排序和比较。 这些特性会尊重对应风格的大小写转换语义:
 
@@ -204,7 +460,7 @@ Traceback (most recent call last):
 TypeError: '<' not supported between instances of 'PureWindowsPath' and 'PurePosixPath'
 ```
 
-### 运算符
+#### 运算符
 
 斜杠操作符可以帮助创建子路径，如 [`os.path.join()`](https://docs.python.org/zh-cn/3/library/os.path.html)。 如果参数为一个绝对路径，则之前的路径会被忽略。 在 Windows 上，当参数为一个带根符号的相对路径 (如 `r'\foo'`) 时驱动器将不会被重置:
 
@@ -254,7 +510,7 @@ b'/etc'
 
 只推荐在 Unix 下调用 [`bytes`](https://docs.python.org/zh-cn/3/library/stdtypes.html)。在 Windows， unicode 形式是文件系统路径的规范表示法。
 
-### 访问个别部分
+#### 访问个别部分
 
 为了访问路径独立的部分 （组件），使用以下特征属性：
 
@@ -274,7 +530,7 @@ PurePath.parts
 
 （注意盘符和本地根目录是如何重组的）
 
-### 方法和特征属性
+#### 方法和特征属性
 
 纯路径提供以下方法和特征属性：
 
@@ -516,9 +772,9 @@ False
 
 `PurePath.is_reserved()`
 
-With `PureWindowsPath`, return `True` if the path is considered reserved under Windows, `False` otherwise. With `PurePosixPath`, `False` is always returned.
+在 `PureWindowsPath` 上：路径在 Windows 下被视为保留名称时返回 `True`，否则返回 `False`。在 `PurePosixPath` 上：永远返回 `False`。
 
-从 3.13 版起已弃用，将在 3.15 版中移除: This method is deprecated; use [`os.path.isreserved()`](https://docs.python.org/zh-cn/3/library/os.path.html) to detect reserved paths on Windows.
+从 3.13 版起已弃用，将在 3.15 版中移除：本方法已弃用；请改用 [`os.path.isreserved()`](https://docs.python.org/zh-cn/3/library/os.path.html) 检测 Windows 下的保留路径。
 
 `PurePath.joinpath(*pathsegments)`
 
@@ -692,7 +948,7 @@ hosts = etc / 'hosts'
 print(hosts.session_id)  # 42
 ```
 
-## 具体路径
+### 具体路径
 
 具体路径是纯路径的子类。除了后者提供的操作之外，它们还提供了对路径对象进行系统调用的方法。有三种方法可以实例化具体路径:
 
@@ -749,7 +1005,7 @@ UnsupportedOperation: cannot instantiate 'WindowsPath' on your system
 
 某些具体路径方法在一个系统调用失败时（例如由于路径不存在）可能引发 [`OSError`](https://docs.python.org/zh-cn/3/library/exceptions.html)。
 
-### 解析和生成 URI
+#### 解析和生成 URI
 
 具体路径对象可基于符合 [**RFC 8089**](https://datatracker.ietf.org/doc/html/rfc8089.html) 的 '文件' URI 来创建，并可用它来表示。
 
@@ -805,7 +1061,7 @@ WindowsPath('c:/windows')
 
 从 3.14 版起已弃用，将在 3.19 版中移除: 可以从 `PurePath` 而不是 `Path` 调用此方法，但已弃用。该方法使用 [`os.fsencode()`](https://docs.python.org/zh-cn/3/library/os.html) 使其严格不纯。
 
-### 扩展和计算路径
+#### 扩展和计算路径
 
 _classmethod_ Path.home()
 
@@ -880,7 +1136,7 @@ PosixPath('/home/antoine/pathlib/setup.py')
 PosixPath('setup.py')
 ```
 
-### 查询文件类型和状态
+#### 查询文件类型和状态
 
 `Path.stat(*, _follow_symlinks=True_)`
 
@@ -994,7 +1250,7 @@ directory
 
 要获取最新的信息，最好调用 `Path.is_dir()`、`is_file()` 和 `is_symlink()`，而不是调用该属性的方法。 没有办法重置缓存；相反，您可以通过 `p = Path(p)` 创建一个空信息缓存的新路径对象。
 
-### 读写文件
+#### 读写文件
 
 `Path.open(mode='r', buffering=-1, encoding=None, errors=None, newline=None)`
 
@@ -1062,7 +1318,7 @@ b'Binary file contents'
 
 一个同名的现存文件将被覆盖。
 
-### 读取目录
+#### 读取目录
 
 `Path.iterdir()`
 
@@ -1196,7 +1452,7 @@ for root, dirs, files in top.walk(top_down=False):
         (root / name).rmdir()
 ```
 
-### 创建文件和目录
+#### 创建文件和目录
 
 `Path.touch(mode=0o666, _exist_ok=True_)`
 
@@ -1247,7 +1503,7 @@ PosixPath('/home/antoine/pathlib/setup.py')
 
 参数顺序 (link, target) 和 [`os.link()`](https://docs.python.org/zh-cn/3/library/os.html) 是相反的。
 
-### 拷贝、移动和删除
+#### 拷贝、移动和删除
 
 `Path.copy(target, *, _follow_symlinks=True_, _preserve_metadata=False_)`
 
@@ -1314,7 +1570,7 @@ PosixPath('bar')
 
 移除此目录。此目录必须为空的。
 
-### 访问权限与所有权
+#### 访问权限与所有权
 
 `Path.owner(*, _follow_symlinks=True_)`
 
@@ -1347,7 +1603,7 @@ PosixPath('bar')
 
 就像 `Path.chmod()` 但是如果路径指向符号链接则是修改符号链接的模式，而不是修改符号链接的目标。
 
-## 模式语言
+### 模式语言
 
 以下通配符在用于 `full_match()`, `glob()` 和 `rglob()` 的模式中是受支持的：
 
@@ -1405,7 +1661,7 @@ PosixPath('bar')
 
 在 `Path.glob()` 和 `rglob()` 中，可以向模式添加一个末尾斜杠以只匹配目录。
 
-## 与 [`glob`](https://docs.python.org/zh-cn/3/library/glob.html) 模块的比较
+### 与 [`glob`](https://docs.python.org/zh-cn/3/library/glob.html) 模块的比较
 
 `Path.glob()` 和 `Path.rglob()` 所接受的模式和所生成的结果相比 [`glob`](https://docs.python.org/zh-cn/3/library/glob.html) 模式的略有不同：
 
@@ -1422,7 +1678,7 @@ PosixPath('bar')
 6.  从 pathlib 的 `path.glob()` 和 `path.rglob()` 返回的值可能包括 _path_ 本身，例如当对 "`**`" 执行 glob 操作的时候，而 `glob.glob(root_dir=path)` 的结果绝不会包括与 _path_ 对应的空字符串。
     
 
-## 与 [`os`](https://docs.python.org/zh-cn/3/library/os.html) 和 [`os.path`](https://docs.python.org/zh-cn/3/library/os.path.html) 模块的比较
+### 与 [`os`](https://docs.python.org/zh-cn/3/library/os.html) 和 [`os.path`](https://docs.python.org/zh-cn/3/library/os.path.html) 模块的比较
 
 pathlib 使用 `PurePath` 和 `Path` 对象来实现路径操作，因此它被认为是 _面向对象的_。 而在另一方面，[`os`](https://docs.python.org/zh-cn/3/library/os.html) 和 [`os.path`](https://docs.python.org/zh-cn/3/library/os.path.html) 模块提供与低层级 `str` 和 `bytes` 对象配合使用的函数，它更接近于 _面向过程的_ 方式。 某些用户认为面向对象的风格可读性更好。
 
@@ -1441,7 +1697,7 @@ pathlib 的路径规范化可能使其不适合某些应用程序：
 
 由于这些差异的影响，pathlib 并不是 [`os.path`](https://docs.python.org/zh-cn/3/library/os.path.html) 的直接替代品。
 
-### 相关工具
+#### 相关工具
 
 以下是一个映射了 [`os`](https://docs.python.org/zh-cn/3/library/os.html) 与 `PurePath`/`Path` 对应相同的函数的表。
 
@@ -1591,7 +1847,7 @@ pathlib 的路径规范化可能使其不适合某些应用程序：
 
 [`os.walk()`](https://docs.python.org/zh-cn/3/library/os.html) 在将路径分类为 _dirnames_ 和 _filenames_ 时总是会跟随符号链接，而 `Path.walk()` 当 _follow_symlinks_ 为（默认的）假值时会将符号链接分类为 _filenames_。
 
-## 协议
+### 协议
 
 `pathlib.types` 块提供了用于静态类型检查的类型。
 
@@ -1621,6 +1877,9 @@ _class_ pathlib.types.PathInfo
 
 如果该路径是符号链接（即使已断开）则返回 `True`；如果该路径是目录或任何种类的文件，或者已不存在则返回 `False`。
 
+
+</details>
+
 ---
 
-> **来源**：本文转载自 [pathlib --- 面向对象的文件系统路径 - Python 3 官方文档（中文）](https://docs.python.org/zh-cn/3/library/pathlib.html)，作者 Python Software Foundation，许可 PSF 许可证第 2 版（转载署名）。抓取于 2026-09-13。原文为官方中文译文，本站仅做格式转换。
+> **来源**：抓取于 2026-09-19。折叠段「参考」译自 [pathlib — 面向对象的文件系统路径 — Python 标准库（中文）](https://docs.python.org/zh-cn/3/library/pathlib.html)（Python Software Foundation，PSF 许可证第 2 版；文中示例与代码片段另按零条款 BSD 许可证授权），原为官方中文译文的整页收录，本篇将其调整为附录并补译了其中未译的英文段落（如 `is_reserved()` 与相关弃用说明），原防盗链的类图外链已移除；十五个常用操作的主线编排、常见坑与目录统计示例为本站编者注。
