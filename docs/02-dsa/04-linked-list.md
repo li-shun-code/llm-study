@@ -182,6 +182,219 @@ class ListNode:
 - **时间片轮转调度算法**：在操作系统中，时间片轮转调度算法是一种常见的 CPU 调度算法，它需要对一组进程进行循环。每个进程被赋予一个时间片，当时间片用完时，CPU 将切换到下一个进程。这种循环操作可以通过环形链表来实现。
 - **数据缓冲区**：在某些数据缓冲区的实现中，也可能会使用环形链表。比如在音频、视频播放器中，数据流可能会被分成多个缓冲块并放入一个环形链表，以便实现无缝播放。
 
+## 可运行的单链表实现
+
+前面各节是按“操作”拆开讲的片段，本节给一个**完整可跑的链表类**：它是《栈》《队列》《LRU 缓存》里手写实现的公共底座，也是理解“为什么所有链表代码都要一个假头”的最好例子。
+
+设计要点只有两条：**用一个不存业务数据的哨兵头节点 `dummy` 承接所有前驱操作**，以及**任何插入都写成“先接后面、再断前面”**。
+
+```python
+class ListNode:
+    """链表节点"""
+
+    def __init__(self, val: int = 0, next: "ListNode | None" = None):
+        self.val = val
+        self.next = next
+
+
+class SinglyLinkedList:
+    """带头节点（dummy head）的单链表：所有插入删除都不用特判头节点"""
+
+    def __init__(self):
+        self._dummy = ListNode(0)        # 哨兵节点：让「第 0 个位置」也有前驱
+        self._size = 0
+
+    def __len__(self) -> int:
+        return self._size
+
+    def get(self, index: int) -> int:
+        """按下标取值，越界抛 IndexError —— 这是链表的软肋：O(n)"""
+        if not 0 <= index < self._size:
+            raise IndexError("下标越界")
+        cur = self._dummy.next
+        for _ in range(index):
+            cur = cur.next
+        return cur.val
+
+    def add_at(self, index: int, val: int) -> None:
+        if not 0 <= index <= self._size:
+            raise IndexError("下标越界")
+        prev = self._dummy
+        for _ in range(index):           # 定位到目标位置的前驱
+            prev = prev.next
+        self._insert_after(prev, val)
+
+    def add_first(self, val: int) -> None:
+        self._insert_after(self._dummy, val)
+
+    def add_last(self, val: int) -> None:
+        cur = self._dummy
+        while cur.next:                  # 没有尾指针就要走完全程：O(n)
+            cur = cur.next
+        self._insert_after(cur, val)
+
+    def remove_at(self, index: int) -> int:
+        if not 0 <= index < self._size:
+            raise IndexError("下标越界")
+        prev = self._dummy
+        for _ in range(index):
+            prev = prev.next
+        dropped = prev.next
+        prev.next = dropped.next         # 跳过被删节点，它随即成为垃圾
+        self._size -= 1
+        return dropped.val
+
+    def _insert_after(self, prev: "ListNode", val: int) -> None:
+        """核心：先接后面（新节点指向后继）、再断前面（前驱指向新节点）"""
+        node = ListNode(val, prev.next)
+        prev.next = node
+        self._size += 1
+
+    def to_list(self) -> list[int]:
+        """转成列表方便打印与断言"""
+        out, cur = [], self._dummy.next
+        while cur:
+            out.append(cur.val)
+            cur = cur.next
+        return out
+
+
+if __name__ == "__main__":
+    lst = SinglyLinkedList()
+    for v in (1, 3, 5, 7):
+        lst.add_last(v)
+    lst.add_at(2, 4)
+    print(lst.to_list(), len(lst), lst.get(0))     # [1, 3, 4, 5, 7] 5 1
+    print(lst.remove_at(1), lst.to_list())         # 3 [1, 4, 5, 7]
+```
+
+## 链表五件套：反转、中点、环、归并、倒数第 k
+
+这五个操作构成了链表问题的“原子”，LRU、归并排序、跳表、`OrderedDict` 的内部逻辑都由它们拼出。
+
+```python
+def reverse(head: "ListNode | None") -> "ListNode | None":
+    """迭代反转：三指针推进。先存后继再断链，顺序不能换"""
+    pre, cur = None, head
+    while cur:
+        nxt = cur.next                  # 1. 存下后继
+        cur.next = pre                  # 2. 反转当前指针
+        pre, cur = cur, nxt             # 3. 双双前移
+    return pre                          # pre 即新头
+
+
+def reverse_recursive(head: "ListNode | None") -> "ListNode | None":
+    """递归反转：把后面反好，再把自己挂到尾部。深度 = 长度，长链会爆栈"""
+    if head is None or head.next is None:
+        return head
+    new_head = reverse_recursive(head.next)
+    head.next.next = head               # 后继的 next 反指回来
+    head.next = None                    # 自己变成新的尾
+    return new_head
+
+
+def middle(head: "ListNode | None") -> "ListNode | None":
+    """快慢指针：快走两步、慢走一步。快到头时慢恰在中点"""
+    slow = fast = head
+    while fast and fast.next:
+        slow, fast = slow.next, fast.next.next
+    return slow
+```
+
+判断环与找环入口用的是同一对快慢指针（Floyd 判圈）。**入口位置那段推导值得亲手验一遍**：设头到入口距离为 a ，入口到相遇点为 b ，环长为 c ，则快指针走了 `a + b + k·c` 、慢指针走了 `a + b` ，又快是慢的两倍，得 `a + b = m·c` ，于是 **a 与“相遇点再走若干整圈到入口”的距离同余** ：把一个指针放回头部、两个指针都每次走一步，下一次相遇点就是入口。
+
+```python
+def has_cycle(head: "ListNode | None") -> bool:
+    slow = fast = head
+    while fast and fast.next:
+        slow, fast = slow.next, fast.next.next
+        if slow is fast:                # 相遇即有环（步长差 1，必在环内相遇）
+            return True
+    return False
+
+
+def cycle_entry(head: "ListNode | None") -> "ListNode | None":
+    """返回环入口节点，无环返回 None"""
+    slow = fast = head
+    while fast and fast.next:
+        slow, fast = slow.next, fast.next.next
+        if slow is fast:
+            p = head
+            while p is not slow:        # 同速前进，再次相遇处即入口
+                p, slow = p.next, slow.next
+            return p
+    return None
+```
+
+“归并两个有序链表”是《排序算法》里归并排序的合并步，“删倒数第 k 个”是快慢指针的第二次用途：
+
+```python
+def merge_sorted(a: "ListNode | None", b: "ListNode | None") -> "ListNode | None":
+    """归并两个升序链表；取等号保证稳定（相等时先取 a 的）"""
+    dummy = tail = ListNode(0)
+    while a and b:
+        if a.val <= b.val:
+            tail.next, a = a, a.next
+        else:
+            tail.next, b = b, b.next
+        tail = tail.next
+    tail.next = a or b                  # 剩余部分整段接上，无须逐节点搬
+    return dummy.next
+
+
+def remove_nth_from_end(head: "ListNode | None", n: int) -> "ListNode | None":
+    """一趟扫描删倒数第 n 个：快指针先走 n + 1 步，再同速前进"""
+    dummy = ListNode(0, head)           # 删头节点也要有前驱，于是又需要哨兵
+    fast = slow = dummy
+    for _ in range(n + 1):
+        fast = fast.next
+    while fast:
+        fast, slow = fast.next, slow.next
+    slow.next = slow.next.next
+    return dummy.next
+```
+
+## 复杂度推导
+
+- **访问 / 查找 O(n)** ：下标随机访问必须从头逐节点走，这是链表的定义性代价。
+- **插入 / 删除本身 O(1) ，但“定位到位置”O(n)** 。上表“添加元素 O(1)”的准确说法是：**已知前驱指针时**修改引用的成本。业务代码里几乎总是“先找再改”，所以端到端仍是 O(n) 。只有“删掉当前指向的节点”“在头节点后插入”这类**位置已知**的场景才是真 O(1) 。
+- **空间 O(n)** ，且每个节点额外存一个引用：CPython 里一个只装 `int` 的 `ListNode` 实例约 56 字节（`__dict__` 开销），加上小整数对象本身，**存 100 万个整数，数组约 8 MB ，链表可以接近 60 MB** ——“链表省空间”只在频繁插入删除、且元素本身是大对象时才成立。
+- **快慢指针类算法都是 O(n) 时间、O(1) 空间** ：中点、判环、找入口、倒数第 k，代价是“一趟或两趟扫描”，优势是不开额外集合。
+- **反转是 O(n) 时间、O(1) 空间**（迭代版）；递归版空间 O(n) 调用栈，长链表上会 `RecursionError` 。
+
+## 常见坑
+
+1. **忘了“先接后断”** 。`prev.next = node` 写在 `node.next = prev.next` 之前，会把后半条链直接丢掉，且**不报任何错** ——最难查的一类 bug 。
+2. **没有哨兵头** 。删除头节点、在下标 0 插入都要单独写分支；用一个 `dummy` 节点能把分支数砍一半。
+3. **`while cur:` 与 `while cur.next:` 用混** 。前者是“遍历节点”，后者是“停在待操作节点的前驱”。循环条件取决于你要停在哪。
+4. **断链后还继续用旧引用** 。删除节点后 `dropped.next` 仍指向后继，若你把它当作“还在表里”就会写出双倍处理。
+5. **反转后头节点变了** 。`reverse(head)` 的返回值才是新头，很多人改完仍用原来的 `head` 变量，得到只有一个节点的“链表”。
+6. **快指针判空顺序** 。必须写 `while fast and fast.next` ：`fast.next` 在 `fast is None` 时求值会抛 `AttributeError` ，而 Python 的 `and` 短路正好保证安全。
+7. **把链表的“O(1) 插入”当成银弹** 。真实机器上，数组的连续内存意味着 CPU 预取友好，**十万级数据下 Python 的 `list.insert(0, x)` 常常比链表实现还快**（`list` 是 C 实现，节点对象要过一遍解释器）。要“两端都快 + 随机访问”请用 `collections.deque` ，见《Python 算法工具箱》。
+8. **共享节点造成“一条链两个头”** 。`a.next = b.next` 这种赋值如果跨链表使用（例如做拼接），会让两条链的尾段合并，删除时互相影响。要么深拷贝节点，要么显式维护 `prev/next` 双向引用。
+9. **Python 里没有真正的指针** 。所谓“引用”是对象引用，`head = head.next` 只改变局部变量的指向，不会影响调用方看到的头节点——想改头节点必须**返回值**或用哨兵节点，这一层理解清楚能避开上面一半的坑。
+
+## 工程应用：为什么缓存淘汰要用双向链表
+
+链表作为基础结构在业务代码里少见，但它常常藏在别人肚子里：
+
+- **LRU / LFU 缓存**：`collections.OrderedDict` 与 Redis 的 `lru` 近似淘汰策略，内部都是“哈希表 + 双向链表”——哈希给出 O(1) 定位，链表给出 O(1) 摘除与插到队头（见《LRU 缓存（哈希表 + 双向链表）》）。
+- **跳表**：Redis 的有序集合、LevelDB / RocksDB 的内存表（MemTable）用跳表替代平衡树，本质是“多层链表 + 随机层高”，把 O(n) 的查找压到期望 O(log n) ，实现比红黑树简单得多。
+- **内存分配器与连接池**：空闲块链表（free list）是分配器最经典的组织方式；对象池里“可用对象”通常串成一条链表，取和还都是 O(1) 。
+- **邻接表与桶结构**：哈希表解决冲突的链式地址、图的邻接表（见《图》），都是把冲突项 / 邻居串成链。
+- **协程与拦截器链**：中间件洋葱模型、责任链模式、事件监听器列表，形态上就是单向链表——“当前处理者持有下一个的引用”。
+
+选型的经验法则是：**“频繁在中间插入删除 + 不需要随机访问 + 元素是大对象”才考虑手写链表** ；否则 `list` / `deque` 的实测性能与内存都更友好。
+
+## 延伸阅读
+
+- 《数组》：连续内存与缓存局部性，解释为什么“链表更快”常常是错觉。
+- 《栈》《队列》：两种受限制的链表 / 数组用法。
+- 《LRU 缓存（哈希表 + 双向链表）》：双向链表最典型的工程落地。
+- 《Python 算法工具箱：heapq、bisect、graphlib 与 collections》：`deque` 、`OrderedDict` 等标准库替代方案。
+- 《排序算法》：归并排序的合并步就是本文的 `merge_sorted` 。
+- [Python 官方文档 `collections.deque`](https://docs.python.org/3/library/collections.html#collections.deque)（PSF License 2.0）：双端队列的复杂度表，工程上多数“想要链表”的场景真正该用它。
+
 ---
 
 > **来源**：本文转载自 [链表](https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/linked_list.md)，作者 krahets，许可 CC BY-NC-SA 4.0。抓取于 2026-09-13。

@@ -13,35 +13,37 @@ isRoot: true
 **入门与最小全链路**
 
 - 什么是 RAG：检索增强生成入门
-- 最小 RAG（Simple RAG）系统
+- 最小 RAG 全流程实战：一份能端到端跑通的完整程序
 
 **摄取层：解析、分块与嵌入**
 
 - 文档解析与摄取：把 PDF、扫描件和表格变成干净的 Markdown
 - 文档分块策略：从固定切分到上下文检索（Contextual Retrieval）
-- 句子窗口与父子块检索（small-to-big）
+- 句子窗口与父子块检索：用小块召回、大块作答
 - Embedding 深入：从语义向量到语义搜索
-- Embedding 模型选型实战（中文优先）
+- Embedding 模型选型：四轴决策与本地实测
 
 **检索层：相似度、过滤、混合与重排**
 
 - 向量检索与相似度：欧氏距离、点积与余弦相似度
 - 元数据过滤与多维过滤检索
-- 混合检索：BM25 词法检索 + 向量语义检索
-- 重排序（Rerank）：LLM 打分与 Cross-Encoder 精排
+- 混合检索：真正的 BM25、RRF 融合与生产实现
+- 重排序：Cross-Encoder 精排与 LLM 打分成本对照
 - Query 改写与扩展：改写、退后提示与子查询分解
+- 检索层 IR 指标：recall@k、MRR、nDCG 与截断阈值怎么定
 
 **进阶范式**
 
-- 多向量检索与 ColBERT/ColPali
+- 多向量检索与 ColBERT/ColPali：后期交互的用法与选型
 - 多模态 RAG：图文混合文档的"图片打字幕"方案
 - GraphRAG：用知识图谱回答"全局性"问题
-- Agentic RAG：从固定管线到会思考的检索
-- Text2SQL 实战：用 Vanna 让自然语言直达数据库
+- Agentic RAG：让检索自己判断"够不够、要不要换工具"
+- Text2SQL 的方法与评测：schema 链接、少样本选择与执行自修复
+- 经典论文精读：RAG 与 Lost in the Middle
 
 **评估与生产化**
 
-- RAG 评估实战：用 RAGAS 量化检索与生成质量
+- RAG 评估实战：RAGAS 指标、LLM 裁判与可跑的确定性兜底
 - 生产化 RAG：可靠管线与常见问题排查
 
 > 本模块文章全部抓取/翻译自网络公开资料，每篇文末均附署名块标注原文出处与许可。

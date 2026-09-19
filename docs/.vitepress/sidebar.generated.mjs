@@ -11,16 +11,16 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "环境搭建与第一个程序",
-              "link": "/00-python-basics/01-setup"
-            },
-            {
-              "text": "pip 与虚拟环境",
-              "link": "/00-python-basics/02-pip-and-venv"
+              "text": "环境与依赖管理",
+              "link": "/00-python-basics/01-env-and-dependencies"
             },
             {
               "text": "环境变量与 API Key 管理（.env 与 python-dotenv）",
-              "link": "/00-python-basics/03-env-and-api-keys"
+              "link": "/00-python-basics/02-env-and-api-keys"
+            },
+            {
+              "text": "PEP 8 命名与代码风格基线",
+              "link": "/00-python-basics/03-pep8-style"
             }
           ]
         },
@@ -39,6 +39,10 @@ export default {
             {
               "text": "可变/不可变与深浅拷贝",
               "link": "/00-python-basics/06-mutability-and-copy"
+            },
+            {
+              "text": "字符串处理方法族与文本清洗",
+              "link": "/00-python-basics/07-string-methods"
             }
           ]
         },
@@ -48,11 +52,19 @@ export default {
           "items": [
             {
               "text": "条件判断",
-              "link": "/00-python-basics/07-conditionals"
+              "link": "/00-python-basics/08-conditionals"
             },
             {
               "text": "循环",
-              "link": "/00-python-basics/08-loops"
+              "link": "/00-python-basics/09-loops"
+            },
+            {
+              "text": "迭代与解包技巧",
+              "link": "/00-python-basics/10-iterating-and-unpacking"
+            },
+            {
+              "text": "结构化模式匹配：match-case",
+              "link": "/00-python-basics/11-match-statements"
             }
           ]
         },
@@ -61,28 +73,28 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "列表",
-              "link": "/00-python-basics/09-list"
+              "text": "列表：增删改查与切片",
+              "link": "/00-python-basics/12-list"
             },
             {
               "text": "列表推导式",
-              "link": "/00-python-basics/10-list-comprehension"
+              "link": "/00-python-basics/13-list-comprehension"
             },
             {
-              "text": "元组",
-              "link": "/00-python-basics/11-tuple"
+              "text": "元组与序列解包",
+              "link": "/00-python-basics/14-tuple"
             },
             {
-              "text": "字典",
-              "link": "/00-python-basics/12-dict"
+              "text": "字典：键值映射与 JSON",
+              "link": "/00-python-basics/15-dict"
             },
             {
-              "text": "集合",
-              "link": "/00-python-basics/13-set"
+              "text": "集合：去重与成员运算",
+              "link": "/00-python-basics/16-set"
             },
             {
-              "text": "collections 容器数据类型（Counter/deque/defaultdict/OrderedDict）",
-              "link": "/00-python-basics/14-collections"
+              "text": "collections 常用容器：Counter、defaultdict 与 deque",
+              "link": "/00-python-basics/17-collections"
             }
           ]
         },
@@ -91,12 +103,12 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "函数定义与参数",
-              "link": "/00-python-basics/15-functions"
+              "text": "函数：参数种类与返回值设计",
+              "link": "/00-python-basics/18-functions"
             },
             {
               "text": "lambda 与高阶函数",
-              "link": "/00-python-basics/16-lambda-and-higher-order"
+              "link": "/00-python-basics/19-lambda-and-higher-order"
             }
           ]
         },
@@ -106,11 +118,11 @@ export default {
           "items": [
             {
               "text": "类与对象",
-              "link": "/00-python-basics/17-classes-and-objects"
+              "link": "/00-python-basics/20-classes-and-objects"
             },
             {
               "text": "继承、多态与魔法方法",
-              "link": "/00-python-basics/18-inheritance-polymorphism-magic"
+              "link": "/00-python-basics/21-inheritance-polymorphism-magic"
             }
           ]
         },
@@ -120,15 +132,15 @@ export default {
           "items": [
             {
               "text": "模块与包",
-              "link": "/00-python-basics/19-modules-and-packages"
+              "link": "/00-python-basics/22-modules-and-packages"
             },
             {
               "text": "异常处理",
-              "link": "/00-python-basics/20-exceptions"
+              "link": "/00-python-basics/23-exceptions"
             },
             {
-              "text": "调试入门：pdb 与断点",
-              "link": "/00-python-basics/21-debugging-pdb"
+              "text": "调试入门：pdb、breakpoint() 与 debugpy",
+              "link": "/00-python-basics/24-debugging-pdb"
             }
           ]
         },
@@ -138,15 +150,15 @@ export default {
           "items": [
             {
               "text": "文件 IO",
-              "link": "/00-python-basics/22-file-io"
+              "link": "/00-python-basics/25-file-io"
             },
             {
-              "text": "pathlib 面向对象的文件系统路径",
-              "link": "/00-python-basics/23-pathlib"
+              "text": "pathlib 常用路径操作",
+              "link": "/00-python-basics/26-pathlib"
             },
             {
               "text": "JSON 与时间日期",
-              "link": "/00-python-basics/24-json-and-datetime"
+              "link": "/00-python-basics/27-json-and-datetime"
             }
           ]
         },
@@ -156,19 +168,11 @@ export default {
           "items": [
             {
               "text": "常见陷阱汇总",
-              "link": "/00-python-basics/25-common-pitfalls"
+              "link": "/00-python-basics/28-common-pitfalls"
             }
           ]
         }
       ]
-    }
-  ],
-  "/01-dsa/": [
-    {
-      "text": "模块 1 · 数据结构与算法",
-      "link": "/01-dsa/",
-      "collapsed": false,
-      "items": []
     }
   ],
   "/01-python-advanced/": [
@@ -182,7 +186,7 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "装饰器实战：functools —— 高阶函数与可调用对象上的操作",
+              "text": "装饰器实战：从手写第一个装饰器到 functools 速查",
               "link": "/01-python-advanced/01-decorators"
             },
             {
@@ -194,7 +198,7 @@ export default {
               "link": "/01-python-advanced/03-context-managers"
             },
             {
-              "text": "内存管理与垃圾回收：引用计数与 gc 模块",
+              "text": "Python 内存管理实战：引用计数、gc、弱引用与内存泄漏排查",
               "link": "/01-python-advanced/04-memory-management-gc"
             },
             {
@@ -204,6 +208,10 @@ export default {
             {
               "text": "dataclasses 与 NamedTuple：数据类",
               "link": "/01-python-advanced/06-dataclasses-namedtuple"
+            },
+            {
+              "text": "typing.Protocol 与结构化子类型",
+              "link": "/01-python-advanced/07-typing-protocol"
             }
           ]
         },
@@ -213,11 +221,15 @@ export default {
           "items": [
             {
               "text": "并发编程：concurrent.futures 与 threading",
-              "link": "/01-python-advanced/07-concurrency"
+              "link": "/01-python-advanced/08-concurrency"
             },
             {
               "text": "asyncio 异步编程",
-              "link": "/01-python-advanced/08-asyncio"
+              "link": "/01-python-advanced/09-asyncio"
+            },
+            {
+              "text": "asyncio 并发限流与重试范式",
+              "link": "/01-python-advanced/10-asyncio-ratelimit-retry"
             }
           ]
         },
@@ -227,11 +239,19 @@ export default {
           "items": [
             {
               "text": "正则表达式指南（re 模块）",
-              "link": "/01-python-advanced/09-regex"
+              "link": "/01-python-advanced/11-regex"
             },
             {
               "text": "Pydantic 模型（Models）：数据校验的核心",
-              "link": "/01-python-advanced/10-pydantic"
+              "link": "/01-python-advanced/12-pydantic"
+            },
+            {
+              "text": "\"Pydantic Settings：把配置从 .env 收进类型\"",
+              "link": "/01-python-advanced/13-pydantic-settings"
+            },
+            {
+              "text": "Pydantic 校验器与字段约束",
+              "link": "/01-python-advanced/14-pydantic-validators-fields"
             }
           ]
         },
@@ -240,12 +260,12 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "requests 快速开始与进阶用法",
-              "link": "/01-python-advanced/11-requests"
+              "text": "HTTP 客户端：requests 用法与 requests / httpx 选型",
+              "link": "/01-python-advanced/15-requests"
             },
             {
-              "text": "HTTPX：新一代 Python HTTP 客户端",
-              "link": "/01-python-advanced/12-httpx"
+              "text": "HTTPX 实战：异步客户端、流式响应与重试",
+              "link": "/01-python-advanced/16-httpx"
             }
           ]
         },
@@ -255,19 +275,19 @@ export default {
           "items": [
             {
               "text": "FastAPI 入门与 API Key 鉴权",
-              "link": "/01-python-advanced/13-fastapi"
+              "link": "/01-python-advanced/17-fastapi"
             },
             {
               "text": "FastAPI 进阶：依赖注入、中间件与流式响应",
-              "link": "/01-python-advanced/14-fastapi-advanced"
+              "link": "/01-python-advanced/18-fastapi-advanced"
             },
             {
               "text": "Gradio 快速开始：为机器学习模型构建演示应用",
-              "link": "/01-python-advanced/15-gradio"
+              "link": "/01-python-advanced/19-gradio"
             },
             {
               "text": "Streamlit 入门：基础概念与进阶概念",
-              "link": "/01-python-advanced/16-streamlit"
+              "link": "/01-python-advanced/20-streamlit"
             }
           ]
         },
@@ -277,15 +297,19 @@ export default {
           "items": [
             {
               "text": "Docker 容器化：Python 语言指南",
-              "link": "/01-python-advanced/17-docker"
+              "link": "/01-python-advanced/21-docker"
             },
             {
               "text": "uv 项目管理：从 uv init 到构建发布（含工程化概念）",
-              "link": "/01-python-advanced/18-uv-poetry"
+              "link": "/01-python-advanced/22-uv-poetry"
             },
             {
               "text": "代码质量工具链：Ruff、mypy 与 pre-commit",
-              "link": "/01-python-advanced/19-code-quality"
+              "link": "/01-python-advanced/23-code-quality"
+            },
+            {
+              "text": "uv 脚本与 PEP 723 内联依赖",
+              "link": "/01-python-advanced/24-uv-scripts-pep723"
             }
           ]
         },
@@ -295,27 +319,19 @@ export default {
           "items": [
             {
               "text": "pytest 入门与使用指南（Get Started + How-To）",
-              "link": "/01-python-advanced/20-pytest"
+              "link": "/01-python-advanced/25-pytest"
             },
             {
               "text": "日志 logging：HOWTO 与 logging.config",
-              "link": "/01-python-advanced/21-logging"
+              "link": "/01-python-advanced/26-logging"
             },
             {
               "text": "性能分析：profile/cProfile 与 py-spy",
-              "link": "/01-python-advanced/22-profiling"
+              "link": "/01-python-advanced/27-profiling"
             }
           ]
         }
       ]
-    }
-  ],
-  "/02-cs-fundamentals/": [
-    {
-      "text": "模块 2 · 计算机基础",
-      "link": "/02-cs-fundamentals/",
-      "collapsed": false,
-      "items": []
     }
   ],
   "/02-dsa/": [
@@ -375,6 +391,10 @@ export default {
             {
               "text": "Trie 前缀树（字典树）",
               "link": "/02-dsa/09-trie"
+            },
+            {
+              "text": "布隆过滤器与集合去重",
+              "link": "/02-dsa/10-bloom-filter-dedup"
             }
           ]
         },
@@ -384,19 +404,23 @@ export default {
           "items": [
             {
               "text": "树与二叉树",
-              "link": "/02-dsa/10-tree"
+              "link": "/02-dsa/11-tree"
             },
             {
               "text": "二叉树遍历",
-              "link": "/02-dsa/11-binary-tree-traversal"
+              "link": "/02-dsa/12-binary-tree-traversal"
             },
             {
               "text": "二叉搜索树",
-              "link": "/02-dsa/12-bst"
+              "link": "/02-dsa/13-bst"
             },
             {
               "text": "堆",
-              "link": "/02-dsa/13-heap"
+              "link": "/02-dsa/14-heap"
+            },
+            {
+              "text": "Top-K 与堆：召回重排里的取前 N 个",
+              "link": "/02-dsa/15-top-k-heap-retrieval"
             }
           ]
         },
@@ -406,23 +430,27 @@ export default {
           "items": [
             {
               "text": "图",
-              "link": "/02-dsa/14-graph"
+              "link": "/02-dsa/16-graph"
             },
             {
               "text": "图的遍历（DFS/BFS）",
-              "link": "/02-dsa/15-graph-traversal"
+              "link": "/02-dsa/17-graph-traversal"
             },
             {
-              "text": "拓扑排序",
-              "link": "/02-dsa/16-topological-sort"
+              "text": "拓扑排序与依赖调度",
+              "link": "/02-dsa/18-topological-sort"
             },
             {
-              "text": "最短路径",
-              "link": "/02-dsa/17-shortest-path"
+              "text": "最短路径与 NetworkX 实践",
+              "link": "/02-dsa/19-shortest-path"
             },
             {
-              "text": "并查集",
-              "link": "/02-dsa/18-dsu"
+              "text": "并查集与等价类归并",
+              "link": "/02-dsa/20-dsu"
+            },
+            {
+              "text": "向量相似度与 HNSW 近邻图",
+              "link": "/02-dsa/21-vector-similarity-hnsw"
             }
           ]
         },
@@ -432,19 +460,27 @@ export default {
           "items": [
             {
               "text": "排序算法",
-              "link": "/02-dsa/19-sorting"
+              "link": "/02-dsa/22-sorting"
             },
             {
               "text": "二分查找",
-              "link": "/02-dsa/20-binary-search"
+              "link": "/02-dsa/23-binary-search"
             },
             {
               "text": "前缀和与差分",
-              "link": "/02-dsa/21-prefix-sum"
+              "link": "/02-dsa/24-prefix-sum"
             },
             {
               "text": "双指针与滑动窗口",
-              "link": "/02-dsa/22-two-pointers"
+              "link": "/02-dsa/25-two-pointers"
+            },
+            {
+              "text": "Python 算法工具箱：heapq、bisect、graphlib 与 collections",
+              "link": "/02-dsa/26-python-algorithm-toolbox"
+            },
+            {
+              "text": "排序惯用法：sorted、key 与稳定性",
+              "link": "/02-dsa/27-sorting-idioms"
             }
           ]
         },
@@ -453,16 +489,16 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "递归与回溯（面试选学）",
-              "link": "/02-dsa/23-recursion-backtracking"
+              "text": "回溯算法（面试选学）",
+              "link": "/02-dsa/28-recursion-backtracking"
             },
             {
               "text": "动态规划（面试选学）",
-              "link": "/02-dsa/24-dynamic-programming"
+              "link": "/02-dsa/29-dynamic-programming"
             },
             {
               "text": "贪心算法（面试选学）",
-              "link": "/02-dsa/25-greedy"
+              "link": "/02-dsa/30-greedy"
             }
           ]
         }
@@ -514,7 +550,7 @@ export default {
               "link": "/03-cs-fundamentals/07-git-advanced"
             },
             {
-              "text": "GitHub Actions 与 CI 基础",
+              "text": "GitHub Actions 实战：一条能跑通的 CI 流水线",
               "link": "/03-cs-fundamentals/08-github-actions-ci"
             }
           ]
@@ -540,12 +576,32 @@ export default {
               "link": "/03-cs-fundamentals/12-concurrency-and-locks"
             },
             {
-              "text": "信号与进程间通信 IPC",
+              "text": "信号与进程通信：异步打断的机制",
               "link": "/03-cs-fundamentals/13-signals-ipc"
             },
             {
               "text": "CPU 调度：FIFO、SJF、STCF 与轮转",
               "link": "/03-cs-fundamentals/14-cpu-scheduling"
+            },
+            {
+              "text": "死锁与同步：四条件、预防、避免与检测",
+              "link": "/03-cs-fundamentals/15-deadlock-and-synchronization"
+            },
+            {
+              "text": "管道、FIFO 与共享内存：进程间传数据的三级台阶",
+              "link": "/03-cs-fundamentals/16-pipes-fifo-shared-memory"
+            },
+            {
+              "text": "条件变量与信号量",
+              "link": "/03-cs-fundamentals/17-condition-variables-and-semaphores"
+            },
+            {
+              "text": "现代调度器：MLFQ 与 Linux CFS/EEVDF",
+              "link": "/03-cs-fundamentals/18-modern-schedulers-mlfq-cfs-eevdf"
+            },
+            {
+              "text": "mmap 与 Unix 域套接字：现代进程间通信的两条主路",
+              "link": "/03-cs-fundamentals/19-mmap-and-unix-domain-sockets"
             }
           ]
         },
@@ -555,15 +611,19 @@ export default {
           "items": [
             {
               "text": "内存管理：地址空间抽象",
-              "link": "/03-cs-fundamentals/15-memory-management"
+              "link": "/03-cs-fundamentals/20-memory-management"
             },
             {
               "text": "虚拟内存：TLB 与地址翻译加速",
-              "link": "/03-cs-fundamentals/16-virtual-memory"
+              "link": "/03-cs-fundamentals/21-virtual-memory"
             },
             {
               "text": "文件系统：文件与目录",
-              "link": "/03-cs-fundamentals/17-file-systems"
+              "link": "/03-cs-fundamentals/22-file-systems"
+            },
+            {
+              "text": "分页、页表与多级页表",
+              "link": "/03-cs-fundamentals/23-paging-and-page-tables"
             }
           ]
         },
@@ -573,11 +633,11 @@ export default {
           "items": [
             {
               "text": "I/O 多路复用：阻塞、poll() 与 select()",
-              "link": "/03-cs-fundamentals/18-io-multiplexing"
+              "link": "/03-cs-fundamentals/24-io-multiplexing"
             },
             {
               "text": "epoll 与事件循环",
-              "link": "/03-cs-fundamentals/19-epoll-event-loop"
+              "link": "/03-cs-fundamentals/25-epoll-event-loop"
             }
           ]
         },
@@ -587,47 +647,39 @@ export default {
           "items": [
             {
               "text": "网络分层模型：从 HTTP 请求到 OSI",
-              "link": "/03-cs-fundamentals/20-network-layering"
+              "link": "/03-cs-fundamentals/26-network-layering"
             },
             {
               "text": "DNS：域名系统",
-              "link": "/03-cs-fundamentals/21-dns"
+              "link": "/03-cs-fundamentals/27-dns"
             },
             {
               "text": "TCP：传输控制协议",
-              "link": "/03-cs-fundamentals/22-tcp"
+              "link": "/03-cs-fundamentals/28-tcp"
             },
             {
               "text": "UDP：用户数据报协议",
-              "link": "/03-cs-fundamentals/23-udp"
+              "link": "/03-cs-fundamentals/29-udp"
             },
             {
               "text": "HTTP 概述",
-              "link": "/03-cs-fundamentals/24-http"
+              "link": "/03-cs-fundamentals/30-http"
             },
             {
               "text": "HTTPS 与 TLS",
-              "link": "/03-cs-fundamentals/25-https"
+              "link": "/03-cs-fundamentals/31-https"
             },
             {
               "text": "SSE 与 WebSocket：流式输出的网络基础",
-              "link": "/03-cs-fundamentals/26-sse-websocket"
+              "link": "/03-cs-fundamentals/32-sse-websocket"
             },
             {
               "text": "REST：表述性状态转移（Fielding 论文第 5 章）",
-              "link": "/03-cs-fundamentals/27-rest"
+              "link": "/03-cs-fundamentals/33-rest"
             }
           ]
         }
       ]
-    }
-  ],
-  "/03-python-advanced/": [
-    {
-      "text": "模块 3 · Python 进阶与框架",
-      "link": "/03-python-advanced/",
-      "collapsed": false,
-      "items": []
     }
   ],
   "/04-llm-basics/": [
@@ -651,6 +703,10 @@ export default {
             {
               "text": "GPT 系列演进",
               "link": "/04-llm-basics/03-gpt-evolution"
+            },
+            {
+              "text": "MoE 与稀疏注意力：读现代模型卡的先修知识",
+              "link": "/04-llm-basics/04-moe-and-sparse-attention"
             }
           ]
         },
@@ -660,19 +716,23 @@ export default {
           "items": [
             {
               "text": "Token 与上下文窗口",
-              "link": "/04-llm-basics/04-tokens-and-context-window"
+              "link": "/04-llm-basics/05-tokens-and-context-window"
             },
             {
               "text": "采样参数：temperature 与 top_p",
-              "link": "/04-llm-basics/05-sampling-parameters"
+              "link": "/04-llm-basics/06-sampling-parameters"
             },
             {
               "text": "幻觉：成因与缓解",
-              "link": "/04-llm-basics/06-hallucination"
+              "link": "/04-llm-basics/07-hallucination"
             },
             {
               "text": "推理模型（o1/R1 类）",
-              "link": "/04-llm-basics/07-reasoning-models"
+              "link": "/04-llm-basics/08-reasoning-models"
+            },
+            {
+              "text": "长上下文的有效利用：Lost in the Middle 与位置偏置",
+              "link": "/04-llm-basics/09-long-context-effectiveness"
             }
           ]
         },
@@ -682,7 +742,7 @@ export default {
           "items": [
             {
               "text": "训练范式总览：预训练 → SFT → RLHF/DPO",
-              "link": "/04-llm-basics/08-training-paradigms"
+              "link": "/04-llm-basics/10-training-paradigms"
             }
           ]
         },
@@ -692,11 +752,15 @@ export default {
           "items": [
             {
               "text": "主流模型生态对比（2026-09）",
-              "link": "/04-llm-basics/09-model-landscape"
+              "link": "/04-llm-basics/11-model-landscape"
             },
             {
               "text": "多模态模型概览",
-              "link": "/04-llm-basics/10-multimodal-models"
+              "link": "/04-llm-basics/12-multimodal-models"
+            },
+            {
+              "text": "模型评测与基准素养：MMLU-Pro、SWE-bench 与 Agent 基准怎么读",
+              "link": "/04-llm-basics/13-benchmark-literacy"
             }
           ]
         }
@@ -728,7 +792,7 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "思维链提示（Chain-of-Thought）",
+              "text": "思维链与多路采样：CoT、Self-Consistency 与失效边界",
               "link": "/05-prompt-engineering/03-chain-of-thought"
             },
             {
@@ -738,6 +802,10 @@ export default {
             {
               "text": "提示链与任务分解（Prompt Chaining）",
               "link": "/05-prompt-engineering/05-prompt-chaining"
+            },
+            {
+              "text": "推理模型时代的提示原则",
+              "link": "/05-prompt-engineering/06-reasoning-era-prompting"
             }
           ]
         },
@@ -747,11 +815,11 @@ export default {
           "items": [
             {
               "text": "系统提示词设计",
-              "link": "/05-prompt-engineering/06-system-prompt-design"
+              "link": "/05-prompt-engineering/07-system-prompt-design"
             },
             {
               "text": "上下文工程：为 AI Agent 管理稀缺的注意力",
-              "link": "/05-prompt-engineering/07-context-engineering"
+              "link": "/05-prompt-engineering/08-context-engineering"
             }
           ]
         },
@@ -761,11 +829,19 @@ export default {
           "items": [
             {
               "text": "提示注入：最坏会发生什么？",
-              "link": "/05-prompt-engineering/08-prompt-injection"
+              "link": "/05-prompt-engineering/09-prompt-injection"
             },
             {
               "text": "提示词的迭代与评估方法",
-              "link": "/05-prompt-engineering/09-iterate-and-evaluate"
+              "link": "/05-prompt-engineering/10-iterate-and-evaluate"
+            },
+            {
+              "text": "分隔符、结构化标签与注入边界",
+              "link": "/05-prompt-engineering/11-delimiters-and-injection-boundaries"
+            },
+            {
+              "text": "LLM-as-Judge 的偏差与校准",
+              "link": "/05-prompt-engineering/12-llm-as-judge-bias"
             }
           ]
         }
@@ -793,6 +869,10 @@ export default {
             {
               "text": "流式输出（SSE）",
               "link": "/06-api-development/03-streaming-sse"
+            },
+            {
+              "text": "Responses API 会话与后台任务：conversation、store 与断流续传",
+              "link": "/06-api-development/04-responses-session-and-background"
             }
           ]
         },
@@ -802,15 +882,23 @@ export default {
           "items": [
             {
               "text": "Function Calling / Tool Use：让模型调用你的函数",
-              "link": "/06-api-development/04-function-calling"
+              "link": "/06-api-development/05-function-calling"
             },
             {
-              "text": "Responses API 托管工具：web_search、file_search、code_interpreter 与图像生成",
-              "link": "/06-api-development/05-hosted-tools"
+              "text": "Responses API 托管工具总览与 web_search",
+              "link": "/06-api-development/06-hosted-tools"
             },
             {
               "text": "JSON Mode 与结构化输出（Structured Outputs）",
-              "link": "/06-api-development/06-json-mode-structured-outputs"
+              "link": "/06-api-development/07-json-mode-structured-outputs"
+            },
+            {
+              "text": "文件检索与代码解释器：file_search 与 code_interpreter",
+              "link": "/06-api-development/08-file-search-and-code-interpreter"
+            },
+            {
+              "text": "MCP 客户端接入：把外部工具生态接到你的模型调用里",
+              "link": "/06-api-development/09-mcp-client-integration"
             }
           ]
         },
@@ -820,19 +908,27 @@ export default {
           "items": [
             {
               "text": "错误处理、重试与限流",
-              "link": "/06-api-development/07-error-retry-rate-limits"
+              "link": "/06-api-development/10-error-retry-rate-limits"
             },
             {
               "text": "Moderation API 与内容过滤",
-              "link": "/06-api-development/08-moderation-api"
+              "link": "/06-api-development/11-moderation-api"
             },
             {
               "text": "成本与 Token 优化：Prompt Caching 与 Batch API",
-              "link": "/06-api-development/09-cost-token-optimization"
+              "link": "/06-api-development/12-cost-token-optimization"
             },
             {
               "text": "模型版本与弃用管理",
-              "link": "/06-api-development/10-model-deprecation"
+              "link": "/06-api-development/13-model-deprecation"
+            },
+            {
+              "text": "生产可观测性：OpenTelemetry GenAI 语义约定与调用侧埋点",
+              "link": "/06-api-development/14-otel-genai-observability"
+            },
+            {
+              "text": "并发请求限流：信号量、令牌桶与超时预算的完整实现",
+              "link": "/06-api-development/15-concurrency-and-rate-limiting"
             }
           ]
         },
@@ -841,20 +937,20 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "视觉理解 API：把图片喂给多模态模型",
-              "link": "/06-api-development/11-vision-api"
+              "text": "视觉理解与图像生成：把图片喂给多模态模型，也让它画图",
+              "link": "/06-api-development/16-vision-api"
             },
             {
               "text": "Embedding API 与文本相似度",
-              "link": "/06-api-development/12-embeddings-similarity"
+              "link": "/06-api-development/17-embeddings-similarity"
             },
             {
               "text": "语音 API：转写、合成与实时会话（选学）",
-              "link": "/06-api-development/13-speech-api"
+              "link": "/06-api-development/18-speech-api"
             },
             {
               "text": "OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型",
-              "link": "/06-api-development/14-openai-compatible-litellm"
+              "link": "/06-api-development/19-openai-compatible-litellm"
             }
           ]
         },
@@ -864,11 +960,11 @@ export default {
           "items": [
             {
               "text": "用 FastAPI 封装 LLM 服务",
-              "link": "/06-api-development/15-fastapi-llm-service"
+              "link": "/06-api-development/20-fastapi-llm-service"
             },
             {
               "text": "实战：命令行聊天机器人",
-              "link": "/06-api-development/16-cli-chatbot-practice"
+              "link": "/06-api-development/21-cli-chatbot-practice"
             }
           ]
         }
@@ -898,20 +994,12 @@ export default {
               "link": "/07-databases/03-crud-basics"
             },
             {
-              "text": "聚合与分组：GROUP BY、HAVING 与聚合函数",
-              "link": "/07-databases/04-aggregation-and-group-by"
-            },
-            {
-              "text": "JOIN 多表查询",
-              "link": "/07-databases/05-joins"
-            },
-            {
-              "text": "索引原理与使用",
-              "link": "/07-databases/06-indexes"
-            },
-            {
               "text": "事务与 ACID",
-              "link": "/07-databases/07-transactions-and-acid"
+              "link": "/07-databases/04-transactions-and-acid"
+            },
+            {
+              "text": "SQL 查询实战：聚合、JOIN 与索引",
+              "link": "/07-databases/05-sql-query-in-practice"
             }
           ]
         },
@@ -921,23 +1009,23 @@ export default {
           "items": [
             {
               "text": "PostgreSQL 入门",
-              "link": "/07-databases/08-postgresql-getting-started"
+              "link": "/07-databases/06-postgresql-getting-started"
             },
             {
               "text": "SQLite 上手",
-              "link": "/07-databases/09-sqlite-getting-started"
+              "link": "/07-databases/07-sqlite-getting-started"
             },
             {
               "text": "PostgreSQL 全文检索（含中文分词）",
-              "link": "/07-databases/10-postgresql-full-text-search"
+              "link": "/07-databases/08-postgresql-full-text-search"
             },
             {
               "text": "SQLAlchemy ORM 入门（2.0 风格，含连接池）",
-              "link": "/07-databases/11-sqlalchemy-orm"
+              "link": "/07-databases/09-sqlalchemy-orm"
             },
             {
               "text": "Alembic 数据库迁移",
-              "link": "/07-databases/12-alembic-database-migrations"
+              "link": "/07-databases/10-alembic-database-migrations"
             }
           ]
         },
@@ -947,15 +1035,15 @@ export default {
           "items": [
             {
               "text": "Redis 核心数据结构与缓存",
-              "link": "/07-databases/13-redis-data-structures-and-cache"
+              "link": "/07-databases/11-redis-data-structures-and-cache"
             },
             {
               "text": "Redis 语义缓存与 RediSearch（含向量检索）",
-              "link": "/07-databases/14-redis-semantic-cache-and-redisearch"
+              "link": "/07-databases/12-redis-semantic-cache-and-redisearch"
             },
             {
               "text": "MongoDB 文档模型",
-              "link": "/07-databases/15-mongodb-document-model"
+              "link": "/07-databases/13-mongodb-document-model"
             }
           ]
         },
@@ -964,20 +1052,20 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "向量数据库原理",
-              "link": "/07-databases/16-vector-database-principles"
+              "text": "向量数据库原理：从 HNSW 论文与公开基准说起",
+              "link": "/07-databases/14-vector-database-principles"
             },
             {
               "text": "Chroma 与 Qdrant 单库实战",
-              "link": "/07-databases/17-chroma-qdrant-quickstart"
+              "link": "/07-databases/15-chroma-qdrant-quickstart"
             },
             {
               "text": "Milvus 与 pgvector 实战",
-              "link": "/07-databases/18-milvus-pgvector-quickstart"
+              "link": "/07-databases/16-milvus-pgvector-quickstart"
             },
             {
-              "text": "向量库选型对比",
-              "link": "/07-databases/19-vector-db-comparison"
+              "text": "向量库选型：用基准测试代替宣传页",
+              "link": "/07-databases/17-vector-db-comparison"
             }
           ]
         }
@@ -999,7 +1087,7 @@ export default {
               "link": "/08-rag/01-what-is-rag"
             },
             {
-              "text": "最小 RAG（Simple RAG）系统",
+              "text": "最小 RAG 全流程实战：一份能端到端跑通的完整程序",
               "link": "/08-rag/02-minimal-rag-walkthrough"
             }
           ]
@@ -1017,7 +1105,7 @@ export default {
               "link": "/08-rag/04-chunking-strategies"
             },
             {
-              "text": "句子窗口与父子块检索（small-to-big）",
+              "text": "句子窗口与父子块检索：用小块召回、大块作答",
               "link": "/08-rag/05-sentence-window-parent-child"
             },
             {
@@ -1025,7 +1113,7 @@ export default {
               "link": "/08-rag/06-embedding-deep-dive"
             },
             {
-              "text": "Embedding 模型选型实战（中文优先）",
+              "text": "Embedding 模型选型：四轴决策与本地实测",
               "link": "/08-rag/07-embedding-model-selection"
             }
           ]
@@ -1043,16 +1131,20 @@ export default {
               "link": "/08-rag/09-metadata-filtering"
             },
             {
-              "text": "混合检索：BM25 词法检索 + 向量语义检索",
+              "text": "混合检索：真正的 BM25、RRF 融合与生产实现",
               "link": "/08-rag/10-hybrid-search-bm25"
             },
             {
-              "text": "重排序（Rerank）：LLM 打分与 Cross-Encoder 精排",
+              "text": "重排序：Cross-Encoder 精排与 LLM 打分成本对照",
               "link": "/08-rag/11-reranking"
             },
             {
               "text": "Query 改写与扩展：改写、退后提示与子查询分解",
               "link": "/08-rag/12-query-rewriting-expansion"
+            },
+            {
+              "text": "检索层 IR 指标：recall@k、MRR、nDCG 与截断阈值怎么定",
+              "link": "/08-rag/13-ir-metrics-recall-mrr-ndcg"
             }
           ]
         },
@@ -1061,24 +1153,28 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "多向量检索与 ColBERT/ColPali",
-              "link": "/08-rag/13-multi-vector-colbert-colpali"
+              "text": "多向量检索与 ColBERT/ColPali：后期交互的用法与选型",
+              "link": "/08-rag/14-multi-vector-colbert-colpali"
             },
             {
               "text": "多模态 RAG：图文混合文档的\"图片打字幕\"方案",
-              "link": "/08-rag/14-multimodal-rag"
+              "link": "/08-rag/15-multimodal-rag"
             },
             {
               "text": "GraphRAG：用知识图谱回答\"全局性\"问题",
-              "link": "/08-rag/15-graphrag"
+              "link": "/08-rag/16-graphrag"
             },
             {
-              "text": "Agentic RAG：从固定管线到会思考的检索",
-              "link": "/08-rag/16-agentic-rag"
+              "text": "Agentic RAG：让检索自己判断\"够不够、要不要换工具\"",
+              "link": "/08-rag/17-agentic-rag"
             },
             {
-              "text": "Text2SQL 实战：用 Vanna 让自然语言直达数据库",
-              "link": "/08-rag/17-text2sql"
+              "text": "Text2SQL 的方法与评测：schema 链接、少样本选择与执行自修复",
+              "link": "/08-rag/18-text2sql"
+            },
+            {
+              "text": "经典论文精读：RAG 与 Lost in the Middle",
+              "link": "/08-rag/19-paper-study-rag-lost-in-middle"
             }
           ]
         },
@@ -1087,12 +1183,12 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "RAG 评估实战：用 RAGAS 量化检索与生成质量",
-              "link": "/08-rag/18-rag-evaluation-ragas"
+              "text": "RAG 评估实战：RAGAS 指标、LLM 裁判与可跑的确定性兜底",
+              "link": "/08-rag/20-rag-evaluation-ragas"
             },
             {
               "text": "生产化 RAG：可靠管线与常见问题排查",
-              "link": "/08-rag/19-production-rag-troubleshooting"
+              "link": "/08-rag/21-production-rag-troubleshooting"
             }
           ]
         }
@@ -1114,7 +1210,7 @@ export default {
               "link": "/09-agents/01-llm-powered-autonomous-agents"
             },
             {
-              "text": "ReAct 范式：思考、行动与观察的循环",
+              "text": "\"ReAct 范式：循环的机制与工程实现\"",
               "link": "/09-agents/02-react-paradigm"
             },
             {
@@ -1146,6 +1242,10 @@ export default {
             {
               "text": "A2A 协议与跨厂商 Agent 互操作",
               "link": "/09-agents/08-a2a-protocol"
+            },
+            {
+              "text": "Agent Skills：用文件夹给智能体装上可复用的专业能力",
+              "link": "/09-agents/09-agent-skills"
             }
           ]
         },
@@ -1155,15 +1255,15 @@ export default {
           "items": [
             {
               "text": "Agent 记忆机制：LangGraph 的短期记忆与长期记忆",
-              "link": "/09-agents/09-agent-memory"
+              "link": "/09-agents/10-agent-memory"
             },
             {
               "text": "长期记忆系统进阶：Mem0、Letta 与 Zep",
-              "link": "/09-agents/10-agent-memory-systems"
+              "link": "/09-agents/11-agent-memory-systems"
             },
             {
               "text": "长时运行 Agent 的上下文管理：压缩（Compaction）",
-              "link": "/09-agents/11-agent-context-compaction"
+              "link": "/09-agents/12-agent-context-compaction"
             }
           ]
         },
@@ -1173,27 +1273,27 @@ export default {
           "items": [
             {
               "text": "LangGraph 入门：用 Graph API 与 Functional API 构建你的第一个智能体",
-              "link": "/09-agents/12-langgraph-quickstart"
+              "link": "/09-agents/13-langgraph-quickstart"
             },
             {
               "text": "LangChain 快速入门（1.0 · create_agent）",
-              "link": "/09-agents/13-langchain-quickstart"
+              "link": "/09-agents/14-langchain-quickstart"
             },
             {
               "text": "多智能体模式：Anthropic 如何构建多智能体研究系统",
-              "link": "/09-agents/14-multi-agent-patterns"
+              "link": "/09-agents/15-multi-agent-patterns"
             },
             {
               "text": "Human-in-the-Loop：用 LangGraph interrupt 实现中断、恢复与人工审批",
-              "link": "/09-agents/15-human-in-the-loop"
+              "link": "/09-agents/16-human-in-the-loop"
             },
             {
               "text": "AutoGen 与 CrewAI：多智能体框架现状（AutoGen 已并入 Microsoft Agent Framework）",
-              "link": "/09-agents/16-autogen-crewai"
+              "link": "/09-agents/17-autogen-crewai"
             },
             {
-              "text": "OpenAI Agents SDK：轻量多智能体框架入门",
-              "link": "/09-agents/17-openai-agents-sdk"
+              "text": "\"OpenAI Agents SDK 实战：从第一个 Agent 到交接、护栏与会话\"",
+              "link": "/09-agents/18-openai-agents-sdk"
             }
           ]
         },
@@ -1203,11 +1303,11 @@ export default {
           "items": [
             {
               "text": "代码解释器型 Agent：让 LLM 用代码思考（smolagents 与 CodeAct）",
-              "link": "/09-agents/18-code-interpreter-agents"
+              "link": "/09-agents/19-code-interpreter-agents"
             },
             {
-              "text": "Computer Use 与浏览器操作 Agent：让模型亲手操作图形界面",
-              "link": "/09-agents/19-computer-use-agents"
+              "text": "\"Computer Use 与浏览器操作 Agent：坐标、DOM 与动作循环的完整实现\"",
+              "link": "/09-agents/20-computer-use-agents"
             }
           ]
         },
@@ -1217,15 +1317,15 @@ export default {
           "items": [
             {
               "text": "可观测性与 Tracing：Agent 生产排障的第一工具（LangSmith / Langfuse / OpenTelemetry）",
-              "link": "/09-agents/20-observability-tracing"
+              "link": "/09-agents/21-observability-tracing"
             },
             {
               "text": "Agent 评测：数据集、评估器与 LLM-as-Judge 实战",
-              "link": "/09-agents/21-agent-evaluation"
+              "link": "/09-agents/22-agent-evaluation"
             },
             {
               "text": "Agent 安全与权限、生产化部署与成本管理",
-              "link": "/09-agents/22-security-production"
+              "link": "/09-agents/23-security-production"
             }
           ]
         }
@@ -1287,6 +1387,14 @@ export default {
             {
               "text": "PEFT/TRL 实战：SFTTrainer 做有监督微调",
               "link": "/10-finetuning-deployment/10-trl-sft-practice"
+            },
+            {
+              "text": "LLaMA-Factory 与 Unsloth 实战对比：配置式 vs 代码式微调",
+              "link": "/10-finetuning-deployment/11-llama-factory-vs-unsloth"
+            },
+            {
+              "text": "LoRA 家族与 DoRA：把低秩更新拆成方向与幅值",
+              "link": "/10-finetuning-deployment/12-dora-lora-variants"
             }
           ]
         },
@@ -1296,11 +1404,11 @@ export default {
           "items": [
             {
               "text": "DPO 与偏好优化：TRL DPOTrainer 实践",
-              "link": "/10-finetuning-deployment/11-dpo-preference-optimization"
+              "link": "/10-finetuning-deployment/13-dpo-preference-optimization"
             },
             {
               "text": "GRPO 与 RLVR：推理模型强化学习实战",
-              "link": "/10-finetuning-deployment/12-grpo-rlvr"
+              "link": "/10-finetuning-deployment/14-grpo-rlvr"
             }
           ]
         },
@@ -1310,11 +1418,11 @@ export default {
           "items": [
             {
               "text": "模型量化基础：Transformers 量化总览与 bitsandbytes",
-              "link": "/10-finetuning-deployment/13-quantization-basics"
+              "link": "/10-finetuning-deployment/15-quantization-basics"
             },
             {
               "text": "推理原理：KV Cache、PagedAttention 与 continuous batching——vLLM 为什么快",
-              "link": "/10-finetuning-deployment/14-inference-principles"
+              "link": "/10-finetuning-deployment/16-inference-principles"
             }
           ]
         },
@@ -1324,15 +1432,19 @@ export default {
           "items": [
             {
               "text": "Ollama 本地部署：官方 README 与文档完整指南",
-              "link": "/10-finetuning-deployment/15-ollama-local-deployment"
+              "link": "/10-finetuning-deployment/17-ollama-local-deployment"
             },
             {
-              "text": "vLLM 高吞吐部署：从 vllm serve 到 Docker 容器化",
-              "link": "/10-finetuning-deployment/16-vllm-high-throughput-deployment"
+              "text": "vLLM 高吞吐部署：从 vllm serve 到多 LoRA、前缀缓存与投机解码",
+              "link": "/10-finetuning-deployment/18-vllm-high-throughput-deployment"
             },
             {
               "text": "推理服务生产化运维：Kubernetes、production stack 与负载均衡",
-              "link": "/10-finetuning-deployment/17-inference-serving-production"
+              "link": "/10-finetuning-deployment/19-inference-serving-production"
+            },
+            {
+              "text": "前缀缓存与 KV 复用在多轮对话与 RAG 中的实战",
+              "link": "/10-finetuning-deployment/20-prefix-caching-kv-reuse"
             }
           ]
         },
@@ -1342,15 +1454,15 @@ export default {
           "items": [
             {
               "text": "开源模型选型：Qwen、GLM、DeepSeek 官方模型卡对照（2026-09）",
-              "link": "/10-finetuning-deployment/18-open-model-selection"
+              "link": "/10-finetuning-deployment/21-open-model-selection"
             },
             {
               "text": "LLM 评测方法与基准：lm-evaluation-harness README 完整指南",
-              "link": "/10-finetuning-deployment/19-evaluation-benchmarks"
+              "link": "/10-finetuning-deployment/22-evaluation-benchmarks"
             },
             {
               "text": "安全、合规与内容护栏：OWASP LLM Top 10 与 NeMo Guardrails",
-              "link": "/10-finetuning-deployment/20-safety-guardrails"
+              "link": "/10-finetuning-deployment/23-safety-guardrails"
             }
           ]
         }
@@ -1386,13 +1498,19 @@ export default {
           ]
         },
         {
-          "text": "Claude Code",
+          "text": "环境搭建",
           "collapsed": false,
           "items": [
             {
-              "text": "环境搭建：Claude Code 与 Cursor 的安装及首次配置",
+              "text": "环境搭建：Claude Code、Cursor、Codex CLI 与 Copilot 的安装与配置矩阵",
               "link": "/11-ai-coding-tools/05-setup-claude-code-cursor"
-            },
+            }
+          ]
+        },
+        {
+          "text": "Claude Code",
+          "collapsed": false,
+          "items": [
             {
               "text": "Claude Code 工作流与最佳实践",
               "link": "/11-ai-coding-tools/06-claude-code-best-practices"
@@ -1418,6 +1536,10 @@ export default {
             {
               "text": "开源工具生态：Cline 与 Windsurf",
               "link": "/11-ai-coding-tools/10-cline-windsurf-ecosystem"
+            },
+            {
+              "text": "Codex CLI 深度使用：OpenAI 终端智能体的三层权限、AGENTS.md 与自动化",
+              "link": "/11-ai-coding-tools/11-codex-cli-deep-dive"
             }
           ]
         },
@@ -1427,19 +1549,11 @@ export default {
           "items": [
             {
               "text": "成本管理：Token 消耗、订阅选择与用量优化",
-              "link": "/11-ai-coding-tools/11-cost-management"
+              "link": "/11-ai-coding-tools/12-cost-management"
             }
           ]
         }
       ]
-    }
-  ],
-  "/11-vibe-coding/": [
-    {
-      "text": "模块 11 · Vibe Coding",
-      "link": "/11-vibe-coding/",
-      "collapsed": false,
-      "items": []
     }
   ],
   "/12-ai-coding-context/": [
@@ -1461,8 +1575,24 @@ export default {
               "link": "/12-ai-coding-context/02-claude-skills"
             },
             {
-              "text": "开源编码 Skills 精选：Superpowers 与 Anthropic 官方技能族深度指南",
-              "link": "/12-ai-coding-context/03-open-source-coding-skills"
+              "text": "开源编码 Skills（一）：Superpowers 编码流程族",
+              "link": "/12-ai-coding-context/03-superpowers-coding-workflow-skills"
+            },
+            {
+              "text": "开源编码 Skills（二）：技能写作与文档协作族",
+              "link": "/12-ai-coding-context/04-skill-authoring-and-doc-skills"
+            },
+            {
+              "text": "开源编码 Skills（三）：工具集成族",
+              "link": "/12-ai-coding-context/05-tool-integration-skills"
+            },
+            {
+              "text": "\"Claude Code Hooks：用确定性脚本守住智能体循环\"",
+              "link": "/12-ai-coding-context/06-claude-code-hooks"
+            },
+            {
+              "text": "大型与遗留代码库上的 AI 落地策略",
+              "link": "/12-ai-coding-context/07-ai-in-large-and-legacy-codebases"
             }
           ]
         },
@@ -1472,7 +1602,7 @@ export default {
           "items": [
             {
               "text": "Spec 驱动开发（Spec-Driven Development）",
-              "link": "/12-ai-coding-context/04-spec-driven-development"
+              "link": "/12-ai-coding-context/08-spec-driven-development"
             }
           ]
         },
@@ -1482,7 +1612,7 @@ export default {
           "items": [
             {
               "text": "MCP 在编码中的应用",
-              "link": "/12-ai-coding-context/05-mcp-for-coding"
+              "link": "/12-ai-coding-context/09-mcp-for-coding"
             }
           ]
         },
@@ -1492,23 +1622,19 @@ export default {
           "items": [
             {
               "text": "多智能体协作编码",
-              "link": "/12-ai-coding-context/06-multi-agent-collaboration"
+              "link": "/12-ai-coding-context/10-multi-agent-collaboration"
             },
             {
               "text": "Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体",
-              "link": "/12-ai-coding-context/07-headless-ci-coding"
+              "link": "/12-ai-coding-context/11-headless-ci-coding"
+            },
+            {
+              "text": "\"Subagents 与并行会话：把探索外包出去\"",
+              "link": "/12-ai-coding-context/12-subagents-and-parallel-sessions"
             }
           ]
         }
       ]
-    }
-  ],
-  "/12-project-analysis/": [
-    {
-      "text": "模块 12 · 优质项目源码分析",
-      "link": "/12-project-analysis/",
-      "collapsed": false,
-      "items": []
     }
   ],
   "/13-ai-coding-engineering/": [
@@ -1552,7 +1678,7 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "AI 代码的安全与质量陷阱",
+              "text": "AI 代码的安全与质量陷阱：六大陷阱与检测清单",
               "link": "/13-ai-coding-engineering/07-ai-code-security-pitfalls"
             },
             {
@@ -1580,14 +1706,6 @@ export default {
           ]
         }
       ]
-    }
-  ],
-  "/13-design-patterns-java/": [
-    {
-      "text": "模块 13 · Java 设计模式教学专栏",
-      "link": "/13-design-patterns-java/",
-      "collapsed": false,
-      "items": []
     }
   ],
   "/14-ai-coding-classics/": [
@@ -1619,12 +1737,18 @@ export default {
           "collapsed": false,
           "items": [
             {
-              "text": "Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、经验心法与拼好码",
+              "text": "Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、机器门禁与拼好码",
               "link": "/14-ai-coding-classics/04-vibe-coding-cn-guide"
-            },
+            }
+          ]
+        },
+        {
+          "text": "官方最佳实践",
+          "collapsed": false,
+          "items": [
             {
-              "text": "AI 编程开发指南精选：鱼皮 ai-guide 的核心心法与 Claude Code 配置哲学",
-              "link": "/14-ai-coding-classics/05-ai-guide-picks"
+              "text": "驾驭 Claude Code：CLAUDE.md、rules、skills、hooks 与子智能体的使用时机（Anthropic 官方博客全文翻译）",
+              "link": "/14-ai-coding-classics/05-steering-claude-code"
             }
           ]
         }

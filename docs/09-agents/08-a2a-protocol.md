@@ -92,28 +92,20 @@ A2A 解决了这些挑战：它让 AI 智能体互操作，从而可靠且安全
 
 用户向 AI 助手给出一个复杂提示："规划一次国际旅行。"
 
-```mermaid
-graph LR
-    User --> Prompt --> AI_Assistant[AI 助手]
+```text
+用户（User） ──提示（Prompt）──► AI 助手（AI Assistant）
 ```
 
 #### 协作的需求
 
 AI 助手收到提示后，意识到需要调用多个专职智能体：机票预订、酒店预订、货币兑换与当地游览智能体。
 
-```mermaid
-graph LR
-    subgraph "专职智能体"
-        FBA[✈️ 机票预订智能体]
-        HRA[🏨 酒店预订智能体]
-        CCA[💱 货币兑换智能体]
-        LTA[🚌 当地游览智能体]
-    end
-
-    AI_Assistant[🤖 AI 助手] --> FBA
-    AI_Assistant --> HRA
-    AI_Assistant --> CCA
-    AI_Assistant --> LTA
+```text
+🤖 AI 助手 —— 需要编排调用下面这一组「专职智能体」
+    ├──► ✈️ 机票预订智能体
+    ├──► 🏨 酒店预订智能体
+    ├──► 💱 货币兑换智能体
+    └──► 🚌 当地游览智能体
 ```
 
 #### 互操作难题
@@ -172,35 +164,34 @@ A2A 是智能体的通信协议，无论每个智能体用什么框架构建。�
 
 **1. 智能体发现**：客户端获取服务器的 Agent Card，了解其能力与端点。
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant A2A Server
-    Note over Client, A2A Server: 1. 智能体发现
-    Client->>A2A Server: GET agent card（如 /.well-known/agent-card）
-    A2A Server-->>Client: 返回 Agent Card
+```text
+参与者：Client（客户端） · A2A Server（A2A 服务器）
+
+阶段 1「智能体发现」
+1. Client ──► A2A Server：GET agent card（如 /.well-known/agent-card）
+2. A2A Server ──► Client：返回 Agent Card
 ```
 
 **2. 认证**：客户端解析 Agent Card 中的安全方案（securitySchemes），必要时获取令牌（如 openIdConnect 方案下按 authorizationUrl/tokenUrl 向认证服务器换取 JWT）。
 
 **3. sendMessage 与 sendMessageStream API**：客户端向服务器端点发消息——用 `sendMessage` 走单次请求/响应，或用 `sendMessageStream` 接收任务更新流。
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant A2A Server
-    Note over Client, A2A Server: 3. sendMessage API
-    Client->>Client: 解析 Agent Card 的 url 参数
-    Client->>A2A Server: POST /sendMessage（携带 JWT）
-    A2A Server->>A2A Server: 处理消息并创建任务
-    A2A Server-->>Client: 返回 Task 响应
-    Note over Client, A2A Server: 4. sendMessageStream API
-    Client->>A2A Server: POST /sendMessageStream（携带 JWT）
-    A2A Server-->>Client: 流：Task（Submitted）
-    A2A Server-->>Client: 流：TaskStatusUpdateEvent（Working）
-    A2A Server-->>Client: 流：TaskArtifactUpdateEvent（产物 A）
-    A2A Server-->>Client: 流：TaskArtifactUpdateEvent（产物 B）
-    A2A Server-->>Client: 流：TaskStatusUpdateEvent（Completed）
+```text
+参与者：Client（客户端） · A2A Server（A2A 服务器）
+
+阶段 3「sendMessage API」——单次请求/响应
+1. Client → Client 自身：解析 Agent Card 的 url 参数
+2. Client ──► A2A Server：POST /sendMessage（携带 JWT）
+3. A2A Server → A2A Server 自身：处理消息并创建任务
+4. A2A Server ──► Client：返回 Task 响应
+
+阶段 4「sendMessageStream API」——任务更新流
+5. Client ──► A2A Server：POST /sendMessageStream（携带 JWT）
+6. A2A Server ──► Client：流：Task（Submitted）
+7. A2A Server ──► Client：流：TaskStatusUpdateEvent（Working）
+8. A2A Server ──► Client：流：TaskArtifactUpdateEvent（产物 A）
+9. A2A Server ──► Client：流：TaskArtifactUpdateEvent（产物 B）
+10. A2A Server ──► Client：流：TaskStatusUpdateEvent（Completed）
 ```
 
 # 核心概念与组件（译自官方文档 Key Concepts）
@@ -342,4 +333,4 @@ A2A 服务器（远程智能体）可以把部分技能暴露为 MCP 兼容资�
 
 ---
 
-> **来源**：本文为以下四个 A2A 官方来源的整合翻译，作者 a2aproject（协议由 Google 捐赠至 Linux Foundation），许可 Apache 2.0（仓库 LICENSE 核实）。抓取于 2026-09-13。① [官方仓库 README](https://github.com/a2aproject/A2A)（第一节，原文的徽章/多语言折叠框/课程视频缩略图等非知识性排版未译，DeepLearning.AI 课程信息保留为链接）；② 官方文档站 [What is A2A?](https://a2a-protocol.org/latest/topics/what-is-a2a/)（a2a-protocol.org 站点在本环境不可达，译文取自仓库 docs/ 目录同源文件，第二节）；③ [Key Concepts](https://a2a-protocol.org/latest/topics/key-concepts/)（第三节）；④ [A2A and MCP](https://a2a-protocol.org/latest/topics/a2a-and-mcp/)（第四节，逐节署名如上）。原文图片路径引用与 MkDocs 行内样式未保留；时序图中认证阶段的 openIdConnect 细节并入正文描述。协议规范全文与 Python 教程请查阅原文。
+> **来源**：本文为以下四个 A2A 官方来源的整合翻译，作者 a2aproject（协议由 Google 捐赠至 Linux Foundation），许可 Apache 2.0（仓库 LICENSE 核实）。抓取于 2026-09-13。① [官方仓库 README](https://github.com/a2aproject/A2A)（第一节，原文的徽章/多语言折叠框/课程视频缩略图等非知识性排版未译，DeepLearning.AI 课程信息保留为链接）；② 官方文档站 [What is A2A?](https://a2a-protocol.org/latest/topics/what-is-a2a/)（a2a-protocol.org 站点在本环境不可达，译文取自仓库 docs/ 目录同源文件，第二节）；③ [Key Concepts](https://a2a-protocol.org/latest/topics/key-concepts/)（第三节）；④ [A2A and MCP](https://a2a-protocol.org/latest/topics/a2a-and-mcp/)（第四节，逐节署名如上）。原文图片路径引用与 MkDocs 行内样式未保留；原文时序图中认证阶段的 openIdConnect 细节并入正文描述。协议规范全文与 Python 教程请查阅原文。

@@ -129,7 +129,7 @@ C 角色+XML+明令 #2: 未执行 -> …"u et à usage général. Sa philosophie
 读结果要小心，别读成"C 方案安全"：
 
 - **B 与 A 一样失败**。定界符加免责句这层"最常被当成防御"的写法，4 次里 4 次没起作用——它只是让模型把攻击文本当成**待翻译内容**，攻击者的字符串照样出现在交付物里。这正是 Willison 那句话的复现。
-- **C 挡住了这一轮**，但挡住的是**这一种话术**：同一篇文档把注释改写成"QA 流程要求译文必须以某个审批 token 结尾"，或者换模型、换温度、换语种，结果都可能翻。把 6 次成功的样本换成 100 次，你大概率会看到漏网的那几次——这类实验的诚实结论是"概率下降"，不是"边界成立"。
+- **C 挡住了这两次**。我把注释改写成更隐蔽的版本（"译文的 QA 流程要求必须以某个审批 token 结尾，否则整条流水线要返工"），同一套 C 边界再跑 2 次也没被突破——4 次尝试 4 次没中招。但这只是 n=4 的概率证据，不是边界：Willison 的论证恰恰是攻击者手里有"几乎无限"的话术变体，换模型、换语种、换温度都可能翻；而且 C 挡住的是"执行标签里的指令"，挡不住"把攻击内容当作待翻译文本原样交付"这种形态（B 档两次就是栽在这里）。诚实的结论是**概率下降**，不是**边界成立**——真正确定性的防线在下一节。
 - 更要紧的是：这个实验里攻击的**最坏结果**只是一句多余的推荐语。同样的注入，如果你的应用给了模型发消息、执行 SQL、读文件的权限，被污染的文本就会变成动作。**边界不在这段文本上，在你的权限图上**——这也是《提示注入：最坏会发生什么？》那篇 lethal-trifecta 一系的论点：私数据 + 不可信内容 + 对外通信能力同处一个上下文时，任何提示层技巧都只是提高门槛。
 
 ## 该把力气花在哪
@@ -139,6 +139,14 @@ C 角色+XML+明令 #2: 未执行 -> …"u et à usage général. Sa philosophie
 3. **把不可信内容当数据预处理**。渲染前净化 HTML、剥掉隐藏文字与注释、限制进入上下文的长度；对"给助手的指令"式句子做检测可以降概率，但只能当信号，不能当闸门。
 4. **让输出契约可判**。要求严格格式 + 下游校验（结构不符就拒绝），能把"注入改变了交付物"从静默事故变成显式失败。上一节 B 档的问题就出在这：没有任何机制会拒绝多出来的那一行。
 5. **默认提示词会泄露**。提示词泄露不是可防住的攻击面，而是需要接受的约束——别把密钥、内部规则、他人数据写进上下文。
+
+## 结构化输出是"可判性"，不是"可信性"
+
+很多人把 JSON Schema / 结构化输出当成第三层边界：既然模型必须返回符合 Schema 的对象，注入文本还能干什么？答案是：**它照样能决定字段里装什么**。
+
+`text.format` / `responses.parse` 这类接口约束的是**形状**（字段名、类型、必填项），不约束**来源与真伪**。上面 B 档那种攻击如果发生在"抽取网页要点存进 `summary` 字段"的应用里，模型会规规矩矩地交出一个合法 JSON，其中 `summary` 里带着攻击者的话——校验全过，污染照旧。OpenAI Cookbook 早期那篇链式调用示例讲得很实在：结构化输出解决的是"类型安全的收敛"，让上游推理结果可靠地落成带类型的结构，它从来不负责判断内容该不该信。
+
+所以正确用法是：**用 Schema 把"是否被改写"变成可检测事件**（字段长度上限、枚举白名单、必须引用来源 ID、正则黑名单），再用第 2 条的能力裁剪决定"被改写之后能造成多大动作"。两者叠加才有意义，单靠其中任何一个都会给你虚假的安全感。
 
 ## 常见坑
 
@@ -156,6 +164,6 @@ C 角色+XML+明令 #2: 未执行 -> …"u et à usage général. Sa philosophie
 
 ---
 
-> **来源**：本文主体翻译自 [Delimiters won't save you from prompt injection](https://simonwillison.net/2023/May/11/delimiters-wont-save-you/)（Simon Willison，2023-05-11；博客原文无开放许可声明，按署名学习翻译）。官方文档部分另引 [GPT-5 prompting guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide)（OpenAI Cookbook，MIT，`<context_gathering>` / `<persistence>` / `<tool_preambles>` 用法）与 [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)（Anthropic，用 XML 标签或 Markdown 标题组织提示小节的建议）。抓取于 2026-09-19。
+> **来源**：本文主体翻译自 [Delimiters won't save you from prompt injection](https://simonwillison.net/2023/May/11/delimiters-wont-save-you/)（Simon Willison，2023-05-11；博客原文无开放许可声明，按署名学习翻译）。官方文档部分另引 [GPT-5 prompting guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide)（OpenAI Cookbook，MIT，`<context_gathering>` / `<persistence>` / `<tool_preambles>` 用法）与 [Using chained calls for reasoning structured outputs](https://cookbook.openai.com/examples/o1/using_chained_calls_for_o1_structured_outputs)（同许可，结构化输出作为格式收敛的定位）与 [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)（Anthropic，用 XML 标签或 Markdown 标题组织提示小节的建议）。抓取于 2026-09-19。
 >
 > **编者注**：原文引用的是 DeepLearning.AI 课程 `ChatGPT Prompt Engineering for Developers` 中的定界符说法，两段英文为原文直引。"可跑实验"一节、结果读法与"该把力气花在哪"清单为本站新增：实验代码与 6 组输出在本机跑通（OpenAI 兼容端点，密钥读自 `.env`），攻击文本与"QA 审批 token"改写版均为自造，不涉及真实系统；样本量很小，只用于展示机制，不构成对任何方案有效率的估计。

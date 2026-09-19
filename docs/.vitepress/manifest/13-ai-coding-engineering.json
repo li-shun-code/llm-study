@@ -4,9 +4,9 @@
     {
       "order": 1,
       "topic": "第一次 AI 结对：从零做一个命令行小工具",
-      "url": "https://code.claude.com/docs/en/quickstart",
-      "author": "Anthropic（Claude Code 官方文档 Quickstart、Common workflows）",
-      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名；编者过渡与本站实操小节已明确标注）",
+      "url": "https://code.claude.com/docs/en/common-workflows",
+      "author": "本站编者（循环骨架依据 Anthropic Claude Code 官方文档 Best practices 与 Common workflows）",
+      "license": "原创整理（所引官方文档 Copyright Anthropic PBC，教学用途署名；文中代码、命令与输出为编者实测记录）",
       "file": "01-first-ai-pairing-cli-tool.md"
     },
     {
@@ -51,10 +51,10 @@
     },
     {
       "order": 7,
-      "topic": "AI 代码的安全与质量陷阱",
-      "url": "https://simonwillison.net/2026/Jul/22/openai-cyberattack/",
-      "author": "Simon Willison",
-      "license": "署名转载（作者博客允许引用转载，需署名并附原文链接）",
+      "topic": "AI 代码的安全与质量陷阱：六大陷阱与检测清单",
+      "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",
+      "author": "Simon Willison（lethal trifecta 与事件复盘主篇）；OWASP GenAI Security Project；Anthropic；METR；Veracode（清单依据，逐节署名）",
+      "license": "署名转载/署名翻译（Willison 部分为作者博客署名翻译转载；OWASP 为 CC BY-SA 4.0；其余为公开研究材料节选引述；逐节署名）",
       "file": "07-ai-code-security-pitfalls.md"
     },
     {

@@ -27,59 +27,83 @@
     },
     {
       "order": 4,
+      "topic": "MoE 与稀疏注意力：读现代模型卡的先修知识",
+      "url": "https://huggingface.co/blog/moe",
+      "author": "Hugging Face 官方博客（osanseviero、lewtun、philschmid、smangrul、ybelkada、pcuenca；ariG23498 等；burtenshaw）· 本站编译",
+      "license": "Hugging Face Blog（署名转载；博客仓库未附独立许可证文件）",
+      "file": "04-moe-and-sparse-attention.md"
+    },
+    {
+      "order": 5,
       "topic": "Token 与上下文窗口",
       "url": "https://huggingface.co/learn/llm-course/chapter6/5",
       "author": "Hugging Face / DataWhale happy-llm / OpenAI",
       "license": "Apache 2.0（HF 课程）· CC BY-NC-SA 4.0（happy-llm）· MIT（OpenAI Cookbook）",
-      "file": "04-tokens-and-context-window.md"
+      "file": "05-tokens-and-context-window.md"
     },
     {
-      "order": 5,
+      "order": 6,
       "topic": "采样参数：temperature 与 top_p",
       "url": "https://huggingface.co/docs/transformers/generation_strategies",
       "author": "Hugging Face",
       "license": "Apache 2.0",
-      "file": "05-sampling-parameters.md"
+      "file": "06-sampling-parameters.md"
     },
     {
-      "order": 6,
+      "order": 7,
       "topic": "幻觉：成因与缓解",
       "url": "https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md",
       "author": "OpenAI（Cookbook）· DataWhale happy-llm 项目",
       "license": "MIT（OpenAI Cookbook）· CC BY-NC-SA 4.0（happy-llm）",
-      "file": "06-hallucination.md"
+      "file": "07-hallucination.md"
     },
     {
-      "order": 7,
+      "order": 8,
       "topic": "推理模型（o1/R1 类）",
       "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning",
       "author": "Microsoft Learn（Azure OpenAI 文档）· 本站补充",
       "license": "CC BY 4.0",
-      "file": "07-reasoning-models.md"
+      "file": "08-reasoning-models.md"
     },
     {
-      "order": 8,
+      "order": 9,
+      "topic": "长上下文的有效利用：Lost in the Middle 与位置偏置",
+      "url": "https://arxiv.org/abs/2307.03172",
+      "author": "Nelson F. Liu、Kevin Lin、John Hewitt、Ashwin Paranjape、Michele Bevilacqua、Fabio Petroni、Percy Liang（TACL 2023）· 本站编译",
+      "license": "MIT（官方代码仓库 nelson-liu/lost-in-the-middle）· arXiv 预印本署名编译",
+      "file": "09-long-context-effectiveness.md"
+    },
+    {
+      "order": 10,
       "topic": "训练范式总览：预训练 → SFT → RLHF/DPO",
       "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md",
       "author": "DataWhale happy-llm 项目",
       "license": "CC BY-NC-SA 4.0",
-      "file": "08-training-paradigms.md"
+      "file": "10-training-paradigms.md"
     },
     {
-      "order": 9,
+      "order": 11,
       "topic": "主流模型生态对比（2026-09）",
       "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models",
       "author": "本站编译（主引用 Microsoft Learn，各家信息出自其官方文档/官网）",
       "license": "CC BY 4.0（主引用），其余来源许可见文内链接",
-      "file": "09-model-landscape.md"
+      "file": "11-model-landscape.md"
     },
     {
-      "order": 10,
+      "order": 12,
       "topic": "多模态模型概览",
       "url": "https://huggingface.co/blog/vlms-2025",
       "author": "Merve Nouribakhsh, Sergio Paniego, Aritra Roy Gosthipaty, Pedro Cuenca, Andrés Marafioti 等（Hugging Face）",
       "license": "Hugging Face Blog（署名转载；博客仓库未附独立许可证文件）",
-      "file": "10-multimodal-models.md"
+      "file": "12-multimodal-models.md"
+    },
+    {
+      "order": 13,
+      "topic": "模型评测与基准素养：MMLU-Pro、SWE-bench 与 Agent 基准怎么读",
+      "url": "https://github.com/TIGER-AI-Lab/MMLU-Pro",
+      "author": "TIGER Lab（Yubo Wang、Xueguang Ma、Wenhu Chen 等）· SWE-bench 团队（Carlos E. Jimenez、John Yang 等）· 本站编译",
+      "license": "Apache 2.0（MMLU-Pro 仓库）· MIT（SWE-bench、τ-bench 仓库）· arXiv 论文节选署名编译",
+      "file": "13-benchmark-literacy.md"
     }
   ]
 }

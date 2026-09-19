@@ -174,7 +174,7 @@ Cookbook 对两种 API 的工作流差异总结得很到位：同样"看图 + �
 - Responses API 额外提供 API 侧会话状态（`retrieve` / `previous_response_id` / `conversation`）与托管工具；
 - 异步用 `AsyncOpenAI`。
 
-下一篇我们把 `messages` / `input` 的角色体系与多轮会话管理讲透。
+《消息角色与多轮会话管理》把 `messages` / `input` 的角色体系与多轮会话管理讲透。
 
 ---
 

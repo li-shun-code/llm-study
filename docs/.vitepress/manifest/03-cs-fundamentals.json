@@ -53,16 +53,16 @@
       "order": 7,
       "topic": "Git 进阶：rebase、cherry-pick 与冲突解决",
       "url": "https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection",
-      "author": "Scott Chacon、Ben Straub（Pro Git 2nd Edition：7.1 Revision Selection、3.6 Rebasing、7.8 Advanced Merging、5.1 Distributed Workflows、5.3 Maintaining a Project 章节）",
+      "author": "Scott Chacon、Ben Straub（Pro Git 2nd Edition：7.1 Revision Selection、3.6 Rebasing、Git Tools Rewriting History、7.8 Advanced Merging、5.1 Distributed Workflows、5.3 Maintaining a Project 章节）",
       "license": "CC BY-NC-SA 3.0",
       "file": "07-git-advanced.md"
     },
     {
       "order": 8,
-      "topic": "GitHub Actions 与 CI 基础",
-      "url": "https://docs.github.com/en/actions/get-started/understanding-github-actions",
-      "author": "GitHub Docs（Understanding GitHub Actions、Workflow syntax for GitHub Actions）",
-      "license": "CC BY 4.0",
+      "topic": "GitHub Actions 实战：一条能跑通的 CI 流水线",
+      "url": "https://github.com/actions/starter-workflows",
+      "author": "GitHub Docs 与 actions/starter-workflows 社区",
+      "license": "概念与语法译自 GitHub Docs（CC BY 4.0）；CI 模板改写自 actions/starter-workflows（MIT）",
       "file": "08-github-actions-ci.md"
     },
     {
@@ -99,9 +99,9 @@
     },
     {
       "order": 13,
-      "topic": "信号与进程间通信 IPC",
+      "topic": "信号与进程通信：异步打断的机制",
       "url": "https://beej.us/guide/bgipc/html/split/signals.html",
-      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Unix IPC：Signals、Pipes、FIFOs、System V Shared Memory Segments 章；死锁一节译自 OSTEP 第 32 章）",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Unix IPC 第 3 章 Signals）",
       "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
       "file": "13-signals-ipc.md"
     },
@@ -115,107 +115,155 @@
     },
     {
       "order": 15,
+      "topic": "死锁与同步：四条件、预防、避免与检测",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-deadlock.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP《操作系统导论》第 32 章 Common Concurrency Problems 之死锁一节）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "15-deadlock-and-synchronization.md"
+    },
+    {
+      "order": 16,
+      "topic": "管道、FIFO 与共享内存：进程间传数据的三级台阶",
+      "url": "https://beej.us/guide/bgipc/html/split/pipes.html",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Unix IPC：Pipes、FIFOs、System V Shared Memory Segments 章）",
+      "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
+      "file": "16-pipes-fifo-shared-memory.md"
+    },
+    {
+      "order": 17,
+      "topic": "条件变量与信号量",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-cv.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP《操作系统导论》第 30 章 Condition Variables、第 31 章 Semaphores）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "17-condition-variables-and-semaphores.md"
+    },
+    {
+      "order": 18,
+      "topic": "现代调度器：MLFQ 与 Linux CFS/EEVDF",
+      "url": "https://docs.kernel.org/scheduler/sched-eevdf.html",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 8 章）；Peter Zijlstra、Ingo Molnar（Linux 内核调度器文档）",
+      "license": "OSTEP 部分 CC BY-NC-SA 4.0；Linux 内核文档 GPL-2.0（documentation）",
+      "file": "18-modern-schedulers-mlfq-cfs-eevdf.md"
+    },
+    {
+      "order": 19,
+      "topic": "mmap 与 Unix 域套接字：现代进程间通信的两条主路",
+      "url": "https://man7.org/linux/man-pages/man2/mmap.2.html",
+      "author": "Michael Kerrisk 与 Linux man-pages 维护者（mmap(2)、memfd_create(2)、unix(7)、socket(7)）",
+      "license": "GPL-2.0-or-later（Linux man-pages；手册页明文允许以二进制/源码形式再分发，需保留版权声明）",
+      "file": "19-mmap-and-unix-domain-sockets.md"
+    },
+    {
+      "order": 20,
       "topic": "内存管理：地址空间抽象",
       "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf",
       "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 13 章）",
       "license": "CC BY-NC-SA 4.0",
-      "file": "15-memory-management.md"
+      "file": "20-memory-management.md"
     },
     {
-      "order": 16,
+      "order": 21,
       "topic": "虚拟内存：TLB 与地址翻译加速",
       "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf",
       "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 19 章）",
       "license": "CC BY-NC-SA 4.0",
-      "file": "16-virtual-memory.md"
+      "file": "21-virtual-memory.md"
     },
     {
-      "order": 17,
+      "order": 22,
       "topic": "文件系统：文件与目录",
       "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf",
       "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 39 章）",
       "license": "CC BY-NC-SA 4.0",
-      "file": "17-file-systems.md"
+      "file": "22-file-systems.md"
     },
     {
-      "order": 18,
+      "order": 23,
+      "topic": "分页、页表与多级页表",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-mechanism.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP《操作系统导论》第 15、18、20 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "23-paging-and-page-tables.md"
+    },
+    {
+      "order": 24,
       "topic": "I/O 多路复用：阻塞、poll() 与 select()",
       "url": "https://beej.us/guide/bgnet/html/split/slightly-advanced-techniques.html",
       "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Programming）",
       "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
-      "file": "18-io-multiplexing.md"
+      "file": "24-io-multiplexing.md"
     },
     {
-      "order": 19,
+      "order": 25,
       "topic": "epoll 与事件循环",
       "url": "https://man7.org/linux/man-pages/man7/epoll.7.html",
       "author": "Davide Libenzi、Michael Kerrisk（Linux man-pages：epoll(7)、epoll_ctl(2)、epoll_wait(2)、epoll_create(2)；引言节译自 Beej's Guide to Network Concepts §29.1）",
       "license": "GPL-2.0-or-later（man-pages）",
-      "file": "19-epoll-event-loop.md"
+      "file": "25-epoll-event-loop.md"
     },
     {
-      "order": 20,
+      "order": 26,
       "topic": "网络分层模型：从 HTTP 请求到 OSI",
       "url": "https://beej.us/guide/bgnet0/html/split/the-layered-network-model.html",
       "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
       "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
-      "file": "20-network-layering.md"
+      "file": "26-network-layering.md"
     },
     {
-      "order": 21,
+      "order": 27,
       "topic": "DNS：域名系统",
       "url": "https://beej.us/guide/bgnet0/html/split/domain-name-system-dns.html",
       "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
       "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
-      "file": "21-dns.md"
+      "file": "27-dns.md"
     },
     {
-      "order": 22,
+      "order": 28,
       "topic": "TCP：传输控制协议",
       "url": "https://beej.us/guide/bgnet0/html/split/transmission-control-protocol-tcp.html",
       "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
       "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
-      "file": "22-tcp.md"
+      "file": "28-tcp.md"
     },
     {
-      "order": 23,
+      "order": 29,
       "topic": "UDP：用户数据报协议",
       "url": "https://beej.us/guide/bgnet0/html/split/user-datagram-protocol-udp.html",
       "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
       "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
-      "file": "23-udp.md"
+      "file": "29-udp.md"
     },
     {
-      "order": 24,
+      "order": 30,
       "topic": "HTTP 概述",
       "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
       "author": "Mozilla 贡献者（MDN Web Docs）",
       "license": "CC BY-SA 2.5",
-      "file": "24-http.md"
+      "file": "30-http.md"
     },
     {
-      "order": 25,
+      "order": 31,
       "topic": "HTTPS 与 TLS",
       "url": "https://www.rfc-editor.org/rfc/rfc8446",
       "author": "Eric Rescorla（IETF RFC 8446《TLS 1.3》）；Mozilla 贡献者（MDN Web Docs）",
       "license": "RFC 8446 部分：IETF Trust Legal Provisions（BCP 78，允许注明出处的翻译）；MDN 部分：CC BY-SA 2.5",
-      "file": "25-https.md"
+      "file": "31-https.md"
     },
     {
-      "order": 26,
+      "order": 32,
       "topic": "SSE 与 WebSocket：流式输出的网络基础",
       "url": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events",
       "author": "Mozilla 贡献者（MDN Web Docs）",
       "license": "CC BY-SA 2.5",
-      "file": "26-sse-websocket.md"
+      "file": "32-sse-websocket.md"
     },
     {
-      "order": 27,
+      "order": 33,
       "topic": "REST：表述性状态转移（Fielding 论文第 5 章）",
       "url": "https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm",
       "author": "Roy Thomas Fielding（加州大学欧文分校博士学位论文第 5 章，2000）",
       "license": "版权所有 © Roy Thomas Fielding, 2000（论文在其个人主页公开可获取；本篇为注明出处的署名学习翻译）",
-      "file": "27-rest.md"
+      "file": "33-rest.md"
     }
   ]
 }

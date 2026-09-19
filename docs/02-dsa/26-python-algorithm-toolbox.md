@@ -12,7 +12,7 @@ group: 查找、排序与数组技巧
 ## 为什么要先查标准库
 
 > **难度**：★★☆（清单类，随查随用）。
-> **定位**：本篇不是新算法，而是一张“标准库索引”。写算法题或做检索系统之前先查一遍，能省掉大量手写代码。
+> **定位**：本篇不是新算法，而是一张“标准库索引”。动手实现堆、二分、计数器之前先查一遍，能省掉大量手写代码与隐蔽 bug 。
 > **前置**：《堆》《二分查找》《哈希表》《拓扑排序与依赖调度》。数据结构原理在那几篇里，这里只讲怎么把标准库用对。
 
 
@@ -288,6 +288,168 @@ print(list(islice(iter(range(10**9)), 3)))                 # [0, 1, 2]
 
 `groupby` 的坑值得单独强调：它按“**相邻**”分组，`groupby(data)` 之前几乎总要先 `sorted(data, key=...)` ，且排序 key 必须与分组 key 完全一致，否则结果静默错误。
 
+## 两个完整可跑的工程小例子
+
+清单看一百遍不如跑一遍。下面两个脚本都只用标准库，存成文件直接 `python3` 运行即可；它们把上文散落的接口按“真实模块”的形状串了起来。
+
+### 例一：文档摄取流水线的最小调度器
+
+`graphlib` 给顺序、`heapq` 选空闲 worker、`defaultdict` 建反查表、`Counter` 出统计、`itertools.batched` 切批次——一个 RAG 摄取调度器的骨架正好由这五件事组成：
+
+```python
+"""摄取流水线：拓扑分层 + 层内按优先级派工 + 依赖反查 + 分批统计"""
+import heapq
+import itertools
+from collections import Counter, defaultdict
+from graphlib import TopologicalSorter
+
+TASKS = {
+    "fetch":   {"deps": set(),                 "cost": 0.4, "priority": 1},
+    "clean":   {"deps": {"fetch"},             "cost": 0.9, "priority": 2},
+    "chunk":   {"deps": {"clean"},             "cost": 0.6, "priority": 2},
+    "extract": {"deps": {"clean"},             "cost": 1.5, "priority": 1},
+    "embed":   {"deps": {"chunk"},             "cost": 2.0, "priority": 5},
+    "index":   {"deps": {"embed"},             "cost": 0.7, "priority": 5},
+    "summary": {"deps": {"extract", "chunk"},  "cost": 1.1, "priority": 3},
+    "report":  {"deps": {"index", "summary"},  "cost": 0.3, "priority": 4},
+}
+
+
+def serial_order(tasks: dict) -> list[str]:
+    """只要一个合法顺序：static_order 一步到位（内部会先检查环）"""
+    return list(TopologicalSorter({k: v["deps"] for k, v in tasks.items()}).static_order())
+
+
+def schedule_by_layer(tasks: dict, workers: int = 2):
+    """按层推进（层间同步屏障），层内用堆把任务派给“最早空闲”的那台 worker。"""
+    ts = TopologicalSorter({k: v["deps"] for k, v in tasks.items()})
+    ts.prepare()                        # 要反复 get_ready() 就必须先 prepare()
+    clock, done_at, layers = 0.0, {}, []
+    while ts.is_active():
+        # 层内按优先级降序、同优先级按名字升序 —— 保证派工结果可复现
+        ready = sorted(ts.get_ready(), key=lambda n: (-tasks[n]["priority"], n))
+        idle = [clock] * workers        # 小顶堆：每个 worker 的下一次空闲时刻
+        heapq.heapify(idle)
+        dispatched = []
+        for name in ready:
+            start = heapq.heappop(idle)              # 抢最早空闲的 worker
+            heapq.heappush(idle, start + tasks[name]["cost"])
+            dispatched.append(name)
+            done_at[name] = start + tasks[name]["cost"]
+        clock = max(done_at[n] for n in ready)       # 屏障：本层全做完才进下一层
+        layers.append(dispatched)
+        ts.done(*ready)                 # done() 支持一次传多个任务
+    return layers, clock, done_at
+
+
+def layer_stats(tasks: dict):
+    """defaultdict 建「依赖 -> 下游」反查表，Counter 统计各层任务数"""
+    reverse: dict[str, list[str]] = defaultdict(list)
+    for name, spec in tasks.items():
+        for dep in spec["deps"]:
+            reverse[dep].append(name)
+    depth: dict[str, int] = {}
+    for n in serial_order(tasks):       # 拓扑序保证算到某点时它的依赖都已就位
+        deps = tasks[n]["deps"]
+        depth[n] = 0 if not deps else 1 + max(depth[d] for d in deps)
+    return dict(Counter(depth.values())), dict(reverse), depth
+
+
+if __name__ == "__main__":
+    print("串行顺序:", serial_order(TASKS))
+    layers, total, done_at = schedule_by_layer(TASKS, workers=2)
+    print("分层派工:", layers)
+    print(f"2 个 worker 总耗时 {total:.1f} ，全串行的关键路径 "
+          f"{sum(t['cost'] for t in TASKS.values()):.1f}")
+    dist, reverse, depth = layer_stats(TASKS)
+    print("各层任务数:", dist, "；clean 的下游:", sorted(reverse["clean"]))
+    print("分批:", [list(b) for b in itertools.batched([f"doc-{i}" for i in range(8)], 3)])
+```
+
+典型输出（Python 3.12 / 3.14 一致）：
+
+```text
+分层派工: [['fetch'], ['clean'], ['chunk', 'extract'], ['embed', 'summary'], ['index'], ['report']]
+2 个 worker 总耗时 5.8 ，全串行的关键路径 7.5
+各层任务数: {0: 1, 1: 1, 2: 2, 3: 2, 4: 1, 5: 1} ；clean 的下游: ['chunk', 'extract']
+```
+
+三个细节值得注意：**`TopologicalSorter` 的依赖方向是“节点 <- 前置”**（`add(node, *before)` 或构造时 `{node: {前置}}`），写反了会得到完全颠倒的计划；`prepare()` 之后才有 `get_ready()` ，而 `static_order()` 是“一次性串行吐完”，两种用法别混；**如果依赖里有环，`get_ready()` 会抛 `CycleError` 且带环上节点列表** ——这就是免费的依赖校验，工作流引擎保存 DAG 时该先跑它一遍（详见《拓扑排序与依赖调度》）。
+
+### 例二：接口实时看板（滑动窗口 + Top-K 慢请求 + 配置层叠）
+
+`deque(maxlen)` 做窗口、`heapq` 做定容量慢请求榜、`Counter` 汇总状态码、`ChainMap` 做配置优先级，四件事凑成一个可观测性小面板：
+
+```python
+"""固定时间窗内的 QPS / 限流判定 / 最慢 K 个请求 / 配置层叠"""
+import heapq
+import random
+import time
+from collections import ChainMap, Counter, deque
+
+DEFAULTS = {"window_sec": 5.0, "rate_limit": 60, "top_k": 3}
+ENV_CONF = {"rate_limit": 80}            # 环境变量覆盖了默认值
+CLI_CONF = {}                            # 命令行没给，就继续往下找
+conf = ChainMap(CLI_CONF, ENV_CONF, DEFAULTS)   # 视图，不拷贝
+
+
+class LatencyBoard:
+    """滑动窗口计数器 + 定容量小顶堆（最慢 K 个）"""
+
+    def __init__(self, window_sec: float, rate_limit: int, top_k: int):
+        self.window, self.rate_limit, self.top_k = window_sec, rate_limit, top_k
+        self.events: deque[float] = deque()            # 请求到达时刻，天然有序
+        self.slow: list[tuple[float, int, str]] = []   # (耗时, 序号, 路由)
+        self._seq = iter(range(10 ** 9))               # 单调序号：同耗时时不必比较路由
+        self.status: Counter[int] = Counter()
+
+    def _evict(self, now: float) -> None:
+        """滑出窗口的旧事件从队首挤掉：每个事件至多进出各一次，均摊 O(1)"""
+        while self.events and now - self.events[0] > self.window:
+            self.events.popleft()
+
+    def allow(self, now: float) -> bool:
+        self._evict(now)
+        return len(self.events) < self.rate_limit
+
+    def record(self, now: float, cost: float, route: str, code: int) -> None:
+        self.events.append(now)
+        self.status[code] += 1
+        item = (cost, next(self._seq), route)          # 序号避免同耗时时比较路由字符串
+        if len(self.slow) < self.top_k:
+            heapq.heappush(self.slow, item)
+        elif cost > self.slow[0][0]:
+            heapq.heapreplace(self.slow, item)         # 只走一次堆调整
+
+    def snapshot(self, now: float) -> dict:
+        self._evict(now)
+        return {
+            "qps": round(len(self.events) / self.window, 2),
+            "slowest_ms": [(round(c * 1000), r) for c, _s, r in sorted(self.slow, reverse=True)],
+            "status": dict(self.status),
+        }
+
+
+if __name__ == "__main__":
+    print("生效配置:", dict(conf))            # rate_limit 来自 ENV_CONF -> 80
+    board = LatencyBoard(conf["window_sec"], conf["rate_limit"], conf["top_k"])
+    rng = random.Random(42)
+    routes = ["/search", "/embed", "/rerank", "/health"]
+    t0, rejected = time.monotonic(), 0
+    for i in range(300):
+        now = t0 + i * 0.05                   # 模拟 20 QPS 的到达流
+        if not board.allow(now):
+            rejected += 1
+            continue
+        cost = rng.lognormvariate(-2.0, 1.2)  # 长尾延迟：对数正态比均匀分布真实得多
+        route = rng.choice(routes)
+        board.record(now, cost, route, 500 if route == "/embed" and cost > 0.5 else 200)
+    print(f"总请求 300 ，被限流 {rejected}")
+    print("末刻快照:", board.snapshot(t0 + 300 * 0.05))
+```
+
+实际输出：`生效配置: {'window_sec': 5.0, 'rate_limit': 80, 'top_k': 3}` 、放行 240 / 限流 60 、`qps 16.0` ，慢请求榜是 `[(4045, '/health'), (3950, '/search'), (3444, '/rerank')]` 。这段里有三个“标准库替你省掉的坑”：**`deque` 的左端挤出天然完成过期** （用 `list` 就是 O(n²) ）；**堆元素带自增序号** ，否则同耗时两条请求比较第二个元素时会 `TypeError` ；**`heapreplace` 而非 `pop`+`push`** ，百万级 QPS 下少一半堆调整。想加 P99 就不能只留 K 个了——要么上 t-digest（第三方），要么按分位数分桶。
+
 ## 选型与迁移建议
 
 - 需要**线程安全**的优先队列用 `queue.PriorityQueue` ，纯单线程性能用 `heapq` 。
@@ -303,6 +465,12 @@ print(list(islice(iter(range(10**9)), 3)))                 # [0, 1, 2]
 4. **`defaultdict` 读时写**、**`groupby` 要先排序**、**`list.pop(0)` 是 O(n)** ——这三条能解决八成的“代码看着对但结果/性能不对”。
 5. **`cache` / `lru_cache` 缓存的是参数对象**，传入大列表或自定义对象会长期占内存；对不可哈希参数需先转 `tuple` ，或改用手写字典。
 6. **`functools.lru_cache` 在实例方法上用会隐式缓存 `self`** ，导致对象无法回收，正确做法是 `cached_property` 或把缓存下沉到静态函数。
+7. **`heapq` 没有“删除任意元素”“升高优先级”的操作**。要做 Dijkstra 的“减小键”，标准做法是**懒删除**（把新距离压进堆，弹出时与 `dist` 比对，旧条目直接丢弃）；要真支持任意删除得自己维护“下标 ↔ 堆位置”的映射（见《堆》）。
+8. **`nlargest` / `nsmallest` 对不可比对象要显式给 `key`** ：不给就是按元素本身比较，装着字典的列表会当场 `TypeError` 。
+9. **把 `Counter` 当并发安全的计数器**：`c[x] += 1` 不是原子操作，多线程下会丢计数；跨进程统计要靠外部存储或加锁。
+10. **`bisect` 配 `key=` 的隐藏成本**：带 `key` 时实现要逐次调用 key 函数，在热循环里比“直接维护 `(key, value)` 元组列表”更慢。
+11. **`itertools` 既惰性又一次性**：`accumulate` / `groupby` / `batched` 返回迭代器，只能消费一次；要复用就 `list(...)` 落地，否则第二段循环静默拿到空结果。
+12. **`deque` 的索引与切片**：`dq[5]` 是 O(n) ，`dq[1:3]` 返回的是 `list` 而不是 `deque` ，链式写 `dq[1:3].append(...)` 会静默改到一个临时列表上。
 
 ## 延伸阅读
 

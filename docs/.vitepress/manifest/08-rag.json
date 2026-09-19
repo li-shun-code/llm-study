@@ -11,10 +11,10 @@
     },
     {
       "order": 2,
-      "topic": "最小 RAG（Simple RAG）系统",
+      "topic": "最小 RAG 全流程实战：一份能端到端跑通的完整程序",
       "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb",
-      "author": "Nir Diamant（RAG_Techniques）",
-      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
+      "author": "Nir Diamant（RAG_Techniques，流程框架参考）；LangChain 官方文档（递归分块思想）",
+      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE；仅参考流程）；MIT（LangChain 文档思想）",
       "file": "02-minimal-rag-walkthrough.md"
     },
     {
@@ -35,9 +35,9 @@
     },
     {
       "order": 5,
-      "topic": "句子窗口与父子块检索（small-to-big）",
-      "url": "https://github.com/run-llama/llama_index/blob/main/docs/examples/node_postprocessor/MetadataReplacementDemo.ipynb",
-      "author": "LlamaIndex 团队（run-llama/llama_index 官方示例）",
+      "topic": "句子窗口与父子块检索：用小块召回、大块作答",
+      "url": "https://docs.llamaindex.ai/en/stable/examples/node_postprocessor/MetadataReplacementDemo/",
+      "author": "LlamaIndex 团队（run-llama/llama_index 官方示例）；Jerry Liu（LlamaIndex）",
       "license": "MIT",
       "file": "05-sentence-window-parent-child.md"
     },
@@ -51,10 +51,10 @@
     },
     {
       "order": 7,
-      "topic": "Embedding 模型选型实战（中文优先）",
+      "topic": "Embedding 模型选型：四轴决策与本地实测",
       "url": "https://github.com/FlagOpen/FlagEmbedding",
-      "author": "BAAI（BGE / FlagEmbedding）；MTEB 团队（embeddings-benchmark）；Qwen 团队（Qwen3-Embedding）",
-      "license": "MIT（FlagEmbedding）；Apache-2.0（mteb）；Apache-2.0（Qwen3-Embedding）",
+      "author": "BAAI（BGE / FlagEmbedding）；Qwen 团队（Qwen3-Embedding）；MTEB 团队（embeddings-benchmark）；阿里云百炼（API 价目与规格）",
+      "license": "MIT（FlagEmbedding 代码与 bge-*-zh / bge-m3 权重）；Apache-2.0（mteb、sentence-transformers、Qwen3-Embedding、bge-reranker-v2-m3 权重）；阿里云百炼规格与单价取自官方文档",
       "file": "07-embedding-model-selection.md"
     },
     {
@@ -75,18 +75,18 @@
     },
     {
       "order": 10,
-      "topic": "混合检索：BM25 词法检索 + 向量语义检索",
-      "url": "https://www.pinecone.io/learn/hybrid-search-intro/",
-      "author": "James Briggs（Pinecone Learn Center）",
-      "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
+      "topic": "混合检索：真正的 BM25、RRF 融合与生产实现",
+      "url": "https://qdrant.tech/documentation/concepts/hybrid-queries/",
+      "author": "Qdrant 官方文档（混合查询）；Elastic 官方文档（RRF retriever）；Damir Čermák（`rank_bm25` 作者）；Pinecone Learn Center（混合检索概念）",
+      "license": "MIT（rank_bm25、Qdrant 文档代码）；Apache 2.0（Elasticsearch 客户端示例）；署名转载（Pinecone 概念段）",
       "file": "10-hybrid-search-bm25.md"
     },
     {
       "order": 11,
-      "topic": "重排序（Rerank）：LLM 打分与 Cross-Encoder 精排",
-      "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reranking.ipynb",
-      "author": "Nir Diamant（RAG_Techniques）",
-      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
+      "topic": "重排序：Cross-Encoder 精排与 LLM 打分成本对照",
+      "url": "https://github.com/UKPLab/sentence-transformers",
+      "author": "Sentence Transformers 团队（UKPLab，TU Darmstadt）；BAAI（bge-reranker 系列）；Qwen 团队（Qwen3-Reranker）；Cohere（Rerank API）；阿里云百炼（文本排序 API 规格）；Nir Diamant（RAG_Techniques，LLM 逐条打分路线的出处）",
+      "license": "Apache-2.0（sentence-transformers）；MIT（FlagEmbedding 代码）；Apache-2.0（bge-reranker-v2-m3、Qwen3-Embedding 权重）；bge-reranker-base 权重 MIT；署名转载（Cohere/百炼文档段落、RAG_Techniques notebook）",
       "file": "11-reranking.md"
     },
     {
@@ -99,59 +99,75 @@
     },
     {
       "order": 13,
-      "topic": "多向量检索与 ColBERT/ColPali",
-      "url": "https://github.com/stanford-futuredata/ColBERT",
-      "author": "Stanford Future Data Systems（ColBERT）；Illuin Technology（ColPali）；Benjamin Clavié（Answer.AI）",
-      "license": "MIT（ColBERT）；Apache-2.0（colpali）；署名转载（Answer.AI 博客）",
-      "file": "13-multi-vector-colbert-colpali.md"
+      "topic": "检索层 IR 指标：recall@k、MRR、nDCG 与截断阈值怎么定",
+      "url": "https://arxiv.org/abs/2104.08663",
+      "author": "Paul Thomas 等（Google，TREC-RAG 评测框架）；scikit-learn 文档团队（排序指标定义）；Elastic 官方文档（BM25 参数与解释）",
+      "license": "arXiv 预印本署名转载；scikit-learn 文档 BSD-3-Clause；Elastic 博客 CC BY 4.0",
+      "file": "13-ir-metrics-recall-mrr-ndcg.md"
     },
     {
       "order": 14,
+      "topic": "多向量检索与 ColBERT/ColPali：后期交互的用法与选型",
+      "url": "https://github.com/stanford-futuredata/ColBERT",
+      "author": "Stanford Future Data Systems（ColBERT）；Illuin / ViDoRe 团队（ColPali）；Answer.AI（RAGatouille）",
+      "license": "MIT（ColBERT 仓库、colpali 仓库）；Apache-2.0（RAGatouille；vidore 多数模型权重）；Gemma 条款（colpali-v1.x 权重）",
+      "file": "14-multi-vector-colbert-colpali.md"
+    },
+    {
+      "order": 15,
       "topic": "多模态 RAG：图文混合文档的\"图片打字幕\"方案",
       "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/multi_model_rag_with_captioning.ipynb",
       "author": "Nir Diamant（RAG_Techniques）",
       "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
-      "file": "14-multimodal-rag.md"
+      "file": "15-multimodal-rag.md"
     },
     {
-      "order": 15,
+      "order": 16,
       "topic": "GraphRAG：用知识图谱回答\"全局性\"问题",
       "url": "https://raw.githubusercontent.com/microsoft/graphrag/main/README.md",
       "author": "Microsoft Research（Jonathan Larson、Steven Truitt 等）",
       "license": "MIT",
-      "file": "15-graphrag.md"
-    },
-    {
-      "order": 16,
-      "topic": "Agentic RAG：从固定管线到会思考的检索",
-      "url": "https://weaviate.io/blog/what-is-agentic-rag",
-      "author": "Erika Cardona（Weaviate Blog）",
-      "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
-      "file": "16-agentic-rag.md"
+      "file": "16-graphrag.md"
     },
     {
       "order": 17,
-      "topic": "Text2SQL 实战：用 Vanna 让自然语言直达数据库",
-      "url": "https://raw.githubusercontent.com/vanna-ai/vanna/main/README.md",
-      "author": "Vanna 项目（Vanna AI）",
-      "license": "MIT",
-      "file": "17-text2sql.md"
+      "topic": "Agentic RAG：让检索自己判断\"够不够、要不要换工具\"",
+      "url": "https://arxiv.org/abs/2501.09136",
+      "author": "Aditi Singh、Abul Masud、Ryan A. Rossi（Agentic RAG 综述作者）；Lucian Popa 等（CRAG）；Weaviate Blog",
+      "license": "arXiv 论文按原文许可署名转载；Weaviate 博客署名转载",
+      "file": "17-agentic-rag.md"
     },
     {
       "order": 18,
-      "topic": "RAG 评估实战：用 RAGAS 量化检索与生成质量",
-      "url": "https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md",
-      "author": "RAGAS 项目（Exploding Gradients）",
-      "license": "Apache 2.0",
-      "file": "18-rag-evaluation-ragas.md"
+      "topic": "Text2SQL 的方法与评测：schema 链接、少样本选择与执行自修复",
+      "url": "https://arxiv.org/abs/2305.03111",
+      "author": "Jinyang Li 等（BIRD-SQL 团队，HKUST-GZ）；Breno W. Carvalho 等（DIN-SQL）；Vanna AI（Vanna 项目）",
+      "license": "署名转载（arXiv 论文按原文许可引用）；MIT（Vanna）",
+      "file": "18-text2sql.md"
     },
     {
       "order": 19,
+      "topic": "经典论文精读：RAG 与 Lost in the Middle",
+      "url": "https://arxiv.org/abs/2005.11401",
+      "author": "Patrick Lewis 等（Facebook AI Research / UCL / NYU，RAG 原论文）；Nelson F. Liu 等（Stanford 等，Lost in the Middle）",
+      "license": "arXiv 预印本署名转载（两文均按 arXiv 页面所列许可引用，译文为教学用途节选与改写）",
+      "file": "19-paper-study-rag-lost-in-middle.md"
+    },
+    {
+      "order": 20,
+      "topic": "RAG 评估实战：RAGAS 指标、LLM 裁判与可跑的确定性兜底",
+      "url": "https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md",
+      "author": "RAGAS 项目（Exploding Gradients / Vibrant Labs）",
+      "license": "Apache 2.0",
+      "file": "20-rag-evaluation-ragas.md"
+    },
+    {
+      "order": 21,
       "topic": "生产化 RAG：可靠管线与常见问题排查",
       "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reliable_rag.ipynb",
       "author": "Nir Diamant（RAG_Techniques）",
       "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
-      "file": "19-production-rag-troubleshooting.md"
+      "file": "21-production-rag-troubleshooting.md"
     }
   ]
 }

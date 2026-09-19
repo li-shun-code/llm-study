@@ -215,6 +215,7 @@ self.next: list[TrieNode | None] = [None] * 26
 上面的上界只是纸面数字，真实的 Python 对象开销要靠测量。把一份约 23.6 万个英文单词的词表（合计约 226 万个字符）插进 `__slots__` 版 Trie，本机实测得到 **76 万个节点、峰值内存约 168 MB**（CPython + `tracemalloc`，换 Python 小版本会在 150~170 MB 之间浮动）。也就是说平均每个节点要 200 字节上下，而它承载的有效信息只有几个字符。复现方式：
 
 ```python
+# 沿用上一节的 TrieNode
 import tracemalloc
 
 
@@ -390,6 +391,7 @@ print(t.top_k("trans", k=2))  # [(900, 'transformer'), (120, 'translation')]
 中文分词、以及“把自由文本对齐到受控词表”的场景，常用**最大前向匹配**：每次从当前位置出发，取词表中能匹配到的最长词。用 Trie 实现，每步只需沿字符下探：
 
 ```python
+# 沿用“标准版”一节里的 Trie / TrieNode 定义
 def forward_max_match(text: str, vocab: Trie, max_len: int = 8) -> list[str]:
     """基于 Trie 的最大前向匹配分词。vocab 为已插入词表的 Trie"""
     tokens: list[str] = []

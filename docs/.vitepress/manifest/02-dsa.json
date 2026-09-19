@@ -68,138 +68,178 @@
     {
       "order": 9,
       "topic": "Trie 前缀树（字典树）",
-      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/string/trie.md",
-      "author": "OI Wiki 项目",
-      "license": "CC BY-SA 4.0",
+      "url": "https://raw.githubusercontent.com/TheAlgorithms/Python/master/data_structures/trie/trie.py",
+      "author": "本站整理；参考 TheAlgorithms/Python、CPython 官方文档",
+      "license": "MIT（TheAlgorithms/Python）",
       "file": "09-trie.md"
     },
     {
       "order": 10,
+      "topic": "布隆过滤器与集合去重",
+      "url": "https://en.wikipedia.org/wiki/Bloom_filter",
+      "author": "本站整理；参考 Wikipedia（Bloom filter）、Burton Howard Bloom (1970)",
+      "license": "CC BY-SA 4.0",
+      "file": "10-bloom-filter-dedup.md"
+    },
+    {
+      "order": 11,
       "topic": "树与二叉树",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "10-tree.md"
+      "file": "11-tree.md"
     },
     {
-      "order": 11,
+      "order": 12,
       "topic": "二叉树遍历",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree_traversal.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "11-binary-tree-traversal.md"
+      "file": "12-binary-tree-traversal.md"
     },
     {
-      "order": 12,
+      "order": 13,
       "topic": "二叉搜索树",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "12-bst.md"
+      "file": "13-bst.md"
     },
     {
-      "order": 13,
+      "order": 14,
       "topic": "堆",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_heap/heap.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "13-heap.md"
+      "file": "14-heap.md"
     },
     {
-      "order": 14,
+      "order": 15,
+      "topic": "Top-K 与堆：召回重排里的取前 N 个",
+      "url": "https://docs.python.org/3/library/heapq.html#heapq.nlargest",
+      "author": "本站整理；参考 Python heapq 官方文档、hello-algo 堆与 Top-K 章节",
+      "license": "PSF License 2.0（Python 文档）；CC BY-NC-SA 4.0（hello-algo）",
+      "file": "15-top-k-heap-retrieval.md"
+    },
+    {
+      "order": 16,
       "topic": "图",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "14-graph.md"
+      "file": "16-graph.md"
     },
     {
-      "order": 15,
+      "order": 17,
       "topic": "图的遍历（DFS/BFS）",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_traversal.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "15-graph-traversal.md"
-    },
-    {
-      "order": 16,
-      "topic": "拓扑排序",
-      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/topo.md",
-      "author": "OI Wiki 项目",
-      "license": "CC BY-SA 4.0",
-      "file": "16-topological-sort.md"
-    },
-    {
-      "order": 17,
-      "topic": "最短路径",
-      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/shortest-path.md",
-      "author": "OI Wiki 项目",
-      "license": "CC BY-SA 4.0",
-      "file": "17-shortest-path.md"
+      "file": "17-graph-traversal.md"
     },
     {
       "order": 18,
-      "topic": "并查集",
-      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/dsu.md",
-      "author": "OI Wiki 项目",
-      "license": "CC BY-SA 4.0",
-      "file": "18-dsu.md"
+      "topic": "拓扑排序与依赖调度",
+      "url": "https://docs.python.org/zh-cn/3/library/graphlib.html",
+      "author": "本站整理；参考 Python 官方文档 graphlib、OI Wiki《拓扑排序》",
+      "license": "PSF License 2.0（Python 文档）；CC BY-SA 4.0（OI Wiki 定义与配图）",
+      "file": "18-topological-sort.md"
     },
     {
       "order": 19,
+      "topic": "最短路径与 NetworkX 实践",
+      "url": "https://networkx.org/documentation/stable/reference/algorithms/shortest_paths.html",
+      "author": "本站整理；参考 NetworkX 官方文档、Python heapq 文档、OI Wiki《最短路》",
+      "license": "BSD-3-Clause（NetworkX）；PSF License 2.0（Python 文档）；CC BY-SA 4.0（OI Wiki 定义）",
+      "file": "19-shortest-path.md"
+    },
+    {
+      "order": 20,
+      "topic": "并查集与等价类归并",
+      "url": "https://raw.githubusercontent.com/TheAlgorithms/Python/master/data_structures/disjoint_set/disjoint_set.py",
+      "author": "本站整理；参考 TheAlgorithms/Python、OI Wiki《并查集》",
+      "license": "MIT（TheAlgorithms/Python）；CC BY-SA 4.0（OI Wiki 定义与配图）",
+      "file": "20-dsu.md"
+    },
+    {
+      "order": 21,
+      "topic": "向量相似度与 HNSW 近邻图",
+      "url": "https://arxiv.org/abs/1603.09320",
+      "author": "本站整理；参考 Malkov & Yashunin (2016/2020)、hnswlib 仓库、NumPy 文档",
+      "license": "Apache-2.0（hnswlib）；arXiv 预印本按原论文引用（CC BY 4.0 版本以论文页为准）",
+      "file": "21-vector-similarity-hnsw.md"
+    },
+    {
+      "order": 22,
       "topic": "排序算法",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/bubble_sort.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "19-sorting.md"
+      "file": "22-sorting.md"
     },
     {
-      "order": 20,
+      "order": 23,
       "topic": "二分查找",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "20-binary-search.md"
-    },
-    {
-      "order": 21,
-      "topic": "前缀和与差分",
-      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/basic/prefix-sum.md",
-      "author": "OI Wiki 项目",
-      "license": "CC BY-SA 4.0",
-      "file": "21-prefix-sum.md"
-    },
-    {
-      "order": 22,
-      "topic": "双指针与滑动窗口",
-      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/misc/two-pointer.md",
-      "author": "OI Wiki 项目",
-      "license": "CC BY-SA 4.0",
-      "file": "22-two-pointers.md"
-    },
-    {
-      "order": 23,
-      "topic": "递归与回溯（面试选学）",
-      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_backtracking/backtracking_algorithm.md",
-      "author": "krahets",
-      "license": "CC BY-NC-SA 4.0",
-      "file": "23-recursion-backtracking.md"
+      "file": "23-binary-search.md"
     },
     {
       "order": 24,
+      "topic": "前缀和与差分",
+      "url": "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0300-0399/0303.Range%20Sum%20Query%20-%20Immutable/README.md",
+      "author": "本站整理；参考 doocs/leetcode、Python itertools 官方文档",
+      "license": "CC BY-SA 4.0（doocs/leetcode 题面）；PSF License 2.0（Python 文档）",
+      "file": "24-prefix-sum.md"
+    },
+    {
+      "order": 25,
+      "topic": "双指针与滑动窗口",
+      "url": "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0000-0099/0011.Container%20With%20Most%20Water/README.md",
+      "author": "本站整理；参考 doocs/leetcode、CPython 官方教程",
+      "license": "CC BY-SA 4.0（doocs/leetcode 题面）；PSF License 2.0（Python 文档）",
+      "file": "25-two-pointers.md"
+    },
+    {
+      "order": 26,
+      "topic": "Python 算法工具箱：heapq、bisect、graphlib 与 collections",
+      "url": "https://docs.python.org/zh-cn/3/library/heapq.html",
+      "author": "本站整理；参考 Python 官方文档 heapq / bisect / collections / graphlib / itertools / functools",
+      "license": "PSF License 2.0",
+      "file": "26-python-algorithm-toolbox.md"
+    },
+    {
+      "order": 27,
+      "topic": "排序惯用法：sorted、key 与稳定性",
+      "url": "https://docs.python.org/3/howto/sorting.html",
+      "author": "本站整理；参考 Python HOWTO \"Sorting How To\"、CPython listsort 文档",
+      "license": "PSF License 2.0",
+      "file": "27-sorting-idioms.md"
+    },
+    {
+      "order": 28,
+      "topic": "回溯算法（面试选学）",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_backtracking/backtracking_algorithm.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "28-recursion-backtracking.md"
+    },
+    {
+      "order": 29,
       "topic": "动态规划（面试选学）",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "24-dynamic-programming.md"
+      "file": "29-dynamic-programming.md"
     },
     {
-      "order": 25,
+      "order": 30,
       "topic": "贪心算法（面试选学）",
       "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/greedy_algorithm.md",
       "author": "krahets",
       "license": "CC BY-NC-SA 4.0",
-      "file": "25-greedy.md"
+      "file": "30-greedy.md"
     }
   ]
 }

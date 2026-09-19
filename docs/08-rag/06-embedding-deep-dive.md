@@ -3,8 +3,9 @@ title: Embedding 深入：从语义向量到语义搜索
 source_url: https://huggingface.co/blog/getting-started-with-embeddings
 author: Omar Espejel（Hugging Face Blog）
 license: 署名转载（博客仓库未附独立开源许可，仅作教学署名转载）
-fetched_at: 2026-09-13
+fetched_at: 2026-09-19
 translated: true
+versions: sentence-transformers 6.x（`SentenceTransformer` / `util.semantic_search` 接口按 6.1.0 核对）
 order: 6
 group: 摄取层：解析、分块与嵌入
 ---
@@ -45,10 +46,10 @@ group: 摄取层：解析、分块与嵌入
 > 编者注（时效性改写）：原文调用的是旧版 Inference API 端点（首次请求需等模型在服务端下载、约 20 秒）。当前稳定做法是本地加载模型，一次加载后批量编码又快又省，且不依赖网络：
 
 ```python
-from sentence_transformers import SentenceTransformers
+from sentence_transformers import SentenceTransformer
 
 model_id = "sentence-transformers/all-MiniLM-L6-v2"
-model = SentenceTransformers(model_id)
+model = SentenceTransformer(model_id)
 
 texts = ["How do I get a replacement Medicare card?",
         "What is the monthly premium for Medicare Part B?",
@@ -94,7 +95,7 @@ import pandas as pd
 pd.DataFrame(embeddings).to_csv("embeddings.csv", index=False)
 ```
 
-> 编者注：这是演示级的存法。生产 RAG 中，嵌入会连同原文一起存入向量数据库（FAISS、Chroma、Milvus、pgvector 等，见「数据库」与本模块第 05/06 篇），由其负责索引与近邻搜索。
+> 编者注：这是演示级的存法。生产 RAG 中，嵌入会连同原文一起存入向量数据库（FAISS、Chroma、Milvus、pgvector 等，选型与度量的关系见《向量检索与相似度：欧氏距离、点积与余弦相似度》《Embedding 模型选型：四轴决策与本地实测》），由其负责索引与近邻搜索。
 
 ### 3. 找出与查询最相似的 FAQ
 
@@ -137,7 +138,7 @@ print([texts[hits[0][i]['corpus_id']] for i in range(len(hits[0]))])
  'Will my Medicare premiums be higher because of my higher income?']
 ```
 
-这就是与客户查询最接近的 5 条 FAQ。很棒！这里我们用 PyTorch 和 Sentence Transformers 作为主要数值工具，其实余弦相似度与排序函数也完全可以用 NumPy、SciPy 自己实现（下一章《向量检索与相似度》会手工实现这些度量）。
+这就是与客户查询最接近的 5 条 FAQ。很棒！这里我们用 PyTorch 和 Sentence Transformers 作为主要数值工具，其实余弦相似度与排序函数也完全可以用 NumPy、SciPy 自己实现（《向量检索与相似度：欧氏距离、点积与余弦相似度》会手工实现这些度量）。
 
 ## 继续深入的资源（编者按当前版整理）
 
@@ -159,4 +160,4 @@ print([texts[hits[0][i]['corpus_id']] for i in range(len(hits[0]))])
 ---
 
 > **来源**：本文翻译自 [Getting Started With Embeddings](https://huggingface.co/blog/getting-started-with-embeddings)，作者 Omar Espejel（Hugging Face Blog），许可署名转载（博客仓库未附独立开源许可，仅作教学署名转载）。抓取于 2026-09-13。
-> 原文通过彼时的 Hugging Face Inference API 发请求生成嵌入，该端点已被 Inference Providers 取代；编者按当前稳定做法将示例改写为本地 `SentenceTransformers` 调用（语义不变），并在文中标注。
+> 原文通过彼时的 Hugging Face Inference API 发请求生成嵌入，该端点已被 Inference Providers 取代；编者按当前稳定做法将示例改写为本地 `SentenceTransformer` 调用（语义不变），并在文中标注。

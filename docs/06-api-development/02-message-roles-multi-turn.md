@@ -187,6 +187,8 @@ response_two_forked = client.responses.create(
 
 > 编者提示：API 托管状态依赖服务端存储（与 `store` 参数相关）；对数据保留有合规要求的应用，仍应选择自管历史。
 
+上面三个玩法是"会话状态归谁管"的最小认知；`previous_response_id` 与 `conversation` 的**互斥关系**、`store=False` 时不能续链、断流后用 `starting_after` 续传、以及删链的顺序这些工程细节，在《Responses API 会话与后台任务：conversation、store 与断流续传》里完整展开，本篇不重复。
+
 ## 五、Counting Tokens：预估历史开销
 
 提交请求时，消息序列会被转换成 token 序列。原文给出一个用 tiktoken 估算消息列表 token 数的函数骨架（模型相关常量随模型而变，此处按现行模型示意——精确计数建议直接读响应的 `usage.prompt_tokens` 回填校准）：

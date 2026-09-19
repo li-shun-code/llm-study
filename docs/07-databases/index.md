@@ -15,9 +15,7 @@ AI 应用的数据底座：SQL 与建模、PostgreSQL 工程化、缓存与文�
 - 关系模型与 SQL 入门
 - E-R 建模与范式：以"会话-消息"表设计为例
 - SELECT 与增删改查（CRUD）
-- 聚合与分组：GROUP BY、HAVING 与聚合函数
-- JOIN 多表查询
-- 索引原理与使用
+- SQL 查询实战：聚合、JOIN 与索引
 - 事务与 ACID
 
 **PostgreSQL 与工程化**
@@ -39,6 +37,6 @@ AI 应用的数据底座：SQL 与建模、PostgreSQL 工程化、缓存与文�
 - 向量数据库原理
 - Chroma 与 Qdrant 单库实战
 - Milvus 与 pgvector 实战
-- 向量库选型对比
+- 向量库选型：用基准测试代替宣传页
 
 > 本模块文章全部抓取/翻译自网络公开资料，每篇文末均附署名块标注原文出处与许可。

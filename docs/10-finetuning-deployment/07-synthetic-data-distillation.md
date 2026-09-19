@@ -238,7 +238,7 @@ training_args = DistillationConfig(
 | 适用场景 | 快速扩充领域数据、冷启动 | 压缩能力/风格、对齐小模型分布 |
 | 代表方法 | SelfInstruct / EvolInstruct / Magpie | GKD / On-Policy Distillation（Qwen3、Gemini 等团队公开报告均在使用） |
 
-实践中常见组合：**先用大模型合成指令数据做 SFT 冷启动，再用 on-policy 蒸馏拉齐分布**；合成的偏好数据（chosen/rejected 由不同大模型打分产生）则喂给 DPO（见 [DPO 与偏好优化](./11-dpo-preference-optimization)）。
+实践中常见组合：**先用大模型合成指令数据做 SFT 冷启动，再用 on-policy 蒸馏拉齐分布**；合成的偏好数据（chosen/rejected 由不同大模型打分产生）则喂给 DPO（见 [DPO 与偏好优化](./13-dpo-preference-optimization)）。
 
 ## 小结
 

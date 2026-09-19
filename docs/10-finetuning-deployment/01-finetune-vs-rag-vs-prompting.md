@@ -96,7 +96,7 @@ group: 选型与训练环境
 ## 延伸阅读
 
 - 原课程的配套视频《To fine-tune or not to fine-tune》
-- 本模块后续文章：[训练范式回顾与全参微调](./03-training-paradigms-full-finetuning)、[LoRA 原理](./04-lora-principles)、[DPO 与偏好优化](./11-dpo-preference-optimization)
+- 本模块后续文章：[训练范式回顾与全参微调](./03-training-paradigms-full-finetuning)、[LoRA 原理](./04-lora-principles)、[DPO 与偏好优化](./13-dpo-preference-optimization)
 
 ---
 

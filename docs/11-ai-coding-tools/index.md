@@ -6,7 +6,7 @@ isRoot: true
 
 # 模块 11 · AI 编程工具与环境
 
-先把工装修起来、跑起来：Vibe Coding 的概念边界、工具全景与评测、Claude Code 与 Cursor 上手、权限与成本。
+先把工装修起来、跑起来：Vibe Coding 的概念边界、工具全景与评测、四款主流工具（Claude Code、Cursor、Codex CLI、Copilot）的安装与配置矩阵、Claude Code 与 Cursor 的深入用法、权限与成本。
 
 ## 学习路径
 
@@ -24,7 +24,7 @@ isRoot: true
 
 **环境搭建**
 
-- 环境搭建：Claude Code 与 Cursor 的安装与配置矩阵
+- 环境搭建：Claude Code、Cursor、Codex CLI 与 Copilot 的安装与配置矩阵
 
 **Cursor 与其他工具**
 

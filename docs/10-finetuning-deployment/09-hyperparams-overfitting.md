@@ -126,7 +126,7 @@ TRL 团队用 SmolLM3-3B 在 OpenR1-Math-220k 数据集上（RL/GRPO 任务，Lo
 | 训练与验证都停在高位高位震荡 | 欠拟合 / 容量不足 | 提高秩（SFT 建议 256）、all-linear、加长训练 |
 | loss 先升后骤降 | 预热（warmup）机制正常工作 | 无需处理 |
 
-其他实用指标：`mean_token_accuracy`（SFT 时 token 级准确率，比 loss 更直观）、`grad_norm`（裁剪前梯度范数，长期 >1 说明学习率偏大）、DPO 的 `rewards/accuracies` 与 `rewards/margins`（见 [DPO 与偏好优化](./11-dpo-preference-optimization)）。
+其他实用指标：`mean_token_accuracy`（SFT 时 token 级准确率，比 loss 更直观）、`grad_norm`（裁剪前梯度范数，长期 >1 说明学习率偏大）、DPO 的 `rewards/accuracies` 与 `rewards/margins`（见 [DPO 与偏好优化](./13-dpo-preference-optimization)）。
 
 ## 超参速查表（编者注）
 

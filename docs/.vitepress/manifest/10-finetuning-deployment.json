@@ -83,83 +83,107 @@
     },
     {
       "order": 11,
+      "topic": "LLaMA-Factory 与 Unsloth 实战对比：配置式 vs 代码式微调",
+      "url": "https://github.com/hiyouga/LLaMA-Factory",
+      "author": "hiyouga 等（LLaMA-Factory 官方 README）、Unsloth AI（Unsloth 官方 README 与文档）",
+      "license": "Apache 2.0（LLaMA-Factory）、Apache 2.0 + AGPL-3.0 双许可（Unsloth：核心包 Apache 2.0，Unsloth Studio UI 为 AGPL-3.0）",
+      "file": "11-llama-factory-vs-unsloth.md"
+    },
+    {
+      "order": 12,
+      "topic": "LoRA 家族与 DoRA：把低秩更新拆成方向与幅值",
+      "url": "https://arxiv.org/abs/2402.09353",
+      "author": "Shih-Yang Liu、Chien-Yi Wang、Hongxu Yin、Pavlo Molchanov、Yu-Chiang Frank Wang 等（NVIDIA，DoRA 论文）；Hugging Face（PEFT 实现）",
+      "license": "论文按 arXiv 页面所列许可转述要点与公式；PEFT 源码为 Apache 2.0（本文代码与配置项说明译自其 `src/peft/tuners/lora/config.py` 主分支）",
+      "file": "12-dora-lora-variants.md"
+    },
+    {
+      "order": 13,
       "topic": "DPO 与偏好优化：TRL DPOTrainer 实践",
       "url": "https://huggingface.co/docs/trl/dpo_trainer",
       "author": "Hugging Face（TRL 文档）",
       "license": "Apache 2.0",
-      "file": "11-dpo-preference-optimization.md"
+      "file": "13-dpo-preference-optimization.md"
     },
     {
-      "order": 12,
+      "order": 14,
       "topic": "GRPO 与 RLVR：推理模型强化学习实战",
       "url": "https://huggingface.co/docs/trl/main/grpo_trainer",
       "author": "Hugging Face（TRL 官方文档）、DeepSeek-AI（DeepSeek-R1 官方仓库 README）",
       "license": "Apache 2.0（TRL）、MIT（DeepSeek-R1）",
-      "file": "12-grpo-rlvr.md"
+      "file": "14-grpo-rlvr.md"
     },
     {
-      "order": 13,
+      "order": 15,
       "topic": "模型量化基础：Transformers 量化总览与 bitsandbytes",
       "url": "https://huggingface.co/docs/transformers/quantization/overview",
       "author": "Hugging Face（Transformers 官方文档）、bitsandbytes-foundation（bitsandbytes 官方 README）",
       "license": "Apache 2.0（Transformers 文档）、MIT（bitsandbytes）",
-      "file": "13-quantization-basics.md"
+      "file": "15-quantization-basics.md"
     },
     {
-      "order": 14,
+      "order": 16,
       "topic": "推理原理：KV Cache、PagedAttention 与 continuous batching——vLLM 为什么快",
       "url": "https://blog.vllm.ai/2023/06/20/vllm.html",
       "author": "Woosuk Kwon、Zhuohan Li（UC Berkeley，vLLM 团队）",
       "license": "Apache 2.0（vLLM 项目）",
-      "file": "14-inference-principles.md"
+      "file": "16-inference-principles.md"
     },
     {
-      "order": 15,
+      "order": 17,
       "topic": "Ollama 本地部署：官方 README 与文档完整指南",
       "url": "https://github.com/ollama/ollama",
       "author": "Ollama 团队（GitHub 官方 README 与 docs.ollama.com 官方文档）",
       "license": "MIT",
-      "file": "15-ollama-local-deployment.md"
+      "file": "17-ollama-local-deployment.md"
     },
     {
-      "order": 16,
-      "topic": "vLLM 高吞吐部署：从 vllm serve 到 Docker 容器化",
+      "order": 18,
+      "topic": "vLLM 高吞吐部署：从 vllm serve 到多 LoRA、前缀缓存与投机解码",
       "url": "https://docs.vllm.ai/en/latest/getting_started/quickstart.html",
       "author": "vLLM 项目",
       "license": "Apache 2.0",
-      "file": "16-vllm-high-throughput-deployment.md"
+      "file": "18-vllm-high-throughput-deployment.md"
     },
     {
-      "order": 17,
+      "order": 19,
       "topic": "推理服务生产化运维：Kubernetes、production stack 与负载均衡",
       "url": "https://docs.vllm.ai/en/latest/deployment/k8s/",
       "author": "vLLM 项目（vLLM 官方文档 deployment 章节）",
       "license": "Apache 2.0",
-      "file": "17-inference-serving-production.md"
+      "file": "19-inference-serving-production.md"
     },
     {
-      "order": 18,
+      "order": 20,
+      "topic": "前缀缓存与 KV 复用在多轮对话与 RAG 中的实战",
+      "url": "https://github.com/vllm-project/vllm/blob/main/docs/design/prefix_caching.md",
+      "author": "vLLM 项目（官方设计文档与特性文档）",
+      "license": "Apache 2.0",
+      "file": "20-prefix-caching-kv-reuse.md"
+    },
+    {
+      "order": 21,
       "topic": "开源模型选型：Qwen、GLM、DeepSeek 官方模型卡对照（2026-09）",
       "url": "https://github.com/QwenLM/Qwen3.5",
       "author": "Qwen 团队、智谱 Z.ai（GLM 团队）、DeepSeek-AI（三家官方 README）",
       "license": "Apache 2.0（Qwen/GLM）、MIT（DeepSeek）",
-      "file": "18-open-model-selection.md"
+      "file": "21-open-model-selection.md"
     },
     {
-      "order": 19,
+      "order": 22,
       "topic": "LLM 评测方法与基准：lm-evaluation-harness README 完整指南",
       "url": "https://github.com/EleutherAI/lm-evaluation-harness",
       "author": "EleutherAI（lm-evaluation-harness 官方 README）",
       "license": "MIT",
-      "file": "19-evaluation-benchmarks.md"
+      "file": "22-evaluation-benchmarks.md"
     },
     {
-      "order": 20,
+      "order": 23,
       "topic": "安全、合规与内容护栏：OWASP LLM Top 10 与 NeMo Guardrails",
       "url": "https://genai.owasp.org/llm-top-10/",
       "author": "OWASP GenAI Security Project、NVIDIA（NeMo Guardrails）",
       "license": "CC BY-SA 4.0（OWASP 内容）、Apache 2.0（NeMo Guardrails）",
-      "file": "20-safety-guardrails.md"
+      "file": "23-safety-guardrails.md"
     }
   ]
 }

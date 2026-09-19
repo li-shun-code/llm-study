@@ -19,7 +19,7 @@
     },
     {
       "order": 3,
-      "topic": "思维链提示（Chain-of-Thought）",
+      "topic": "思维链与多路采样：CoT、Self-Consistency 与失效边界",
       "url": "https://www.promptingguide.ai/techniques/cot",
       "author": "DAIR.AI（Elvis Saravia）",
       "license": "MIT",
@@ -43,35 +43,59 @@
     },
     {
       "order": 6,
+      "topic": "推理模型时代的提示原则",
+      "url": "https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide",
+      "author": "OpenAI（OpenAI Cookbook 团队）",
+      "license": "MIT（OpenAI Cookbook）",
+      "file": "06-reasoning-era-prompting.md"
+    },
+    {
+      "order": 7,
       "topic": "系统提示词设计",
       "url": "https://cookbook.openai.com/examples/gpt4-1_prompting_guide",
       "author": "OpenAI（Carrie Liu、Marco Ramponi 等）",
       "license": "MIT（OpenAI Cookbook）",
-      "file": "06-system-prompt-design.md"
+      "file": "07-system-prompt-design.md"
     },
     {
-      "order": 7,
+      "order": 8,
       "topic": "上下文工程：为 AI Agent 管理稀缺的注意力",
       "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
       "author": "Anthropic 应用 AI 团队（Prithvi Rajasekaran、Ethan Dixon、Carly Ryan、Jeremy Hadfield 等）",
       "license": "© Anthropic（官网工程博客，原文无开放许可声明；署名学习翻译）",
-      "file": "07-context-engineering.md"
+      "file": "08-context-engineering.md"
     },
     {
-      "order": 8,
+      "order": 9,
       "topic": "提示注入：最坏会发生什么？",
       "url": "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/",
       "author": "Simon Willison",
       "license": "© Simon Willison（博客原文无开放许可声明；署名学习翻译）",
-      "file": "08-prompt-injection.md"
+      "file": "09-prompt-injection.md"
     },
     {
-      "order": 9,
+      "order": 10,
       "topic": "提示词的迭代与评估方法",
       "url": "https://cookbook.openai.com/examples/gpt-5/prompt-optimization-cookbook",
       "author": "OpenAI（OpenAI Cookbook 团队）",
       "license": "MIT（OpenAI Cookbook）",
-      "file": "09-iterate-and-evaluate.md"
+      "file": "10-iterate-and-evaluate.md"
+    },
+    {
+      "order": 11,
+      "topic": "分隔符、结构化标签与注入边界",
+      "url": "https://simonwillison.net/2023/May/11/delimiters-wont-save-you/",
+      "author": "Simon Willison（边界机制部分另引 OpenAI / Anthropic 官方文档，见文末）",
+      "license": "© Simon Willison（博客原文无开放许可声明；署名学习翻译）；官方文档部分 MIT（OpenAI Cookbook）",
+      "file": "11-delimiters-and-injection-boundaries.md"
+    },
+    {
+      "order": 12,
+      "topic": "LLM-as-Judge 的偏差与校准",
+      "url": "https://arxiv.org/abs/2306.05685",
+      "author": "Lianmin Zheng 等（UC Berkeley / LMSYS、Stanford、SHAI、UCSD 等；MT-Bench 与 Chatbot Arena 团队）",
+      "license": "Apache 2.0（论文对应代码仓库 lm-sys/FastChat）；论文按 arXiv 分发",
+      "file": "12-llm-as-judge-bias.md"
     }
   ]
 }

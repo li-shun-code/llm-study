@@ -35,10 +35,10 @@
     },
     {
       "order": 5,
-      "topic": "环境搭建：Claude Code 与 Cursor 的安装及首次配置",
-      "url": "https://code.claude.com/docs/en/quickstart",
-      "author": "Anthropic（Claude Code 官方文档 Quickstart / Advanced setup）；Anysphere（Cursor 官方文档 Quickstart）",
-      "license": "署名翻译（两家官方文档版权归原厂所有，本文为教学用途的编译与翻译，逐节署名）",
+      "topic": "环境搭建：Claude Code、Cursor、Codex CLI 与 Copilot 的安装与配置矩阵",
+      "url": "https://code.claude.com/docs/en/setup",
+      "author": "Anthropic（Claude Code 官方文档 Setup / Settings / Model configuration / Authentication / Enterprise network configuration / Troubleshoot installation and login）；Anysphere（Cursor 官方文档 Quickstart、Rules、CLI Installation / Authentication / Configuration、Network configuration、Models and Pricing）；OpenAI（openai/codex 仓库 README、docs/install.md、docs/config.md 与 codex-rs 源码中的配置加载与登录实现）；GitHub（GitHub Copilot 官方文档 Install / Authenticate / Configure Copilot CLI、Change settings、CLI configuration directory、Copilot plans）",
+      "license": "署名翻译（各官方文档版权归原厂所有；openai/codex 仓库为 Apache-2.0；本文为教学用途的编译与翻译，逐节署名）",
       "file": "05-setup-claude-code-cursor.md"
     },
     {
@@ -60,7 +60,7 @@
     {
       "order": 8,
       "topic": "Cursor 入门与 Rules 规则系统",
-      "url": "https://cursor.com/docs/context/rules",
+      "url": "https://cursor.com/docs/rules",
       "author": "Anysphere（Cursor 官方文档）",
       "license": "署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）",
       "file": "08-cursor-rules.md"
@@ -83,11 +83,19 @@
     },
     {
       "order": 11,
+      "topic": "Codex CLI 深度使用：OpenAI 终端智能体的三层权限、AGENTS.md 与自动化",
+      "url": "https://github.com/openai/codex",
+      "author": "OpenAI（openai/codex 仓库 README、docs/、codex-rs/ 源码与提示词模板、GitHub Releases）",
+      "license": "Apache-2.0（openai/codex 仓库 LICENSE）",
+      "file": "11-codex-cli-deep-dive.md"
+    },
+    {
+      "order": 12,
       "topic": "成本管理：Token 消耗、订阅选择与用量优化",
       "url": "https://code.claude.com/docs/en/costs",
       "author": "Anthropic（Claude Code 官方文档 Manage costs effectively）",
       "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名）",
-      "file": "11-cost-management.md"
+      "file": "12-cost-management.md"
     }
   ]
 }

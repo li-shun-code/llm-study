@@ -19,43 +19,83 @@
     },
     {
       "order": 3,
-      "topic": "开源编码 Skills 精选：Superpowers 与 Anthropic 官方技能族深度指南",
+      "topic": "开源编码 Skills（一）：Superpowers 编码流程族",
       "url": "https://github.com/obra/superpowers",
-      "author": "Jesse Vincent; Anthropic",
-      "license": "各仓库许可（obra/superpowers 为 MIT；anthropics/skills 多数示例技能为 Apache-2.0，docx/pdf/pptx/xlsx 文档技能为源码可用，见各节署名）",
-      "file": "03-open-source-coding-skills.md"
+      "author": "Jesse Vincent 与 Prime Radiant 团队（obra/superpowers）",
+      "license": "MIT（obra/superpowers 仓库 LICENSE 文件为 \"MIT License, Copyright (c) 2025 Jesse Vincent\"）",
+      "file": "03-superpowers-coding-workflow-skills.md"
     },
     {
       "order": 4,
+      "topic": "开源编码 Skills（二）：技能写作与文档协作族",
+      "url": "https://github.com/anthropics/skills",
+      "author": "Anthropic（anthropics/skills）；Jesse Vincent 与 Prime Radiant 团队（obra/superpowers 的 writing-skills）",
+      "license": "anthropics/skills 各技能目录自带 LICENSE.txt（示例技能为 Apache-2.0，文档四件套为源码可用）；obra/superpowers 为 MIT",
+      "file": "04-skill-authoring-and-doc-skills.md"
+    },
+    {
+      "order": 5,
+      "topic": "开源编码 Skills（三）：工具集成族",
+      "url": "https://github.com/anthropics/skills",
+      "author": "Anthropic（anthropics/skills 的 mcp-builder、webapp-testing、web-artifacts-builder、claude-api、frontend-design）",
+      "license": "Apache-2.0（anthropics/skills example-skills 各技能目录附 LICENSE.txt）",
+      "file": "05-tool-integration-skills.md"
+    },
+    {
+      "order": 6,
+      "topic": "\"Claude Code Hooks：用确定性脚本守住智能体循环\"",
+      "url": "https://code.claude.com/docs/en/hooks-guide",
+      "author": "Anthropic（Claude Code 官方文档 Automate actions with hooks 与 Hooks reference）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名；编者补充部分已标明）",
+      "file": "06-claude-code-hooks.md"
+    },
+    {
+      "order": 7,
+      "topic": "大型与遗留代码库上的 AI 落地策略",
+      "url": "https://claude.com/blog/ai-code-migration",
+      "author": "Anthropic（claude.com 博客 How Anthropic runs large-scale code migrations with Claude Code，2026-07-16）；Anthropic（Claude Code 官方文档 Set up Claude Code in a monorepo or large codebase）",
+      "license": "署名翻译与摘要（官方博客与官方文档版权归 Anthropic PBC 所有，教学用途翻译并署名；编者补充部分已标明）",
+      "file": "07-ai-in-large-and-legacy-codebases.md"
+    },
+    {
+      "order": 8,
       "topic": "Spec 驱动开发（Spec-Driven Development）",
       "url": "https://github.com/github/spec-kit",
       "author": "GitHub（Spec Kit 项目 README，主篇）；Geoffrey Huntley（Ralph 实践视角，延伸）",
       "license": "MIT（Spec Kit README）；Ralph 文章署名转载",
-      "file": "04-spec-driven-development.md"
+      "file": "08-spec-driven-development.md"
     },
     {
-      "order": 5,
+      "order": 9,
       "topic": "MCP 在编码中的应用",
       "url": "https://code.claude.com/docs/en/mcp",
       "author": "Anthropic（Claude Code 官方文档）",
       "license": "署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）",
-      "file": "05-mcp-for-coding.md"
+      "file": "09-mcp-for-coding.md"
     },
     {
-      "order": 6,
+      "order": 10,
       "topic": "多智能体协作编码",
       "url": "https://code.claude.com/docs/en/agent-teams",
       "author": "Anthropic（Claude Code 官方文档，主篇）；Simon Willison（并行智能体生活方式，引言）",
       "license": "署名翻译（官方文档 Copyright Anthropic PBC）；引言部分博客署名转载",
-      "file": "06-multi-agent-collaboration.md"
+      "file": "10-multi-agent-collaboration.md"
     },
     {
-      "order": 7,
+      "order": 11,
       "topic": "Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体",
       "url": "https://code.claude.com/docs/en/headless",
-      "author": "Anthropic（Claude Code Headless、Agent SDK、GitHub Actions 官方文档）；GitHub（Copilot cloud agent 官方文档）；Microsoft（Copilot Copyright Commitment 相关声明见第 27 篇）",
+      "author": "Anthropic（Claude Code Headless、Agent SDK、GitHub Actions 官方文档）；GitHub（Copilot cloud agent 官方文档）；Microsoft（Copilot Copyright Commitment 相关声明见《AI 生成代码的 IP 与合规：版权承诺、责任边界与可版权性》）",
       "license": "署名翻译（Anthropic 与 GitHub 官方文档版权归原厂所有，教学用途编译翻译并署名）",
-      "file": "07-headless-ci-coding.md"
+      "file": "11-headless-ci-coding.md"
+    },
+    {
+      "order": 12,
+      "topic": "\"Subagents 与并行会话：把探索外包出去\"",
+      "url": "https://code.claude.com/docs/en/sub-agents",
+      "author": "Anthropic（Claude Code 官方文档 Create custom subagents、Run agents in parallel、Run parallel sessions with worktrees）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名；编者补充部分已标明）",
+      "file": "12-subagents-and-parallel-sessions.md"
     }
   ]
 }

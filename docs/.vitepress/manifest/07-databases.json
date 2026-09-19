@@ -27,131 +27,115 @@
     },
     {
       "order": 4,
-      "topic": "聚合与分组：GROUP BY、HAVING 与聚合函数",
-      "url": "https://www.postgresql.org/docs/current/tutorial-agg.html",
-      "author": "PostgreSQL Global Development Group",
-      "license": "PostgreSQL Licence",
-      "file": "04-aggregation-and-group-by.md"
-    },
-    {
-      "order": 5,
-      "topic": "JOIN 多表查询",
-      "url": "https://www.postgresql.org/docs/current/tutorial-join.html",
-      "author": "PostgreSQL Global Development Group",
-      "license": "PostgreSQL Licence",
-      "file": "05-joins.md"
-    },
-    {
-      "order": 6,
-      "topic": "索引原理与使用",
-      "url": "https://www.postgresql.org/docs/current/indexes-intro.html",
-      "author": "PostgreSQL Global Development Group",
-      "license": "PostgreSQL Licence",
-      "file": "06-indexes.md"
-    },
-    {
-      "order": 7,
       "topic": "事务与 ACID",
       "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
       "author": "PostgreSQL Global Development Group",
       "license": "PostgreSQL Licence",
-      "file": "07-transactions-and-acid.md"
+      "file": "04-transactions-and-acid.md"
     },
     {
-      "order": 8,
+      "order": 5,
+      "topic": "SQL 查询实战：聚合、JOIN 与索引",
+      "url": "https://www.postgresql.org/docs/current/tutorial-agg.html",
+      "author": "PostgreSQL Global Development Group",
+      "license": "PostgreSQL Licence",
+      "file": "05-sql-query-in-practice.md"
+    },
+    {
+      "order": 6,
       "topic": "PostgreSQL 入门",
       "url": "https://www.postgresql.org/docs/current/tutorial-createdb.html",
       "author": "PostgreSQL Global Development Group",
       "license": "PostgreSQL Licence",
-      "file": "08-postgresql-getting-started.md"
+      "file": "06-postgresql-getting-started.md"
     },
     {
-      "order": 9,
+      "order": 7,
       "topic": "SQLite 上手",
       "url": "https://www.sqlite.org/whentouse.html",
       "author": "SQLite Developers（sqlite.org）",
       "license": "Public Domain（公有领域）",
-      "file": "09-sqlite-getting-started.md"
+      "file": "07-sqlite-getting-started.md"
     },
     {
-      "order": 10,
+      "order": 8,
       "topic": "PostgreSQL 全文检索（含中文分词）",
       "url": "https://www.postgresql.org/docs/current/textsearch.html",
       "author": "PostgreSQL Global Development Group；amutu（zhparser）；Pan Jiamin（pg_jieba）",
       "license": "PostgreSQL Licence；zhparser 为 PostgreSQL 许可风格许可；pg_jieba 为 BSD-3-Clause",
-      "file": "10-postgresql-full-text-search.md"
+      "file": "08-postgresql-full-text-search.md"
     },
     {
-      "order": 11,
+      "order": 9,
       "topic": "SQLAlchemy ORM 入门（2.0 风格，含连接池）",
       "url": "https://docs.sqlalchemy.org/en/20/orm/quickstart.html",
       "author": "SQLAlchemy authors and contributors",
       "license": "MIT",
-      "file": "11-sqlalchemy-orm.md"
+      "file": "09-sqlalchemy-orm.md"
     },
     {
-      "order": 12,
+      "order": 10,
       "topic": "Alembic 数据库迁移",
       "url": "https://alembic.sqlalchemy.org/en/latest/tutorial.html",
       "author": "Mike Bayer / SQLAlchemy 作者与贡献者（Alembic 项目）",
       "license": "MIT",
-      "file": "12-alembic-database-migrations.md"
+      "file": "10-alembic-database-migrations.md"
     },
     {
-      "order": 13,
+      "order": 11,
       "topic": "Redis 核心数据结构与缓存",
       "url": "https://redis.io/docs/latest/develop/data-types/",
       "author": "Redis Ltd.（redis-doc 文档仓库）",
       "license": "CC BY-SA 4.0",
-      "file": "13-redis-data-structures-and-cache.md"
+      "file": "11-redis-data-structures-and-cache.md"
     },
     {
-      "order": 14,
+      "order": 12,
       "topic": "Redis 语义缓存与 RediSearch（含向量检索）",
       "url": "https://redis.io/docs/latest/develop/interact/search-and-query/",
       "author": "Redis Ltd.（redis/docs 文档仓库）",
       "license": "CC BY-SA 4.0",
-      "file": "14-redis-semantic-cache-and-redisearch.md"
+      "file": "12-redis-semantic-cache-and-redisearch.md"
     },
     {
-      "order": 15,
+      "order": 13,
       "topic": "MongoDB 文档模型",
       "url": "https://www.mongodb.com/docs/manual/core/document/",
       "author": "MongoDB Inc.（MongoDB 文档手册）",
       "license": "CC BY-NC-SA 3.0 US",
-      "file": "15-mongodb-document-model.md"
+      "file": "13-mongodb-document-model.md"
+    },
+    {
+      "order": 14,
+      "topic": "向量数据库原理：从 HNSW 论文与公开基准说起",
+      "url": "https://arxiv.org/abs/1603.09320",
+      "author": "Yury A. Malkov, Dmitry A. Yashunin（arXiv:1603.09320）；Martin Aumueller / Erik Bernhardsson / Alec Faitfull（ann-benchmarks）；pgvector、Qdrant、Milvus 官方文档与源码",
+      "license": "arXiv 论文按预印本署名学习翻译；ann-benchmarks 为 MIT；pgvector 为 PostgreSQL Licence；Qdrant / Milvus 文档与源码为 Apache-2.0",
+      "file": "14-vector-database-principles.md"
+    },
+    {
+      "order": 15,
+      "topic": "Chroma 与 Qdrant 单库实战",
+      "url": "https://docs.trychroma.com/docs/overview/getting-started",
+      "author": "Chroma（docs.trychroma.com 官方文档）、Qdrant 与 qdrant-client（官方仓库 README）",
+      "license": "Apache-2.0（chroma-core/chroma、qdrant/qdrant、qdrant/qdrant-client 三个仓库的 LICENSE 均为 Apache-2.0；Chroma 文档站内容按项目文档署名转载）",
+      "file": "15-chroma-qdrant-quickstart.md"
     },
     {
       "order": 16,
-      "topic": "向量数据库原理",
-      "url": "https://milvus.io/docs/overview.md",
-      "author": "Milvus（Zilliz / LF AI & Data Foundation）",
-      "license": "Apache-2.0",
-      "file": "16-vector-database-principles.md"
+      "topic": "Milvus 与 pgvector 实战",
+      "url": "https://raw.githubusercontent.com/milvus-io/milvus-docs/v3.0.x/site/en/getstarted/quickstart.md",
+      "author": "Milvus 官方文档（milvus-docs v3.0.x）/ pgvector（Andrew Kane）",
+      "license": "Apache-2.0（Milvus）/ PostgreSQL Licence（pgvector）",
+      "file": "16-milvus-pgvector-quickstart.md"
     },
     {
       "order": 17,
-      "topic": "Chroma 与 Qdrant 单库实战",
-      "url": "https://github.com/qdrant/qdrant",
-      "author": "Qdrant / Chroma（两项目官方 README）",
-      "license": "Apache-2.0",
-      "file": "17-chroma-qdrant-quickstart.md"
-    },
-    {
-      "order": 18,
-      "topic": "Milvus 与 pgvector 实战",
-      "url": "https://milvus.io/docs/quickstart.md",
-      "author": "Milvus（Zilliz）/ pgvector（Andrew Kane）",
-      "license": "Apache-2.0 / PostgreSQL Licence",
-      "file": "18-milvus-pgvector-quickstart.md"
-    },
-    {
-      "order": 19,
-      "topic": "向量库选型对比",
-      "url": "https://milvus.io/docs/comparison.md",
-      "author": "Milvus（Zilliz）",
-      "license": "Apache-2.0",
-      "file": "19-vector-db-comparison.md"
+      "topic": "向量库选型：用基准测试代替宣传页",
+      "url": "https://ann-benchmarks.com/",
+      "author": "Erik Bernhardsson、Martin Aumüller、Alexander Faithfull（ann-benchmarks）；pgvector、Qdrant、Milvus、Chroma 官方文档",
+      "license": "MIT（erikbern/ann-benchmarks）；Apache-2.0（Milvus / Qdrant / Chroma 文档与源码）；PostgreSQL Licence（pgvector）；arXiv 论文按预印本署名引用。本页不采用任何厂商互评材料",
+      "file": "17-vector-db-comparison.md"
     }
   ]
 }

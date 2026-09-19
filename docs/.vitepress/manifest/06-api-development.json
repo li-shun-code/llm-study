@@ -27,107 +27,147 @@
     },
     {
       "order": 4,
+      "topic": "Responses API 会话与后台任务：conversation、store 与断流续传",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/src/openai/resources/responses/responses.py",
+      "author": "OpenAI（openai-python SDK 源码与文档字符串、Cookbook responses_example.ipynb）",
+      "license": "Apache 2.0 / MIT",
+      "file": "04-responses-session-and-background.md"
+    },
+    {
+      "order": 5,
       "topic": "Function Calling / Tool Use：让模型调用你的函数",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_call_functions_with_chat_models.ipynb",
       "author": "OpenAI Cookbook（How to call functions with chat models、responses_api_tool_orchestration.ipynb）",
       "license": "MIT",
-      "file": "04-function-calling.md"
-    },
-    {
-      "order": 5,
-      "topic": "Responses API 托管工具：web_search、file_search、code_interpreter 与图像生成",
-      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb",
-      "author": "OpenAI Cookbook（responses_example、File_Search_Responses、introduction_to_deep_research_api、Generate_Images_With_GPT_Image）",
-      "license": "MIT",
-      "file": "05-hosted-tools.md"
+      "file": "05-function-calling.md"
     },
     {
       "order": 6,
+      "topic": "Responses API 托管工具总览与 web_search",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/tool.py",
+      "author": "OpenAI（openai-python SDK 类型定义、Cookbook responses_example.ipynb）",
+      "license": "Apache 2.0 / MIT",
+      "file": "06-hosted-tools.md"
+    },
+    {
+      "order": 7,
       "topic": "JSON Mode 与结构化输出（Structured Outputs）",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Structured_Outputs_Intro.ipynb",
       "author": "OpenAI Cookbook（Introduction to Structured Outputs）、OpenAI（openai-python helpers 文档）",
       "license": "MIT / Apache 2.0",
-      "file": "06-json-mode-structured-outputs.md"
+      "file": "07-json-mode-structured-outputs.md"
     },
     {
-      "order": 7,
+      "order": 8,
+      "topic": "文件检索与代码解释器：file_search 与 code_interpreter",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/File_Search_Responses.ipynb",
+      "author": "OpenAI Cookbook（File_Search_Responses、introduction_to_deep_research_api）",
+      "license": "MIT",
+      "file": "08-file-search-and-code-interpreter.md"
+    },
+    {
+      "order": 9,
+      "topic": "MCP 客户端接入：把外部工具生态接到你的模型调用里",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/src/openai/types/responses/tool.py",
+      "author": "OpenAI（openai-python SDK 类型定义）；Model Context Protocol 项目（python-sdk README）",
+      "license": "Apache 2.0 / MIT",
+      "file": "09-mcp-client-integration.md"
+    },
+    {
+      "order": 10,
       "topic": "错误处理、重试与限流",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_handle_rate_limits.ipynb",
       "author": "OpenAI Cookbook（How to handle rate limits）、OpenAI（openai-python README · Handling errors / Retries / Timeouts）",
       "license": "MIT / Apache 2.0",
-      "file": "07-error-retry-rate-limits.md"
+      "file": "10-error-retry-rate-limits.md"
     },
     {
-      "order": 8,
+      "order": 11,
       "topic": "Moderation API 与内容过滤",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_use_moderation.ipynb",
       "author": "OpenAI Cookbook",
       "license": "MIT",
-      "file": "08-moderation-api.md"
+      "file": "11-moderation-api.md"
     },
     {
-      "order": 9,
+      "order": 12,
       "topic": "成本与 Token 优化：Prompt Caching 与 Batch API",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Prompt_Caching101.ipynb",
       "author": "OpenAI Cookbook（Prompt Caching 101、Batch processing with the Batch API）",
       "license": "MIT",
-      "file": "09-cost-token-optimization.md"
+      "file": "12-cost-token-optimization.md"
     },
     {
-      "order": 10,
+      "order": 13,
       "topic": "模型版本与弃用管理",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/data/oai_docs/deprecations.txt",
       "author": "OpenAI（Deprecations 文档、Prompt Migration Guide）、openai-python（README）、Microsoft（Azure OpenAI v1 API 文档）",
       "license": "MIT（OpenAI Cookbook 收录部分）与 Apache 2.0（openai-python 部分）；Azure 部分为 © Microsoft 学习翻译",
-      "file": "10-model-deprecation.md"
+      "file": "13-model-deprecation.md"
     },
     {
-      "order": 11,
-      "topic": "视觉理解 API：把图片喂给多模态模型",
-      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
-      "author": "OpenAI（openai-python README · Vision）、OpenAI Cookbook（Tag caption images with GPT-4V）",
-      "license": "Apache 2.0 / MIT",
-      "file": "11-vision-api.md"
+      "order": 14,
+      "topic": "生产可观测性：OpenTelemetry GenAI 语义约定与调用侧埋点",
+      "url": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-spans.md",
+      "author": "OpenTelemetry（semantic-conventions-genai 仓库，Apache 2.0）",
+      "license": "Apache 2.0",
+      "file": "14-otel-genai-observability.md"
     },
     {
-      "order": 12,
+      "order": 15,
+      "topic": "并发请求限流：信号量、令牌桶与超时预算的完整实现",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/api_request_parallel_processor.py",
+      "author": "OpenAI Cookbook（api_request_parallel_processor.py）",
+      "license": "MIT",
+      "file": "15-concurrency-and-rate-limiting.md"
+    },
+    {
+      "order": 16,
+      "topic": "视觉理解与图像生成：把图片喂给多模态模型，也让它画图",
+      "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/multimodal/document_and_multimodal_understanding_tips.ipynb",
+      "author": "OpenAI Cookbook（Getting the Most out of GPT-5.4 for Vision and Document Understanding、Tag and caption images with GPT-4o mini、Generate and edit images with GPT Image）、OpenAI（openai-python README · Vision）",
+      "license": "MIT / Apache 2.0",
+      "file": "16-vision-api.md"
+    },
+    {
+      "order": 17,
       "topic": "Embedding API 与文本相似度",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Get_embeddings_from_dataset.ipynb",
       "author": "OpenAI Cookbook（Get embeddings from dataset、Semantic text search using embeddings）",
       "license": "MIT",
-      "file": "12-embeddings-similarity.md"
+      "file": "17-embeddings-similarity.md"
     },
     {
-      "order": 13,
+      "order": 18,
       "topic": "语音 API：转写、合成与实时会话（选学）",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Speech_transcription_methods.ipynb",
       "author": "OpenAI Cookbook（Comparing Speech-to-Text Methods、Steering Text-to-Speech）、OpenAI（openai-python README · Realtime）",
       "license": "MIT / Apache 2.0",
-      "file": "13-speech-api.md"
+      "file": "18-speech-api.md"
     },
     {
-      "order": 14,
+      "order": 19,
       "topic": "OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型",
       "url": "https://docs.litellm.ai/docs/",
       "author": "BerriAI（LiteLLM 官方文档）",
       "license": "MIT（enterprise 目录除外）",
-      "file": "14-openai-compatible-litellm.md"
+      "file": "19-openai-compatible-litellm.md"
     },
     {
-      "order": 15,
+      "order": 20,
       "topic": "用 FastAPI 封装 LLM 服务",
       "url": "https://fastapi.tiangolo.com/zh/tutorial/first-steps/",
       "author": "FastAPI 官方文档（中文版，tiangolo）",
       "license": "MIT",
-      "file": "15-fastapi-llm-service.md"
+      "file": "20-fastapi-llm-service.md"
     },
     {
-      "order": 16,
+      "order": 21,
       "topic": "实战：命令行聊天机器人",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb",
       "author": "OpenAI Cookbook（How to stream completions、responses_example.ipynb）、OpenAI（openai-python README）",
       "license": "MIT / Apache 2.0",
-      "file": "16-cli-chatbot-practice.md"
+      "file": "21-cli-chatbot-practice.md"
     }
   ]
 }

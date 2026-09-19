@@ -91,13 +91,13 @@ Claude 的上下文窗口容纳：对话历史、文件内容、命令输出、C
 
 ## 六、两种保险丝：检查点与权限
 
-同页官方还概述了两道安全机制，这里一并译出作为后面两篇的引子：
+同页官方还概述了两道安全机制，这里一并译出作为引子——**两道闸门的完整机制只在一处展开**：权限侧看《Claude Code 权限系统与安全机制》，跨工具的另一种权限建模看《Codex CLI 深度使用：OpenAI 终端智能体的三层权限、AGENTS.md 与自动化》。
 
 - **检查点（checkpoints）**：文件编辑可回滚。Claude 编辑文件前会先快照当前内容；出问题时按两次 `Esc` 回到之前的状态，或直接让它撤销。检查点独立于 git，恢复会话后依然可用；只覆盖文件改动，远程系统操作（数据库、API、部署）不在其列。
-- **权限（permissions）**：按模式设定 Claude 不问你的许可就能做什么——**Auto**（分类器后台审查、拦截高危动作）、**Manual**（改文件与跑命令前先问）、**Accept edits**（直接改文件、跑常见文件系统命令）、**Plan**（只探索并给出计划，不动源文件）。也可以在 `.claude/settings.json` 里放行特定命令。
+- **权限（permissions）**：按模式设定 Claude 不问你的许可就能做什么，日常用到的是 **Auto**、**Manual**、**Accept edits**、**Plan** 四档；也可以在 `.claude/settings.json` 里放行特定命令。各档到底"不问就执行"什么、哪些动作任何模式下都要问，见《Claude Code 权限系统与安全机制》。
 
 ---
 
-> 延伸阅读：心智模型建立完毕后进入单工具深入——《Claude Code 工作流与最佳实践》译出 Anthropic 官方的最佳实践，把"探索→计划→实现→提交"的完整工作流讲透；《环境搭建：Claude Code 与 Cursor 的安装与配置矩阵》解决"装到哪一步、配置读哪一层"。
+> 延伸阅读：心智模型建立完毕后进入单工具深入——《Claude Code 工作流与最佳实践》译出 Anthropic 官方的最佳实践，把"探索→计划→实现→提交"的完整工作流讲透；《环境搭建：Claude Code、Cursor、Codex CLI 与 Copilot 的安装与配置矩阵》解决"装到哪一步、配置读哪一层"。
 
 > **来源**：本文第一至四、六节翻译自 [How Claude Code works](https://code.claude.com/docs/en/how-claude-code-works) 与 [Explore the context window](https://code.claude.com/docs/en/context-window)（Claude Code 官方文档，2026-09 当前版），作者 Anthropic，许可署名翻译（Copyright Anthropic PBC，教学用途）；第五节"分词"为本站编者补充并已标明。抓取于 2026-09-13。

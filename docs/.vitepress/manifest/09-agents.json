@@ -11,9 +11,9 @@
     },
     {
       "order": 2,
-      "topic": "ReAct 范式：思考、行动与观察的循环",
+      "topic": "\"ReAct 范式：循环的机制与工程实现\"",
       "url": "https://huggingface.co/learn/agents-course/en/unit1/thoughts",
-      "author": "Hugging Face Agents Course 团队",
+      "author": "Hugging Face Agents Course 团队（概念底座）；机制与代码为对照官方 API 的工程化整理",
       "license": "Apache 2.0",
       "file": "02-react-paradigm.md"
     },
@@ -67,115 +67,123 @@
     },
     {
       "order": 9,
+      "topic": "Agent Skills：用文件夹给智能体装上可复用的专业能力",
+      "url": "https://github.com/agentskills/agentskills",
+      "author": "agentskills 社区（规范由 Anthropic 首创并开放）、Anthropic（anthropics/skills 示例仓库）",
+      "license": "Apache 2.0（agentskills/agentskills 仓库 LICENSE 为 Apache-2.0；anthropics/skills 中文档类 Skill 为 source-available，本篇未译其正文）",
+      "file": "09-agent-skills.md"
+    },
+    {
+      "order": 10,
       "topic": "Agent 记忆机制：LangGraph 的短期记忆与长期记忆",
       "url": "https://docs.langchain.com/oss/python/langgraph/add-memory",
       "author": "LangChain 团队（LangGraph 官方文档）",
       "license": "MIT",
-      "file": "09-agent-memory.md"
+      "file": "10-agent-memory.md"
     },
     {
-      "order": 10,
+      "order": 11,
       "topic": "长期记忆系统进阶：Mem0、Letta 与 Zep",
       "url": "https://github.com/mem0ai/mem0",
       "author": "mem0ai/mem0、letta-ai/letta、getzep/zep（三家官方仓库 README 整合）",
       "license": "Apache 2.0",
-      "file": "10-agent-memory-systems.md"
+      "file": "11-agent-memory-systems.md"
     },
     {
-      "order": 11,
+      "order": 12,
       "topic": "长时运行 Agent 的上下文管理：压缩（Compaction）",
       "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
       "author": "Anthropic Engineering、LangChain 团队（LangChain / Deep Agents 官方文档）、Anthropic（Claude Code 官方文档）",
       "license": "原文页面未附开源许可，按署名转载处理（LangChain 文档部分为 MIT）",
-      "file": "11-agent-context-compaction.md"
+      "file": "12-agent-context-compaction.md"
     },
     {
-      "order": 12,
+      "order": 13,
       "topic": "LangGraph 入门：用 Graph API 与 Functional API 构建你的第一个智能体",
       "url": "https://docs.langchain.com/oss/python/langgraph/quickstart",
       "author": "LangChain 团队（LangGraph 官方文档）",
       "license": "MIT",
-      "file": "12-langgraph-quickstart.md"
+      "file": "13-langgraph-quickstart.md"
     },
     {
-      "order": 13,
+      "order": 14,
       "topic": "LangChain 快速入门（1.0 · create_agent）",
       "url": "https://docs.langchain.com/oss/python/langchain/quickstart",
       "author": "LangChain（官方文档 Quickstart，langchain-ai/docs）",
       "license": "MIT",
-      "file": "13-langchain-quickstart.md"
+      "file": "14-langchain-quickstart.md"
     },
     {
-      "order": 14,
+      "order": 15,
       "topic": "多智能体模式：Anthropic 如何构建多智能体研究系统",
       "url": "https://www.anthropic.com/engineering/built-multi-agent-research-system",
       "author": "Jeremy Hadfield、Barry Zhang、Kenneth Lien、Florian Scholz、Jeremy Fox、Daniel Ford（Anthropic）",
       "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
-      "file": "14-multi-agent-patterns.md"
+      "file": "15-multi-agent-patterns.md"
     },
     {
-      "order": 15,
+      "order": 16,
       "topic": "Human-in-the-Loop：用 LangGraph interrupt 实现中断、恢复与人工审批",
       "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
       "author": "LangChain 团队（LangGraph 官方文档）",
       "license": "MIT",
-      "file": "15-human-in-the-loop.md"
+      "file": "16-human-in-the-loop.md"
     },
     {
-      "order": 16,
+      "order": 17,
       "topic": "AutoGen 与 CrewAI：多智能体框架现状（AutoGen 已并入 Microsoft Agent Framework）",
       "url": "https://github.com/microsoft/agent-framework",
       "author": "Microsoft（Agent Framework 团队）、CrewAIInc 贡献者",
       "license": "MIT",
-      "file": "16-autogen-crewai.md"
-    },
-    {
-      "order": 17,
-      "topic": "OpenAI Agents SDK：轻量多智能体框架入门",
-      "url": "https://github.com/openai/openai-agents-python",
-      "author": "OpenAI",
-      "license": "MIT",
-      "file": "17-openai-agents-sdk.md"
+      "file": "17-autogen-crewai.md"
     },
     {
       "order": 18,
+      "topic": "\"OpenAI Agents SDK 实战：从第一个 Agent 到交接、护栏与会话\"",
+      "url": "https://openai.github.io/openai-agents-python/",
+      "author": "OpenAI（Agents SDK 官方文档与源码）",
+      "license": "MIT",
+      "file": "18-openai-agents-sdk.md"
+    },
+    {
+      "order": 19,
       "topic": "代码解释器型 Agent：让 LLM 用代码思考（smolagents 与 CodeAct）",
       "url": "https://github.com/huggingface/smolagents",
       "author": "Aymeric Roucher 等（Hugging Face smolagents 团队）",
       "license": "Apache 2.0",
-      "file": "18-code-interpreter-agents.md"
-    },
-    {
-      "order": 19,
-      "topic": "Computer Use 与浏览器操作 Agent：让模型亲手操作图形界面",
-      "url": "https://github.com/browser-use/browser-use",
-      "author": "Magnus Müller、Gregor Žunič（browser-use）",
-      "license": "MIT",
-      "file": "19-computer-use-agents.md"
+      "file": "19-code-interpreter-agents.md"
     },
     {
       "order": 20,
+      "topic": "\"Computer Use 与浏览器操作 Agent：坐标、DOM 与动作循环的完整实现\"",
+      "url": "https://github.com/browser-use/browser-use",
+      "author": "Magnus Müller、Gregor Žunič（browser-use）；OpenAI（Agents SDK）；Anthropic（computer-use 参考实现）",
+      "license": "MIT（browser-use、openai-agents、anthropic-quickstarts 三个仓库均为 MIT）",
+      "file": "20-computer-use-agents.md"
+    },
+    {
+      "order": 21,
       "topic": "可观测性与 Tracing：Agent 生产排障的第一工具（LangSmith / Langfuse / OpenTelemetry）",
       "url": "https://docs.langchain.com/langsmith/observability-concepts",
       "author": "LangChain 团队（LangSmith 官方文档）",
       "license": "MIT",
-      "file": "20-observability-tracing.md"
+      "file": "21-observability-tracing.md"
     },
     {
-      "order": 21,
+      "order": 22,
       "topic": "Agent 评测：数据集、评估器与 LLM-as-Judge 实战",
       "url": "https://docs.langchain.com/langsmith/evaluate-llm-application",
       "author": "LangChain 团队（LangSmith 官方文档）",
       "license": "MIT",
-      "file": "21-agent-evaluation.md"
+      "file": "22-agent-evaluation.md"
     },
     {
-      "order": 22,
+      "order": 23,
       "topic": "Agent 安全与权限、生产化部署与成本管理",
       "url": "https://raw.githubusercontent.com/microsoft/ai-agents-for-beginners/main/10-ai-agents-production/README.md",
       "author": "Microsoft（AI Agents for Beginners 课程）、Model Context Protocol 项目（安全最佳实践）",
       "license": "MIT",
-      "file": "22-security-production.md"
+      "file": "23-security-production.md"
     }
   ]
 }

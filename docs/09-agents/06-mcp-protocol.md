@@ -65,23 +65,17 @@ MCP 架构中的关键参与者：
 
 **举例**：Visual Studio Code 充当 MCP 主机。当 VS Code 连接到某个 MCP 服务器（例如 Sentry MCP 服务器）时，VS Code 运行时会实例化一个 MCP 客户端对象来维护这条连接；随后 VS Code 又连接另一个 MCP 服务器（例如本地文件系统服务器）时，运行时会再实例化一个新的 MCP 客户端对象来维护这条新连接。
 
-```mermaid
-graph TB
-    subgraph "MCP Host (AI Application)"
-        Client1["MCP Client 1"]
-        Client2["MCP Client 2"]
-        Client3["MCP Client 3"]
-        Client4["MCP Client 4"]
-    end
+MCP 主机与服务器拓扑（结构如下所示）：
 
-    ServerA["MCP Server A - Local<br/>(e.g. Filesystem)"]
-    ServerB["MCP Server B - Local<br/>(e.g. Database)"]
-    ServerC["MCP Server C - Remote<br/>(e.g. Sentry)"]
-
-    Client1 ---|"Dedicated<br/>connection"| ServerA
-    Client2 ---|"Dedicated<br/>connection"| ServerB
-    Client3 ---|"Dedicated<br/>connection"| ServerC
-    Client4 ---|"Dedicated<br/>connection"| ServerC
+```text
+┌─ MCP Host（AI Application，AI 应用）
+│
+│   MCP Client 1 ──专用连接──► MCP Server A（Local · 例：Filesystem 文件系统）
+│   MCP Client 2 ──专用连接──► MCP Server B（Local · 例：Database 数据库）
+│   MCP Client 3 ──专用连接──► MCP Server C（Remote · 例：Sentry）
+│   MCP Client 4 ──专用连接──► MCP Server C（Remote · 例：Sentry）
+│
+└─ 每个 MCP Client 只对应一条到某个 MCP Server 的专用连接（1:1）
 ```
 
 注意：**MCP 服务器**指的是提供上下文数据的程序本身，与它运行在哪里无关——可以在本地也可以在远程。例如 Claude Desktop 启动文件系统服务器时，该服务器使用 STDIO 传输、运行在同一台机器上，这就是通常所说的"本地 MCP 服务器"；官方 Sentry MCP 服务器运行在 Sentry 平台上、使用 Streamable HTTP 传输，则是典型的"远程 MCP 服务器"。

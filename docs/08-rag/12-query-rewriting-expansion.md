@@ -67,7 +67,7 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 ### 1 - 查询改写：重塑查询以提升检索
 
 ```python
-re_write_llm = ChatOpenAI(temperature=0, model_name="gpt-4o", max_tokens=4000)
+re_write_llm = ChatOpenAI(temperature=0, model="gpt-4o", max_completion_tokens=4000)
 
 # 查询改写提示词模板
 query_rewrite_template = """You are an AI assistant tasked with reformulating user queries to improve retrieval in a RAG system. 
@@ -114,7 +114,7 @@ print("\nRewritten query:", rewritten_query)
 ### 2 - 退后提示：生成更宽泛的查询以取回背景
 
 ```python
-step_back_llm = ChatOpenAI(temperature=0, model_name="gpt-4o", max_tokens=4000)
+step_back_llm = ChatOpenAI(temperature=0, model="gpt-4o", max_completion_tokens=4000)
 
 step_back_template = """You are an AI assistant tasked with generating broader, more general queries to improve context retrieval in a RAG system.
 Given the original query, generate a step-back query that is more general and can help retrieve relevant background information.
@@ -156,7 +156,7 @@ print("\nStep-back query:", step_back_query)
 ### 3 - 子查询分解：把复杂问题拆成简单子问题
 
 ```python
-sub_query_llm = ChatOpenAI(temperature=0, model_name="gpt-4o", max_tokens=4000)
+sub_query_llm = ChatOpenAI(temperature=0, model="gpt-4o", max_completion_tokens=4000)
 
 subquery_decomposition_template = """You are an AI assistant tasked with breaking down complex queries into simpler sub-queries for a RAG system.
 Given the original query, decompose it into 2-4 simpler sub-queries that, when answered together, would provide a comprehensive response to the original query.
@@ -217,7 +217,7 @@ for i, sub_query in enumerate(sub_queries, 1):
 
 ## 小结
 
-查询变换为提升 RAG 检索能力提供了有力工具：改写、退后、分解，各有侧重，可以显著改善召回信息的相关性、上下文与全面性。在查询复杂或多面的领域——科学研究、法律分析、综合性事实调查——价值尤其突出。与第 17 篇的 Agentic RAG 呼应：查询改写正是 Agent"自主决定如何检索"的基本动作之一。
+查询变换为提升 RAG 检索能力提供了有力工具：改写、退后、分解，各有侧重，可以显著改善召回信息的相关性、上下文与全面性。在查询复杂或多面的领域——科学研究、法律分析、综合性事实调查——价值尤其突出。与《Agentic RAG：让检索自己判断"够不够、要不要换工具"》呼应：查询改写正是 Agent"自主决定如何检索"的基本动作之一。
 
 ---
 

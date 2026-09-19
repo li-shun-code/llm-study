@@ -117,11 +117,11 @@ Each of these techniques employs unique strategies to enhance or specify the int
 
 第一条链环：用推理模型完成"重活"——抓取某维基百科公司列表页，判断哪些公司最能从 AI 能力中受益，并要求以 JSON 格式返回。此时 JSON 只是提示词约定的产物：你需要手工把它解析进类型安全的结构，而且模型拒答时 API 也不会返回显式的拒答结构。
 
-第二条链环：把第一步返回的文本喂给 `gpt-4o-mini`，对这次调用启用**结构化输出**（JSON Schema），由它负责把上游内容严格整理成带类型的目标结构。这样，链头负责推理与判断，链尾负责可靠的格式收敛：
+第二条链环：把第一步返回的文本喂给 `gpt-5.4-mini`，对这次调用启用**结构化输出**（JSON Schema），由它负责把上游内容严格整理成带类型的目标结构。这样，链头负责推理与判断，链尾负责可靠的格式收敛：
 
 ```python
 response = client.responses.parse(
-    model="gpt-4o-mini",
+    model="gpt-5.4-mini",
     input=[
         {"role": "user", "content": raw_text_from_previous_call},
     ],
@@ -129,7 +129,7 @@ response = client.responses.parse(
 )
 ```
 
-Cookbook 的结论是：结构化输出让代码获得可靠的类型安全、让提示更简单，还能复用同一套 Schema 便于集成；通过把两次请求链在一起，可以复用 `gpt-4o-mini` 已有的结构化输出能力，而第二次小模型调用的成本相对上游推理模型的调用可以忽略不计。
+Cookbook 的结论是：结构化输出让代码获得可靠的类型安全、让提示更简单，还能复用同一套 Schema 便于集成；通过把两次请求链在一起，可以复用 `gpt-5.4-mini` 已有的结构化输出能力，而第二次轻量模型调用的成本相对上游推理模型的调用可以忽略不计。
 
 > **译注（按 2026-09 现状校订）**：现行的推理模型已原生支持结构化输出（`responses.parse` / `text.format`，见《JSON Mode 与结构化输出（Structured Outputs）》），上面"补一环做格式化"的写法已不再是必需。但它演示的链式分工思想——"重推理"与"轻格式化/轻校验"各占一环——在多步工作流里依然普遍适用，也正是本章与 ReAct 一脉相承的地方：复杂任务不靠一条巨型提示，而靠职责单一的环节串接。
 

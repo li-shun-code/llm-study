@@ -239,7 +239,7 @@ jobs:
 - **`on` 里同时写 `push` 和 `pull_request`**：PR 上的检查用于卡合并，push 到 `main` 的检查用于验证真实合并结果。两者的 `GITHUB_TOKEN` 权限不同——`pull_request` 来自 fork 时是**只读**且拿不到 secrets（见第四节）。
 - **`permissions: contents: read`**：官方 starter 模板（`ci/python-app.yml`）第一行就是这个。默认值往往是"能写"，收紧到只读是零成本的安全提升，需要写时在单个作业里再放开。
 - **`needs` 决定形状，不决定速度**：`lint → test → docker` 串行便于"错在最早最便宜的地方"；但真正拖时长的是它，多数团队会把 lint 与 test 并行、只让 docker 依赖 test。
-- **`if: ${{ ! cancelled() }}`**：默认情况下作业被前面的步骤失败打断时，后续步骤不执行。加上这个条件，测试挂了也能拿到报告。
+- **`if: $&#123;&#123; ! cancelled() }}`**：默认情况下作业被前面的步骤失败打断时，后续步骤不执行。加上这个条件，测试挂了也能拿到报告。
 - **`--output-format=github`**：让 ruff 的问题以"文件+行号"的红线出现在 diff 里，而不是埋进日志。这类"把结果回灌到 PR 界面"的习惯，比多写十个步骤更提升体验。
 
 ## 三、缓存与矩阵：把时长从 6 分钟压到 90 秒
@@ -456,7 +456,7 @@ concurrency:
 - **部署/发布**：必须 `false`，同组串行排队，否则两个部署同时改线上必然互相踩。
 - `queue: max` 允许同组最多 100 个 pending 排队（默认 `single` 只留最新一个），且与 `cancel-in-progress: true` **不能同时使用**（校验直接报错）。
 - 组名**不区分大小写**；同组按"开始等待组的时间"FIFO 处理，实际顺序无保证。
-- 想让 `main` 不被取消而 PR 被取消，用条件表达式：`cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}`。
+- 想让 `main` 不被取消而 PR 被取消，用条件表达式：`cancel-in-progress: $&#123;&#123; github.ref != 'refs/heads/main' }}`。
 
 ### 5.3 让 CI 真正"卡住"合并
 

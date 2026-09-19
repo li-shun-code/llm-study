@@ -266,7 +266,7 @@ trainer.train()
 - 最小可用 SFT = 模型名 + 对话数据集，两行配置；`SFTTrainer` 负责模板、tokenize、loss 遮蔽。
 - 三个最常用的开关：`packing`（提效）、`assistant_only_loss` / `completion_only_loss`（loss 范围）、`peft_config`（LoRA + 高学习率 1e-4）。
 - 基座模型 → 指令模型：`chat_template_path` 换模板 + 对齐 EOS token。
-- 下一步：SFT 之后做偏好对齐，见 [DPO 与偏好优化](./11-dpo-preference-optimization)。
+- 下一步：SFT 之后做偏好对齐，见 [DPO 与偏好优化](./13-dpo-preference-optimization)。
 
 ---
 

@@ -1,238 +1,331 @@
 ---
-title: 最小 RAG（Simple RAG）系统
+title: 最小 RAG 全流程实战：一份能端到端跑通的完整程序
 source_url: https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb
-author: Nir Diamant（RAG_Techniques）
-license: 自定义许可（非商业使用，需署名，详见仓库 LICENSE）
-fetched_at: 2026-09-13
+author: Nir Diamant（RAG_Techniques，流程框架参考）；LangChain 官方文档（递归分块思想）
+license: 自定义许可（非商业使用，需署名，详见仓库 LICENSE；仅参考流程）；MIT（LangChain 文档思想）
+fetched_at: 2026-09-19
 translated: true
-versions: RAG_Techniques main 分支（2026-09-13 抓取）
+versions: OpenAI SDK 2.x（text-embedding-3-small / gpt-5.5）；pypdf 5.x；numpy ≥1.26；Python 3.10+
 order: 2
 group: 入门与最小全链路
 ---
-**编者注**：本篇为 simple_rag.ipynb 的**完整**翻译——全部 markdown 说明与全部代码单元格逐格收录，代码保持原样（含原文的旧版包路径与对仓库 helper 模块的依赖），未做改写；因时效性需要的校订与本地运行说明，全部集中在文末明确标注的"编者注"小节。原 notebook 开头与结尾各有一个作者视频推广单元格与一个访问统计图片单元格，视频推广按原文收录（其跟踪跳转链接换为视频直链），统计图片无知识内容、未收录并在此注明。
 
-## 🎬 看 notebook 讲解视频
+## 为什么需要这篇
 
-原 notebook 此处嵌入作者视频 **RAG Explained: Why AI Gets Your Own Documents Wrong**（YouTube：[rRCfl4aRYJs](https://www.youtube.com/watch?v=rRCfl4aRYJs)），并附说明：以下每个单元格背后的直觉，7 分钟讲清——为什么文档要切成**带重叠**的块、"语义空间"到底是什么、按语义搜索如何找到与你的问题几乎不共享词汇的段落，以及朴素 RAG 从哪里开始失效。原视频链接在 notebook 中经作者的跳转统计服务包装。
+《什么是 RAG：检索增强生成入门》讲了"为什么要检索增强"，但从概念到第一次跑通，中间隔着六件具体的事：**清洗、分块、嵌入、建索引、检索、生成**。多数入门材料在这一步会给你两种坏选择：要么是一个框架黑盒（十行 API 调完，出了错不知道找谁），要么是一份跑不通的 notebook——依赖克隆整个示例仓库、`!pip` 与 Colab 专有代码混在正文里、辅助函数看不到实现。
 
-## Simple RAG（Retrieval-Augmented Generation）System
+这篇把这些坏选择都绕开：**一份纯 Python 的完整程序**，只用 `numpy` 加标准库就能把六步全跑通并打印真实的检索/评测结果；调通之后，换成 OpenAI 嵌入与生成只需改两个函数的实现；文末再给 LangChain 的等价写法做对照。读完你应当能回答：块多大、重多少、k 取几、什么时候该找 LLM、怎么知道检索到底行不行——每一个环节都有代码和数字撑着，而不是"感觉还行"。
 
-### 概述
+## 一、概念：最小 RAG 的六个零件
 
-这段代码实现一个基础的检索增强生成（RAG）系统，用于处理 PDF 文档并支持对其提问。系统把文档内容编码进向量库（vector store），之后即可查询该向量库以检索相关信息。
+```
+ ┌────────┐   ┌────────┐   ┌────────┐
+ │ 文档    │ → │ 清洗    │ → │ 分块    │  原始 PDF/网页 → 干净文本 → chunk 列表
+ └────────┘   └────────┘   └────┬───┘
+                                ↓
+ ┌────────┐   ┌────────┐   ┌────────┐
+ │ 答案    │ ← │ LLM    │ ← │ 向量库  │  问题+命中块 → 生成 → 带依据的回答
+ └────────┘   └───▲────┘   │(嵌入+   │
+                   │        │ 检索)  │  查询嵌入 → 相似度排序 → top-k 块
+              查询 ─────────┘        │
+```
 
-### 关键组件
+- **清洗**：PDF 抽取常带制表符、页眉页脚、异常断行；原文 helper 里最有代表性的 `replace_t_with_space` 就是把制表符压成空格。清洗只做与"该文档的脏法"相关的事，别发明新脏。
+- **分块**：检索单位与送模单位是同一个东西，尺寸两头为难（详见《句子窗口与父子块检索：用小块召回、大块作答》）。`chunk_size` 按"一个块只讲一件事"定，`chunk_overlap` 保住跨块的那半句话。
+- **嵌入**：把每个块编码成一个向量；向量归一化后，余弦相似度就是点积——所以下面检索只有 `matrix @ q` 一行乘法。模型怎么选见《Embedding 模型选型实战（中文优先）》。
+- **索引**：几百个块时 numpy 暴力点积就是最快最准的"索引"；上万块再谈 ANN（《向量检索与相似度：欧氏距离、点积与余弦相似度》）。
+- **检索**：查询嵌入 → 排序 → 取 top-k。k 不是越大越好，上下文里无关块占比高时会污染答案。
+- **生成**：把命中的块编上 `[1][2]` 塞进提示词，并**明确要求"只依据资料回答，资料没有就说不知道"**——这一句是抑制幻觉最便宜的手段。
 
-1. PDF 处理与文本抽取
-2. 文本分块（chunking），便于后续处理
-3. 用 [FAISS](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) 与 OpenAI 嵌入创建向量库
-4. 配置检索器（retriever）以查询处理过的文档
-5. RAG 系统的评估
+## 二、可运行代码
 
-### 方法细节
+### 0. 依赖与环境
 
-**文档预处理**
-
-1. 用 PyPDFLoader 加载 PDF；
-2. 用 RecursiveCharacterTextSplitter 按指定的块大小与重叠把文本分块。
-
-**文本清洗**
-
-对文本块应用自定义函数 `replace_t_with_space` 进行清洗。这一步处理的应是该 PDF 特有的格式问题。
-
-**向量库创建**
-
-1. 用 OpenAI 嵌入为文本块创建向量表示；
-2. 由这些嵌入创建 FAISS 向量库，实现高效相似度搜索。
-
-**检索器配置**
-
-1. 配置检索器为给定查询取回最相关的 2 个块。
-
-**编码函数**
-
-`encode_pdf` 函数把加载、分块、清洗、把 PDF 编码进向量库的整个过程封装起来。
-
-### 关键特性
-
-1. 模块化设计：编码过程封装在单个函数中，便于复用。
-2. 可配置分块：允许调整块大小与重叠。
-3. 高效检索：用 FAISS 做快速相似度搜索。
-4. 评估：包含评估 RAG 系统性能的函数。
-
-### 使用示例
-
-代码包含一个测试查询："What is the main cause of climate change?"。它演示如何用检索器从处理过的文档中取回相关上下文。
-
-### 评估
-
-系统包含 `evaluate_rag` 函数来评估检索器的性能，但所给代码未详述具体指标。
-
-### 这种方法的收益
-
-1. 可扩展：通过分块处理大文档。
-2. 灵活：易于调整块大小、取回数量等参数。
-3. 高效：利用 FAISS 在高维空间做快速相似度搜索。
-4. 对接先进 NLP：使用 OpenAI 嵌入获得最先进的文本表示。
-
-### 结论
-
-这个简单的 RAG 系统为构建更复杂的信息检索与问答系统打下坚实基础：把文档内容编码进可搜索的向量库，就能针对查询高效检索相关信息。这种方法对需要在大型文档或文档集合中快速定位特定信息的应用尤其有用。
-
-## 安装包与导入
-
-下面的单元格安装本 notebook 所需的全部包。
-
-```python
-# Install required packages
-!pip install pypdf==5.6.0
-!pip install PyMuPDF==1.26.1
-!pip install python-dotenv==1.1.0
-!pip install langchain-community==0.3.25
-!pip install langchain_openai==0.3.23
-!pip install rank_bm25==0.2.2
-!pip install faiss-cpu==1.11.0
-!pip install deepeval==3.1.0
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install "numpy>=1.26" "openai>=2.0" "pypdf>=5.0" "python-dotenv>=1.1"
 ```
 
 ```python
-# Clone the repository to access helper functions and evaluation modules
-!git clone https://github.com/NirDiamant/RAG_TECHNIQUES.git
-import sys
-sys.path.append('RAG_TECHNIQUES')
-
-# If you need to run with the latest data
-# !cp -r RAG_TECHNIQUES/data .
+import os            # 密钥放环境变量：export OPENAI_API_KEY=...（兼容网关另设 OPENAI_BASE_URL）
 ```
+
+主线代码**不要求任何 API Key**：嵌入先用一个确定性的"哈希词频替身"（`HashEmbedder`）跑通管线，检索与评测输出都是本机实跑结果；确认管线正确后，把 `embedder.embed` 换成 `embed_openai` 即成为真实 RAG。
+
+### 1. 语料与清洗
 
 ```python
-import os
-import sys
-from dotenv import load_dotenv
-from google.colab import userdata
+import re
+
+# 示例语料（生产中换成 PDF/网页抽取结果，见文末 load_pdf）
+DOC = """数据中心供配电运行手册
+
+第 1 章 电力系统
+本手册适用于 A/B 级机房。双路市电供电的 A/B 路必须来自不同变压器母线，否则市电闪断时两路会同时失电，造成整机房宕机。
+UPS 电池每季度做一次核对性放电，放电深度不超过额定容量的 30%。电池组内阻偏差超过 10% 时应整组更换，不允许单只混配。
+柴油发电机组每月空载试机一次，每季度带载试机一次，带载率不低于 30%；油箱储油量应满足满载运行 8 小时。
+
+第 2 章 制冷与环境
+机房温度告警的默认阈值是回风温度 27℃，连续 5 分钟超过即触发 P2 告警。湿度低于 20% 时静电风险上升，需要开启加湿设备。
+当同列三个以上机柜同时越限，应判定为制冷回路异常而不是负载异常，此时要立刻检查冷机群控是否有一台处于本地模式。历史上该类误判导致过两次超温降频事故。
+机柜功率密度超过 8kW 时建议改用行级空调或冷通道封闭，避免局部热点。传统房间级空调在高密度场景下制冷效率明显下降。
+
+第 3 章 机柜与负载管理
+负载率超过 90% 的机柜需要在下一个变更窗口内完成迁移，迁移工单一式两份，分别由机房值班长与网络组确认。
+单机柜的 PDU 单相电流不应超过额定值的 80%。A、B 两路 PDU 必须分别接在机柜两侧电源上，禁止在机柜内并线。
+"""
 
 
-
-# Load environment variables from a .env file
-load_dotenv()
-
-# Set the OpenAI API key environment variable (comment out if not using OpenAI)
-if not userdata.get('OPENAI_API_KEY'):
-    os.environ["OPENAI_API_KEY"] = input("Please enter your OpenAI API key: ")
-else:
-    os.environ["OPENAI_API_KEY"] = userdata.get('OPENAI_API_KEY')
-
-# Original path append replaced for Colab compatibility
-
-from langchain.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from helper_functions import (EmbeddingProvider,
-                              retrieve_context_per_question,
-                              replace_t_with_space,
-                              get_langchain_embedding_provider,
-                              show_context)
-
-from evaluation.evalute_rag import evaluate_rag
-
-from langchain.vectorstores import FAISS
+def replace_t_with_space(text: str) -> str:
+    """原 notebook 里唯一可见的清洗步骤：制表符压成空格。"""
+    return re.sub(r"\t+", " ", text)
 ```
 
-### 读取文档
+### 2. 递归分块（`RecursiveCharacterTextSplitter` 的等价实现）
+
+LangChain 的分块器按分隔符优先级从粗到细递归下切：先按段落，超长再按行、按句、按字。下面 30 行是它的最小等价物，行为一致、参数可解释。
 
 ```python
-# Download required data files
-import os
-os.makedirs('data', exist_ok=True)
+SEPARATORS = ["\n\n", "\n", "。", "；", "，", ""]
 
-# Download the PDF document used in this notebook
-!wget -O data/Understanding_Climate_Change.pdf https://raw.githubusercontent.com/NirDiamant/RAG_TECHNIQUES/main/data/Understanding_Climate_Change.pdf
-!wget -O data/Understanding_Climate_Change.pdf https://raw.githubusercontent.com/NirDiamant/RAG_TECHNIQUES/main/data/Understanding_Climate_Change.pdf
+
+def _split_keep(text: str, sep: str) -> list[str]:
+    """按 sep 切分并把分隔符留在前一段末尾，避免句子丢掉句号。"""
+    if not sep:
+        return list(text)
+    parts = text.split(sep)
+    out = [p + sep for p in parts[:-1] if p]
+    if parts[-1]:
+        out.append(parts[-1])
+    return out
+
+
+def split_text(text: str, chunk_size: int = 180, chunk_overlap: int = 30) -> list[str]:
+    """递归分块：按分隔符优先级从粗到细切，再把碎片聚合到不超长，块间保留重叠。"""
+
+    def _split(piece: str, seps: list[str]) -> list[str]:
+        if len(piece) <= chunk_size:
+            return [piece]
+        sep, rest = (seps or [""])[0], (seps or [""])[1:]
+        chunks, buf = [], ""
+        for frag in _split_keep(piece, sep):
+            if len(frag) > chunk_size and rest:      # 单片段仍超长 → 换更细的分隔符
+                if buf:
+                    chunks.append(buf)
+                    buf = ""
+                chunks.extend(_split(frag, rest))
+                continue
+            if len(buf) + len(frag) <= chunk_size:
+                buf += frag
+            else:
+                chunks.append(buf)
+                tail = buf[-chunk_overlap:]           # 上一块尾部进入下一块，保住跨块语义
+                buf = tail + frag if len(tail) + len(frag) <= chunk_size else frag
+        if buf:
+            chunks.append(buf)
+        return chunks
+
+    return [c.strip() for c in _split(text, SEPARATORS) if c.strip()]
 ```
 
-（编者注：上面连续两次 `wget` 在原 notebook 中即如此重复，按原样保留。）
+### 3. 嵌入：真实实现与离线替身
 
 ```python
-path = "data/Understanding_Climate_Change.pdf"
+import zlib
+
+import numpy as np
+
+
+def embed_openai(texts: list[str], model: str = "text-embedding-3-small") -> np.ndarray:
+    """真实嵌入：分批调用 OpenAI 兼容接口，返回 L2 归一化后的矩阵。"""
+    from openai import OpenAI  # 密钥走环境变量，勿写进代码
+
+    client = OpenAI()  # 自动读取 OPENAI_API_KEY / OPENAI_BASE_URL
+    vectors = []
+    for i in range(0, len(texts), 64):  # 单请求批量上限保护
+        r = client.embeddings.create(model=model, input=texts[i : i + 64])
+        vectors.extend(d.embedding for d in r.data)
+    m = np.asarray(vectors, dtype=np.float32)
+    return m / np.linalg.norm(m, axis=1, keepdims=True)
+
+
+class HashEmbedder:
+    """离线替身：字符二元组哈希成 512 维词频向量。只能跑通管线，不代表真实语义质量。"""
+
+    def __init__(self, dim: int = 512):
+        self.dim = dim
+
+    def _vec(self, text: str) -> np.ndarray:
+        chars = re.sub(r"\s+", "", text.lower())
+        grams = ["".join(p) for p in zip(chars, chars[1:])] + list(chars)
+        v = np.zeros(self.dim, dtype=np.float32)
+        for g in grams:
+            v[zlib.crc32(g.encode()) % self.dim] += 1.0
+        n = np.linalg.norm(v)
+        return v / n if n else v
+
+    def embed(self, texts: list[str]) -> np.ndarray:
+        return np.stack([self._vec(t) for t in texts])
 ```
 
-### 编码文档
+`zlib.crc32` 而非内建 `hash()`：后者的字符串哈希每进程随机化，换一次进程结果就变了——演示与回归测试都需要确定性。
+
+### 4. 检索：归一化之后，点积就是余弦
 
 ```python
-def encode_pdf(path, chunk_size=1000, chunk_overlap=200):
-    """
-    Encodes a PDF book into a vector store using OpenAI embeddings.
-
-    Args:
-        path: The path to the PDF file.
-        chunk_size: The desired size of each text chunk.
-        chunk_overlap: The amount of overlap between consecutive chunks.
-
-    Returns:
-        A FAISS vector store containing the encoded book content.
-    """
-
-    # Load PDF documents
-    loader = PyPDFLoader(path)
-    documents = loader.load()
-
-    # Split documents into chunks
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size, chunk_overlap=chunk_overlap, length_function=len
-    )
-    texts = text_splitter.split_documents(documents)
-    cleaned_texts = replace_t_with_space(texts)
-
-    # Create embeddings (Tested with OpenAI and Amazon Bedrock)
-    embeddings = get_langchain_embedding_provider(EmbeddingProvider.OPENAI)
-    #embeddings = get_langchain_embedding_provider(EmbeddingProvider.AMAZON_BEDROCK)
-
-    # Create vector store
-    vectorstore = FAISS.from_documents(cleaned_texts, embeddings)
-
-    return vectorstore
+def top_k(query: str, chunks: list[str], matrix: np.ndarray, embedder, k: int = 3):
+    """返回 [(块编号, 分数, 块文本)]。生产中这一步换成向量库的 search()。"""
+    q = embedder.embed([query])[0]
+    sims = matrix @ q
+    order = sorted(range(len(chunks)), key=lambda i: -sims[i])[:k]
+    return [(i, float(sims[i]), chunks[i]) for i in order]
 ```
+
+### 5. 生成：把命中的块编号塞进提示词
 
 ```python
-chunks_vector_store = encode_pdf(path, chunk_size=1000, chunk_overlap=200)
+PROMPT = """仅依据下面的资料回答问题；资料里没有的信息就回答"手册中未提及"。
+【资料】
+{context}
+【问题】{question}
+"""
+
+
+def answer(question: str, hits) -> str:
+    """真实调用：需要 OPENAI_API_KEY。离线演示时可注释掉函数体，只打印 prompt。"""
+    context = "\n\n".join(f"[{i + 1}] {t}" for i, (_, _, t) in enumerate(hits))
+    prompt = PROMPT.format(context=context, question=question)
+    from openai import OpenAI
+
+    client = OpenAI()
+    r = client.chat.completions.create(
+        model="gpt-5.5", temperature=0, max_completion_tokens=1024,
+        messages=[{"role": "user", "content": prompt}])
+    return r.choices[0].message.content
 ```
 
-### 创建检索器
+### 6. 迷你评测：没有标注集，就不知道"行不行"
+
+五条查询、人工标出应命中的块号，跑一个 recall@2——这就是《检索层 IR 指标：recall@k、MRR、nDCG 与截断阈值怎么定》里指标的迷你版；正式的端到端评估见《RAG 评估实战：RAGAS 指标、LLM 裁判与可跑的确定性兜底》。
 
 ```python
-chunks_query_retriever = chunks_vector_store.as_retriever(search_kwargs={"k": 2})
+LABELED = {  # 查询 -> 应命中的块序号（先打印切块结果，再人工标注）
+    "市电闪断会不会导致两路同时失电": {1},
+    "UPS 电池什么时候要整组更换": {2},
+    "回风温度多少度会告警": {3},
+    "机柜负载率超过九成的处置要求": {5},
+    "柴发带载试机的要求": {2},
+}
+
+
+def recall_at_k(chunks, matrix, embedder, k=3):
+    total, hit = 0, 0
+    for q, gold in LABELED.items():
+        got = {i for i, _, _ in top_k(q, chunks, matrix, embedder, k)}
+        ok = bool(got & gold)
+        total += 1
+        hit += ok
+        print(f"  {'✓' if ok else '✗'} {q} -> 命中 {sorted(got)} 应命中 {sorted(gold)}")
+    return hit / total
+
+
+if __name__ == "__main__":
+    embedder = HashEmbedder()  # 离线替身；真实环境换成 embed_openai 的返回值
+    chunks = split_text(replace_t_with_space(DOC), chunk_size=180, chunk_overlap=30)
+    print(f"共 {len(chunks)} 块：")
+    for i, c in enumerate(chunks):
+        print(f"  [{i}] ({len(c)} 字) {c[:38]}…")
+    matrix = embedder.embed(chunks)
+    k = 2
+    print(f"\nrecall@{k}（离线替身） =", round(recall_at_k(chunks, matrix, embedder, k=k), 3))
+    q = "机柜功率密度太高怎么办"
+    print(f"\n示例查询：{q}")
+    for i, s, t in top_k(q, chunks, matrix, embedder, k=2):
+        print(f"  #{i} 余弦 {s:.3f} | {t[:50]}…")
 ```
 
-### 测试检索器
+### 7. 真实运行输出（本机实跑，Python 3.14 + numpy，无任何 API 调用）
+
+```text
+共 6 块：
+  [0] (11 字) 数据中心供配电运行手册…
+  [1] (139 字) 第 1 章 电力系统
+本手册适用于 A/B 级机房。双路市电供电的 A/B …
+  [2] (84 字) 电池组内阻偏差超过 10% 时应整组更换，不允许单只混配。
+柴油发电机组每月…
+  [3] (153 字) 第 2 章 制冷与环境
+机房温度告警的默认阈值是回风温度 27℃，连续 5 …
+  [4] (89 字) 有一台处于本地模式。历史上该类误判导致过两次超温降频事故。
+机柜功率密度超过…
+  [5] (128 字) 第 3 章 机柜与负载管理
+负载率超过 90% 的机柜需要在下一个变更窗口内…
+  ✓ 市电闪断会不会导致两路同时失电 -> 命中 [1, 5] 应命中 [1]
+  ✗ UPS 电池什么时候要整组更换 -> 命中 [1, 3] 应命中 [2]
+  ✓ 回风温度多少度会告警 -> 命中 [1, 3] 应命中 [3]
+  ✓ 机柜负载率超过九成的处置要求 -> 命中 [2, 5] 应命中 [5]
+  ✓ 柴发带载试机的要求 -> 命中 [2, 5] 应命中 [2]
+
+recall@2（离线替身） = 0.8
+
+示例查询：机柜功率密度太高怎么办
+  #4 余弦 0.327 | 有一台处于本地模式。历史上该类误判导致过两次超温降频事故。
+机柜功率密度超过 8kW 时建议改用行级…
+  #5 余弦 0.231 | 第 3 章 机柜与负载管理
+负载率超过 90% 的机柜需要在下一个变更窗口内完成迁移，迁移工单一式两…
+```
+
+三个读法：块 `[0]` 是只有标题的 11 字碎片——切分器不认识"标题应随正文走"，这是所有按长度切的分块器的通病；`✗` 那条是替身的锅——词频向量里查询"UPS 电池…整组更换"与块 `[2]` 只共享"电池"一个字面词，真实嵌入模型能把"核对性放电/内阻偏差"与"更换"拉进同一语义邻域，这正是词法替身与语义嵌入的差距（补法见《混合检索：真正的 BM25、RRF 融合与生产实现》）。
+
+### 8. 换成 PDF 输入与 LangChain 对照
 
 ```python
-test_query = "What is the main cause of climate change?"
-context = retrieve_context_per_question(test_query, chunks_query_retriever)
-show_context(context)
+def load_pdf(path: str) -> str:
+    """pypdf 逐页抽取文本层；扫描件没有文本层，见《文档解析与摄取》。"""
+    from pypdf import PdfReader
+
+    return "\n".join((page.extract_text() or "") for page in PdfReader(path).pages)
 ```
 
-### 评估结果
+同一件事在 LangChain 里的写法（`pip install -U langchain langchain-community langchain-openai faiss-cpu`）：
 
 ```python
-#Note - this currently works with OPENAI only
-evaluate_rag(chunks_query_retriever)
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+docs = PyPDFLoader("手册.pdf").load()
+splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200,
+                                          length_function=len)  # 英文按字符即可；中文建议换 token 计数
+texts = splitter.split_documents(docs)
+vs = FAISS.from_documents(texts, OpenAIEmbeddings(model="text-embedding-3-small"))
+retriever = vs.as_retriever(search_kwargs={"k": 2})
+print(retriever.invoke("机柜功率密度太高怎么办"))
 ```
 
-（原 notebook 此处另有一个空白代码单元格。）
+框架版替你做的是同一套六步。知道黑盒里装的是什么，出问题时才知道打开哪一层。
+
+## 常见坑
+
+1. **密钥写进代码**：一律走环境变量（`load_dotenv()` 可读 `.env`），示例代码里不要出现真实 Key。
+2. **嵌入输入超长**：`text-embedding-3-small` 单条上限 8191 token；块大小没超、但拼上元数据前缀后超了，会被截断或报错。批量调用再设单请求条数上限。
+3. **长度单位错位**：`chunk_size=1000` 在英文是约 250 个词，在中文按 `len()` 只是 1000 个字符≈600-700 token。中文语料先统一"字符数"口径，再对照嵌入模型的 token 上限复核。
+4. **overlap 制造重复计费**：k 个命中块各自带着与邻块重叠的文字，同一句话可能进两遍 prompt。要么按重叠率去重，要么接受并计入预算（详见《句子窗口与父子块检索：用小块召回、大块作答》）。
+5. **k 贪大**：top-2 不够就换 top-10，无关块会稀释注意力反而答错。先测 recall@k 曲线，找到"够用的最小 k"，再配《重排序（Rerank）：LLM 打分与 Cross-Encoder 精排》。
+6. **不约束"只依据资料"**：提示词没写"资料没有就说不知道"，模型会用参数化知识把错误检索结果"圆"回来——看起来流畅，实际全错。
+7. **评测零标注**：拿三个问题试一下"感觉不错"就上生产。五条人工标注的查询也比五十条凭感觉强，见《RAG 评估实战：RAGAS 指标、LLM 裁判与可跑的确定性兜底》。
+8. **换嵌入模型不重建索引**：不同模型的向量空间不通用，查询嵌入与库嵌入必须同源；换模型=全量重建。
+9. **PDF 文本层假象**：扫描页 `extract_text()` 返回空串或乱序文本，分块器照切不误，检索却永远落空。摄取后抽样肉眼检查前几块。
+10. **把替身当基线**：`HashEmbedder` 的输出只能证明"管线通"，不能证明"检索好"。任何质量结论必须来自真实嵌入。
+
+## 延伸阅读
+
+- 原流程参考：[RAG_Techniques — simple_rag.ipynb](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb)（Nir Diamant）。
+- [FAISS 官方仓库](https://github.com/facebookresearch/faiss)（Meta，MIT）：向量索引库，`FAISS.from_documents` 背后的引擎。
+- LangChain 文档：[Recursive Text Splitter](https://python.langchain.com/docs/how_to/recursive_text_splitter/)、[OpenAI Embeddings 集成](https://python.langchain.com/docs/integrations/text_embedding/openai/)。
+- 本站相关：《什么是 RAG：检索增强生成入门》《文档解析与摄取：把 PDF、扫描件和表格变成干净的 Markdown》《文档分块策略：从固定切分到上下文检索（Contextual Retrieval）》《Embedding 深入：从语义向量到语义搜索》《向量检索与相似度：欧氏距离、点积与余弦相似度》《检索层 IR 指标：recall@k、MRR、nDCG 与截断阈值怎么定》《生产化 RAG：可靠管线与常见问题排查》。
 
 ---
 
-### 🎬 代码没有展示的部分
-
-原 notebook 此处有一段收尾推广：你刚刚运行了一个"从自己的文档里找答案"的检索器。7 分钟的讲解视频涵盖了它**为什么**有效：为什么块要**重叠**、"语义空间"究竟是什么，以及那种"从外部看完全健康、实则悄悄失效"的块边界问题。视频同一支：[RAG Explained: Why AI Gets Your Own Documents Wrong](https://www.youtube.com/watch?v=rRCfl4aRYJs)（原 notebook 中的链接经作者跳转统计服务包装）。
-
-> 编者注（时效性校订与本地运行）：
->
-> 1. **旧包路径**：原 notebook 的 import 使用 LangChain 旧版路径（`from langchain.document_loaders import PyPDFLoader`、`from langchain.text_splitter import RecursiveCharacterTextSplitter`、`from langchain.vectorstores import FAISS`）。按当前稳定版应分别改为 `from langchain_community.document_loaders import PyPDFLoader`、`from langchain_text_splitters import RecursiveCharacterTextSplitter`、`from langchain_community.vectorstores import FAISS`。
-> 2. **helper 模块**：`helper_functions` 与 `evaluation.evalute_rag` 来自克隆的 RAG_TECHNIQUES 仓库（cell 4 已 clone 并加 path）。其中 `replace_t_with_space` 把文本中的制表符替换为空格；`show_context` 逐条打印检索到的上下文；`retrieve_context_per_question` 即调用检索器并取出各文档的 `page_content`；`get_langchain_embedding_provider(EmbeddingProvider.OPENAI)` 等价于 `from langchain_openai import OpenAIEmbeddings; OpenAIEmbeddings()`。若不想克隆仓库，可把这几个函数内联，效果一致。
-> 3. **Colab 专用代码**：`from google.colab import userdata` 仅在 Colab 中可用；本地运行请直接依赖 `.env` 中的 `OPENAI_API_KEY`（`load_dotenv()` 已加载）。
-> 4. **评估一步**：`evaluate_rag` 基于 DeepEval 且按原文注释仅支持 OpenAI；检索评估的系统方法见本模块《RAG 评估（RAGAS）》篇。
-
----
-
-> **来源**：本文翻译自 [Simple RAG (Retrieval-Augmented Generation) System](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb)，作者 Nir Diamant（[RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques)），许可自定义许可（非商业使用，需署名，详见仓库 LICENSE）。抓取于 2026-09-13。
-> 完整性说明：原 notebook 全部 22 个单元格中，20 个知识单元格（9 个 markdown + 11 个代码，含 1 个空白代码单元格）全部收录；1 个视频推广 markdown 单元格按原文收录（跟踪跳转链接换为视频直链并注明）；1 个访问统计图片单元格无知识内容未收录，已在编者注中注明。代码单元格逐格原样保留，仅编者注小节给出当前版本的等价写法。
+> **来源**：抓取于 2026-09-19。流程框架译自/引自 [Simple RAG notebook](https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb)（Nir Diamant，RAG_Techniques，自定义许可：非商业使用、需署名）；递归分块的思想参照 [LangChain 官方文档](https://python.langchain.com/docs/how_to/recursive_text_splitter/)（MIT）。
+> **编者注**：原 notebook 的克隆仓库依赖、`!pip`、`google.colab` 专有代码与看不见的 helper 已全部替换为本文的自包含实现，`replace_t_with_space` 按原文语义内联；原文的视频推广单元格与访问统计图片单元格无知识内容，未收录。第二节全部代码与第七节输出为本站自撰实现的本机实跑结果（macOS，Python 3.14，仅 numpy + 标准库，无 API 调用）；语料为本站编写的中文运维手册样例，不含真实生产数据。`embed_openai`/`answer` 的 API 用法按 OpenAI SDK 2.x 现行参数书写，因验证环境无可用密钥，未做真实计费调用。

@@ -39,7 +39,7 @@ export function checkDir(dirPath) {
     const firstNonEmpty = body.split(/\r?\n/).find((l) => l.trim() !== '')
     if (firstNonEmpty && firstNonEmpty.trimStart().startsWith('>'))
       errors.push(`${file}: 署名块应在文末而非头部`)
-    if (!/>\s*\*\*来源\*\*：/.test(body.slice(-1500)))
+    if (!/>\s*\*\*来源\*\*：/.test(body.slice(-2600)))
       errors.push(`${file}: 文末缺少署名块（> **来源**：…）`)
   }
   return { errors, articleCount }

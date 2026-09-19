@@ -158,7 +158,7 @@ PEFT 的量化指南还覆盖了以下方案（均可在量化模型上训练 Lo
 | LoRA（bf16 底座） | 14 GB | <1 GB | 15 GB+激活 | 24 GB 卡可跑 |
 | QLoRA（NF4 底座） | 3.5–4.5 GB | <1 GB | 5 GB+激活 | 12–16 GB 卡可跑 7B；65B 需 48 GB |
 
-组合拳的优先级：**QLoRA（NF4 + 双重量化 + all-linear LoRA）→ gradient checkpointing → 减小 batch size / 缩短序列 → 8-bit 优化器**。推理部署侧的量化格式（GPTQ/AWQ/GGUF/FP8）与本篇训练侧量化是两套体系，见 [模型量化基础](./13-quantization-basics)。
+组合拳的优先级：**QLoRA（NF4 + 双重量化 + all-linear LoRA）→ gradient checkpointing → 减小 batch size / 缩短序列 → 8-bit 优化器**。推理部署侧的量化格式（GPTQ/AWQ/GGUF/FP8）与本篇训练侧量化是两套体系，见 [模型量化基础](./15-quantization-basics)。
 
 ## 小结
 

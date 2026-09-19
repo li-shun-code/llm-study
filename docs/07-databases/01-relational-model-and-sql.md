@@ -78,7 +78,7 @@ PostgreSQL 是一个关系数据库管理系统（RDBMS，Relational Database Ma
 
 表被组织进数据库；由单个 PostgreSQL 服务器实例管理的一组数据库，构成一个数据库集群（Database Cluster）。
 
-SQL 语言通过 `SELECT` 等语句对这些表做查询与修改，具体语法从下一篇 CRUD 开始逐篇展开。
+SQL 语言通过 `SELECT` 等语句对这些表做查询与修改，具体语法从《SELECT 与增删改查（CRUD）》开始逐篇展开。
 
 ## 站内示例：用关系模型看"LLM 会话"
 

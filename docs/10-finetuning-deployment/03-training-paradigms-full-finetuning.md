@@ -469,7 +469,7 @@ class SupervisedDataset(Dataset):
 ## 延伸阅读
 
 - 下一节内容（高效微调 LoRA）见本模块 [LoRA 原理](./04-lora-principles)
-- 偏好对齐概览见本模块 [DPO 与偏好优化](./11-dpo-preference-optimization)
+- 偏好对齐概览见本模块 [DPO 与偏好优化](./13-dpo-preference-optimization)
 
 ---
 
