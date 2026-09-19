@@ -6,8 +6,8 @@ license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: false
 order: 3
+group: 架构地基
 ---
-
 ## 一、Decoder-Only：大模型的基础架构
 
 在前两节中，happy-llm 分别讲解了由 Transformer 发展而来的两种模型架构——以 BERT 为代表的 Encoder-Only 模型和以 T5 为代表的 Encoder-Decoder 模型。很自然可以想见，除了上述两种架构，还可以有一种模型架构——**Decoder-Only**，即只使用 Decoder 堆叠而成的模型。

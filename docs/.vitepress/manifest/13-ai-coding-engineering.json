@@ -1,0 +1,93 @@
+{
+  "module": "13-ai-coding-engineering",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "第一次 AI 结对：从零做一个命令行小工具",
+      "url": "https://code.claude.com/docs/en/quickstart",
+      "author": "Anthropic（Claude Code 官方文档 Quickstart、Common workflows）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名；编者过渡与本站实操小节已明确标注）",
+      "file": "01-first-ai-pairing-cli-tool.md"
+    },
+    {
+      "order": 2,
+      "topic": "Git in AI 工作流：commit 即存档、worktree 隔离与审查流",
+      "url": "https://code.claude.com/docs/en/worktrees",
+      "author": "Anthropic（Claude Code 官方文档，主篇）；Simon Willison / Geoffrey Huntley（实践引言）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC；引言部分为博客署名转载）",
+      "file": "02-git-in-ai-workflow.md"
+    },
+    {
+      "order": 3,
+      "topic": "调试 with AI：让 AI 定位 Bug 的工作流",
+      "url": "https://words.filippo.io/claude-debugging/",
+      "author": "Filippo Valsorda（主篇）；Anthropic（Claude Code 官方文档 Common workflows，延伸）",
+      "license": "署名翻译（原文页未附开源许可，按作者公开博客教学署名翻译处理；官方文档部分 Copyright Anthropic PBC）",
+      "file": "03-debugging-with-ai.md"
+    },
+    {
+      "order": 4,
+      "topic": "重构 with AI：从日常重构到百万行迁移的上下文策略",
+      "url": "https://claude.com/blog/ai-code-migration",
+      "author": "Anthropic（官方博客主篇）；Aman Agrawal（实践观察）；Anthropic（Claude Code 官方文档 Common workflows）；Anthropic（Rakuten 客户案例）",
+      "license": "署名翻译（官方博客与文档 Copyright Anthropic PBC；Aman Agrawal 部分为作者公开博客教学署名翻译；均署名）",
+      "file": "04-refactoring-with-ai.md"
+    },
+    {
+      "order": 5,
+      "topic": "TDD with AI：Kent Beck 的增强编程实践",
+      "url": "https://tidyfirst.substack.com/p/augmented-coding-beyond-the-vibes",
+      "author": "Kent Beck",
+      "license": "署名翻译（Substack 原文页未附开源许可，按作者公开博客教学署名翻译处理）",
+      "file": "05-tdd-with-ai.md"
+    },
+    {
+      "order": 6,
+      "topic": "AI 结对与代码审查",
+      "url": "https://code.claude.com/docs/en/code-review",
+      "author": "Anthropic（Claude Code 官方文档）",
+      "license": "署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）",
+      "file": "06-ai-pairing-code-review.md"
+    },
+    {
+      "order": 7,
+      "topic": "AI 代码的安全与质量陷阱",
+      "url": "https://simonwillison.net/2026/Jul/22/openai-cyberattack/",
+      "author": "Simon Willison",
+      "license": "署名转载（作者博客允许引用转载，需署名并附原文链接）",
+      "file": "07-ai-code-security-pitfalls.md"
+    },
+    {
+      "order": 8,
+      "topic": "AI 编码供应链安全：幻觉包、Slopsquatting 与沙箱防线",
+      "url": "https://simonwillison.net/2024/Apr/1/diving-deeper-into-ai-package-hallucinations/",
+      "author": "Simon Willison（两篇博客与一篇引文）；Lasso Security、Spracklen 等与 Trend Micro（公开研究，经 Willison 博客转述）；Anthropic（Claude Code Security/Sandboxing 官方文档）",
+      "license": "署名转载/署名翻译（Willison 部分为作者博客署名翻译转载；官方文档 Copyright Anthropic PBC 教学用途翻译；每节均署名）",
+      "file": "08-ai-supply-chain-security.md"
+    },
+    {
+      "order": 9,
+      "topic": "AI 生成代码的 IP 与合规：版权承诺、责任边界与可版权性",
+      "url": "https://blogs.microsoft.com/on-the-issues/2023/09/07/copilot-copyright-commitment-ai-legal-concerns/",
+      "author": "Microsoft（Copilot Copyright Commitment 官方公告，Brad Smith 与 Hossein Nowbar）；GitHub（Copilot 行内建议负责任使用官方文档）；美国版权局（U.S. Copyright Office，2025 报告，公共领域）",
+      "license": "署名翻译（Microsoft/GitHub 版权归原厂、教学用途翻译；美国版权局报告为美国政府作品、公共领域；逐节署名）",
+      "file": "09-ai-code-ip-compliance.md"
+    },
+    {
+      "order": 10,
+      "topic": "团队落地：AI 编码规范的团队推广与度量",
+      "url": "https://code.claude.com/docs/en/admin-setup",
+      "author": "Anthropic（Claude Code 官方文档 Set up Claude Code for your organization / Track team usage with analytics）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途编译翻译并署名）",
+      "file": "10-team-adoption.md"
+    },
+    {
+      "order": 11,
+      "topic": "从 0 到 1 用 AI 做产品：未来属于能直接动手的人",
+      "url": "https://ghuntley.com/dothings/",
+      "author": "Geoffrey Huntley",
+      "license": "署名转载（作者公开博客，翻译转载需署名并附原文链接；本篇为原文全文翻译，编者内容仅限文末已标明的编者注）",
+      "file": "11-zero-to-one-with-ai.md"
+    }
+  ]
+}

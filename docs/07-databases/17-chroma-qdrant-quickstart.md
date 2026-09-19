@@ -5,8 +5,9 @@ author: Qdrant / Chroma（两项目官方 README）
 license: Apache-2.0
 fetched_at: 2026-09-13
 translated: true
-order: 17
 versions: Qdrant 与 Chroma 官方仓库当前版 README（均为 Apache-2.0 项目）
+order: 17
+group: 向量数据库
 ---
 这两个库是轻量级向量数据库的代表：Chroma 以"嵌入式、开箱即用"著称，适合本地原型与中小规模；Qdrant 以 Rust 编写、过滤能力突出，既能单机跑也能分布式部署。本篇把两库的官方上手路径放在一起对照。
 

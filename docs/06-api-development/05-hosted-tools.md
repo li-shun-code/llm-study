@@ -5,10 +5,10 @@ author: OpenAI Cookbook（responses_example、File_Search_Responses、introducti
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 5
 versions: OpenAI Responses API（2026-09）；各 notebook 原文基于 gpt-4o 系 / o3-deep-research / gpt-image-1，概念与参数在当前版本仍然适用
+order: 5
+group: 工具与输出契约
 ---
-
 上一篇 Function Calling 讲的是"自定义工具"：模型输出函数名与参数，**执行权在你手里**。Responses API 还提供另一类工具——**托管工具**（hosted tools，又称内置工具）：`web_search`（网页搜索）、`file_search`（文件/向量检索）、`code_interpreter`（代码执行）、图像生成等。对托管工具，你只需在请求的 `tools` 里声明，**API 会自己决定何时调用并代为执行**，再把结果融入回答——省去了"模型出调用、你执行、回传结果"的手工循环。
 
 Cookbook《What is the Responses API》原文对此的概括是：Responses API 的一个关键收益就是支持 `file_search`、`web_search` 这类托管工具——不必手工调用工具，只要传入工具列表，API 会决定用哪个工具并直接使用它。

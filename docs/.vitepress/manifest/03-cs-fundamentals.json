@@ -1,0 +1,221 @@
+{
+  "module": "03-cs-fundamentals",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "Linux 常用命令：从 Shell 开始",
+      "url": "https://missing.csail.mit.edu/2020/course-shell/",
+      "author": "Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT）",
+      "license": "CC BY-SA 4.0",
+      "file": "01-linux-common-commands.md"
+    },
+    {
+      "order": 2,
+      "topic": "Shell 脚本入门",
+      "url": "https://missing.csail.mit.edu/2020/shell-tools/",
+      "author": "Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT）",
+      "license": "CC BY-SA 4.0",
+      "file": "02-shell-scripting.md"
+    },
+    {
+      "order": 3,
+      "topic": "文件权限",
+      "url": "http://linuxcommand.org/lc3_lts0090.php",
+      "author": "William E. Shotts（《The Linux Command Line》作者）",
+      "license": "版权所有 © William E. Shotts（允许保留版权声明的逐字复制；本篇为署名学习翻译）",
+      "file": "03-file-permissions.md"
+    },
+    {
+      "order": 4,
+      "topic": "SSH：远程开发基础",
+      "url": "https://missing.csail.mit.edu/2020/command-line/",
+      "author": "Anish Athalye、Jon Gjengset、Jose J. Cambronero（MIT）",
+      "license": "CC BY-SA 4.0",
+      "file": "04-ssh.md"
+    },
+    {
+      "order": 5,
+      "topic": "Git 基础：获取仓库、暂存、提交与回退",
+      "url": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository",
+      "author": "Scott Chacon、Ben Straub（Pro Git 2nd Edition，Apress）",
+      "license": "CC BY-NC-SA 3.0",
+      "file": "05-git-basics.md"
+    },
+    {
+      "order": 6,
+      "topic": "Git 分支、合并与远程协作",
+      "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+      "author": "Scott Chacon、Ben Straub（Pro Git 2nd Edition，Apress）",
+      "license": "CC BY-NC-SA 3.0",
+      "file": "06-git-branching.md"
+    },
+    {
+      "order": 7,
+      "topic": "Git 进阶：rebase、cherry-pick 与冲突解决",
+      "url": "https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection",
+      "author": "Scott Chacon、Ben Straub（Pro Git 2nd Edition：7.1 Revision Selection、3.6 Rebasing、7.8 Advanced Merging、5.1 Distributed Workflows、5.3 Maintaining a Project 章节）",
+      "license": "CC BY-NC-SA 3.0",
+      "file": "07-git-advanced.md"
+    },
+    {
+      "order": 8,
+      "topic": "GitHub Actions 与 CI 基础",
+      "url": "https://docs.github.com/en/actions/get-started/understanding-github-actions",
+      "author": "GitHub Docs（Understanding GitHub Actions、Workflow syntax for GitHub Actions）",
+      "license": "CC BY 4.0",
+      "file": "08-github-actions-ci.md"
+    },
+    {
+      "order": 9,
+      "topic": "操作系统概述：虚拟化、并发与持久化",
+      "url": "https://www.ostep.org/",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 1 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "09-os-overview.md"
+    },
+    {
+      "order": 10,
+      "topic": "进程：运行中的程序",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-intro.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 4 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "10-processes.md"
+    },
+    {
+      "order": 11,
+      "topic": "线程：并发导论",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 26 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "11-threads.md"
+    },
+    {
+      "order": 12,
+      "topic": "并发与锁",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 28 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "12-concurrency-and-locks.md"
+    },
+    {
+      "order": 13,
+      "topic": "信号与进程间通信 IPC",
+      "url": "https://beej.us/guide/bgipc/html/split/signals.html",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Unix IPC：Signals、Pipes、FIFOs、System V Shared Memory Segments 章；死锁一节译自 OSTEP 第 32 章）",
+      "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
+      "file": "13-signals-ipc.md"
+    },
+    {
+      "order": 14,
+      "topic": "CPU 调度：FIFO、SJF、STCF 与轮转",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 7 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "14-cpu-scheduling.md"
+    },
+    {
+      "order": 15,
+      "topic": "内存管理：地址空间抽象",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 13 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "15-memory-management.md"
+    },
+    {
+      "order": 16,
+      "topic": "虚拟内存：TLB 与地址翻译加速",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 19 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "16-virtual-memory.md"
+    },
+    {
+      "order": 17,
+      "topic": "文件系统：文件与目录",
+      "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf",
+      "author": "Remzi H. Arpaci-Dusseau、Andrea C. Arpaci-Dusseau（OSTEP 第 39 章）",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "17-file-systems.md"
+    },
+    {
+      "order": 18,
+      "topic": "I/O 多路复用：阻塞、poll() 与 select()",
+      "url": "https://beej.us/guide/bgnet/html/split/slightly-advanced-techniques.html",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Programming）",
+      "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
+      "file": "18-io-multiplexing.md"
+    },
+    {
+      "order": 19,
+      "topic": "epoll 与事件循环",
+      "url": "https://man7.org/linux/man-pages/man7/epoll.7.html",
+      "author": "Davide Libenzi、Michael Kerrisk（Linux man-pages：epoll(7)、epoll_ctl(2)、epoll_wait(2)、epoll_create(2)；引言节译自 Beej's Guide to Network Concepts §29.1）",
+      "license": "GPL-2.0-or-later（man-pages）",
+      "file": "19-epoll-event-loop.md"
+    },
+    {
+      "order": 20,
+      "topic": "网络分层模型：从 HTTP 请求到 OSI",
+      "url": "https://beej.us/guide/bgnet0/html/split/the-layered-network-model.html",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
+      "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
+      "file": "20-network-layering.md"
+    },
+    {
+      "order": 21,
+      "topic": "DNS：域名系统",
+      "url": "https://beej.us/guide/bgnet0/html/split/domain-name-system-dns.html",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
+      "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
+      "file": "21-dns.md"
+    },
+    {
+      "order": 22,
+      "topic": "TCP：传输控制协议",
+      "url": "https://beej.us/guide/bgnet0/html/split/transmission-control-protocol-tcp.html",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
+      "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
+      "file": "22-tcp.md"
+    },
+    {
+      "order": 23,
+      "topic": "UDP：用户数据报协议",
+      "url": "https://beej.us/guide/bgnet0/html/split/user-datagram-protocol-udp.html",
+      "author": "Brian “Beej Jorgensen” Hall（Beej's Guide to Network Concepts）",
+      "license": "CC BY-NC-ND 3.0（含官方翻译例外条款）",
+      "file": "23-udp.md"
+    },
+    {
+      "order": 24,
+      "topic": "HTTP 概述",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
+      "author": "Mozilla 贡献者（MDN Web Docs）",
+      "license": "CC BY-SA 2.5",
+      "file": "24-http.md"
+    },
+    {
+      "order": 25,
+      "topic": "HTTPS 与 TLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc8446",
+      "author": "Eric Rescorla（IETF RFC 8446《TLS 1.3》）；Mozilla 贡献者（MDN Web Docs）",
+      "license": "RFC 8446 部分：IETF Trust Legal Provisions（BCP 78，允许注明出处的翻译）；MDN 部分：CC BY-SA 2.5",
+      "file": "25-https.md"
+    },
+    {
+      "order": 26,
+      "topic": "SSE 与 WebSocket：流式输出的网络基础",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events",
+      "author": "Mozilla 贡献者（MDN Web Docs）",
+      "license": "CC BY-SA 2.5",
+      "file": "26-sse-websocket.md"
+    },
+    {
+      "order": 27,
+      "topic": "REST：表述性状态转移（Fielding 论文第 5 章）",
+      "url": "https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm",
+      "author": "Roy Thomas Fielding（加州大学欧文分校博士学位论文第 5 章，2000）",
+      "license": "版权所有 © Roy Thomas Fielding, 2000（论文在其个人主页公开可获取；本篇为注明出处的署名学习翻译）",
+      "file": "27-rest.md"
+    }
+  ]
+}

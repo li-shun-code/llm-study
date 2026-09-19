@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: Transformers 主分支文档（2026-09）；bitsandbytes 当前开发分支 README
 order: 13
+group: 量化与推理原理
 ---
-
 本篇正文完整译自两份一手文档——Hugging Face Transformers 官方文档的量化总览页（含量化方法选型表）与 bitsandbytes 官方 README（含平台支持矩阵），文末逐节署名。
 
 # 量化总览（译自 Transformers 官方文档 Quantization Overview）

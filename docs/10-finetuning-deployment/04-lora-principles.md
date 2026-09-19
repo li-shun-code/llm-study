@@ -5,10 +5,10 @@ author: DataWhale happy-llm 项目组
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: false
-order: 4
 versions: PEFT ≥0.15（编者注部分）
+order: 4
+group: 训练
 ---
-
 全参微调需要更新模型全部权重，对 7B 以上的模型来说资源压力非常大。LoRA（Low-Rank Adaptation，低秩适应）是目前高效微调 LLM 的主流方法。本文从"为什么只需要低秩更新"讲起，推导 LoRA 的数学原理，并看它的代码实现。
 
 ## 高效微调的两条路线

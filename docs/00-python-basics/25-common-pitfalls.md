@@ -5,10 +5,10 @@ author: Python Software Foundation
 license: PSF 许可证第 2 版（转载署名）
 fetched_at: 2026-09-13
 translated: false
-order: 25
 versions: Python 3.14 文档
+order: 25
+group: 收尾
 ---
-
 ## 变量明明有值，为什么还会出现 UnboundLocalError？
 
 当在函数内部某处添加了一条赋值语句，因而导致之前正常工作的代码报出 `UnboundLocalError` 错误，这确实有点令人惊讶。

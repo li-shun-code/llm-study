@@ -5,8 +5,9 @@ author: Adrienne Watt / Nelson Eng（Database Design - 2nd Edition）
 license: CC BY 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 1
 versions: 概念适用于所有关系数据库；示例对照 PostgreSQL 18 官方教程
+order: 1
+group: SQL 与数据建模
 ---
 在学习具体数据库产品之前，先建立"关系模型（Relational Model）"的概念框架：后面遇到的 SQLite、PostgreSQL、MySQL，乃至 SQLAlchemy ORM，本质上都是这一模型的不同实现。
 

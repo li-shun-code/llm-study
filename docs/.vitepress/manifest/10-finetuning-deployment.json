@@ -2,123 +2,163 @@
   "module": "10-finetuning-deployment",
   "articles": [
     {
-      "topic": "微调 vs RAG vs 提示工程选型",
+      "order": 1,
+      "topic": "微调、RAG 还是提示工程：如何为你的场景选型",
       "url": "https://github.com/microsoft/generative-ai-for-beginners/blob/main/18-fine-tuning/README.md",
-      "channel": "raw",
+      "author": "Microsoft（generative-ai-for-beginners 课程团队）",
+      "license": "MIT",
       "file": "01-finetune-vs-rag-vs-prompting.md"
     },
     {
-      "topic": "GPU 环境基础（CUDA、显存估算、AutoDL 上手）",
+      "order": 2,
+      "topic": "GPU 环境基础：CUDA、显存估算与 AutoDL 上手",
       "url": "https://www.autodl.com/docs/quick_start/",
-      "channel": "web",
+      "author": "AutoDL 帮助文档",
+      "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
       "file": "02-gpu-environment-basics.md"
     },
     {
-      "topic": "训练范式回顾与全参微调流程",
-      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter6/第六章 大模型训练流程实践.md",
-      "channel": "raw",
+      "order": 3,
+      "topic": "训练范式回顾与全参微调流程（Transformers 实战）",
+      "url": "https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md",
+      "author": "DataWhale happy-llm 项目组",
+      "license": "CC BY-NC-SA 4.0",
       "file": "03-training-paradigms-full-finetuning.md"
     },
     {
-      "topic": "LoRA 原理",
-      "url": "https://raw.githubusercontent.com/datawhalechina/happy-llm/main/docs/chapter6/第六章 大模型训练流程实践.md",
-      "channel": "raw",
+      "order": 4,
+      "topic": "LoRA 原理：低秩适应为什么有效",
+      "url": "https://github.com/datawhalechina/happy-llm/blob/main/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B%E5%AE%9E%E8%B7%B5.md",
+      "author": "DataWhale happy-llm 项目组",
+      "license": "CC BY-NC-SA 4.0",
       "file": "04-lora-principles.md"
     },
     {
-      "topic": "QLoRA 与显存优化",
+      "order": 5,
+      "topic": "QLoRA 与显存优化：单卡微调大模型",
       "url": "https://huggingface.co/docs/peft/developer_guides/quantization",
-      "channel": "raw",
+      "author": "Hugging Face（PEFT 文档）",
+      "license": "Apache 2.0",
       "file": "05-qlora-memory-optimization.md"
     },
     {
-      "topic": "训练数据准备与清洗",
+      "order": 6,
+      "topic": "训练数据准备与清洗：TRL 数据集格式全解",
       "url": "https://huggingface.co/docs/trl/dataset_formats",
-      "channel": "raw",
+      "author": "Hugging Face（TRL 文档）",
+      "license": "Apache 2.0",
       "file": "06-training-data-preparation.md"
     },
     {
-      "topic": "数据蒸馏与合成",
+      "order": 7,
+      "topic": "数据蒸馏与合成：用大模型造小模型的训练数据",
       "url": "https://github.com/huggingface/smol-course/tree/main/v1/6_synthetic_datasets",
-      "channel": "raw",
+      "author": "Hugging Face（smol-course）、TRL 文档",
+      "license": "Apache 2.0",
       "file": "07-synthetic-data-distillation.md"
     },
     {
-      "topic": "继续预训练 CPT 与领域自适应",
+      "order": 8,
+      "topic": "继续预训练（CPT）与领域自适应",
       "url": "https://huggingface.co/docs/trl/main/dataset_formats",
-      "channel": "raw",
+      "author": "Hugging Face（TRL 官方文档）、Qwen 团队（官方 README 微调章节）、hiyouga（LLaMA-Factory 官方文档）",
+      "license": "Apache 2.0",
       "file": "08-cpt-domain-adaptation.md"
     },
     {
-      "topic": "训练超参与过拟合诊断",
+      "order": 9,
+      "topic": "训练超参与过拟合诊断：学习率、秩与 loss 曲线判读",
       "url": "https://huggingface.co/docs/trl/lora_without_regret",
-      "channel": "raw",
+      "author": "Hugging Face（TRL 文档，基于 Thinking Machines Lab《LoRA Without Regret》）",
+      "license": "Apache 2.0",
       "file": "09-hyperparams-overfitting.md"
     },
     {
-      "topic": "PEFT/TRL 实战（SFT）",
+      "order": 10,
+      "topic": "PEFT/TRL 实战：SFTTrainer 做有监督微调",
       "url": "https://huggingface.co/docs/trl/sft_trainer",
-      "channel": "raw",
+      "author": "Hugging Face（TRL 文档）",
+      "license": "Apache 2.0",
       "file": "10-trl-sft-practice.md"
     },
     {
-      "topic": "DPO 与偏好优化（TRL 实践）",
+      "order": 11,
+      "topic": "DPO 与偏好优化：TRL DPOTrainer 实践",
       "url": "https://huggingface.co/docs/trl/dpo_trainer",
-      "channel": "raw",
+      "author": "Hugging Face（TRL 文档）",
+      "license": "Apache 2.0",
       "file": "11-dpo-preference-optimization.md"
     },
     {
-      "topic": "GRPO 与 RLVR：推理模型强化学习",
+      "order": 12,
+      "topic": "GRPO 与 RLVR：推理模型强化学习实战",
       "url": "https://huggingface.co/docs/trl/main/grpo_trainer",
-      "channel": "raw",
+      "author": "Hugging Face（TRL 官方文档）、DeepSeek-AI（DeepSeek-R1 官方仓库 README）",
+      "license": "Apache 2.0（TRL）、MIT（DeepSeek-R1）",
       "file": "12-grpo-rlvr.md"
     },
     {
-      "topic": "模型量化基础（Transformers 量化总览 + bitsandbytes）",
+      "order": 13,
+      "topic": "模型量化基础：Transformers 量化总览与 bitsandbytes",
       "url": "https://huggingface.co/docs/transformers/quantization/overview",
-      "channel": "raw",
+      "author": "Hugging Face（Transformers 官方文档）、bitsandbytes-foundation（bitsandbytes 官方 README）",
+      "license": "Apache 2.0（Transformers 文档）、MIT（bitsandbytes）",
       "file": "13-quantization-basics.md"
     },
     {
-      "topic": "推理原理（KV Cache / continuous batching / PagedAttention）",
+      "order": 14,
+      "topic": "推理原理：KV Cache、PagedAttention 与 continuous batching——vLLM 为什么快",
       "url": "https://blog.vllm.ai/2023/06/20/vllm.html",
-      "channel": "web",
+      "author": "Woosuk Kwon、Zhuohan Li（UC Berkeley，vLLM 团队）",
+      "license": "Apache 2.0（vLLM 项目）",
       "file": "14-inference-principles.md"
     },
     {
-      "topic": "Ollama 本地部署（官方 README + 文档全译）",
-      "url": "https://raw.githubusercontent.com/ollama/ollama/main/README.md",
-      "channel": "raw",
+      "order": 15,
+      "topic": "Ollama 本地部署：官方 README 与文档完整指南",
+      "url": "https://github.com/ollama/ollama",
+      "author": "Ollama 团队（GitHub 官方 README 与 docs.ollama.com 官方文档）",
+      "license": "MIT",
       "file": "15-ollama-local-deployment.md"
     },
     {
-      "topic": "vLLM 高吞吐部署（含 Docker 容器化）",
+      "order": 16,
+      "topic": "vLLM 高吞吐部署：从 vllm serve 到 Docker 容器化",
       "url": "https://docs.vllm.ai/en/latest/getting_started/quickstart.html",
-      "channel": "raw",
+      "author": "vLLM 项目",
+      "license": "Apache 2.0",
       "file": "16-vllm-high-throughput-deployment.md"
     },
     {
-      "topic": "推理服务生产化运维（Kubernetes / production stack / Nginx）",
+      "order": 17,
+      "topic": "推理服务生产化运维：Kubernetes、production stack 与负载均衡",
       "url": "https://docs.vllm.ai/en/latest/deployment/k8s/",
-      "channel": "raw",
+      "author": "vLLM 项目（vLLM 官方文档 deployment 章节）",
+      "license": "Apache 2.0",
       "file": "17-inference-serving-production.md"
     },
     {
-      "topic": "开源模型选型（Qwen/GLM/DeepSeek 官方模型卡）",
-      "url": "https://raw.githubusercontent.com/QwenLM/Qwen3.5/main/README.md",
-      "channel": "raw",
+      "order": 18,
+      "topic": "开源模型选型：Qwen、GLM、DeepSeek 官方模型卡对照（2026-09）",
+      "url": "https://github.com/QwenLM/Qwen3.5",
+      "author": "Qwen 团队、智谱 Z.ai（GLM 团队）、DeepSeek-AI（三家官方 README）",
+      "license": "Apache 2.0（Qwen/GLM）、MIT（DeepSeek）",
       "file": "18-open-model-selection.md"
     },
     {
-      "topic": "LLM 评测方法与基准（lm-eval）",
-      "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/main/README.md",
-      "channel": "raw",
+      "order": 19,
+      "topic": "LLM 评测方法与基准：lm-evaluation-harness README 完整指南",
+      "url": "https://github.com/EleutherAI/lm-evaluation-harness",
+      "author": "EleutherAI（lm-evaluation-harness 官方 README）",
+      "license": "MIT",
       "file": "19-evaluation-benchmarks.md"
     },
     {
-      "topic": "安全、合规与内容护栏",
+      "order": 20,
+      "topic": "安全、合规与内容护栏：OWASP LLM Top 10 与 NeMo Guardrails",
       "url": "https://genai.owasp.org/llm-top-10/",
-      "channel": "web",
+      "author": "OWASP GenAI Security Project、NVIDIA（NeMo Guardrails）",
+      "license": "CC BY-SA 4.0（OWASP 内容）、Apache 2.0（NeMo Guardrails）",
       "file": "20-safety-guardrails.md"
     }
   ]

@@ -5,8 +5,9 @@ author: PostgreSQL Global Development Group
 license: PostgreSQL Licence
 fetched_at: 2026-09-13
 translated: true
-order: 6
 versions: PostgreSQL 18 官方文档（第 11 章 11.1、11.2、11.12 节）
+order: 6
+group: SQL 与数据建模
 ---
 ## 索引为什么快
 

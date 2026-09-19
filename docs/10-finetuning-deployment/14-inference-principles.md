@@ -5,10 +5,10 @@ author: Woosuk Kwon、Zhuohan Li（UC Berkeley，vLLM 团队）
 license: Apache 2.0（vLLM 项目）
 fetched_at: 2026-09-13
 translated: true
-order: 14
 versions: vLLM V1 引擎（架构部分译自 2026-09 官方文档）
+order: 14
+group: 量化与推理原理
 ---
-
 "为什么 vLLM 这么快？"——答案不在算子，而在**显存管理**。本文从自回归解码的内存瓶颈讲起，解释 PagedAttention 的设计，再补充 V1 引擎架构与连续批处理，让你能完整回答"vLLM 为什么快"。
 
 ## 超越当时的最优性能

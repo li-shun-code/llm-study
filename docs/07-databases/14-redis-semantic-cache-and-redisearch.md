@@ -5,8 +5,9 @@ author: Redis Ltd.（redis/docs 文档仓库）
 license: CC BY-SA 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 14
 versions: redis/docs 仓库当前版（Redis 8 / Redis Open Source，含 Redis Search 与语义缓存用例指南）
+order: 14
+group: 缓存与文档型存储
 ---
 ## Redis Search：搜索与查询
 

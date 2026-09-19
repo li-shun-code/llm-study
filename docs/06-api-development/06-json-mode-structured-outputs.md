@@ -5,10 +5,10 @@ author: OpenAI Cookbook（Introduction to Structured Outputs）、OpenAI（opena
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 6
 versions: openai-python 2026-09 最新稳定版；gpt-4o-2024-08-06 起支持 Structured Outputs，现行模型均可用
+order: 6
+group: 工具与输出契约
 ---
-
 结构化输出（Structured Outputs）保证模型**永远生成符合你给定 JSON Schema 的响应**——与只保证"是合法 JSON"的 JSON Mode 相比，它约束的是 JSON 的**形状**，而不只是合法性。这让生产级应用可以放心地把输出 `json.loads` 后直接用。
 
 ## 一、两个层级：JSON Mode 与 Structured Outputs

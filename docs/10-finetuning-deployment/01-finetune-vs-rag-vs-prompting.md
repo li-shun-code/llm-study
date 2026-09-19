@@ -5,10 +5,10 @@ author: Microsoft（generative-ai-for-beginners 课程团队）
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 1
 versions: 课程版本 2026-09 主分支（含 Microsoft Foundry 当前微调技术说明）
+order: 1
+group: 选型与训练环境
 ---
-
 用大语言模型构建生成式 AI 应用会带来新的挑战。一个关键问题是：如何保证模型针对给定用户请求所生成内容的质量（准确性与相关性）。在前面的课程中，我们讨论过提示工程（Prompt Engineering）与检索增强生成（Retrieval-Augmented Generation，RAG）这两种技术，它们都通过**修改输入给现有模型的提示词**来解决问题。本课讨论第三种技术——**微调（Fine-Tuning）**，它尝试通过**用额外数据重新训练模型本身**来应对这一挑战。
 
 ## 什么是面向语言模型的微调

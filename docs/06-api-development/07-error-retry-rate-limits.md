@@ -5,10 +5,10 @@ author: OpenAI Cookbook（How to handle rate limits）、OpenAI（openai-python 
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 7
 versions: openai-python 2026-09 最新稳定版（默认重试 2 次、默认超时 10 分钟）
+order: 7
+group: 可靠性、安全与成本
 ---
-
 生产环境的 LLM 应用一定会遇到三类故障：请求太快被限流（429）、网络/超时、服务端 5xx。这一篇把 SDK 的异常体系、自动重试机制，以及 Cookbook 的限流应对策略一次讲全。
 
 ## 一、为什么存在限流（Rate Limits）

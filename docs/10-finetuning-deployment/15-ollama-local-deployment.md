@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: Ollama 官方 README 与 docs.ollama.com 当前版（2026-09，含 ollama launch 集成与 cloud 模式）
 order: 15
+group: 部署与服务化
 ---
-
 本篇正文完整译自 Ollama 官方 GitHub README 与官方文档站（quickstart、CLI、import、GPU、FAQ、Docker 六个页面），文末逐节署名。
 
 # Ollama（译自官方 README）

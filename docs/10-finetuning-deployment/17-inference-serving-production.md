@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: vLLM 官方文档 latest（2026-09，docs.vllm.ai 与仓库 docs/ 目录同源）
 order: 17
+group: 部署与服务化
 ---
-
 上一篇把 vLLM 跑了起来，这一篇解决"跑在生产里"：Kubernetes 原生部署（探针、共享内存、GPU 调度）、官方 production stack（Helm 一键部署 + 路由器 + 可观测性），以及 Nginx 负载均衡方案。三节均完整翻译自 vLLM 官方文档 deployment 章节，文末逐节署名。
 
 # 在 Kubernetes 上使用 vLLM（译自官方文档 Using Kubernetes）

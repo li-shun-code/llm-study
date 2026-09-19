@@ -5,8 +5,9 @@ author: Adrienne Watt / Nelson Eng（Database Design - 2nd Edition）
 license: CC BY 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 2
 versions: 概念性内容，适用于所有关系数据库
+order: 2
+group: SQL 与数据建模
 ---
 ## E-R 数据模型
 

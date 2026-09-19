@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: Mem0 2026-04 新记忆算法版；Letta（f.k.a. MemGPT）当前版；Zep Cloud 仓库当前版
 order: 10
+group: 记忆与上下文管理
 ---
-
 上一篇的 LangGraph 记忆机制给出了"检查点器 + Store"的基础设施视角。这一篇看三个专门的 Agent 记忆系统：**Mem0**（开箱即用的记忆层）、**Letta**（源自 MemGPT 的有状态智能体框架）与 **Zep**（托管的时间感知记忆服务）。三节均译自各自官方仓库 README，文末逐节署名。
 
 # Mem0：为个性化 AI 而生的记忆层（译自 mem0ai/mem0 README）

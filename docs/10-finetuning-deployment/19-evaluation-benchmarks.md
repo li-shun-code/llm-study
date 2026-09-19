@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: lm-eval 主分支（2026-09 当前版，含 Plugins 与 CLI 子命令重构）
 order: 19
+group: 评测、选型与安全合规
 ---
-
 本篇正文完整译自 lm-evaluation-harness 官方 README。lm-eval 是开源 LLM 评测的事实标准——Hugging Face Open LLM Leaderboard 的后端、数百篇论文的评测工具。
 
 # Language Model Evaluation Harness（译自官方 README）

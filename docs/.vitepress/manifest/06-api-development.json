@@ -2,106 +2,132 @@
   "module": "06-api-development",
   "articles": [
     {
-      "topic": "第一个 API 调用（Responses API 为主、Chat Completions 对照）",
+      "order": 1,
+      "topic": "第一个 API 调用：Responses API 与 Chat Completions",
       "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
-      "channel": "raw",
+      "author": "OpenAI（openai-python README）、OpenAI Cookbook（responses_example.ipynb）",
+      "license": "Apache 2.0 / MIT",
       "file": "01-first-api-call.md"
     },
     {
+      "order": 2,
       "topic": "消息角色与多轮会话管理",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（How to format inputs to ChatGPT models、responses_example.ipynb）、OpenAI（openai-python README）",
+      "license": "MIT / Apache 2.0",
       "file": "02-message-roles-multi-turn.md"
     },
     {
+      "order": 3,
       "topic": "流式输出（SSE）",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（How to stream completions）、OpenAI（openai-python README）",
+      "license": "MIT / Apache 2.0",
       "file": "03-streaming-sse.md"
     },
     {
-      "topic": "Function Calling/Tool Use",
+      "order": 4,
+      "topic": "Function Calling / Tool Use：让模型调用你的函数",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_call_functions_with_chat_models.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（How to call functions with chat models、responses_api_tool_orchestration.ipynb）",
+      "license": "MIT",
       "file": "04-function-calling.md"
     },
     {
-      "topic": "Responses API 托管工具（web_search/file_search/code_interpreter/图像生成）",
+      "order": 5,
+      "topic": "Responses API 托管工具：web_search、file_search、code_interpreter 与图像生成",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/responses_api/responses_example.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（responses_example、File_Search_Responses、introduction_to_deep_research_api、Generate_Images_With_GPT_Image）",
+      "license": "MIT",
       "file": "05-hosted-tools.md"
     },
     {
-      "topic": "JSON Mode 与结构化输出（Structured Outputs/JSON Schema）",
+      "order": 6,
+      "topic": "JSON Mode 与结构化输出（Structured Outputs）",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Structured_Outputs_Intro.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（Introduction to Structured Outputs）、OpenAI（openai-python helpers 文档）",
+      "license": "MIT / Apache 2.0",
       "file": "06-json-mode-structured-outputs.md"
     },
     {
-      "topic": "错误处理/重试/限流",
+      "order": 7,
+      "topic": "错误处理、重试与限流",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_handle_rate_limits.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（How to handle rate limits）、OpenAI（openai-python README · Handling errors / Retries / Timeouts）",
+      "license": "MIT / Apache 2.0",
       "file": "07-error-retry-rate-limits.md"
     },
     {
-      "topic": "Moderation API 与内容过滤（输入/输出/自定义审核）",
+      "order": 8,
+      "topic": "Moderation API 与内容过滤",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_use_moderation.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook",
+      "license": "MIT",
       "file": "08-moderation-api.md"
     },
     {
-      "topic": "成本与 Token 优化（Prompt Caching 与 Batch API）",
+      "order": 9,
+      "topic": "成本与 Token 优化：Prompt Caching 与 Batch API",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Prompt_Caching101.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（Prompt Caching 101、Batch processing with the Batch API）",
+      "license": "MIT",
       "file": "09-cost-token-optimization.md"
     },
     {
-      "topic": "OpenAI 兼容端点与 LiteLLM",
-      "url": "https://docs.litellm.ai/docs/",
-      "channel": "web",
-      "file": "10-openai-compatible-litellm.md"
-    },
-    {
-      "topic": "模型版本与弃用管理（Deprecations + Prompt 迁移 + Azure v1 生命周期）",
+      "order": 10,
+      "topic": "模型版本与弃用管理",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/data/oai_docs/deprecations.txt",
-      "channel": "raw",
-      "file": "11-model-deprecation.md"
+      "author": "OpenAI（Deprecations 文档、Prompt Migration Guide）、openai-python（README）、Microsoft（Azure OpenAI v1 API 文档）",
+      "license": "MIT（OpenAI Cookbook 收录部分）与 Apache 2.0（openai-python 部分）；Azure 部分为 © Microsoft 学习翻译",
+      "file": "10-model-deprecation.md"
     },
     {
+      "order": 11,
+      "topic": "视觉理解 API：把图片喂给多模态模型",
+      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
+      "author": "OpenAI（openai-python README · Vision）、OpenAI Cookbook（Tag caption images with GPT-4V）",
+      "license": "Apache 2.0 / MIT",
+      "file": "11-vision-api.md"
+    },
+    {
+      "order": 12,
       "topic": "Embedding API 与文本相似度",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Get_embeddings_from_dataset.ipynb",
-      "channel": "raw",
+      "author": "OpenAI Cookbook（Get embeddings from dataset、Semantic text search using embeddings）",
+      "license": "MIT",
       "file": "12-embeddings-similarity.md"
     },
     {
-      "topic": "视觉理解 API",
-      "url": "https://raw.githubusercontent.com/openai/openai-python/main/README.md",
-      "channel": "raw",
-      "file": "13-vision-api.md"
-    },
-    {
-      "topic": "语音 API（ASR/TTS/Realtime，选学）",
+      "order": 13,
+      "topic": "语音 API：转写、合成与实时会话（选学）",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/Speech_transcription_methods.ipynb",
-      "channel": "raw",
-      "file": "14-speech-api.md"
+      "author": "OpenAI Cookbook（Comparing Speech-to-Text Methods、Steering Text-to-Speech）、OpenAI（openai-python README · Realtime）",
+      "license": "MIT / Apache 2.0",
+      "file": "13-speech-api.md"
     },
     {
-      "topic": "LangChain 快速入门（≥1.0 create_agent）",
-      "url": "https://docs.langchain.com/oss/python/langchain/quickstart",
-      "channel": "web",
-      "file": "15-langchain-quickstart.md"
+      "order": 14,
+      "topic": "OpenAI 兼容端点与 LiteLLM：一套代码调用所有模型",
+      "url": "https://docs.litellm.ai/docs/",
+      "author": "BerriAI（LiteLLM 官方文档）",
+      "license": "MIT（enterprise 目录除外）",
+      "file": "14-openai-compatible-litellm.md"
     },
     {
-      "topic": "用 FastAPI 封装 LLM 服务（.env 方案，交叉引用模块 0）",
+      "order": 15,
+      "topic": "用 FastAPI 封装 LLM 服务",
       "url": "https://fastapi.tiangolo.com/zh/tutorial/first-steps/",
-      "channel": "web",
-      "file": "16-fastapi-llm-service.md"
+      "author": "FastAPI 官方文档（中文版，tiangolo）",
+      "license": "MIT",
+      "file": "15-fastapi-llm-service.md"
     },
     {
+      "order": 16,
       "topic": "实战：命令行聊天机器人",
       "url": "https://raw.githubusercontent.com/openai/openai-cookbook/main/examples/How_to_stream_completions.ipynb",
-      "channel": "raw",
-      "file": "17-cli-chatbot-practice.md"
+      "author": "OpenAI Cookbook（How to stream completions、responses_example.ipynb）、OpenAI（openai-python README）",
+      "license": "MIT / Apache 2.0",
+      "file": "16-cli-chatbot-practice.md"
     }
   ]
 }

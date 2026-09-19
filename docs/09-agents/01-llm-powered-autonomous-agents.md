@@ -6,6 +6,7 @@ license: CC BY-NC 4.0
 fetched_at: 2026-09-13
 translated: true
 order: 1
+group: 奠基：智能体如何思考
 vPre: true
 ---
 以大语言模型（LLM）为核心控制器来构建智能体（Agent）是一个很酷的概念。AutoGPT、GPT-Engineer、BabyAGI 等一批概念验证（Proof-of-Concept） demos 是极具启发性的例子。LLM 的潜力不止于生成写得不错的文案、故事、散文和程序——它还可以被构架为一个强大的通用问题求解器（General Problem Solver）。

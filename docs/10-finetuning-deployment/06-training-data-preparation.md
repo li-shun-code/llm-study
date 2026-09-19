@@ -5,10 +5,10 @@ author: Hugging Face（TRL 文档）
 license: Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 6
 versions: TRL（2026-09 主分支文档，含 Tool Calling / Harmony 格式）
+order: 6
+group: 训练
 ---
-
 微调效果的上限由数据决定。这份 TRL 官方指南是训练数据准备的"标准答案"：无论用哪个 Trainer，先把数据整理成它期望的**格式（format）**与**类型（type）**，再谈超参数。
 
 ## 格式与类型：两个正交的维度

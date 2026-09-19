@@ -20,44 +20,45 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       {
-        text: '开发者内功',
+        text: '① 开发内功',
         items: [
           { text: '🐍 Python 基础', link: '/00-python-basics/' },
-          { text: '🧮 数据结构与算法', link: '/01-dsa/' },
-          { text: '💻 计算机基础', link: '/02-cs-fundamentals/' },
-          { text: '⚙️ Python 进阶与框架', link: '/03-python-advanced/' }
+          { text: '⚙️ Python 进阶与工程化', link: '/01-python-advanced/' },
+          { text: '🧮 数据结构与算法', link: '/02-dsa/' },
+          { text: '💻 计算机基础', link: '/03-cs-fundamentals/' }
         ]
       },
       {
-        text: 'LLM 应用开发',
+        text: '② 原理与提示',
         items: [
-          { text: '🧠 LLM 基础', link: '/04-llm-basics/' },
-          { text: '💬 Prompt 工程', link: '/05-prompt-engineering/' },
-          { text: '🔌 API 与应用开发', link: '/06-api-development/' },
-          { text: '🗄️ 数据库', link: '/07-databases/' },
-          { text: '📚 RAG', link: '/08-rag/' },
+          { text: '🧠 LLM 原理与模型生态', link: '/04-llm-basics/' },
+          { text: '💬 提示工程与上下文工程', link: '/05-prompt-engineering/' }
+        ]
+      },
+      {
+        text: '③ LLM 应用开发',
+        items: [
+          { text: '🔌 模型 API 与应用开发', link: '/06-api-development/' },
+          { text: '🗄️ 数据库与向量存储', link: '/07-databases/' },
+          { text: '📚 RAG 检索增强生成', link: '/08-rag/' },
           { text: '🤖 Agent 智能体', link: '/09-agents/' },
           { text: '🛠️ 微调与部署', link: '/10-finetuning-deployment/' }
         ]
       },
-      { text: '✨ Vibe Coding', link: '/11-vibe-coding/' },
       {
-        text: '☕ Java 设计模式',
+        text: '④ AI 编程实战',
         items: [
-          { text: '专栏导读与模式总览', link: '/13-design-patterns-java/' },
-          { text: '创建型模式', link: '/13-design-patterns-java/creational' },
-          { text: '结构型模式', link: '/13-design-patterns-java/structural' },
-          { text: '行为型模式', link: '/13-design-patterns-java/behavioral' },
-          { text: '企业级架构模式', link: '/13-design-patterns-java/enterprise' }
+          { text: '🧰 AI 编程工具与环境', link: '/11-ai-coding-tools/' },
+          { text: '📐 规范、上下文与技能', link: '/12-ai-coding-context/' },
+          { text: '🛡️ AI 工程实践与质量安全', link: '/13-ai-coding-engineering/' },
+          { text: '📚 名篇与视野', link: '/14-ai-coding-classics/' }
         ]
       },
       {
-        text: '🔍 项目源码分析',
+        text: '⑤ 源码与延伸',
         items: [
-          { text: '🏗️ Dify 工作流引擎', link: '/12-project-analysis/' },
-          { text: '⚙️ n8n 执行引擎', link: '/12-project-analysis/n8n' },
-          { text: '📚 RAGFlow 检索管线', link: '/12-project-analysis/ragflow' },
-          { text: '🌐 browser-use Agent 循环', link: '/12-project-analysis/browser-use' }
+          { text: '🔍 优质项目源码分析', link: '/15-project-analysis/' },
+          { text: '☕ Java 设计模式专栏', link: '/16-design-patterns-java/' }
         ]
       }
     ],

@@ -5,8 +5,9 @@ author: SQLAlchemy authors and contributors
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 11
 versions: SQLAlchemy 2.0.52（当前稳定版；全文使用 2.0 风格 API，不涉及遗留 Query API）
+order: 11
+group: PostgreSQL 与工程化
 ---
 SQLAlchemy 是 Python 生态最主流的 ORM（Object-Relational Mapper，对象关系映射器）。本篇以 SQLAlchemy 2.0 的现代写法（类型注解 + `mapped_column()` + `select()`）走通 ORM 的完整流程：声明模型 → 建 Engine → 建表 → 增 → 查（含 JOIN） → 改 → 删。
 

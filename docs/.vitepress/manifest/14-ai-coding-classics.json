@@ -1,0 +1,45 @@
+{
+  "module": "14-ai-coding-classics",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "我的 LLM 代码生成工作流（Harper Reed 名篇全文翻译）",
+      "url": "https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/",
+      "author": "Harper Reed",
+      "license": "署名翻译转载（作者公开博客，允许署名翻译转载，需署名并附原文链接）",
+      "file": "01-harper-llm-codegen-workflow.md"
+    },
+    {
+      "order": 2,
+      "topic": "初级开发者的复仇（Steve Yegge 名篇全文翻译）",
+      "url": "https://yegge.ai/essays/revenge-of-the-junior-developer/",
+      "author": "Steve Yegge",
+      "license": "署名翻译转载（作者公开站点/Sourcegraph 博客名篇，允许署名翻译转载，需署名并附原文链接）",
+      "file": "02-yegge-revenge-of-the-junior-developer.md"
+    },
+    {
+      "order": 3,
+      "topic": "Ralph Wiggum 作为\"软件工程师\"（Geoffrey Huntley 名篇全文翻译）",
+      "url": "https://ghuntley.com/ralph/",
+      "author": "Geoffrey Huntley",
+      "license": "署名翻译转载（作者公开博客，允许署名翻译转载，需署名并附原文链接）",
+      "file": "03-ralph-wiggum-software-engineer.md"
+    },
+    {
+      "order": 4,
+      "topic": "Vibe Coding 中文实战精选：vibe-coding-cn 的核心命题、经验心法与拼好码",
+      "url": "https://github.com/tradecatlabs/vibe-coding-cn",
+      "author": "vibe-coding-cn 仓库贡献者（tukuaiai、123olp 等）",
+      "license": "MIT（仓库 LICENSE，署名转载；中文原文直接转载）",
+      "file": "04-vibe-coding-cn-guide.md"
+    },
+    {
+      "order": 5,
+      "topic": "AI 编程开发指南精选：鱼皮 ai-guide 的核心心法与 Claude Code 配置哲学",
+      "url": "https://github.com/liyupi/ai-guide",
+      "author": "程序员鱼皮（liyupi）",
+      "license": "CC BY-NC-SA 4.0（教程文档内容，署名-非商业性使用-相同方式共享；中文原文直接转载）",
+      "file": "05-ai-guide-picks.md"
+    }
+  ]
+}

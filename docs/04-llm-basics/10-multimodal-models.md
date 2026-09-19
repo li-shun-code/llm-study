@@ -6,8 +6,8 @@ license: Hugging Face Blog（署名转载；博客仓库未附独立许可证文
 fetched_at: 2026-09-13
 translated: true
 order: 10
+group: 生态与选型
 ---
-
 ## 一、什么是视觉语言模型（VLM）（编者注）
 
 视觉语言模型（Vision Language Model，VLM）= 语言模型 + 视觉编码器。主流做法（LLaVA 一系）分三件套：

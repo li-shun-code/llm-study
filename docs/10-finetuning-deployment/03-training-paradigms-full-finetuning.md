@@ -5,8 +5,9 @@ author: DataWhale happy-llm 项目组
 license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: false
-order: 3
 versions: transformers Trainer / DeepSpeed ZeRO-2（2026-09 现行版本）
+order: 3
+group: 训练
 ---
 ## 6.1 模型预训练
 

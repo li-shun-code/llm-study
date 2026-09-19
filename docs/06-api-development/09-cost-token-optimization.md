@@ -5,10 +5,10 @@ author: OpenAI Cookbook（Prompt Caching 101、Batch processing with the Batch A
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 9
 versions: Prompt Caching（提示词 >1024 token 自动启用）；Batch API（completion_window=24h，约 5 折）
+order: 9
+group: 可靠性、安全与成本
 ---
-
 控制 LLM 应用成本，先想清楚两个"被动省钱"机制——它们不需要你改模型行为，只需要改**请求的组织方式**：
 
 - **Prompt Caching（提示词缓存）**：重复的提示词前缀命中缓存，降低延迟与费用——优化"实时请求"的成本；

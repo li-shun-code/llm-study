@@ -5,8 +5,9 @@ author: Mike Bayer / SQLAlchemy 作者与贡献者（Alembic 项目）
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 12
 versions: Alembic 1.20.0 官方教程
+order: 12
+group: PostgreSQL 与工程化
 ---
 ## 教程
 

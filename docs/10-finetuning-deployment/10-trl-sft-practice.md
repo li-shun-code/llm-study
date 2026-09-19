@@ -5,10 +5,10 @@ author: Hugging Face（TRL 文档）
 license: Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 10
 versions: TRL（2026-09 主分支文档，SFTTrainer/SFTConfig 现行 API）
+order: 10
+group: 训练
 ---
-
 原理已在前面几篇铺垫完毕：SFT 学什么（[训练范式回顾](./03-training-paradigms-full-finetuning)）、数据什么格式（[数据准备](./06-training-data-preparation)）、超参怎么给（[超参与过拟合](./09-hyperparams-overfitting)）。这篇进入实战：用 TRL 的 `SFTTrainer`，十几行代码完成一次有监督微调。
 
 ## 概述

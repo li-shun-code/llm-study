@@ -5,10 +5,10 @@ author: OpenAI Cookbook（How to format inputs to ChatGPT models、responses_exa
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 2
 versions: openai-python 2026-09 最新稳定版；原 notebook 基于 gpt-3.5-turbo/gpt-4 时代撰写，本站示例按现行 API 校订
+order: 2
+group: 调用基础
 ---
-
 聊天模型把**一系列消息（messages）**作为输入，返回一条模型生成的消息作为输出。这一篇讲清楚：消息有哪些角色、如何组织多轮对话、以及"谁来记住历史"的两种方案。
 
 ## 一、消息与角色

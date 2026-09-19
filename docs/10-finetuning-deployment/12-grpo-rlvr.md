@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: TRL 主分支文档（2026-09 当前版）；DeepSeek-R1 仓库当前版
 order: 12
+group: 对齐与强化学习
 ---
-
 上一篇 DPO 解决了"没有奖励模型也要对齐偏好"。这一篇进入推理模型时代的主流后训练方法：**GRPO**（Group Relative Policy Optimization，组相对策略优化）——DeepSeekMath 提出、经 DeepSeek-R1 用可验证奖励（RLVR，Reinforcement Learning with Verifiable Rewards）路线发扬光大。本文第一部分译自 DeepSeek-R1 官方仓库 README（MIT），第二部分完整翻译 TRL 官方文档 GRPOTrainer 一页（Apache 2.0），文末逐节署名。
 
 # 第一部分：DeepSeek-R1——纯强化学习驱动的推理模型（译自 DeepSeek-R1 官方 README）

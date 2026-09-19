@@ -5,8 +5,9 @@ author: PostgreSQL Global Development Group
 license: PostgreSQL Licence
 fetched_at: 2026-09-13
 translated: true
-order: 7
 versions: PostgreSQL 18 官方教程（第 3 章 3.4 节）+ 官方文档第 13 章 MVCC/并发控制（13.1–13.2 节）
+order: 7
+group: SQL 与数据建模
 ---
 ## 事务是什么
 

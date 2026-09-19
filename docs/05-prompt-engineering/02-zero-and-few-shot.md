@@ -5,8 +5,9 @@ author: DAIR.AI（Elvis Saravia）
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 2
 versions: 提示技术通用
+order: 2
+group: 提示基础
 ---
 ## 零样本提示
 

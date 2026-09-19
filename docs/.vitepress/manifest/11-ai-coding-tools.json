@@ -1,0 +1,93 @@
+{
+  "module": "11-ai-coding-tools",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "Vibe Coding 是什么：概念源起与工程争议",
+      "url": "https://simonwillison.net/2025/Mar/19/vibe-coding/",
+      "author": "Simon Willison（主篇：Not all AI-assisted programming is vibe coding；延伸篇：Vibe engineering）",
+      "license": "署名转载（作者博客允许引用转载，需署名并附原文链接；标注 CC BY-SA 4.0 的内容同此处理）",
+      "file": "01-what-is-vibe-coding.md"
+    },
+    {
+      "order": 2,
+      "topic": "AI 编程工具全景对比（2026-09 版）",
+      "url": "https://code.claude.com/docs/en/overview",
+      "author": "各工具官方文档（本站编译）：Anthropic Claude Code Docs、Cursor Docs、GitHub Copilot Docs、Cline Docs、Cognition/Devin（Windsurf）Docs、OpenAI Codex",
+      "license": "署名编译（各官方文档版权归原厂所有，本文为教学用途的编译与翻译，逐节署名）",
+      "file": "02-ai-coding-tools-landscape.md"
+    },
+    {
+      "order": 3,
+      "topic": "AI 编码工具与模型评测基准：SWE-bench 与 Terminal-Bench",
+      "url": "https://github.com/SWE-bench/SWE-bench",
+      "author": "Carlos E. Jimenez、John Yang 等（SWE-bench 团队，Princeton）；Terminal-Bench 团队（Laude Institute）；Anthropic、OpenAI（官方公告 benchmark 章节）",
+      "license": "SWE-bench 与 Terminal-Bench README 为 MIT / Apache-2.0 许可；Anthropic/OpenAI 公告章节为官方博客署名翻译（版权归原厂，教学用途）",
+      "file": "03-benchmarks-swe-bench.md"
+    },
+    {
+      "order": 4,
+      "topic": "心智模型：LLM 如何\"看\"你的代码",
+      "url": "https://code.claude.com/docs/en/how-claude-code-works",
+      "author": "Anthropic（Claude Code 官方文档 How Claude Code works / Explore the context window）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名；编者补充部分已标明）",
+      "file": "04-llm-mental-model.md"
+    },
+    {
+      "order": 5,
+      "topic": "环境搭建：Claude Code 与 Cursor 的安装及首次配置",
+      "url": "https://code.claude.com/docs/en/quickstart",
+      "author": "Anthropic（Claude Code 官方文档 Quickstart / Advanced setup）；Anysphere（Cursor 官方文档 Quickstart）",
+      "license": "署名翻译（两家官方文档版权归原厂所有，本文为教学用途的编译与翻译，逐节署名）",
+      "file": "05-setup-claude-code-cursor.md"
+    },
+    {
+      "order": 6,
+      "topic": "Claude Code 工作流与最佳实践",
+      "url": "https://code.claude.com/docs/en/best-practices",
+      "author": "Anthropic（Claude Code 官方文档）",
+      "license": "署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途全文翻译并署名）",
+      "file": "06-claude-code-best-practices.md"
+    },
+    {
+      "order": 7,
+      "topic": "Claude Code 权限系统与安全机制",
+      "url": "https://code.claude.com/docs/en/permissions",
+      "author": "Anthropic（Claude Code 官方文档 Permissions / Permission modes / Sandboxing）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名）",
+      "file": "07-claude-code-permissions.md"
+    },
+    {
+      "order": 8,
+      "topic": "Cursor 入门与 Rules 规则系统",
+      "url": "https://cursor.com/docs/context/rules",
+      "author": "Anysphere（Cursor 官方文档）",
+      "license": "署名翻译（官方文档版权归 Anysphere 所有，仅作教学用途全文翻译并署名）",
+      "file": "08-cursor-rules.md"
+    },
+    {
+      "order": 9,
+      "topic": "Cursor 深入：Tab 补全、Agent 模式与调试/评审工作流",
+      "url": "https://cursor.com/docs/agent/overview",
+      "author": "Anysphere（Cursor 官方文档 Agent / Plan Mode / Debug Mode / Agent Review / Prompting / Tab）",
+      "license": "署名翻译（官方文档版权归 Anysphere 所有，教学用途编译翻译并署名）",
+      "file": "09-cursor-modes.md"
+    },
+    {
+      "order": 10,
+      "topic": "开源工具生态：Cline 与 Windsurf",
+      "url": "https://docs.cline.bot/cline-overview",
+      "author": "Cline Bot Inc.（Cline 官方文档）；Cognition（Devin Desktop/Cascade 官方文档）；Microsoft（VS Code README/LICENSE）",
+      "license": "署名翻译（Cline/Cognition/Microsoft 官方文档与仓库资料版权归原厂所有，教学用途编译翻译并署名；对比表与收束为本站编者内容并已标明）",
+      "file": "10-cline-windsurf-ecosystem.md"
+    },
+    {
+      "order": 11,
+      "topic": "成本管理：Token 消耗、订阅选择与用量优化",
+      "url": "https://code.claude.com/docs/en/costs",
+      "author": "Anthropic（Claude Code 官方文档 Manage costs effectively）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC，教学用途翻译并署名）",
+      "file": "11-cost-management.md"
+    }
+  ]
+}

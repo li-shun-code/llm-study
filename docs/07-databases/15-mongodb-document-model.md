@@ -5,8 +5,9 @@ author: MongoDB Inc.（MongoDB 文档手册）
 license: CC BY-NC-SA 3.0 US
 fetched_at: 2026-09-13
 translated: true
-order: 15
 versions: MongoDB 文档手册当前版（含 5.0/6.1 起的行为说明）
+order: 15
+group: 缓存与文档型存储
 ---
 ## MongoDB 是什么
 

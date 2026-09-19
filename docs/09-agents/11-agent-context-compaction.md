@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: docs.langchain.com 当前版（LangChain 1.x / Deep Agents）；Claude Code 文档 v2.1.x（2026-09）
 order: 11
+group: 记忆与上下文管理
 ---
-
 本模块第 1 篇讲过上下文窗口是 Agent 的"工作内存"；「Prompt 工程」已全文翻译过 Anthropic《Effective context engineering for AI agents》的通论部分。这一篇聚焦其中与**长时运行 Agent**最相关的技术——**压缩（Compaction）**，并整合 LangChain/Deep Agents 官方文档与 Claude Code 官方文档中的对应内容，构成"原理 → 框架实现 → 产品实践"三层对照。全文逐节署名。
 
 # 长时程任务的上下文工程（译自 Anthropic Engineering《Effective context engineering for AI agents》"Context engineering for long-horizon tasks"一节）

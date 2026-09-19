@@ -5,8 +5,9 @@ author: Milvus（Zilliz）
 license: Apache-2.0
 fetched_at: 2026-09-13
 translated: true
-order: 19
 versions: Milvus 官方文档当前版（milvus-docs v3.0.x）
+order: 19
+group: 向量数据库
 ---
 ## 选型方法论
 

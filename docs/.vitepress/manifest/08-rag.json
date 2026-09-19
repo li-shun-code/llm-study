@@ -2,117 +2,155 @@
   "module": "08-rag",
   "articles": [
     {
-      "topic": "什么是 RAG",
+      "order": 1,
+      "topic": "什么是 RAG：检索增强生成入门",
       "url": "https://www.pinecone.io/learn/retrieval-augmented-generation/",
-      "channel": "web",
+      "author": "Jenna Pederson（Pinecone Learn Center）",
+      "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
       "file": "01-what-is-rag.md"
     },
     {
-      "topic": "文档解析与摄取（Docling/MinerU/Unstructured）",
-      "url": "https://raw.githubusercontent.com/docling-project/docling/main/README.md",
-      "channel": "raw",
-      "file": "02-document-parsing-ingestion.md"
-    },
-    {
-      "topic": "Embedding 深入",
-      "url": "https://huggingface.co/blog/getting-started-with-embeddings",
-      "channel": "raw",
-      "file": "03-embedding-deep-dive.md"
-    },
-    {
-      "topic": "Embedding 模型选型实战（中文优先，BGE/MTEB/Qwen3）",
-      "url": "https://raw.githubusercontent.com/FlagOpen/FlagEmbedding/master/README.md",
-      "channel": "raw",
-      "file": "04-embedding-model-selection.md"
-    },
-    {
-      "topic": "文档分块策略（含 Anthropic Contextual Retrieval）",
-      "url": "https://www.pinecone.io/learn/chunking-strategies/",
-      "channel": "web",
-      "file": "05-chunking-strategies.md"
-    },
-    {
-      "topic": "向量检索与相似度",
-      "url": "https://www.pinecone.io/learn/vector-similarity/",
-      "channel": "web",
-      "file": "06-vector-search-similarity.md"
-    },
-    {
-      "topic": "元数据过滤与多维过滤检索",
-      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/multi_faceted_filtering.ipynb",
-      "channel": "raw",
-      "file": "07-metadata-filtering.md"
-    },
-    {
+      "order": 2,
       "topic": "最小 RAG（Simple RAG）系统",
-      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/simple_rag.ipynb",
-      "channel": "raw",
-      "file": "08-minimal-rag-walkthrough.md"
+      "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/simple_rag.ipynb",
+      "author": "Nir Diamant（RAG_Techniques）",
+      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
+      "file": "02-minimal-rag-walkthrough.md"
     },
     {
-      "topic": "RAG 评估（RAGAS）",
-      "url": "https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md",
-      "channel": "raw",
-      "file": "09-rag-evaluation-ragas.md"
+      "order": 3,
+      "topic": "文档解析与摄取：把 PDF、扫描件和表格变成干净的 Markdown",
+      "url": "https://raw.githubusercontent.com/docling-project/docling/main/README.md",
+      "author": "Docling 项目（IBM Research）／MinerU 项目（OpenDataLab）／Unstructured 项目",
+      "license": "MIT（Docling）／MinerU 开源许可（基于 Apache 2.0 + 附加条款）／Apache 2.0（Unstructured）",
+      "file": "03-document-parsing-ingestion.md"
     },
     {
-      "topic": "混合检索（BM25+向量）",
+      "order": 4,
+      "topic": "文档分块策略：从固定切分到上下文检索（Contextual Retrieval）",
+      "url": "https://www.pinecone.io/learn/chunking-strategies/",
+      "author": "Roie Schwaber-Cohen、Arjun Patel（Pinecone）；Daniel Ford 等（Anthropic Engineering）",
+      "license": "署名转载（两篇原文页面均未附开源许可，仅作教学署名转载）",
+      "file": "04-chunking-strategies.md"
+    },
+    {
+      "order": 5,
+      "topic": "句子窗口与父子块检索（small-to-big）",
+      "url": "https://github.com/run-llama/llama_index/blob/main/docs/examples/node_postprocessor/MetadataReplacementDemo.ipynb",
+      "author": "LlamaIndex 团队（run-llama/llama_index 官方示例）",
+      "license": "MIT",
+      "file": "05-sentence-window-parent-child.md"
+    },
+    {
+      "order": 6,
+      "topic": "Embedding 深入：从语义向量到语义搜索",
+      "url": "https://huggingface.co/blog/getting-started-with-embeddings",
+      "author": "Omar Espejel（Hugging Face Blog）",
+      "license": "署名转载（博客仓库未附独立开源许可，仅作教学署名转载）",
+      "file": "06-embedding-deep-dive.md"
+    },
+    {
+      "order": 7,
+      "topic": "Embedding 模型选型实战（中文优先）",
+      "url": "https://github.com/FlagOpen/FlagEmbedding",
+      "author": "BAAI（BGE / FlagEmbedding）；MTEB 团队（embeddings-benchmark）；Qwen 团队（Qwen3-Embedding）",
+      "license": "MIT（FlagEmbedding）；Apache-2.0（mteb）；Apache-2.0（Qwen3-Embedding）",
+      "file": "07-embedding-model-selection.md"
+    },
+    {
+      "order": 8,
+      "topic": "向量检索与相似度：欧氏距离、点积与余弦相似度",
+      "url": "https://www.pinecone.io/learn/vector-similarity/",
+      "author": "Roie Schwaber-Cohen（Pinecone Learn Center）",
+      "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
+      "file": "08-vector-search-similarity.md"
+    },
+    {
+      "order": 9,
+      "topic": "元数据过滤与多维过滤检索",
+      "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/multi_faceted_filtering.ipynb",
+      "author": "Nir Diamant（RAG_Techniques）",
+      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
+      "file": "09-metadata-filtering.md"
+    },
+    {
+      "order": 10,
+      "topic": "混合检索：BM25 词法检索 + 向量语义检索",
       "url": "https://www.pinecone.io/learn/hybrid-search-intro/",
-      "channel": "web",
+      "author": "James Briggs（Pinecone Learn Center）",
+      "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
       "file": "10-hybrid-search-bm25.md"
     },
     {
-      "topic": "重排序 rerank",
-      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/reranking.ipynb",
-      "channel": "raw",
+      "order": 11,
+      "topic": "重排序（Rerank）：LLM 打分与 Cross-Encoder 精排",
+      "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reranking.ipynb",
+      "author": "Nir Diamant（RAG_Techniques）",
+      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
       "file": "11-reranking.md"
     },
     {
-      "topic": "句子窗口与父子块（small-to-big）",
-      "url": "https://raw.githubusercontent.com/run-llama/llama_index/main/docs/examples/node_postprocessor/MetadataReplacementDemo.ipynb",
-      "channel": "raw",
-      "file": "12-sentence-window-parent-child.md"
+      "order": 12,
+      "topic": "Query 改写与扩展：改写、退后提示与子查询分解",
+      "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/query_transformations.ipynb",
+      "author": "Nir Diamant（RAG_Techniques）",
+      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
+      "file": "12-query-rewriting-expansion.md"
     },
     {
-      "topic": "Query 改写与扩展",
-      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/query_transformations.ipynb",
-      "channel": "raw",
-      "file": "13-query-rewriting-expansion.md"
+      "order": 13,
+      "topic": "多向量检索与 ColBERT/ColPali",
+      "url": "https://github.com/stanford-futuredata/ColBERT",
+      "author": "Stanford Future Data Systems（ColBERT）；Illuin Technology（ColPali）；Benjamin Clavié（Answer.AI）",
+      "license": "MIT（ColBERT）；Apache-2.0（colpali）；署名转载（Answer.AI 博客）",
+      "file": "13-multi-vector-colbert-colpali.md"
     },
     {
-      "topic": "多模态 RAG",
-      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/multi_model_rag_with_captioning.ipynb",
-      "channel": "raw",
+      "order": 14,
+      "topic": "多模态 RAG：图文混合文档的\"图片打字幕\"方案",
+      "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/multi_model_rag_with_captioning.ipynb",
+      "author": "Nir Diamant（RAG_Techniques）",
+      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
       "file": "14-multimodal-rag.md"
     },
     {
-      "topic": "多向量检索与 ColBERT/ColPali",
-      "url": "https://raw.githubusercontent.com/stanford-futuredata/ColBERT/main/README.md",
-      "channel": "raw",
-      "file": "15-multi-vector-colbert-colpali.md"
-    },
-    {
-      "topic": "GraphRAG",
+      "order": 15,
+      "topic": "GraphRAG：用知识图谱回答\"全局性\"问题",
       "url": "https://raw.githubusercontent.com/microsoft/graphrag/main/README.md",
-      "channel": "raw",
-      "file": "16-graphrag.md"
+      "author": "Microsoft Research（Jonathan Larson、Steven Truitt 等）",
+      "license": "MIT",
+      "file": "15-graphrag.md"
     },
     {
-      "topic": "Agentic RAG",
+      "order": 16,
+      "topic": "Agentic RAG：从固定管线到会思考的检索",
       "url": "https://weaviate.io/blog/what-is-agentic-rag",
-      "channel": "web",
-      "file": "17-agentic-rag.md"
+      "author": "Erika Cardona（Weaviate Blog）",
+      "license": "署名转载（原文页面未附开源许可，仅作教学署名转载）",
+      "file": "16-agentic-rag.md"
     },
     {
-      "topic": "Text2SQL 实战",
+      "order": 17,
+      "topic": "Text2SQL 实战：用 Vanna 让自然语言直达数据库",
       "url": "https://raw.githubusercontent.com/vanna-ai/vanna/main/README.md",
-      "channel": "raw",
-      "file": "18-text2sql.md"
+      "author": "Vanna 项目（Vanna AI）",
+      "license": "MIT",
+      "file": "17-text2sql.md"
     },
     {
-      "topic": "生产化架构与常见问题排查",
-      "url": "https://raw.githubusercontent.com/NirDiamant/RAG_Techniques/main/all_rag_techniques/reliable_rag.ipynb",
-      "channel": "raw",
+      "order": 18,
+      "topic": "RAG 评估实战：用 RAGAS 量化检索与生成质量",
+      "url": "https://raw.githubusercontent.com/explodinggradients/ragas/main/docs/getstarted/rag_eval.md",
+      "author": "RAGAS 项目（Exploding Gradients）",
+      "license": "Apache 2.0",
+      "file": "18-rag-evaluation-ragas.md"
+    },
+    {
+      "order": 19,
+      "topic": "生产化 RAG：可靠管线与常见问题排查",
+      "url": "https://github.com/NirDiamant/RAG_Techniques/blob/main/all_rag_techniques/reliable_rag.ipynb",
+      "author": "Nir Diamant（RAG_Techniques）",
+      "license": "自定义许可（非商业使用，需署名，详见仓库 LICENSE）",
       "file": "19-production-rag-troubleshooting.md"
     }
   ]

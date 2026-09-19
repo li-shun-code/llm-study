@@ -5,10 +5,10 @@ author: OWASP GenAI Security Project、NVIDIA（NeMo Guardrails）
 license: CC BY-SA 4.0（OWASP 内容）、Apache 2.0（NeMo Guardrails）
 fetched_at: 2026-09-13
 translated: true
-order: 20
 versions: OWASP GenAI LLM Top 10（2025 版）/ NeMo Guardrails（2026-09 主分支）
+order: 20
+group: 评测、选型与安全合规
 ---
-
 微调与部署的最后一课是安全。你的模型一旦对外服务，就要面对提示注入、数据泄露、越权工具调用等真实攻击面。本文用两个权威来源回答：风险全景是什么（OWASP），工程上怎么加护栏（NeMo Guardrails）。
 
 ## OWASP LLM 应用十大风险（2025 版）

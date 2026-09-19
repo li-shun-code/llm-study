@@ -5,10 +5,10 @@ author: PostgreSQL Global Development Group
 license: PostgreSQL Licence
 fetched_at: 2026-09-13
 translated: true
-order: 4
 versions: PostgreSQL 18 官方教程（第 2 章 2.7 节）
+order: 4
+group: SQL 与数据建模
 ---
-
 与其他关系数据库产品一样，PostgreSQL 支持**聚合函数（Aggregate Function）**：它从多个输入行计算出一个结果。常见的聚合函数有 `count`（计数）、`sum`（求和）、`avg`（平均值）、`max`（最大值）、`min`（最小值）。
 
 例如，查询所有地点的最低气温读数中的最大值：

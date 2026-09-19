@@ -1,0 +1,45 @@
+{
+  "module": "16-design-patterns-java",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "专栏导读：iluwatar/java-design-patterns 与设计模式总览",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "author": "iluwatar/java-design-patterns 社区",
+      "license": "MIT（仓库 LICENSE.md 原文核实；代码与说明文档教学性翻译转载，逐篇署名）",
+      "file": "01-column-overview.md"
+    },
+    {
+      "order": 2,
+      "topic": "创建型模式：单例、工厂与对象的受控诞生",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "author": "iluwatar/java-design-patterns 社区",
+      "license": "MIT（仓库 LICENSE.md 原文核实；代码与说明文档教学性翻译转载，逐篇署名）",
+      "file": "02-creational-patterns.md"
+    },
+    {
+      "order": 3,
+      "topic": "结构型模式：组合优于继承的工程实践",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "author": "iluwatar/java-design-patterns 社区",
+      "license": "MIT（仓库 LICENSE.md 原文核实；代码与说明文档教学性翻译转载，逐篇署名）",
+      "file": "03-structural-patterns.md"
+    },
+    {
+      "order": 4,
+      "topic": "行为型模式：对象间的职责分配与协作",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "author": "iluwatar/java-design-patterns 社区",
+      "license": "MIT（仓库 LICENSE.md 原文核实；代码与说明文档教学性翻译转载，逐篇署名）",
+      "file": "04-behavioral-patterns.md"
+    },
+    {
+      "order": 5,
+      "topic": "企业级架构模式：从 Ambassador 到 Anti-Corruption Layer",
+      "url": "https://github.com/iluwatar/java-design-patterns",
+      "author": "iluwatar/java-design-patterns 社区",
+      "license": "MIT（仓库 LICENSE.md 原文核实；代码与说明文档教学性翻译转载，逐篇署名）",
+      "file": "05-enterprise-patterns.md"
+    }
+  ]
+}

@@ -5,8 +5,9 @@ author: PostgreSQL Global Development Group；amutu（zhparser）；Pan Jiamin�
 license: PostgreSQL Licence；zhparser 为 PostgreSQL 许可风格许可；pg_jieba 为 BSD-3-Clause
 fetched_at: 2026-09-13
 translated: true
-order: 10
 versions: PostgreSQL 18 官方文档第 12 章 Full Text Search（12.1–12.4、12.7–12.9、12.11 节）
+order: 10
+group: PostgreSQL 与工程化
 ---
 ## 全文检索是什么
 

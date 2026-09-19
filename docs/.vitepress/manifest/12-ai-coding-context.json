@@ -1,0 +1,61 @@
+{
+  "module": "12-ai-coding-context",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "AGENTS.md 与 CLAUDE.md：给智能体的项目规范文件",
+      "url": "https://agents.md/",
+      "author": "OpenAI 等生态共建方（agents.md 官方站）；Anthropic（Claude Code Memory 文档，延伸阅读）",
+      "license": "署名翻译（agents.md 站点及 openai/agents.md 仓库内容为开放格式说明文档；CLAUDE.md 部分为官方文档教学翻译，均署名）",
+      "file": "01-agents-md-claude-md.md"
+    },
+    {
+      "order": 2,
+      "topic": "Claude Skills：可复用技能包",
+      "url": "https://code.claude.com/docs/en/skills",
+      "author": "Anthropic（Claude Code 官方文档）",
+      "license": "署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）",
+      "file": "02-claude-skills.md"
+    },
+    {
+      "order": 3,
+      "topic": "开源编码 Skills 精选：Superpowers 与 Anthropic 官方技能族深度指南",
+      "url": "https://github.com/obra/superpowers",
+      "author": "Jesse Vincent; Anthropic",
+      "license": "各仓库许可（obra/superpowers 为 MIT；anthropics/skills 多数示例技能为 Apache-2.0，docx/pdf/pptx/xlsx 文档技能为源码可用，见各节署名）",
+      "file": "03-open-source-coding-skills.md"
+    },
+    {
+      "order": 4,
+      "topic": "Spec 驱动开发（Spec-Driven Development）",
+      "url": "https://github.com/github/spec-kit",
+      "author": "GitHub（Spec Kit 项目 README，主篇）；Geoffrey Huntley（Ralph 实践视角，延伸）",
+      "license": "MIT（Spec Kit README）；Ralph 文章署名转载",
+      "file": "04-spec-driven-development.md"
+    },
+    {
+      "order": 5,
+      "topic": "MCP 在编码中的应用",
+      "url": "https://code.claude.com/docs/en/mcp",
+      "author": "Anthropic（Claude Code 官方文档）",
+      "license": "署名翻译（官方文档，Copyright Anthropic PBC，仅作教学用途翻译并署名）",
+      "file": "05-mcp-for-coding.md"
+    },
+    {
+      "order": 6,
+      "topic": "多智能体协作编码",
+      "url": "https://code.claude.com/docs/en/agent-teams",
+      "author": "Anthropic（Claude Code 官方文档，主篇）；Simon Willison（并行智能体生活方式，引言）",
+      "license": "署名翻译（官方文档 Copyright Anthropic PBC）；引言部分博客署名转载",
+      "file": "06-multi-agent-collaboration.md"
+    },
+    {
+      "order": 7,
+      "topic": "Headless 与 CI 中的 AI 编码：Headless、Agent SDK 与 Copilot 云端智能体",
+      "url": "https://code.claude.com/docs/en/headless",
+      "author": "Anthropic（Claude Code Headless、Agent SDK、GitHub Actions 官方文档）；GitHub（Copilot cloud agent 官方文档）；Microsoft（Copilot Copyright Commitment 相关声明见第 27 篇）",
+      "license": "署名翻译（Anthropic 与 GitHub 官方文档版权归原厂所有，教学用途编译翻译并署名）",
+      "file": "07-headless-ci-coding.md"
+    }
+  ]
+}

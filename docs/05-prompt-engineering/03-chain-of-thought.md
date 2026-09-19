@@ -5,10 +5,10 @@ author: DAIR.AI（Elvis Saravia）
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 3
 versions: 提示技术通用
+order: 3
+group: 推理与任务分解
 ---
-
 **思维链提示**（Chain-of-Thought, CoT）由 Wei et al. (2022) 提出，通过中间推理步骤（intermediate reasoning steps）来启用复杂推理能力。它可以与少样本提示结合，在那些"回答前需要先推理"的复杂任务上取得更好的效果。
 
 ![思维链示意图](https://www.promptingguide.ai/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcot.1933d9fe.png&w=1920&q=75)

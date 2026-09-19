@@ -5,10 +5,10 @@ author: OpenAI（openai-python README）、OpenAI Cookbook（responses_example.i
 license: Apache 2.0 / MIT
 fetched_at: 2026-09-13
 translated: true
-order: 1
 versions: openai-python 2026-09 最新稳定版（HTTPX2 传输层）、示例模型 gpt-5.5 / gpt-4o-mini
+order: 1
+group: 调用基础
 ---
-
 本篇是整个模块的起点：安装官方 SDK、配置 API Key（用「Python 基础」讲过的 `.env` 方案，不要把 Key 写进代码），然后分别用 **Responses API** 与 **Chat Completions API** 发出第一个调用。OpenAI 现在的主推接口是 Responses API；Chat Completions 是长期支持（"supported indefinitely"）的上一代标准，两者并讲、互相印证。
 
 > 编者注：早期的 Assistants API 已废弃，本站一律不作为教学内容；如你读到基于 Assistants/Threads 的旧教程，请按本模块的 Responses API 写法对照迁移。

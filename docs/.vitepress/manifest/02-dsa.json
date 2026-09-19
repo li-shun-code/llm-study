@@ -1,0 +1,205 @@
+{
+  "module": "02-dsa",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "复杂度分析",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/time_complexity.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "01-complexity.md"
+    },
+    {
+      "order": 2,
+      "topic": "递归入门",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_computational_complexity/iteration_and_recursion.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "02-recursion.md"
+    },
+    {
+      "order": 3,
+      "topic": "数组",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/array.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "03-array.md"
+    },
+    {
+      "order": 4,
+      "topic": "链表",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_array_and_linkedlist/linked_list.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "04-linked-list.md"
+    },
+    {
+      "order": 5,
+      "topic": "栈",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/stack.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "05-stack.md"
+    },
+    {
+      "order": 6,
+      "topic": "队列",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_stack_and_queue/queue.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "06-queue.md"
+    },
+    {
+      "order": 7,
+      "topic": "LRU 缓存（哈希表 + 双向链表）",
+      "url": "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0100-0199/0146.LRU%20Cache/README.md",
+      "author": "doocs/leetcode 项目（Yang Fugui 等）",
+      "license": "CC BY-SA 4.0",
+      "file": "07-lru-cache.md"
+    },
+    {
+      "order": 8,
+      "topic": "哈希表",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_hashing/hash_map.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "08-hash-table.md"
+    },
+    {
+      "order": 9,
+      "topic": "Trie 前缀树（字典树）",
+      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/string/trie.md",
+      "author": "OI Wiki 项目",
+      "license": "CC BY-SA 4.0",
+      "file": "09-trie.md"
+    },
+    {
+      "order": 10,
+      "topic": "树与二叉树",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "10-tree.md"
+    },
+    {
+      "order": 11,
+      "topic": "二叉树遍历",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_tree_traversal.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "11-binary-tree-traversal.md"
+    },
+    {
+      "order": 12,
+      "topic": "二叉搜索树",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_tree/binary_search_tree.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "12-bst.md"
+    },
+    {
+      "order": 13,
+      "topic": "堆",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_heap/heap.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "13-heap.md"
+    },
+    {
+      "order": 14,
+      "topic": "图",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "14-graph.md"
+    },
+    {
+      "order": 15,
+      "topic": "图的遍历（DFS/BFS）",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_graph/graph_traversal.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "15-graph-traversal.md"
+    },
+    {
+      "order": 16,
+      "topic": "拓扑排序",
+      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/topo.md",
+      "author": "OI Wiki 项目",
+      "license": "CC BY-SA 4.0",
+      "file": "16-topological-sort.md"
+    },
+    {
+      "order": 17,
+      "topic": "最短路径",
+      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/graph/shortest-path.md",
+      "author": "OI Wiki 项目",
+      "license": "CC BY-SA 4.0",
+      "file": "17-shortest-path.md"
+    },
+    {
+      "order": 18,
+      "topic": "并查集",
+      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/ds/dsu.md",
+      "author": "OI Wiki 项目",
+      "license": "CC BY-SA 4.0",
+      "file": "18-dsu.md"
+    },
+    {
+      "order": 19,
+      "topic": "排序算法",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_sorting/bubble_sort.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "19-sorting.md"
+    },
+    {
+      "order": 20,
+      "topic": "二分查找",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_searching/binary_search.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "20-binary-search.md"
+    },
+    {
+      "order": 21,
+      "topic": "前缀和与差分",
+      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/basic/prefix-sum.md",
+      "author": "OI Wiki 项目",
+      "license": "CC BY-SA 4.0",
+      "file": "21-prefix-sum.md"
+    },
+    {
+      "order": 22,
+      "topic": "双指针与滑动窗口",
+      "url": "https://raw.githubusercontent.com/OI-wiki/OI-wiki/master/docs/misc/two-pointer.md",
+      "author": "OI Wiki 项目",
+      "license": "CC BY-SA 4.0",
+      "file": "22-two-pointers.md"
+    },
+    {
+      "order": 23,
+      "topic": "递归与回溯（面试选学）",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_backtracking/backtracking_algorithm.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "23-recursion-backtracking.md"
+    },
+    {
+      "order": 24,
+      "topic": "动态规划（面试选学）",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_dynamic_programming/intro_to_dynamic_programming.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "24-dynamic-programming.md"
+    },
+    {
+      "order": 25,
+      "topic": "贪心算法（面试选学）",
+      "url": "https://raw.githubusercontent.com/krahets/hello-algo/main/docs/chapter_greedy/greedy_algorithm.md",
+      "author": "krahets",
+      "license": "CC BY-NC-SA 4.0",
+      "file": "25-greedy.md"
+    }
+  ]
+}

@@ -6,8 +6,8 @@ license: Apache 2.0（HF 课程）· CC BY-NC-SA 4.0（happy-llm）· MIT（Open
 fetched_at: 2026-09-13
 translated: true
 order: 4
+group: 开发者必知的模型行为
 ---
-
 ## 一、为什么需要"子词"：从词到字符到子词
 
 在 NLP 任务中，我们往往需要将自然语言的输入转化为机器可以处理的向量。在输入神经网络之前，我们往往会先让自然语言输入通过分词器（tokenizer），分词器的作用是把自然语言输入切分成 token 并转化为一个固定的 index。例如，如果我们将词表大小设为 4，输入"我喜欢你"，分词器可以将输入转化成：

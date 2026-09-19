@@ -5,10 +5,10 @@ author: OpenAI Cookbook（How to call functions with chat models、responses_api
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 4
 versions: openai-python 2026-09 最新稳定版；Chat Completions 示例原文即基于 gpt-5/gpt-4o 时代
+order: 4
+group: 工具与输出契约
 ---
-
 Function Calling（函数调用，Anthropic 生态称 Tool Use，工具使用）让模型不只是"说话"，还能**决定何时调用你定义的函数、并生成符合规范的参数**。关键认知（Cookbook 原文）：**API 不会真的执行任何函数**——模型只输出"我想调用 X 函数，参数是 Y"，真正执行函数、把结果回传模型，都是开发者的责任。
 
 ## 一、基本概念：tools 参数

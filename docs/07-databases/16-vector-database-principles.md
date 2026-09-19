@@ -5,8 +5,9 @@ author: Milvus（Zilliz / LF AI & Data Foundation）
 license: Apache-2.0
 fetched_at: 2026-09-13
 translated: true
-order: 16
 versions: Milvus 官方文档当前版（milvus-docs v3.0.x）
+order: 16
+group: 向量数据库
 ---
 ## 非结构化数据、Embedding 与向量数据库
 

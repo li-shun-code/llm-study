@@ -5,8 +5,9 @@ author: Redis Ltd.（redis-doc 文档仓库）
 license: CC BY-SA 4.0
 fetched_at: 2026-09-13
 translated: true
-order: 13
 versions: Redis 官方文档当前版（redis-doc 仓库，CC BY-SA 4.0）
+order: 13
+group: 缓存与文档型存储
 ---
 ## Redis 是数据结构服务器
 

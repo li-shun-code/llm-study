@@ -6,8 +6,8 @@ license: 署名转载（原文页面未附开源许可，仅作教学署名转�
 fetched_at: 2026-09-13
 translated: true
 order: 1
+group: 入门与最小全链路
 ---
-
 基础模型（Foundation Model）不仅"被困在过去"，还会刻意生成听起来自然、富有变化的回答。这两点叠加，就会产生自信却错误、且不相关的内容——这就是所谓的"幻觉（Hallucination）"。
 
 本文将介绍基础模型的局限性，以及检索增强生成（Retrieval-Augmented Generation，RAG）如何解决这些局限，让聊天、搜索和智能体（Agent）工作流都从中受益。

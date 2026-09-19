@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: TRL 主分支文档、LLaMA-Factory main、Qwen3.5/Qwen3 README（均为 2026-09 当前版）
 order: 8
+group: 训练
 ---
-
 前面几篇讲的都是"在指令/偏好数据上做后训练"。当目标变成**把一个强基座模型适配到垂直领域**——医疗、法律、金融或某种新语言——第一块拼图往往是**继续预训练（Continued Pre-Training, CPT）**：用领域纯文本，以语言建模目标继续训练已有的基座模型。GRPO 论文里的 DeepSeekMath 正是"CPT（120B 数学 token）+ RL"的经典组合。本文整合翻译三份官方文档：TRL 的语言建模数据集与 SFT packing 文档、LLaMA-Factory 的预训练数据集文档、Qwen 官方 README 的微调章节，文末逐节署名。
 
 # 一、TRL 中的继续预训练：语言建模数据集与 SFTTrainer（译自 TRL 官方文档）

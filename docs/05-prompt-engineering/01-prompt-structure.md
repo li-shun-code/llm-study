@@ -5,8 +5,9 @@ author: DAIR.AI（Elvis Saravia）
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 1
 versions: 提示技术通用；示例适用于当前主流对话模型（GPT/Claude/Gemini 等）
+order: 1
+group: 提示基础
 ---
 随着提示词工程（Prompt Engineering）的例子和应用程序越来越多，你会发现一个提示词（prompt）是由若干固定的要素组合而成的。
 

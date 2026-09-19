@@ -6,8 +6,8 @@ license: CC BY-NC-SA 4.0
 fetched_at: 2026-09-13
 translated: false
 order: 2
+group: 架构地基
 ---
-
 ## 一、为什么需要注意力机制
 
 随着 NLP 从统计机器学习向深度学习迈进，文本表示方法也从统计学习进入神经网络时代。从计算机视觉（Computer Vision，CV）起源发展起来的神经网络，其核心架构有三种：

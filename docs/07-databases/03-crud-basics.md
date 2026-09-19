@@ -5,8 +5,9 @@ author: PostgreSQL Global Development Group
 license: PostgreSQL Licence
 fetched_at: 2026-09-13
 translated: true
-order: 3
 versions: PostgreSQL 18 官方教程（第 2 章 2.3-2.5、2.8-2.9 节）
+order: 3
+group: SQL 与数据建模
 ---
 这一篇覆盖对单张表的完整增删改查（CRUD，Create / Read / Update / Delete）。示例沿用 PostgreSQL 官方教程的城市与天气两张表。
 

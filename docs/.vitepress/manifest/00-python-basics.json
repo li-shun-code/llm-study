@@ -1,30 +1,205 @@
 {
   "module": "00-python-basics",
   "articles": [
-    { "topic": "环境搭建与第一个程序", "url": "https://liaoxuefeng.com/books/python/install/index.html", "channel": "web", "file": "01-setup.md" },
-    { "topic": "变量与基本类型", "url": "https://liaoxuefeng.com/books/python/basic/data-types/index.html", "channel": "web", "file": "02-variables-and-types.md" },
-    { "topic": "数字与字符串（f-string 与 UTF-8 编码）", "url": "https://liaoxuefeng.com/books/python/basic/string-encoding/index.html", "channel": "web", "file": "03-numbers-and-strings.md" },
-    { "topic": "列表", "url": "https://www.runoob.com/python3/python3-list.html", "channel": "web", "file": "04-list.md" },
-    { "topic": "列表推导式（含字典/集合推导式）", "url": "https://liaoxuefeng.com/books/python/advanced/list-comprehension/index.html", "channel": "web", "file": "05-list-comprehension.md" },
-    { "topic": "元组", "url": "https://www.runoob.com/python3/python3-tuple.html", "channel": "web", "file": "06-tuple.md" },
-    { "topic": "字典", "url": "https://www.runoob.com/python3/python3-dictionary.html", "channel": "web", "file": "07-dict.md" },
-    { "topic": "集合", "url": "https://www.runoob.com/python3/python3-set.html", "channel": "web", "file": "08-set.md" },
-    { "topic": "collections 标准库容器（Counter/deque/defaultdict/OrderedDict）", "url": "https://docs.python.org/zh-cn/3/library/collections.html", "channel": "web", "file": "09-collections.md" },
-    { "topic": "条件判断", "url": "https://liaoxuefeng.com/books/python/basic/if/index.html", "channel": "web", "file": "10-conditionals.md" },
-    { "topic": "循环", "url": "https://liaoxuefeng.com/books/python/basic/loop/index.html", "channel": "web", "file": "11-loops.md" },
-    { "topic": "函数定义与参数（含 *args/**kwargs）", "url": "https://www.runoob.com/python3/python3-function.html", "channel": "web", "file": "12-functions.md" },
-    { "topic": "lambda 与高阶函数", "url": "https://liaoxuefeng.com/books/python/functional/higher-order-function/index.html", "channel": "web", "file": "13-lambda-and-higher-order.md" },
-    { "topic": "类与对象", "url": "https://liaoxuefeng.com/books/python/oop/class/index.html", "channel": "web", "file": "14-classes-and-objects.md" },
-    { "topic": "继承、多态与魔法方法", "url": "https://liaoxuefeng.com/books/python/oop/extend/index.html", "channel": "web", "file": "15-inheritance-polymorphism-magic.md" },
-    { "topic": "可变/不可变与深浅拷贝", "url": "https://docs.python.org/zh-cn/3/library/copy.html", "channel": "web", "file": "16-mutability-and-copy.md" },
-    { "topic": "模块与包", "url": "https://docs.python.org/zh-cn/3/tutorial/modules.html", "channel": "web", "file": "17-modules-and-packages.md" },
-    { "topic": "异常处理", "url": "https://liaoxuefeng.com/books/python/error-debug-test/error/index.html", "channel": "web", "file": "18-exceptions.md" },
-    { "topic": "调试入门（pdb 与断点）", "url": "https://docs.python.org/zh-cn/3/library/pdb.html", "channel": "web", "file": "19-debugging-pdb.md" },
-    { "topic": "文件 IO", "url": "https://liaoxuefeng.com/books/python/io/file/index.html", "channel": "web", "file": "20-file-io.md" },
-    { "topic": "pathlib 现代路径处理", "url": "https://docs.python.org/zh-cn/3/library/pathlib.html", "channel": "web", "file": "21-pathlib.md" },
-    { "topic": "JSON 与时间日期", "url": "https://liaoxuefeng.com/books/python/io/serialization/index.html", "channel": "web", "file": "22-json-and-datetime.md" },
-    { "topic": "pip 与虚拟环境", "url": "https://docs.python.org/zh-cn/3/tutorial/venv.html", "channel": "web", "file": "23-pip-and-venv.md" },
-    { "topic": "环境变量与 API Key 管理（.env/python-dotenv）", "url": "https://raw.githubusercontent.com/theskumar/python-dotenv/main/README.md", "channel": "raw", "file": "24-env-and-api-keys.md" },
-    { "topic": "常见陷阱汇总", "url": "https://docs.python.org/zh-cn/3/faq/programming.html", "channel": "web", "file": "25-common-pitfalls.md" }
+    {
+      "order": 1,
+      "topic": "环境搭建与第一个程序",
+      "url": "https://liaoxuefeng.com/books/python/install/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "01-setup.md"
+    },
+    {
+      "order": 2,
+      "topic": "pip 与虚拟环境",
+      "url": "https://docs.python.org/zh-cn/3/tutorial/venv.html",
+      "author": "Python Software Foundation",
+      "license": "PSF 许可证第 2 版（转载署名）",
+      "file": "02-pip-and-venv.md"
+    },
+    {
+      "order": 3,
+      "topic": "环境变量与 API Key 管理（.env 与 python-dotenv）",
+      "url": "https://github.com/theskumar/python-dotenv",
+      "author": "Saurabh Kumar 及 python-dotenv 贡献者",
+      "license": "MIT License（转载署名）",
+      "file": "03-env-and-api-keys.md"
+    },
+    {
+      "order": 4,
+      "topic": "变量与基本类型",
+      "url": "https://liaoxuefeng.com/books/python/basic/data-types/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "04-variables-and-types.md"
+    },
+    {
+      "order": 5,
+      "topic": "数字与字符串（f-string 与 UTF-8 编码）",
+      "url": "https://liaoxuefeng.com/books/python/basic/string-encoding/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "05-numbers-and-strings.md"
+    },
+    {
+      "order": 6,
+      "topic": "可变/不可变与深浅拷贝",
+      "url": "https://docs.python.org/zh-cn/3/library/copy.html",
+      "author": "Python Software Foundation",
+      "license": "PSF 许可证第 2 版（转载署名）",
+      "file": "06-mutability-and-copy.md"
+    },
+    {
+      "order": 7,
+      "topic": "条件判断",
+      "url": "https://liaoxuefeng.com/books/python/basic/if/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "07-conditionals.md"
+    },
+    {
+      "order": 8,
+      "topic": "循环",
+      "url": "https://liaoxuefeng.com/books/python/basic/loop/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "08-loops.md"
+    },
+    {
+      "order": 9,
+      "topic": "列表",
+      "url": "https://www.runoob.com/python3/python3-list.html",
+      "author": "菜鸟教程",
+      "license": "© 菜鸟教程（转载署名）",
+      "file": "09-list.md"
+    },
+    {
+      "order": 10,
+      "topic": "列表推导式",
+      "url": "https://liaoxuefeng.com/books/python/advanced/list-comprehension/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "10-list-comprehension.md"
+    },
+    {
+      "order": 11,
+      "topic": "元组",
+      "url": "https://www.runoob.com/python3/python3-tuple.html",
+      "author": "菜鸟教程",
+      "license": "© 菜鸟教程（转载署名）",
+      "file": "11-tuple.md"
+    },
+    {
+      "order": 12,
+      "topic": "字典",
+      "url": "https://www.runoob.com/python3/python3-dictionary.html",
+      "author": "菜鸟教程",
+      "license": "© 菜鸟教程（转载署名）",
+      "file": "12-dict.md"
+    },
+    {
+      "order": 13,
+      "topic": "集合",
+      "url": "https://www.runoob.com/python3/python3-set.html",
+      "author": "菜鸟教程",
+      "license": "© 菜鸟教程（转载署名）",
+      "file": "13-set.md"
+    },
+    {
+      "order": 14,
+      "topic": "collections 容器数据类型（Counter/deque/defaultdict/OrderedDict）",
+      "url": "https://docs.python.org/zh-cn/3/library/collections.html",
+      "author": "Python Software Foundation",
+      "license": "PSF 许可证第 2 版（转载署名）",
+      "file": "14-collections.md"
+    },
+    {
+      "order": 15,
+      "topic": "函数定义与参数",
+      "url": "https://www.runoob.com/python3/python3-function.html",
+      "author": "菜鸟教程",
+      "license": "© 菜鸟教程（转载署名）",
+      "file": "15-functions.md"
+    },
+    {
+      "order": 16,
+      "topic": "lambda 与高阶函数",
+      "url": "https://liaoxuefeng.com/books/python/functional/higher-order-function/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "16-lambda-and-higher-order.md"
+    },
+    {
+      "order": 17,
+      "topic": "类与对象",
+      "url": "https://liaoxuefeng.com/books/python/oop/class/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "17-classes-and-objects.md"
+    },
+    {
+      "order": 18,
+      "topic": "继承、多态与魔法方法",
+      "url": "https://liaoxuefeng.com/books/python/oop/extend/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "18-inheritance-polymorphism-magic.md"
+    },
+    {
+      "order": 19,
+      "topic": "模块与包",
+      "url": "https://docs.python.org/zh-cn/3/tutorial/modules.html",
+      "author": "Python Software Foundation",
+      "license": "PSF 许可证第 2 版（转载署名）",
+      "file": "19-modules-and-packages.md"
+    },
+    {
+      "order": 20,
+      "topic": "异常处理",
+      "url": "https://liaoxuefeng.com/books/python/error-debug-test/error/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "20-exceptions.md"
+    },
+    {
+      "order": 21,
+      "topic": "调试入门：pdb 与断点",
+      "url": "https://docs.python.org/zh-cn/3/library/pdb.html",
+      "author": "Python Software Foundation",
+      "license": "PSF 许可证第 2 版（转载署名）",
+      "file": "21-debugging-pdb.md"
+    },
+    {
+      "order": 22,
+      "topic": "文件 IO",
+      "url": "https://liaoxuefeng.com/books/python/io/file/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "22-file-io.md"
+    },
+    {
+      "order": 23,
+      "topic": "pathlib 面向对象的文件系统路径",
+      "url": "https://docs.python.org/zh-cn/3/library/pathlib.html",
+      "author": "Python Software Foundation",
+      "license": "PSF 许可证第 2 版（转载署名）",
+      "file": "23-pathlib.md"
+    },
+    {
+      "order": 24,
+      "topic": "JSON 与时间日期",
+      "url": "https://liaoxuefeng.com/books/python/io/serialization/index.html",
+      "author": "廖雪峰",
+      "license": "© 廖雪峰（转载署名）",
+      "file": "24-json-and-datetime.md"
+    },
+    {
+      "order": 25,
+      "topic": "常见陷阱汇总",
+      "url": "https://docs.python.org/zh-cn/3/faq/programming.html",
+      "author": "Python Software Foundation",
+      "license": "PSF 许可证第 2 版（转载署名）",
+      "file": "25-common-pitfalls.md"
+    }
   ]
 }

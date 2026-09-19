@@ -5,10 +5,10 @@ author: Hugging Face（smol-course）、TRL 文档
 license: Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 7
 versions: distilabel / TRL DistillationTrainer（2026-09 现行版）
+order: 7
+group: 训练
 ---
-
 给小模型做 SFT，最贵的不是算力而是数据。两条主流的"造数据"路线：**合成（Synthetic Data）**——用大模型生成指令-回答对；**蒸馏（Distillation）**——让小模型直接学习大模型的输出分布。本文各用一份官方一手文档讲透。
 
 ## 第一部分：生成指令数据集（smol-course）

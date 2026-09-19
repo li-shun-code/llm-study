@@ -5,10 +5,10 @@ author: Hugging Face（TRL 文档，基于 Thinking Machines Lab《LoRA Without 
 license: Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 9
 versions: TRL（2026-09 主分支文档）/ SFTConfig 现行 API
+order: 9
+group: 训练
 ---
-
 微调调的是什么超参？学习率、epoch、batch size、LoRA 秩……它们互相纠缠，网上建议互相矛盾。这份 TRL 官方指南把《LoRA Without Regret》的核心结论翻译成了可复现的配置：**配置正确的 LoRA 可以追平全参微调（Full Fine-Tuning，FullFT），而只花约 67% 的算力**。
 
 ## LoRA 相比全参微调的好处

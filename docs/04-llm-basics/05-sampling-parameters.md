@@ -6,8 +6,8 @@ license: Apache 2.0
 fetched_at: 2026-09-13
 translated: true
 order: 5
+group: 开发者必知的模型行为
 ---
-
 ## 一、解码策略：模型如何选出下一个 token
 
 解码策略（decoding strategy）决定模型如何选择下一个生成的 token。解码策略有很多种，选择合适的策略对生成文本的质量有显著影响。基础解码方法有三种（译自 Transformers 官方文档）：

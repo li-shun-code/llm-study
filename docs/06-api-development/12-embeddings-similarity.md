@@ -5,10 +5,10 @@ author: OpenAI Cookbook（Get embeddings from dataset、Semantic text search usi
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 12
 versions: text-embedding-3-small（当前主力 Embedding 模型）；tiktoken o200k_base / cl100k_base
+order: 12
+group: 多模态与向量能力
 ---
-
 Embedding（嵌入）把任意文本映射成一个固定长度的浮点向量，**语义相近的文本在向量空间里距离更近**。这是语义搜索、聚类、推荐、分类与整个 RAG 体系（「RAG」）的地基。本篇讲两件事：怎么批量拿到 Embedding，以及怎么用它做文本相似度检索。
 
 ## 一、调用 Embedding API

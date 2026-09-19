@@ -1,0 +1,181 @@
+{
+  "module": "01-python-advanced",
+  "articles": [
+    {
+      "order": 1,
+      "topic": "装饰器实战：functools —— 高阶函数与可调用对象上的操作",
+      "url": "https://docs.python.org/zh-cn/3/library/functools.html",
+      "author": "Python 软件基金会（PSF）文档团队",
+      "license": "PSF 许可证第 2 版",
+      "file": "01-decorators.md"
+    },
+    {
+      "order": 2,
+      "topic": "迭代器与生成器（函数式编程指引）",
+      "url": "https://docs.python.org/zh-cn/3/howto/functional.html",
+      "author": "A. M. Kuchling（Python 官方文档团队）",
+      "license": "PSF 许可证第 2 版",
+      "file": "02-iterators-and-generators.md"
+    },
+    {
+      "order": 3,
+      "topic": "上下文管理器：contextlib 完全指南",
+      "url": "https://docs.python.org/zh-cn/3/library/contextlib.html",
+      "author": "Python 软件基金会（PSF）文档团队",
+      "license": "PSF 许可证第 2 版",
+      "file": "03-context-managers.md"
+    },
+    {
+      "order": 4,
+      "topic": "内存管理与垃圾回收：引用计数与 gc 模块",
+      "url": "https://docs.python.org/zh-cn/3/c-api/refcounting.html",
+      "author": "Python 软件基金会（PSF）文档团队",
+      "license": "PSF 许可证第 2 版",
+      "file": "04-memory-management-gc.md"
+    },
+    {
+      "order": 5,
+      "topic": "类型注解：typing 模块核心章节",
+      "url": "https://docs.python.org/zh-cn/3/library/typing.html",
+      "author": "Python 软件基金会（PSF）文档团队",
+      "license": "PSF 许可证第 2 版",
+      "file": "05-type-hints.md"
+    },
+    {
+      "order": 6,
+      "topic": "dataclasses 与 NamedTuple：数据类",
+      "url": "https://docs.python.org/zh-cn/3/library/dataclasses.html",
+      "author": "Python 软件基金会（PSF）文档团队",
+      "license": "PSF 许可证第 2 版",
+      "file": "06-dataclasses-namedtuple.md"
+    },
+    {
+      "order": 7,
+      "topic": "并发编程：concurrent.futures 与 threading",
+      "url": "https://docs.python.org/zh-cn/3/library/concurrent.futures.html",
+      "author": "Python 软件基金会（PSF）文档团队",
+      "license": "PSF 许可证第 2 版",
+      "file": "07-concurrency.md"
+    },
+    {
+      "order": 8,
+      "topic": "asyncio 异步编程",
+      "url": "https://docs.python.org/zh-cn/3/howto/a-conceptual-overview-of-asyncio.html",
+      "author": "Alexander Nordin（Python 官方文档团队）",
+      "license": "PSF 许可证第 2 版（GPL 兼容）",
+      "file": "08-asyncio.md"
+    },
+    {
+      "order": 9,
+      "topic": "正则表达式指南（re 模块）",
+      "url": "https://docs.python.org/zh-cn/3/howto/regex.html",
+      "author": "A. M. Kuchling（Python 官方文档团队）",
+      "license": "PSF 许可证第 2 版",
+      "file": "09-regex.md"
+    },
+    {
+      "order": 10,
+      "topic": "Pydantic 模型（Models）：数据校验的核心",
+      "url": "https://docs.pydantic.dev/latest/concepts/models/",
+      "author": "Pydantic Services Inc. 与 Pydantic 社区",
+      "license": "MIT 许可证",
+      "file": "10-pydantic.md"
+    },
+    {
+      "order": 11,
+      "topic": "requests 快速开始与进阶用法",
+      "url": "https://requests.readthedocs.io/en/latest/user/quickstart/",
+      "author": "Kenneth Reitz 与 PSF Requests 团队",
+      "license": "Apache 许可证 2.0",
+      "file": "11-requests.md"
+    },
+    {
+      "order": 12,
+      "topic": "HTTPX：新一代 Python HTTP 客户端",
+      "url": "https://www.python-httpx.org/quickstart/",
+      "author": "Tom Christie（Encode 团队）",
+      "license": "BSD 三条款许可证",
+      "file": "12-httpx.md"
+    },
+    {
+      "order": 13,
+      "topic": "FastAPI 入门与 API Key 鉴权",
+      "url": "https://fastapi.tiangolo.com/zh/tutorial/first-steps/",
+      "author": "Sebastián Ramírez 及 FastAPI 贡献者",
+      "license": "MIT License",
+      "file": "13-fastapi.md"
+    },
+    {
+      "order": 14,
+      "topic": "FastAPI 进阶：依赖注入、中间件与流式响应",
+      "url": "https://fastapi.tiangolo.com/zh/tutorial/dependencies/",
+      "author": "Sebastián Ramírez（tiangolo）与 FastAPI 社区中文译者",
+      "license": "MIT 许可证",
+      "file": "14-fastapi-advanced.md"
+    },
+    {
+      "order": 15,
+      "topic": "Gradio 快速开始：为机器学习模型构建演示应用",
+      "url": "https://www.gradio.app/guides/quickstart",
+      "author": "Gradio 开发团队（Hugging Face）",
+      "license": "Apache 许可证 2.0",
+      "file": "15-gradio.md"
+    },
+    {
+      "order": 16,
+      "topic": "Streamlit 入门：基础概念与进阶概念",
+      "url": "https://docs.streamlit.io/get-started/fundamentals/main-concepts",
+      "author": "Streamlit（Snowflake）文档团队",
+      "license": "Apache 许可证 2.0",
+      "file": "16-streamlit.md"
+    },
+    {
+      "order": 17,
+      "topic": "Docker 容器化：Python 语言指南",
+      "url": "https://docs.docker.com/language/python/",
+      "author": "Docker Inc. 文档团队（社区贡献：Esteban Maya、Igor Aleksandrov）",
+      "license": "Apache 许可证 2.0",
+      "file": "17-docker.md"
+    },
+    {
+      "order": 18,
+      "topic": "uv 项目管理：从 uv init 到构建发布（含工程化概念）",
+      "url": "https://docs.astral.sh/uv/guides/projects/",
+      "author": "Astral",
+      "license": "MIT OR Apache-2.0 双许可",
+      "file": "18-uv-poetry.md"
+    },
+    {
+      "order": 19,
+      "topic": "代码质量工具链：Ruff、mypy 与 pre-commit",
+      "url": "https://docs.astral.sh/ruff/",
+      "author": "Astral（Ruff）；Jukka Lehtosalo 与 mypy 贡献者（mypy）；Anthony Sottile 与 pre-commit 贡献者（pre-commit）",
+      "license": "MIT 许可证（三者均为 MIT 许可）",
+      "file": "19-code-quality.md"
+    },
+    {
+      "order": 20,
+      "topic": "pytest 入门与使用指南（Get Started + How-To）",
+      "url": "https://docs.pytest.org/en/stable/getting-started.html",
+      "author": "Holger Krekel 与 pytest 开发团队",
+      "license": "MIT 许可证",
+      "file": "20-pytest.md"
+    },
+    {
+      "order": 21,
+      "topic": "日志 logging：HOWTO 与 logging.config",
+      "url": "https://docs.python.org/zh-cn/3/howto/logging.html",
+      "author": "Vinay Sajip（Python 官方文档团队）",
+      "license": "PSF 许可证第 2 版",
+      "file": "21-logging.md"
+    },
+    {
+      "order": 22,
+      "topic": "性能分析：profile/cProfile 与 py-spy",
+      "url": "https://docs.python.org/zh-cn/3/library/profile.html",
+      "author": "Python 软件基金会（PSF）；Ben Frederickson（py-spy）",
+      "license": "PSF 许可证第 2 版；MIT 许可证（py-spy）",
+      "file": "22-profiling.md"
+    }
+  ]
+}

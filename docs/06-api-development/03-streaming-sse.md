@@ -5,10 +5,10 @@ author: OpenAI Cookbook（How to stream completions）、OpenAI（openai-python 
 license: MIT / Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 3
 versions: openai-python 2026-09 最新稳定版（SSE 流式）
+order: 3
+group: 调用基础
 ---
-
 默认情况下，API 会**等整个回复生成完毕**才一次性返回。如果回复很长，你可能要干等几秒甚至几十秒。流式输出（streaming）让响应在生成过程中就逐段（chunk）下发——首字节可以在 0.1 秒左右到达，而不是几秒。
 
 ## 一、开启流式：stream=True

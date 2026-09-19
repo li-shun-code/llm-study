@@ -7,8 +7,8 @@ fetched_at: 2026-09-13
 translated: true
 versions: Qwen3.5 仓库（至 Qwen3.8，2026-08）/ GLM-5 仓库（至 GLM-5.3）/ DeepSeek-V3.2 仓库（2026-09 核实为最新）
 order: 18
+group: 评测、选型与安全合规
 ---
-
 本篇正文完整译自 Qwen、GLM、DeepSeek 三个官方仓库 README 中的模型卡（2026-09 各自最新版），按"统一多模态基座 → 长时程智能体 → 长上下文效率"对照阅读，文末逐节署名。
 
 # Qwen3.5 系列（译自 QwenLM/Qwen3.5 官方 README）

@@ -5,10 +5,10 @@ author: OpenAI Cookbook
 license: MIT
 fetched_at: 2026-09-13
 translated: true
-order: 8
 versions: OpenAI Moderation API（omni-moderation-latest）；原文示例模型为 gpt-4o-mini，工作流在当前模型系同样适用
+order: 8
+group: 可靠性、安全与成本
 ---
-
 原文提醒：本指南旨在与 Guardrails Cookbook 互补，聚焦审核（moderation）技术本身；两者在内容与结构上有部分重叠，本文对"如何按需定制审核标准"着墨更深。若想先获得包含 guardrails 与 moderation 在内的内容安全全景，建议从 [Guardrails Cookbook](https://cookbook.openai.com/examples/how_to_use_guardrails) 读起；两篇合读可以对"如何在应用中有效管理与审核内容"建立完整认识。
 
 正如现实世界中的护栏，审核是一种**预防性措施**，确保你的应用停留在可接受、安全的内容边界之内。审核技术非常通用，凡是 LLM 可能遇到问题的场景都可以应用。本文提供可以直接改编的直白示例，并讨论"是否要上审核、如何上"的考量与权衡。我们将使用 [Moderation API](https://platform.openai.com/docs/guides/moderation/overview)——一个用于检查文本或图像是否潜在有害的工具。

@@ -5,8 +5,9 @@ author: Milvus（Zilliz）/ pgvector（Andrew Kane）
 license: Apache-2.0 / PostgreSQL Licence
 fetched_at: 2026-09-13
 translated: true
-order: 18
 versions: Milvus 官方文档 Quickstart（milvus-docs v3.0.x）；pgvector v0.8.6 README
+order: 18
+group: 向量数据库
 ---
 ## Milvus：从 Milvus Lite 开始
 

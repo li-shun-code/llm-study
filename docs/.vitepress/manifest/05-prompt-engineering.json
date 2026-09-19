@@ -1,16 +1,77 @@
 {
   "module": "05-prompt-engineering",
   "articles": [
-    { "topic": "提示词基本结构", "url": "https://www.promptingguide.ai/introduction/elements", "channel": "web", "file": "docs/05-prompt-engineering/01-prompt-structure.md" },
-    { "topic": "零样本与少样本", "url": "https://www.promptingguide.ai/techniques/fewshot", "channel": "web", "file": "docs/05-prompt-engineering/02-zero-and-few-shot.md" },
-    { "topic": "思维链 CoT", "url": "https://www.promptingguide.ai/techniques/cot", "channel": "web", "file": "docs/05-prompt-engineering/03-chain-of-thought.md" },
-    { "topic": "自洽性与多路采样", "url": "https://www.promptingguide.ai/techniques/consistency", "channel": "web", "file": "docs/05-prompt-engineering/04-self-consistency.md" },
-    { "topic": "ReAct 提示模式", "url": "https://www.promptingguide.ai/techniques/react", "channel": "web", "file": "docs/05-prompt-engineering/05-react-pattern.md" },
-    { "topic": "提示链与任务分解（Prompt Chaining）", "url": "https://www.promptingguide.ai/techniques/prompt_chaining", "channel": "web", "file": "docs/05-prompt-engineering/06-prompt-chaining.md" },
-    { "topic": "系统提示词设计", "url": "https://cookbook.openai.com/examples/gpt4-1_prompting_guide", "channel": "web", "file": "docs/05-prompt-engineering/07-system-prompt-design.md" },
-    { "topic": "上下文工程（Context Engineering）", "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "channel": "web", "file": "docs/05-prompt-engineering/08-context-engineering.md" },
-    { "topic": "提示注入攻击与防护", "url": "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/", "channel": "web", "file": "docs/05-prompt-engineering/09-prompt-injection.md" },
-    { "topic": "多模态提示", "url": "https://cookbook.openai.com/examples/multimodal/document_and_multimodal_understanding_tips", "channel": "web", "file": "docs/05-prompt-engineering/10-multimodal-prompting.md" },
-    { "topic": "提示迭代评估方法", "url": "https://cookbook.openai.com/examples/gpt-5/prompt-optimization-cookbook", "channel": "web", "file": "docs/05-prompt-engineering/11-iterate-and-evaluate.md" }
+    {
+      "order": 1,
+      "topic": "提示词的基本要素与格式",
+      "url": "https://www.promptingguide.ai/introduction/elements",
+      "author": "DAIR.AI（Elvis Saravia）",
+      "license": "MIT",
+      "file": "01-prompt-structure.md"
+    },
+    {
+      "order": 2,
+      "topic": "零样本与少样本提示",
+      "url": "https://www.promptingguide.ai/techniques/fewshot",
+      "author": "DAIR.AI（Elvis Saravia）",
+      "license": "MIT",
+      "file": "02-zero-and-few-shot.md"
+    },
+    {
+      "order": 3,
+      "topic": "思维链提示（Chain-of-Thought）",
+      "url": "https://www.promptingguide.ai/techniques/cot",
+      "author": "DAIR.AI（Elvis Saravia）",
+      "license": "MIT",
+      "file": "03-chain-of-thought.md"
+    },
+    {
+      "order": 4,
+      "topic": "ReAct 提示模式：推理与行动交替",
+      "url": "https://www.promptingguide.ai/techniques/react",
+      "author": "DAIR.AI（Elvis Saravia）",
+      "license": "MIT",
+      "file": "04-react-pattern.md"
+    },
+    {
+      "order": 5,
+      "topic": "提示链与任务分解（Prompt Chaining）",
+      "url": "https://www.promptingguide.ai/techniques/prompt_chaining",
+      "author": "DAIR.AI（Elvis Saravia）",
+      "license": "MIT",
+      "file": "05-prompt-chaining.md"
+    },
+    {
+      "order": 6,
+      "topic": "系统提示词设计",
+      "url": "https://cookbook.openai.com/examples/gpt4-1_prompting_guide",
+      "author": "OpenAI（Carrie Liu、Marco Ramponi 等）",
+      "license": "MIT（OpenAI Cookbook）",
+      "file": "06-system-prompt-design.md"
+    },
+    {
+      "order": 7,
+      "topic": "上下文工程：为 AI Agent 管理稀缺的注意力",
+      "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+      "author": "Anthropic 应用 AI 团队（Prithvi Rajasekaran、Ethan Dixon、Carly Ryan、Jeremy Hadfield 等）",
+      "license": "© Anthropic（官网工程博客，原文无开放许可声明；署名学习翻译）",
+      "file": "07-context-engineering.md"
+    },
+    {
+      "order": 8,
+      "topic": "提示注入：最坏会发生什么？",
+      "url": "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/",
+      "author": "Simon Willison",
+      "license": "© Simon Willison（博客原文无开放许可声明；署名学习翻译）",
+      "file": "08-prompt-injection.md"
+    },
+    {
+      "order": 9,
+      "topic": "提示词的迭代与评估方法",
+      "url": "https://cookbook.openai.com/examples/gpt-5/prompt-optimization-cookbook",
+      "author": "OpenAI（OpenAI Cookbook 团队）",
+      "license": "MIT（OpenAI Cookbook）",
+      "file": "09-iterate-and-evaluate.md"
+    }
   ]
 }

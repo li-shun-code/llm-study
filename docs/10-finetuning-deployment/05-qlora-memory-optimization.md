@@ -5,10 +5,10 @@ author: Hugging Face（PEFT 文档）
 license: Apache 2.0
 fetched_at: 2026-09-13
 translated: true
-order: 5
 versions: PEFT ≥0.15 / transformers（BitsAndBytesConfig 现行 API）/ bitsandbytes（2026-09）
+order: 5
+group: 训练
 ---
-
 QLoRA（Quantized LoRA）回答的是一个问题：**怎么在一张消费级 GPU 上微调一个几十亿参数的模型**。答案是"4-bit 量化底座 + LoRA 旁路"——本文译自 PEFT 官方文档，给出完整的可运行配置。
 
 ## bitsandbytes 提供了什么（背景）
